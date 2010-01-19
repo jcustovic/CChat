@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+    
+<struts>
+
+	<constant name="struts.objectFactory" value="spring"/>
+	<constant name="struts.objectFactory.spring.autoWire" value="type"/>
+	<constant name="struts.enable.DynamicMethodInvocation" value="false"/>
+	<constant name="struts.devMode" value="false"/>
+	<constant name="struts.multipart.maxSize" value="10485760"/>
+	<constant name="struts.i18n.encoding" value="UTF-8"/>
+	
+	
+	<package name="admin" namespace="/admin" extends="json-default">
+	
+	    <result-types>
+			<result-type name="tiles" default="true" class="org.apache.struts2.views.tiles.TilesResult"/>
+		</result-types>
+		
+		<interceptors>
+			<interceptor name="authenticateAdminInterceptor" class="hr.chus.cchat.struts2.interceptor.AuthenticateInterceptor">
+				<param name="role">admin</param>
+			</interceptor>
+
+			<interceptor-stack name="adminSecureStack">
+				<interceptor-ref name="authenticateAdminInterceptor"/>
+				<interceptor-ref name="defaultStack"/>
+			</interceptor-stack>
+		</interceptors>
+		
+		<default-interceptor-ref name="adminSecureStack"/>
+		
+		<default-action-ref name="AdminMain" />
+		
+		<global-results>
+			<result name="login" type="httpheader">
+				 <param name="error">450</param>
+ 				 <param name="errorMessage">You must log in</param>
+			</result>
+			<result name="Exception" type="httpheader">
+				<param name="error">500</param>
+				<param name="errorMessage">Internal server error</param>
+			</result>
+		</global-results>
+		
+		<global-exception-mappings>
+			<exception-mapping exception="java.lang.Exception" result="Exception"/>
+		</global-exception-mappings>
+		
+		<action name="Logout">
+            <result type="redirectAction">
+                <param name="actionName">Logout</param>
+                <param name="namespace">/</param>
+            </result>
+        </action>
+        
+		<action name="Login">
+			<interceptor-ref name="defaultStack" />
+            <result type="redirectAction">
+                <param name="actionName">Login</param>
+                <param name="namespace">/</param>
+            </result>
+        </action>
+		
+		<!-- Admin area -->
+	
+		<action name="AdminMain" class="hr.chus.cchat.struts2.action.admin.AdminMain">
+			<result>admin.Main</result>
+		</action>
+		
+		<action name="AdminMainGWT" class="hr.chus.cchat.struts2.action.admin.AdminMain">
+			<result>admin.MainGWT</result>
+		</action>
+		
+		<action name="Admin*List" class="hr.chus.cchat.struts2.action.admin.Admin{1}List">
+			<result>admin.{1}List</result>
+		</action>
+		
+		<action name="Admin*Function" class="hr.chus.cchat.struts2.action.admin.Admin{1}Function">
+			<result>admin.{1}Function</result>
+		</action>
+				
+		<action name="Admin*JSON" class="hr.chus.cchat.struts2.action.admin.Admin{1}">
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+			</result>
+			<result name="input" type="json" />
+		</action>
+		
+		<action name="UserInfoAction" class="hr.chus.cchat.struts2.action.common.GetUserInfoAction">
+	    	<result>common.UserInfo</result>
+	    </action>
+	    
+	    <action name="AdminPictureUploadAction" class="hr.chus.cchat.struts2.action.admin.AdminPictureUpload">
+			<interceptor-ref name="fileUpload">
+				<!-- 35Kb limit -->
+				<param name="maximumSize" >35840</param>
+				<param name="allowedTypes">image/png,image/gif,image/jpeg,image/jpg,image/pjpeg</param>
+			</interceptor-ref>
+			<interceptor-ref name="adminSecureStack" />
+			<result>admin.PictureGWT</result>
+			<result name="input">struts2.Error</result>
+			<result name="error">struts2.Error</result>
+	    </action>
+	
+	</package>
+
+</struts>
