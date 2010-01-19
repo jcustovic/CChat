@@ -1,0 +1,13 @@
+{
+    "success": true,
+    "errors": [
+        {
+            "id": "operator.username",
+            "msg": "Already exists!"
+        },
+        {
+            "id": "operator.name",
+            "msg": "Already taken"
+        }
+    ]
+}
