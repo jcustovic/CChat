@@ -1,7 +1,5 @@
 package hr.chus.cchat.gwt.admin;
 
-import hr.chus.cchat.gwt.i18n.Dictionary;
-
 import com.google.gwt.core.client.GWT;
 import com.gwtext.client.core.Connection;
 import com.gwtext.client.core.EventObject;
@@ -26,10 +24,9 @@ public class UploadPicture extends Window {
 	private FormPanel formPanel = new FormPanel();
 	private Grid grid = new Grid(3, 1);
 	private Store store = null;
-	private static Dictionary dictionary = (Dictionary) GWT.create(Dictionary.class);
 
 	public UploadPicture(final Store pictureStore) {
-		super(dictionary.pictureUploader());
+		super(AdminGWT.dictionary.pictureUploader());
 		setSize(400, 350);
 		setCloseAction(Window.HIDE);
 		setResizable(true);
@@ -40,7 +37,7 @@ public class UploadPicture extends Window {
 		formPanel.setLabelAlign(Position.LEFT);
 		formPanel.setPaddings(5);
 
-		final TextField textField = new TextField(dictionary.picture(), "picture");
+		final TextField textField = new TextField(AdminGWT.dictionary.picture(), "picture");
 		textField.setInputType("file");
 		formPanel.setAutoHeight(true);
 		formPanel.setAutoWidth(true);
@@ -55,14 +52,14 @@ public class UploadPicture extends Window {
 		errorReader.setSuccess("@success");
 		formPanel.setErrorReader(errorReader);
 		grid.setWidget(0, 0, formPanel);
-		final Panel centerPanel = new HTMLPanel(dictionary.uploading());
+		final Panel centerPanel = new HTMLPanel(AdminGWT.dictionary.uploading());
 		centerPanel.hide();
 		centerPanel.setBorder(true);
 		grid.setWidget(1, 0, centerPanel);
-		final Button upload = new Button(dictionary.upload(), new ButtonListenerAdapter() {
+		final Button upload = new Button(AdminGWT.dictionary.upload(), new ButtonListenerAdapter() {
 			@Override
 			public void onClick(Button button, EventObject e) {
-				MessageBox.confirm(dictionary.confirm(), dictionary.reqularConfirm(),
+				MessageBox.confirm(AdminGWT.dictionary.confirm(), AdminGWT.dictionary.reqularConfirm(),
 						new MessageBox.ConfirmCallback() {
 							public void execute(String btnID) {
 								if (btnID.equals("yes")) {
@@ -71,15 +68,15 @@ public class UploadPicture extends Window {
 										centerPanel.getEl().update("Please select a file.");
 										return;
 									}
-									centerPanel.getEl().update(dictionary.uploading());
-									formPanel.getForm().submit(GWT.getModuleBaseURL() + "AdminPictureUploadAction", null, Connection.POST, dictionary.savingData(), false);
+									centerPanel.getEl().update(AdminGWT.dictionary.uploading());
+									formPanel.getForm().submit(GWT.getModuleBaseURL() + "AdminPictureUploadAction", null, Connection.POST, AdminGWT.dictionary.savingData(), false);
 								}
 							}
 				});
 			}
 		});
 		addButton(upload);
-		final Button close = new Button(dictionary.close(), new ButtonListenerAdapter() {
+		final Button close = new Button(AdminGWT.dictionary.close(), new ButtonListenerAdapter() {
 			public void onClick(Button button, EventObject e) {
 				setSize(400, 350);
 				pictureStore.reload();
@@ -115,7 +112,7 @@ public class UploadPicture extends Window {
 				if (httpStatus == 450) {
 					com.google.gwt.user.client.Window.open(GWT.getModuleBaseURL() + "Login", "_self", "");
 				} else {
-					centerPanel.getEl().update(dictionary.uploadFailed());
+					centerPanel.getEl().update(AdminGWT.dictionary.uploadFailed());
 				}
 			}
 		});
@@ -163,11 +160,11 @@ public class UploadPicture extends Window {
 //		store.load();
 		
 		ComboBox comboBox = new ComboBox();
-		comboBox.setFieldLabel(dictionary.nick());
+		comboBox.setFieldLabel(AdminGWT.dictionary.nick());
 		comboBox.setHiddenName("nick");
 		comboBox.setStore(store);
 		comboBox.setDisplayField("name");
-		comboBox.setEmptyText(dictionary.noNick());
+		comboBox.setEmptyText(AdminGWT.dictionary.noNick());
 		comboBox.setValueField("id");
 		comboBox.setAllowBlank(true);
 		comboBox.setTypeAhead(true);

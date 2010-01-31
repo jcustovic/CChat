@@ -1,6 +1,5 @@
 package hr.chus.cchat.gwt.admin;
 
-import hr.chus.cchat.gwt.i18n.Dictionary;
 import hr.chus.cchat.gwt.image.ImageChooser;
 import hr.chus.cchat.gwt.image.ImageChooserCallback;
 import hr.chus.cchat.gwt.image.ImageData;
@@ -38,7 +37,6 @@ public class AdminNickGWT {
 	private Panel panel = null;
 	private Store pictureStore = null;
 	private ImageChooser ic = null;
-	private Dictionary dictionary = (Dictionary) GWT.create(Dictionary.class);
 
 	/**
 	 * 
@@ -113,14 +111,14 @@ public class AdminNickGWT {
 		store.load();
 
 		ColumnModel columnModel = new ColumnModel(new ColumnConfig[] {
-				new ColumnConfig(dictionary.name(), "nick.name", 100, false)
-				, new ColumnConfig(dictionary.description(), "nick.description", 200, false)
+				new ColumnConfig(AdminGWT.dictionary.name(), "nick.name", 100, false)
+				, new ColumnConfig(AdminGWT.dictionary.description(), "nick.description", 200, false)
 		});
 		
 		final GridPanel gridPanel = new GridPanel();
 		gridPanel.setStore(store);
 		gridPanel.setColumnModel(columnModel);
-		gridPanel.setTitle(dictionary.nickList());
+		gridPanel.setTitle(AdminGWT.dictionary.nickList());
 		gridPanel.setIconCls("nicks-icon");
 		gridPanel.setWidth(300);
 		gridPanel.setHeight(300);
@@ -154,23 +152,23 @@ public class AdminNickGWT {
 	
 		inner.add(columnOne);
 		
-		Button updateButton = new Button(dictionary.update(), new ButtonListenerAdapter() {
+		Button updateButton = new Button(AdminGWT.dictionary.update(), new ButtonListenerAdapter() {
 			public void onClick(Button button, EventObject e) {
 				formPanel.getForm().findField("operation").setValue("save/edit");
-				formPanel.getForm().submit("AdminNickFunctionJSON", null, Connection.POST, dictionary.savingData(), false);
+				formPanel.getForm().submit("AdminNickFunctionJSON", null, Connection.POST, AdminGWT.dictionary.savingData(), false);
 			}
 		});
 		updateButton.setIconCls("edit-icon");
 		paddedPanel.addButton(updateButton);
 		
-		Button deleteButton = new Button(dictionary.delete(), new ButtonListenerAdapter() {
+		Button deleteButton = new Button(AdminGWT.dictionary.delete(), new ButtonListenerAdapter() {
 			public void onClick(Button button, EventObject e) {
-				MessageBox.confirm(dictionary.confirm(), dictionary.nickDeleteWarning(),
+				MessageBox.confirm(AdminGWT.dictionary.confirm(), AdminGWT.dictionary.nickDeleteWarning(),
 						new MessageBox.ConfirmCallback() {
 							public void execute(String btnID) {
 								if (btnID.equals("yes")) {
 									formPanel.getForm().findField("operation").setValue("delete");
-									formPanel.getForm().submit("AdminNickFunctionJSON", null, Connection.POST, dictionary.savingData(), false);
+									formPanel.getForm().submit("AdminNickFunctionJSON", null, Connection.POST, AdminGWT.dictionary.savingData(), false);
 								}
 							}
 				});
@@ -179,12 +177,12 @@ public class AdminNickGWT {
 		deleteButton.setIconCls("delete-icon");
 		paddedPanel.addButton(deleteButton);
 		
-		Button showImages = new Button(dictionary.showPictures(), new ButtonListenerAdapter() {
+		Button showImages = new Button(AdminGWT.dictionary.showPictures(), new ButtonListenerAdapter() {
 			public void onClick(final Button button, EventObject e) {
 				int nickId = sm.getSelected().getAsInteger("nick.id");
 				pictureStore.reload(new UrlParam[] { new UrlParam("nick", String.valueOf(nickId)) });
 				if (ic == null) {
-					ic = new ImageChooser(dictionary.pictures(), 515, 400, pictureStore);
+					ic = new ImageChooser(AdminGWT.dictionary.pictures(), 515, 400, pictureStore);
 				}
 
 				ic.show(new ImageChooserCallback() {
@@ -227,7 +225,7 @@ public class AdminNickGWT {
 		addFormPanel.setPaddings(5);
 		addFormPanel.setWidth(400);
 		final Window window = new Window();
-		window.setTitle(dictionary.addNewNick());
+		window.setTitle(AdminGWT.dictionary.addNewNick());
 		window.setIconCls("");
 		window.setWidth(400);
 		window.setResizable(true);
@@ -235,10 +233,10 @@ public class AdminNickGWT {
 		window.setCloseAction(Window.HIDE);
 		final FieldSet addNickFieldSet = getNickFieldSet();
 		addFormPanel.add(new PaddedPanel(addNickFieldSet, 10, 10, 10, 10));
-		addFormPanel.addButton(new Button(dictionary.save(), new ButtonListenerAdapter() {
+		addFormPanel.addButton(new Button(AdminGWT.dictionary.save(), new ButtonListenerAdapter() {
 			public void onClick(Button button, EventObject e) {
 				addFormPanel.getForm().findField("operation").setValue("save/edit");
-				addFormPanel.getForm().submit("AdminNickFunctionJSON", null, Connection.POST, dictionary.savingData(), false);
+				addFormPanel.getForm().submit("AdminNickFunctionJSON", null, Connection.POST, AdminGWT.dictionary.savingData(), false);
 			}
 		}));
 		addFormPanel.getForm().addListener(new FormListenerAdapter() {
@@ -260,7 +258,7 @@ public class AdminNickGWT {
 		});
 		window.add(addFormPanel);
 		
-		Button addNick = new Button(dictionary.addNew(), new ButtonListenerAdapter() {
+		Button addNick = new Button(AdminGWT.dictionary.addNew(), new ButtonListenerAdapter() {
 			public void onClick(Button button, EventObject e) {
 				window.show();
 			}
@@ -306,15 +304,15 @@ public class AdminNickGWT {
 	private FieldSet getNickFieldSet() {
 		FieldSet fieldSet = new FieldSet();
 		fieldSet.setLabelWidth(90);
-		fieldSet.setTitle(dictionary.editNick());
+		fieldSet.setTitle(AdminGWT.dictionary.editNick());
 		fieldSet.setAutoHeight(true);
 		fieldSet.setBorder(false);
 
 		// the field names must match the data field values from the Store
 		fieldSet.add(new Hidden("operation", ""));
 		fieldSet.add(new Hidden("nick.id", ""));
-		fieldSet.add(new TextField(dictionary.name(), "nick.name", 200));
-		TextArea description = new TextArea(dictionary.description(), "nick.description");
+		fieldSet.add(new TextField(AdminGWT.dictionary.name(), "nick.name", 200));
+		TextArea description = new TextArea(AdminGWT.dictionary.description(), "nick.description");
 		description.setWidth(200);
 		description.setGrow(false);
 		description.setGrowMin(30);

@@ -1,7 +1,5 @@
 package hr.chus.cchat.gwt.admin;
 
-import hr.chus.cchat.gwt.i18n.Dictionary;
-
 import com.google.gwt.core.client.GWT;
 import com.gwtext.client.core.Connection;
 import com.gwtext.client.core.EventObject;
@@ -28,7 +26,6 @@ public class AdminOperatorGWT {
 	
 	private Store operatorRoleStore = null;
 	private Panel panel = null;
-	private Dictionary dictionary = (Dictionary) GWT.create(Dictionary.class);
 
 	/**
 	 * 
@@ -110,30 +107,30 @@ public class AdminOperatorGWT {
 		store.load();
 
 		ColumnModel columnModel = new ColumnModel(new ColumnConfig[] {
-				new ColumnConfig(dictionary.username(), "operator.username", 80, false)
-				, new ColumnConfig(dictionary.name(), "operator.name", 75, false)
-				, new ColumnConfig(dictionary.surname(), "operator.surname", 100, false)
-				, new ColumnConfig(dictionary.email(), "operator.email", 120, false) 
-				, new ColumnConfig(dictionary.role(), "role.name", 70, false)
-				, new ColumnConfig(dictionary.isDisabled(), "operator.disabled", 72, false, new Renderer() {
+				new ColumnConfig(AdminGWT.dictionary.username(), "operator.username", 80, false)
+				, new ColumnConfig(AdminGWT.dictionary.name(), "operator.name", 75, false)
+				, new ColumnConfig(AdminGWT.dictionary.surname(), "operator.surname", 100, false)
+				, new ColumnConfig(AdminGWT.dictionary.email(), "operator.email", 120, false) 
+				, new ColumnConfig(AdminGWT.dictionary.role(), "role.name", 70, false)
+				, new ColumnConfig(AdminGWT.dictionary.isDisabled(), "operator.disabled", 72, false, new Renderer() {
 					
 					@Override
 					public String render(Object value, CellMetadata cellMetadata, Record record, int rowIndex, int colNum, Store store) {
 						if ((Boolean) value) {
-							return dictionary.yes();
+							return AdminGWT.dictionary.yes();
 						} else {
-							return dictionary.no();
+							return AdminGWT.dictionary.no();
 						}
 					}
 				})
-				, new ColumnConfig(dictionary.isActive(), "operator.isActive", 70, false, new Renderer() {
+				, new ColumnConfig(AdminGWT.dictionary.isActive(), "operator.isActive", 70, false, new Renderer() {
 					
 					@Override
 					public String render(Object value, CellMetadata cellMetadata, Record record, int rowIndex, int colNum, Store store) {
 						if ((Boolean) value) {
-							return dictionary.yes();
+							return AdminGWT.dictionary.yes();
 						} else {
-							return dictionary.no();
+							return AdminGWT.dictionary.no();
 						}
 					}
 				})
@@ -142,7 +139,7 @@ public class AdminOperatorGWT {
 		final GridPanel gridPanel = new GridPanel();
 		gridPanel.setStore(store);
 		gridPanel.setColumnModel(columnModel);
-		gridPanel.setTitle(dictionary.operatorsList());
+		gridPanel.setTitle(AdminGWT.dictionary.operatorsList());
 		gridPanel.setIconCls("operators-icon");
 		gridPanel.setWidth(600);
 		gridPanel.setHeight(250);
@@ -176,19 +173,19 @@ public class AdminOperatorGWT {
 	
 		inner.add(columnOne);
 		
-		Button updateButton = new Button(dictionary.update(), new ButtonListenerAdapter() {
+		Button updateButton = new Button(AdminGWT.dictionary.update(), new ButtonListenerAdapter() {
 			public void onClick(Button button, EventObject e) {
 				formPanel.getForm().findField("operation").setValue("save/edit");
-				formPanel.getForm().submit("AdminOperatorFunctionJSON", null, Connection.POST, dictionary.savingData(), false);
+				formPanel.getForm().submit("AdminOperatorFunctionJSON", null, Connection.POST, AdminGWT.dictionary.savingData(), false);
 			}
 		});
 		updateButton.setIconCls("edit-icon");
 		paddedPanel.addButton(updateButton);
 		
-		Button deleteButton = new Button(dictionary.delete(), new ButtonListenerAdapter() {
+		Button deleteButton = new Button(AdminGWT.dictionary.delete(), new ButtonListenerAdapter() {
 			public void onClick(Button button, EventObject e) {
 				formPanel.getForm().findField("operation").setValue("delete");
-				formPanel.getForm().submit("AdminOperatorFunctionJSON", null, Connection.POST, dictionary.savingData(), false);
+				formPanel.getForm().submit("AdminOperatorFunctionJSON", null, Connection.POST, AdminGWT.dictionary.savingData(), false);
 			}
 		});
 		deleteButton.setIconCls("delete-icon");
@@ -224,7 +221,7 @@ public class AdminOperatorGWT {
 		addFormPanel.setPaddings(5);
 		addFormPanel.setWidth(300);
 		final Window window = new Window();
-		window.setTitle(dictionary.addNewOperator());
+		window.setTitle(AdminGWT.dictionary.addNewOperator());
 		window.setIconCls("");
 		window.setWidth(300);
 		window.setResizable(true);
@@ -236,7 +233,7 @@ public class AdminOperatorGWT {
 		addFormPanel.addButton(new Button("Save", new ButtonListenerAdapter() {
 			public void onClick(Button button, EventObject e) {
 				addFormPanel.getForm().findField("operation").setValue("save/edit");
-				addFormPanel.getForm().submit("AdminOperatorFunctionJSON", null, Connection.POST, dictionary.savingData(), false);
+				addFormPanel.getForm().submit("AdminOperatorFunctionJSON", null, Connection.POST, AdminGWT.dictionary.savingData(), false);
 			}
 		}));
 		addFormPanel.getForm().addListener(new FormListenerAdapter() {
@@ -258,7 +255,7 @@ public class AdminOperatorGWT {
 		});
 		window.add(addFormPanel);
 		
-		Button addOperator = new Button(dictionary.addNewOperator(), new ButtonListenerAdapter() {
+		Button addOperator = new Button(AdminGWT.dictionary.addNewOperator(), new ButtonListenerAdapter() {
 			public void onClick(Button button, EventObject e) {
 				window.show();
 			}
@@ -297,23 +294,23 @@ public class AdminOperatorGWT {
 	private FieldSet getOperatorFieldSet() {
 		FieldSet fieldSet = new FieldSet();
 		fieldSet.setLabelWidth(90);
-		fieldSet.setTitle(dictionary.editOperator());
+		fieldSet.setTitle(AdminGWT.dictionary.editOperator());
 		fieldSet.setAutoHeight(true);
 		fieldSet.setBorder(false);
 
 		// the field names must match the data field values from the Store
 		fieldSet.add(new Hidden("operation", ""));
 		fieldSet.add(new Hidden("operator.id", ""));
-		fieldSet.add(new TextField(dictionary.username(), "operator.username", 120));
-		fieldSet.add(new TextField(dictionary.name(), "operator.name", 120));
-		fieldSet.add(new TextField(dictionary.surname(), "operator.surname", 120));
-		fieldSet.add(new TextField(dictionary.email(), "operator.email", 120));
-		TextField password = new TextField(dictionary.password(), "operator.password", 120);
+		fieldSet.add(new TextField(AdminGWT.dictionary.username(), "operator.username", 120));
+		fieldSet.add(new TextField(AdminGWT.dictionary.name(), "operator.name", 120));
+		fieldSet.add(new TextField(AdminGWT.dictionary.surname(), "operator.surname", 120));
+		fieldSet.add(new TextField(AdminGWT.dictionary.email(), "operator.email", 120));
+		TextField password = new TextField(AdminGWT.dictionary.password(), "operator.password", 120);
 		password.setPassword(true);
 		fieldSet.add(password);
 		
 		ComboBox comboBox = new ComboBox();
-		comboBox.setFieldLabel(dictionary.role());
+		comboBox.setFieldLabel(AdminGWT.dictionary.role());
 		comboBox.setHiddenName("operator.role");
 		comboBox.setStore(operatorRoleStore);
 		comboBox.setDisplayField("name");
@@ -325,8 +322,8 @@ public class AdminOperatorGWT {
 		comboBox.setWidth(120);
 		fieldSet.add(comboBox);
 		
-		fieldSet.add(new Checkbox(dictionary.isDisabled(), "operator.disabled"));
-		fieldSet.add(new Checkbox(dictionary.isActive(), "operator.isActive"));
+		fieldSet.add(new Checkbox(AdminGWT.dictionary.isDisabled(), "operator.disabled"));
+		fieldSet.add(new Checkbox(AdminGWT.dictionary.isActive(), "operator.isActive"));
 		
 		return fieldSet;
 	}
