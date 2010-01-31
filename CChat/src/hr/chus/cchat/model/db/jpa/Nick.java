@@ -31,6 +31,12 @@ public class Nick implements Serializable {
 	
 	public Nick() { }
 	
+	public Nick(String name, String description) {
+		this.name = name;
+		this.description = description;
+	}
+
+
 
 	@Id
 	@GeneratedValue

@@ -14,6 +14,8 @@
 	<bean id="roleService" class="hr.chus.cchat.db.service.jpa.RoleServiceImpl" />
 	<bean id="nickService" class="hr.chus.cchat.db.service.jpa.NickServiceImpl" />
 	<bean id="pictureService" class="hr.chus.cchat.db.service.jpa.PictureServiceImpl" />
+	<bean id="userService" class="hr.chus.cchat.db.service.jpa.UserServiceImpl" />
+	<bean id="serviceProviderService" class="hr.chus.cchat.db.service.jpa.ServiceProviderServiceImpl" />
 	
 	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
 

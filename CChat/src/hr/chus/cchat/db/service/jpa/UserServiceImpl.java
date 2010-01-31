@@ -1,7 +1,5 @@
 package hr.chus.cchat.db.service.jpa;
 
-import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -43,54 +41,65 @@ public class UserServiceImpl implements UserService {
 		return entityManager.find(User.class, id);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public List<User> searchUsers(Nick nick, Operator operator, ServiceProvider serviceProvider, String msisdn, String name, String surname, int start, int limit) {
-		StringBuffer queryBuffer = new StringBuffer("SELECT u FROM User u ");
+	public Object[] searchUsers(Nick nick, Operator operator, ServiceProvider serviceProvider, String msisdn, String name, String surname, int start, int limit) {
+		StringBuffer queryWhereBuffer = new StringBuffer();
 		boolean first = true;
 		if (nick != null) {
 			String query = "u.nick = :nick ";
-			queryBuffer.append(first ? "WHERE " + query : "AND " + query);
+			queryWhereBuffer.append(first ? "WHERE " + query : "AND " + query);
 			first = false;
 		}
 		if (operator != null) {
 			String query = "u.operator = :operator ";
-			queryBuffer.append(first ? "WHERE " + query : "AND " + query);
+			queryWhereBuffer.append(first ? "WHERE " + query : "AND " + query);
 			first = false;
 		}
 		if (serviceProvider != null) {
 			String query = "u.serviceProvider = :serviceProvider ";
-			queryBuffer.append(first ? "WHERE " + query : "AND " + query);
+			queryWhereBuffer.append(first ? "WHERE " + query : "AND " + query);
 			first = false;
 		}
 		if (msisdn != null && !msisdn.isEmpty()) {
-			String query = "u.msisdn LIKE :msisdn% ";
-			queryBuffer.append(first ? "WHERE " + query : "AND " + query);
+			String query = "u.msisdn LIKE :msisdn ";
+			queryWhereBuffer.append(first ? "WHERE " + query : "AND " + query);
 			first = false;
 		}
 		if (name != null && !name.isEmpty()) {
-			String query = "u.name LIKE :name% ";
-			queryBuffer.append(first ? "WHERE " + query : "AND " + query);
+			String query = "u.name LIKE :name ";
+			queryWhereBuffer.append(first ? "WHERE " + query : "AND " + query);
 			first = false;
 		}
 		if (surname != null && !surname.isEmpty()) {
-			String query = "u.surname LIKE :surname% ";
-			queryBuffer.append(first ? "WHERE " + query : "AND " + query);
+			String query = "u.surname LIKE :surname ";
+			queryWhereBuffer.append(first ? "WHERE " + query : "AND " + query);
 			first = false;
 		}
 		
-		queryBuffer.append("ORDER BY u.joined DESC");
-		Query query = entityManager.createQuery(queryBuffer.toString());
-		log.debug("Search users query: " + queryBuffer.toString());
+		queryWhereBuffer.append("ORDER BY u.joined DESC");
+		Query query = entityManager.createQuery("SELECT u FROM User u " + queryWhereBuffer.toString());
+		log.debug("Search users query: SELECT u FROM User u " + queryWhereBuffer.toString());
 		
 		if (nick != null) query.setParameter("nick", nick);
 		if (operator != null) query.setParameter("operator", operator);
 		if (serviceProvider != null) query.setParameter("serviceProvider", serviceProvider);
-		if (msisdn != null && !msisdn.isEmpty()) query.setParameter("msisdn", msisdn);
-		if (name != null && !name.isEmpty()) query.setParameter("name", name);
-		if (surname != null && !surname.isEmpty()) query.setParameter("surname", surname);
+		if (msisdn != null && !msisdn.isEmpty()) query.setParameter("msisdn", msisdn + "%");
+		if (name != null && !name.isEmpty()) query.setParameter("name", name + "%");
+		if (surname != null && !surname.isEmpty()) query.setParameter("surname", surname + "%");
 		
-		return query.setFirstResult(start).setMaxResults(limit).getResultList();
+		Object[] result = new Object[2];
+		result[1] = query.setFirstResult(start).setMaxResults(limit).getResultList();
+		
+		Query queryCount = entityManager.createQuery("SELECT COUNT(u) FROM User u " + queryWhereBuffer.toString());
+		if (nick != null) queryCount.setParameter("nick", nick);
+		if (operator != null) queryCount.setParameter("operator", operator);
+		if (serviceProvider != null) queryCount.setParameter("serviceProvider", serviceProvider);
+		if (msisdn != null && !msisdn.isEmpty()) queryCount.setParameter("msisdn", msisdn + "%");
+		if (name != null && !name.isEmpty()) queryCount.setParameter("name", name + "%");
+		if (surname != null && !surname.isEmpty()) queryCount.setParameter("surname", surname + "%");
+		result[0] = queryCount.getSingleResult();
+		
+		return result;
 	}
 	
 	
@@ -98,5 +107,10 @@ public class UserServiceImpl implements UserService {
 	
 	@PersistenceContext
 	public void setEntityManager(EntityManager entityManager) { this.entityManager = entityManager; }
+
+	@Override
+	public Long getCount() {
+		return (Long) entityManager.createNamedQuery("User.getCount").getSingleResult();
+	}
 
 }
