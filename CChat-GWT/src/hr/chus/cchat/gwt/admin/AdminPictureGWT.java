@@ -1,6 +1,5 @@
 package hr.chus.cchat.gwt.admin;
 
-import hr.chus.cchat.gwt.i18n.Dictionary;
 import hr.chus.cchat.gwt.reader.JSONCustomReader;
 
 import com.google.gwt.core.client.GWT;
@@ -26,7 +25,6 @@ import com.gwtext.client.widgets.layout.FitLayout;
 public class AdminPictureGWT {
 	
 	private Panel panel = null;
-	private Dictionary dictionary = (Dictionary) GWT.create(Dictionary.class);
 	private Store nickStore = null; 
 
 	/**
@@ -95,20 +93,20 @@ public class AdminPictureGWT {
 			}
 		});
 		store.load();
-		ColumnConfig nickId = new ColumnConfig(dictionary.assignedNick(), "picture.nick", 50, false);
+		ColumnConfig nickId = new ColumnConfig(AdminGWT.dictionary.assignedNick(), "picture.nick", 50, false);
 		nickId.setHidden(true);
 		ColumnModel columnModel = new ColumnModel(new ColumnConfig[] {
-				new ColumnConfig(dictionary.name(), "picture.name", 100, false)
-				, new ColumnConfig(dictionary.type(), "picture.type", 70, false)
-				, new ColumnConfig(dictionary.sizeBytes(), "picture.length", 100, false)
-				, new ColumnConfig(dictionary.assignedNick(), "picture.nick.name", 100, false)
+				new ColumnConfig(AdminGWT.dictionary.name(), "picture.name", 100, false)
+				, new ColumnConfig(AdminGWT.dictionary.type(), "picture.type", 70, false)
+				, new ColumnConfig(AdminGWT.dictionary.sizeBytes(), "picture.length", 100, false)
+				, new ColumnConfig(AdminGWT.dictionary.assignedNick(), "picture.nick.name", 100, false)
 				, nickId
 		});
 		
 		final GridPanel gridPanel = new GridPanel();
 		gridPanel.setStore(store);
 		gridPanel.setColumnModel(columnModel);
-		gridPanel.setTitle(dictionary.pictureList());
+		gridPanel.setTitle(AdminGWT.dictionary.pictureList());
 		gridPanel.setIconCls("pictures-icon");
 		gridPanel.setWidth(320);
 		gridPanel.setHeight(300);
@@ -123,9 +121,9 @@ public class AdminPictureGWT {
 		
 		String detailTemplate[] = new String[] { "<tpl for='.'>",
 				"<div class='details'><img src='{url}'>",
-				"<div class='details-info'><b>" + dictionary.imageName() + ":</b>",
-				"<span>{name}</span><b>" + dictionary.sizeBytes() + ":</b>",
-				"<span>{sizeString}</span><b>" + dictionary.type() + ":</b>",
+				"<div class='details-info'><b>" + AdminGWT.dictionary.imageName() + ":</b>",
+				"<span>{name}</span><b>" + AdminGWT.dictionary.sizeBytes() + ":</b>",
+				"<span>{sizeString}</span><b>" + AdminGWT.dictionary.type() + ":</b>",
 				"<span>{type}</span></div></div>", "</tpl>",
 				"<div class='x-clear'></div>" };
 		final XTemplate detailsTemplate = new XTemplate(detailTemplate);
@@ -163,19 +161,19 @@ public class AdminPictureGWT {
 	
 		inner.add(columnOne);
 		
-		Button deleteButton = new Button(dictionary.delete(), new ButtonListenerAdapter() {
+		Button deleteButton = new Button(AdminGWT.dictionary.delete(), new ButtonListenerAdapter() {
 			public void onClick(Button button, EventObject e) {
 				formPanel.getForm().findField("operation").setValue("delete");
-				formPanel.getForm().submit("AdminPictureFunctionJSON", null, Connection.POST, dictionary.savingData(), false);
+				formPanel.getForm().submit("AdminPictureFunctionJSON", null, Connection.POST, AdminGWT.dictionary.savingData(), false);
 			}
 		});
 		deleteButton.setIconCls("delete-icon");
 		paddedPanel.addButton(deleteButton);
 		
-		Button updateButton = new Button(dictionary.update(), new ButtonListenerAdapter() {
+		Button updateButton = new Button(AdminGWT.dictionary.update(), new ButtonListenerAdapter() {
 			public void onClick(Button button, EventObject e) {
 				formPanel.getForm().findField("operation").setValue("update");
-				formPanel.getForm().submit("AdminPictureFunctionJSON", null, Connection.POST, dictionary.savingData(), false);
+				formPanel.getForm().submit("AdminPictureFunctionJSON", null, Connection.POST, AdminGWT.dictionary.savingData(), false);
 			}
 		});
 		updateButton.setIconCls("edit-icon");
@@ -215,7 +213,7 @@ public class AdminPictureGWT {
 		});
 		
 		final Window window = new UploadPicture(store);
-		Button addPicture = new Button(dictionary.addNew(), new ButtonListenerAdapter() {
+		Button addPicture = new Button(AdminGWT.dictionary.addNew(), new ButtonListenerAdapter() {
 			public void onClick(Button button, EventObject e) {
 				window.show();
 			}
@@ -275,20 +273,20 @@ public class AdminPictureGWT {
 	private FieldSet getPictureFieldSet() {
 		FieldSet fieldSet = new FieldSet();
 		fieldSet.setLabelWidth(90);
-		fieldSet.setTitle(dictionary.editPicture());
+		fieldSet.setTitle(AdminGWT.dictionary.editPicture());
 		fieldSet.setAutoHeight(true);
 		fieldSet.setBorder(false);
 		
 		// the field names must match the data field values from the Store
 		fieldSet.add(new Hidden("operation", ""));
 		fieldSet.add(new Hidden("picture.id", ""));
-		TextField name = new TextField(dictionary.name(), "picture.name", 100);
+		TextField name = new TextField(AdminGWT.dictionary.name(), "picture.name", 100);
 		name.setReadOnly(true);
 		fieldSet.add(name);
-		TextField type = new TextField(dictionary.type(), "picture.type", 100);
+		TextField type = new TextField(AdminGWT.dictionary.type(), "picture.type", 100);
 		type.setReadOnly(true);
 		fieldSet.add(type);
-		TextField length = new TextField(dictionary.sizeBytes(), "picture.length", 100);
+		TextField length = new TextField(AdminGWT.dictionary.sizeBytes(), "picture.length", 100);
 		length.setReadOnly(true);
 		fieldSet.add(length);
 		fieldSet.add(getNickList());
@@ -298,11 +296,11 @@ public class AdminPictureGWT {
 	
 	private ComboBox getNickList() {
 		final ComboBox comboBox = new ComboBox();
-		comboBox.setFieldLabel(dictionary.nick());
+		comboBox.setFieldLabel(AdminGWT.dictionary.nick());
 		comboBox.setHiddenName("picture.nick");
 		comboBox.setStore(nickStore);
 		comboBox.setDisplayField("name");
-		comboBox.setEmptyText(dictionary.noNick());
+		comboBox.setEmptyText(AdminGWT.dictionary.noNick());
 		comboBox.setValueField("id");
 		comboBox.setAllowBlank(true);
 		comboBox.setTypeAhead(true);

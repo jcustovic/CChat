@@ -29,7 +29,7 @@ public class AdminGWT implements EntryPoint {
 	private Panel nickPanel = new Panel();
 	private Panel picturePanel = new Panel();
 	private Panel userPanel = new Panel();
-	private Dictionary dictionary = (Dictionary) GWT.create(Dictionary.class);
+	public static Dictionary dictionary = (Dictionary) GWT.create(Dictionary.class);
 
 	public void onModuleLoad() {
 		operatorPanel.setTitle(dictionary.operators());

@@ -1,19 +1,27 @@
 package hr.chus.cchat.gwt.admin;
 
+import hr.chus.cchat.gwt.reader.JSONCustomReader;
+
+import java.util.Date;
+
+import com.google.gwt.core.client.GWT;
 import com.gwtext.client.core.EventObject;
 import com.gwtext.client.core.Position;
-import com.gwtext.client.core.SortDir;
-import com.gwtext.client.core.TextAlign;
 import com.gwtext.client.core.UrlParam;
 import com.gwtext.client.data.*;
+import com.gwtext.client.data.event.StoreListenerAdapter;
 import com.gwtext.client.util.DateUtil;
-import com.gwtext.client.util.Format;
 import com.gwtext.client.widgets.*;
 import com.gwtext.client.widgets.event.ButtonListenerAdapter;
 import com.gwtext.client.widgets.event.PanelListenerAdapter;
+import com.gwtext.client.widgets.form.ComboBox;
+import com.gwtext.client.widgets.form.DateField;
+import com.gwtext.client.widgets.form.Field;
 import com.gwtext.client.widgets.form.FieldSet;
 import com.gwtext.client.widgets.form.FormPanel;
+import com.gwtext.client.widgets.form.TextArea;
 import com.gwtext.client.widgets.form.TextField;
+import com.gwtext.client.widgets.form.event.TextFieldListenerAdapter;
 import com.gwtext.client.widgets.grid.*;
 import com.gwtext.client.widgets.grid.event.RowSelectionListenerAdapter;
 import com.gwtext.client.widgets.layout.ColumnLayout;
@@ -22,33 +30,15 @@ import com.gwtext.client.widgets.layout.FitLayout;
 import com.gwtext.client.widgets.layout.RowLayout;
 import com.gwtext.client.widgets.layout.RowLayoutData;
 
-import java.util.Date;
-
+/**
+ * 
+ * @author Jan Čustović
+ *
+ */
 public class AdminUserGWT {
 
 	private Panel panel = null;
 	private GridPanel grid;
-	private boolean showPreview = true;
-
-	private Renderer renderTopic = new Renderer() {
-		public String render(Object value, CellMetadata cellMetadata, Record record, int rowIndex, int colNum, Store store) {
-			return Format.format("<b><a href=\"http://extjs.com/forum/showthread.php?t={2}\"  "
-									+ "target=\"_blank\">{0}</a></b>  "
-									+ "<a href=\"http://extjs.com/forum/forumdisplay.php?f={3}\" target=\"_blank\">{1} Forum</a>",
-							new String[] { (String) value,
-									record.getAsString("forumtitle"),
-									record.getId(),
-									record.getAsString("forumid"), });
-		}
-	};
-
-	private Renderer renderLast = new Renderer() {
-		public String render(Object value, CellMetadata cellMetadata, Record record, int rowIndex, int colNum, Store store) {
-			Date lastPost = record.getAsDate("lastpost");
-			String lastPostStr = DateUtil.format(lastPost, "M j, Y, g:i a");
-			return Format.format("{0}<br/>by {1}", new String[] { lastPostStr, record.getAsString("lastposter") });
-		}
-	};
 	
 	/**
 	 * 
@@ -58,6 +48,9 @@ public class AdminUserGWT {
 		return panel;
 	}
 
+	/**
+	 * 
+	 */
 	public void init() {
 		panel = new Panel();
 		panel.setBorder(false);
@@ -78,37 +71,53 @@ public class AdminUserGWT {
 		Panel bindPanel = new Panel();  
 		bindPanel.setLayout(new RowLayout());
 
-		DataProxy dataProxy = new ScriptTagProxy("http://extjs.com/forum/topics-browse-remote.php");
+		HttpProxy dataProxy = new HttpProxy("AdminUserListJSON");
 
 		final RecordDef recordDef = new RecordDef(
-				new FieldDef[] { new StringFieldDef("title"),
-						new StringFieldDef("forumtitle"),
-						new StringFieldDef("forumid"),
-						new StringFieldDef("author"),
-						new IntegerFieldDef("replycount"),
-						new DateFieldDef("lastpost", "lastpost", "timestamp"),
-						new StringFieldDef("lastposter"),
-						new StringFieldDef("excerpt") });
-		JsonReader reader = new JsonReader(recordDef);
-		reader.setRoot("topics");
+				new FieldDef[] { new StringFieldDef("id")
+						, new StringFieldDef("nick", "nick.name")
+						, new StringFieldDef("operator", "operator.username")
+						, new StringFieldDef("msisdn", "msisdn")
+						, new StringFieldDef("serviceProvider", "serviceProvider.providerName")
+						, new DateFieldDef("joined", "joined", "Y-m-dTH:i:s")
+						, new StringFieldDef("name")
+						, new StringFieldDef("surname")
+						, new StringFieldDef("notes")
+				});
+		JSONCustomReader reader = new JSONCustomReader(recordDef);
+		reader.setRoot("userList");
 		reader.setTotalProperty("totalCount");
-		reader.setId("threadid");
+		reader.setId("id");
 
 		final Store store = new Store(dataProxy, reader, true);
-		store.setDefaultSort("lastpost", SortDir.DESC);
 
-		ColumnConfig topicColumn = new ColumnConfig("Topic", "title", 420, false, renderTopic, "topic");
-		topicColumn.setCss("white-space:normal;");
+		ColumnConfig idColumn = new ColumnConfig("ID", "id", 50, false);
+		ColumnConfig msisdnColumn = new ColumnConfig("MSISDN", "msisdn", 150, false);
+		ColumnConfig serviceProviderColumn = new ColumnConfig("Provider", "serviceProvider", 100);
+		ColumnConfig nameColumn = new ColumnConfig("Name", "name", 70);
+		ColumnConfig surnameColumn = new ColumnConfig("Surame", "surname", 70);
+		ColumnConfig nickColumn = new ColumnConfig("Nick", "nick", 70, false, new Renderer() {
+			
+			@Override
+			public String render(Object value, CellMetadata cellMetadata, Record record, int rowIndex, int colNum, Store store) {
+				if (value == null) {
+					return "None";
+				}
+				return (String) value;
+			}
+		});
+		ColumnConfig operatorColumn = new ColumnConfig("Operator", "operator", 70);
+		ColumnConfig joinedColumn = new ColumnConfig("Joined", "joined", 150, false, new Renderer() {
+			
+			@Override
+			public String render(Object value, CellMetadata cellMetadata, Record record, int rowIndex, int colNum, Store store) {
+				Date joinedDate = record.getAsDate("joined");
+				String joinedDateString = DateUtil.format(joinedDate, "d.m.Y H:i:s");
+				return joinedDateString;
+			}
+		});
 
-		ColumnConfig authorColumn = new ColumnConfig("Author", "author", 100);
-		authorColumn.setHidden(true);
-
-		ColumnConfig repliesColumn = new ColumnConfig("Replies", "replycount", 70);
-		repliesColumn.setAlign(TextAlign.RIGHT);
-
-		ColumnConfig lastPostColumn = new ColumnConfig("Last Post", "lastPost", 150, true, renderLast, "last");
-
-		ColumnModel columnModel = new ColumnModel(new ColumnConfig[] { topicColumn, authorColumn, repliesColumn, lastPostColumn });
+		ColumnModel columnModel = new ColumnModel(new ColumnConfig[] { idColumn, msisdnColumn, serviceProviderColumn, nameColumn, surnameColumn, nickColumn, operatorColumn, joinedColumn });
 		columnModel.setDefaultSortable(true);
 
 		Panel gridPanel = new Panel();
@@ -116,80 +125,116 @@ public class AdminUserGWT {
 		grid = new GridPanel();
 		grid.setWidth(600);
 		grid.setHeight(500);
-		grid.setTitle("Remote Paging Grid ");
+		grid.setTitle("Users");
 		grid.setStore(store);
 		grid.setColumnModel(columnModel);
 		grid.setTrackMouseOver(false);
 		grid.setLoadMask(true);
-		grid.setSelectionModel(new RowSelectionModel());
 		grid.setFrame(true);
 		grid.setStripeRows(true);
-		grid.setIconCls("grid-icon");
-
-		GridView view = new GridView() {
-			public String getRowClass(Record record, int index, RowParams rowParams, Store store) {
-				if (showPreview) {
-					rowParams.setBody(Format.format("<p>{0}</p>", record.getAsString("excerpt")));
-					return "x-grid3-row-expanded";
-				} else {
-					return "x-grid3-row-collapsed";
-				}
-			}
-		};
-		view.setForceFit(true);
-		view.setEnableRowBody(true);
-		grid.setView(view);
+		grid.setIconCls("users-icon");
 
 		PagingToolbar pagingToolbar = new PagingToolbar(store);
 		pagingToolbar.setPageSize(25);
 		pagingToolbar.setDisplayInfo(true);
-		pagingToolbar.setDisplayMsg("Displaying topics {0} - {1} of {2}");
-		pagingToolbar.setEmptyMsg("No topics to display");
-
+		pagingToolbar.setDisplayMsg("Displaying users {0} - {1} of {2}");
+		pagingToolbar.setEmptyMsg("No users to display");
+		
 		pagingToolbar.addSeparator();
-		ToolbarButton toolbarButton = new ToolbarButton("Show Preview");
-		toolbarButton.setPressed(showPreview);
-		toolbarButton.setEnableToggle(true);
-		toolbarButton.setCls("");
-		toolbarButton.addListener(new ButtonListenerAdapter() {
-			public void onToggle(Button button, boolean pressed) {
-				toggleDetails(pressed);
-			}
-		});
-
-		pagingToolbar.addButton(toolbarButton);
 		grid.setBottomToolbar(pagingToolbar);
 
 		grid.addListener(new PanelListenerAdapter() {
 			public void onRender(Component component) {
-				store.load(0, 25);
+//				store.load(0, 25);
 			}
 		});
 		gridPanel.add(grid);
 		
-		FieldSet fieldSet = new FieldSet();
-		fieldSet.setLabelWidth(90);
-		fieldSet.setTitle("Company Details");
-		fieldSet.setAutoHeight(true);
-		fieldSet.setBorder(false);
-		// the field names msut match the data field values from the Store
-		fieldSet.add(new TextField("Title", "title", 120));
-		fieldSet.add(new TextField("Author", "author", 120));
+		Panel detailsPanel = new Panel();
+		detailsPanel.setBorder(true);
+		detailsPanel.setTitle("User details");
+		detailsPanel.setLayout(new ColumnLayout());
 		
-		final PaddedPanel fieldSetPanel = new PaddedPanel(fieldSet, 10, 0, 0, 0);
+		Panel leftContainer = new Panel();
+		leftContainer.setBorder(false);
+		leftContainer.setPaddings(5);
+		Panel rightContainer = new Panel();
+		rightContainer.setBorder(false);
+		rightContainer.setPaddings(5);
+		
+		FieldSet leftFieldSet = new FieldSet();
+		leftFieldSet.setBorder(false);
+		leftFieldSet.setPaddings(2);
+		leftFieldSet.setTitle("#1");
+		
+		TextField msisdnField = new TextField("MSISDN", "msisdn", 120);
+		msisdnField.setDisabled(true);
+		leftFieldSet.add(msisdnField);
+		
+		TextField providerField = new TextField("Provider", "serviceProvider", 120);
+		providerField.setDisabled(true);
+		leftFieldSet.add(providerField);
+		
+		leftFieldSet.add(new TextField("Name", "name", 120));
+		leftFieldSet.add(new TextField("Surame", "surname", 120));
+		leftFieldSet.add(new TextField("Address", "address", 180));
+		
+		FieldSet rightFieldSet = new FieldSet();
+		rightFieldSet.setBorder(false);
+		rightFieldSet.setPaddings(2);
+		rightFieldSet.setTitle("#2");
+		
+		DateField joinedField = new DateField("Joined", "joined", 120);
+		joinedField.setFormat("d.m.Y H:i:s");
+		joinedField.setDisabled(true);
+		rightFieldSet.add(joinedField);
+		
+		DateField birthDateField = new DateField("Birth date", "birthDate", 120);
+		joinedField.setFormat("d.m.Y");
+		rightFieldSet.add(birthDateField);
+		rightFieldSet.add(getNickList());
+		rightFieldSet.add(getOperatorList());
+		TextArea notesField = new TextArea("Notes", "notes");
+		notesField.setSize(160, 80);
+		rightFieldSet.add(notesField);
+		
+		leftContainer.add(leftFieldSet);
+		rightContainer.add(rightFieldSet);
+		
+		detailsPanel.add(leftContainer, new ColumnLayoutData(0.48));
+		detailsPanel.add(rightContainer, new ColumnLayoutData(0.48));
+		
+		Button updateButton = new Button(AdminGWT.dictionary.update());
+		updateButton.setIconCls("edit-icon");
+		
+		Button deleteButton = new Button(AdminGWT.dictionary.delete());
+		deleteButton.setIconCls("delete-icon");
+		
+		detailsPanel.addButton(updateButton);
+		detailsPanel.addButton(deleteButton);
+		
+		final PaddedPanel fieldSetPanel = new PaddedPanel(detailsPanel, 10, 0, 0, 0);
 		fieldSetPanel.hide();
 		
 		final RowSelectionModel sm = new RowSelectionModel(true);
 		sm.addListener(new RowSelectionListenerAdapter() {
+			@Override
 			public void onRowSelect(RowSelectionModel sm, int rowIndex, Record record) {
 				formPanel.getForm().loadRecord(record);
 				fieldSetPanel.show();
+			}
+			
+			// TODO: FIX - Have to do this to deselect all. When I use JSONCustomReader RowSelectionModel(true) doesn't seem to work correctly!
+			@Override
+			public boolean doBeforeRowSelect(RowSelectionModel sm, int rowIndex, boolean keepExisting, Record record) {
+				sm.deselectRange(0, store.getCount() - 1);
+				return true;
 			}
 		});
 		grid.setSelectionModel(sm);
 		
 		bindPanel.add(gridPanel, new RowLayoutData(500));  
-		bindPanel.add(fieldSetPanel, new RowLayoutData(200));
+		bindPanel.add(fieldSetPanel, new RowLayoutData(320));
 		
 		formPanel.add(bindPanel);
 		
@@ -205,8 +250,13 @@ public class AdminUserGWT {
 		searchFieldSet.setAutoHeight(true);
 		searchFieldSet.setBorder(false);
 		// the field names msut match the data field values from the Store
-		searchFieldSet.add(new TextField("Title", "title", 120));
-		searchFieldSet.add(new TextField("Author", "author", 120));
+		searchFieldSet.add(new TextField("MSISDN", "msisdn", 120));
+		searchFieldSet.add(new TextField("Name", "name", 120));
+		searchFieldSet.add(new TextField("Surname", "surname", 120));
+		searchFieldSet.add(getNickList());
+		searchFieldSet.add(getOperatorList());
+		searchFieldSet.add(getServiceProviderList());
+		
 		
 		PaddedPanel searchPanel = new PaddedPanel(searchFieldSet, 0);
 		searchPanel.setFrame(true);
@@ -221,6 +271,7 @@ public class AdminUserGWT {
 					params[i] = new UrlParam(nameValue[0], nameValue[1]);
 				}
 				store.setBaseParams(params);
+				store.removeAll();
 				store.load(0, 25);
 			}
 		});
@@ -228,14 +279,156 @@ public class AdminUserGWT {
 		
 		searchFormPanel.add(searchPanel);
 		
-		mainPanel.add(formPanel, new ColumnLayoutData(0.74));
-		mainPanel.add(searchFormPanel, new ColumnLayoutData(0.25));
+		mainPanel.add(formPanel, new ColumnLayoutData(0.71));
+		mainPanel.add(searchFormPanel, new ColumnLayoutData(0.28));
 		
 		panel.add(mainPanel);
 	}
 
-	private void toggleDetails(boolean pressed) {
-		showPreview = pressed;
-		grid.getView().refresh();
+	/**
+	 * 
+	 * @return
+	 */
+	private ComboBox getNickList() {
+		HttpProxy dataProxy = new HttpProxy("AdminNickListJSON");
+		final RecordDef recordDef = new RecordDef(new FieldDef[] {
+				new StringFieldDef("description", "description")
+				, new StringFieldDef("id", "id")
+				, new StringFieldDef("name", "name")
+		});
+		JsonReader reader = new JsonReader(recordDef);
+		reader.setRoot("nickList");
+		reader.setId("id");
+
+		Store nickStore = new Store(dataProxy, reader, true);
+		nickStore.addStoreListener(new StoreListenerAdapter() {
+			@Override
+			public void onLoadException(Throwable error) {
+				com.google.gwt.user.client.Window.open(GWT.getModuleBaseURL() + "Login", "_self", "");
+			}
+		});
+		nickStore.load();
+		
+		final ComboBox comboBox = new ComboBox();
+		comboBox.setFieldLabel(AdminGWT.dictionary.nick());
+		comboBox.setHiddenName("nick");
+		comboBox.setStore(nickStore);
+		comboBox.setDisplayField("name");
+		comboBox.setEmptyText(AdminGWT.dictionary.noNick());
+		comboBox.setValueField("id");
+		comboBox.setAllowBlank(true);
+		comboBox.setTypeAhead(true);
+		comboBox.setMode(ComboBox.LOCAL);
+		comboBox.setTriggerAction(ComboBox.ALL);
+		comboBox.setWidth(150);
+		comboBox.addListener(new TextFieldListenerAdapter() {
+			@Override
+			public void onBlur(Field field) {
+				super.onBlur(field);
+				if (field.getRawValue().isEmpty()) {
+					comboBox.setValue(null);
+				} 
+			}
+		});
+		comboBox.setSelectOnFocus(true);
+		return comboBox;
 	}
+	
+	/**
+	 * 
+	 */
+	private ComboBox getOperatorList() {
+		HttpProxy dataProxy = new HttpProxy("AdminOperatorListJSON");
+		final RecordDef recordDef = new RecordDef(new FieldDef[] {
+				new StringFieldDef("role", "role.name")
+				, new StringFieldDef("id", "id")
+				, new StringFieldDef("username", "username")
+		});
+		JsonReader reader = new JsonReader(recordDef);
+		reader.setRoot("operatorList");
+		reader.setId("id");
+
+		Store nickStore = new Store(dataProxy, reader, true);
+		nickStore.addStoreListener(new StoreListenerAdapter() {
+			@Override
+			public void onLoadException(Throwable error) {
+				com.google.gwt.user.client.Window.open(GWT.getModuleBaseURL() + "Login", "_self", "");
+			}
+		});
+		nickStore.load();
+		
+		final ComboBox comboBox = new ComboBox();
+		comboBox.setFieldLabel(AdminGWT.dictionary.operators());
+		comboBox.setHiddenName("operator");
+		comboBox.setStore(nickStore);
+		comboBox.setDisplayField("username");
+		comboBox.setEmptyText(AdminGWT.dictionary.noNick());
+		comboBox.setValueField("id");
+		comboBox.setAllowBlank(true);
+		comboBox.setTypeAhead(true);
+		comboBox.setMode(ComboBox.LOCAL);
+		comboBox.setTriggerAction(ComboBox.ALL);
+		comboBox.setWidth(150);
+		comboBox.addListener(new TextFieldListenerAdapter() {
+			@Override
+			public void onBlur(Field field) {
+				super.onBlur(field);
+				if (field.getRawValue().isEmpty()) {
+					comboBox.setValue(null);
+				} 
+			}
+		});
+		comboBox.setSelectOnFocus(true);
+		return comboBox;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	private Component getServiceProviderList() {
+		HttpProxy dataProxy = new HttpProxy("AdminServiceProviderListJSON");
+		final RecordDef recordDef = new RecordDef(new FieldDef[] {
+				new StringFieldDef("providerName", "providerName")
+				, new StringFieldDef("id", "id")
+				, new StringFieldDef("sc", "sc")
+		});
+		JsonReader reader = new JsonReader(recordDef);
+		reader.setRoot("serviceProviderList");
+		reader.setId("id");
+
+		Store nickStore = new Store(dataProxy, reader, true);
+		nickStore.addStoreListener(new StoreListenerAdapter() {
+			@Override
+			public void onLoadException(Throwable error) {
+				com.google.gwt.user.client.Window.open(GWT.getModuleBaseURL() + "Login", "_self", "");
+			}
+		});
+		nickStore.load();
+		
+		final ComboBox comboBox = new ComboBox();
+		comboBox.setFieldLabel("Service provider");
+		comboBox.setHiddenName("serviceProvider");
+		comboBox.setStore(nickStore);
+		comboBox.setDisplayField("providerName");
+		comboBox.setEmptyText("No service provider");
+		comboBox.setValueField("id");
+		comboBox.setAllowBlank(true);
+		comboBox.setTypeAhead(true);
+		comboBox.setMode(ComboBox.LOCAL);
+		comboBox.setTriggerAction(ComboBox.ALL);
+		comboBox.setWidth(150);
+		comboBox.addListener(new TextFieldListenerAdapter() {
+			@Override
+			public void onBlur(Field field) {
+				super.onBlur(field);
+				if (field.getRawValue().isEmpty()) {
+					comboBox.setValue(null);
+				} 
+			}
+		});
+		comboBox.setSelectOnFocus(true);
+		return comboBox;
+	}
+	
 }
