@@ -77,23 +77,26 @@ CREATE TABLE Operators (
 CREATE TABLE Users (
   id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
   service_provider_id INTEGER UNSIGNED NOT NULL,
-  nick_id INTEGER UNSIGNED NOT NULL,
-  operator_id INTEGER UNSIGNED NOT NULL,
+  operator_id INTEGER UNSIGNED NULL,
+  nick_id INTEGER UNSIGNED NULL,
   msisdn VARCHAR(20) NOT NULL,
   name VARCHAR(20) NULL,
   surname VARCHAR(30) NULL,
   address VARCHAR(100) NULL,
   birth_date DATE NULL,
   notes TEXT NULL,
-  joined_date DATE NOT NULL,
+  joined_date DATETIME NOT NULL,
   PRIMARY KEY(id),
-  FOREIGN KEY(operator_id) REFERENCES Operators(id)
+  FOREIGN KEY(operator_id)
+    REFERENCES Operators(id)
       ON DELETE NO ACTION
       ON UPDATE NO ACTION,
-  FOREIGN KEY(nick_id) REFERENCES Nicks(id)
+  FOREIGN KEY(nick_id)
+    REFERENCES Nicks(id)
       ON DELETE NO ACTION
       ON UPDATE NO ACTION,
-  FOREIGN KEY(service_provider_id) REFERENCES Service_Provider(id)
+  FOREIGN KEY(service_provider_id)
+    REFERENCES Service_Provider(id)
       ON DELETE NO ACTION
       ON UPDATE NO ACTION
 );
@@ -103,7 +106,7 @@ CREATE TABLE SMS_Messages (
   service_provider_id INTEGER UNSIGNED NOT NULL,
   operator_id INTEGER UNSIGNED NOT NULL,
   user_id INTEGER UNSIGNED NOT NULL,
-  time TIME NOT NULL,
+  time DATETIME NOT NULL,
   text VARCHAR(800) NOT NULL,
   sc VARCHAR(20) NOT NULL,
   direction VARCHAR(6) NOT NULL,
@@ -135,19 +138,11 @@ CREATE TABLE Users_Pictures (
 --- DB SHEMA DROP ---
 
 DROP TABLE Users_Pictures;
-
 DROP TABLE SMS_Messages;
-
 DROP TABLE Users;
-
 DROP TABLE Operators;
-
 DROP TABLE Pictures;
-
 DROP TABLE Configuration;
-
 DROP TABLE Nicks;
-
 DROP TABLE Operator_Roles;
-
 DROP TABLE Service_Provider;

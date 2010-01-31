@@ -13,6 +13,7 @@ public interface UserService {
 	public User editUser(User user);
 	public void deleteUser(User user);
 	public User getUserId(Integer id);
-	public List<User> searchUsers(Nick nick, Operator operator, ServiceProvider serviceProvider, String msisdn, String name, String surname, int start, int limit);
+	public Object[] searchUsers(Nick nick, Operator operator, ServiceProvider serviceProvider, String msisdn, String name, String surname, int start, int limit);
+	public Long getCount();
 
 }

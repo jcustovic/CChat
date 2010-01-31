@@ -34,7 +34,13 @@ public class Role implements Serializable {
 	
 	public Role() { }
 
-	
+	public Role(String name, String description) {
+		super();
+		this.name = name;
+		this.description = description;
+	}
+
+
 	@Id
 	@GeneratedValue
 	@Column(name = "id")

@@ -26,6 +26,7 @@ import javax.persistence.Table;
 @Table(name = "Users")
 @NamedQueries({
 	@NamedQuery(name = "User.getAll", query = "SELECT u FROM User u")
+	, @NamedQuery(name = "User.getCount", query = "SELECT COUNT(u) FROM User u")
 })
 public class User implements Serializable {
 	
@@ -46,7 +47,18 @@ public class User implements Serializable {
 	
 	public User() { }
 
-	
+	public User(Nick nick, Operator operator, String msisdn, ServiceProvider serviceProvider, String name, String surname, Date joined) {
+		this.nick = nick;
+		this.operator = operator;
+		this.msisdn = msisdn;
+		this.serviceProvider = serviceProvider;
+		this.name = name;
+		this.surname = surname;
+		this.joined = joined;
+	}
+
+
+
 	@Id
 	@GeneratedValue
 	@Column(name = "id")
@@ -92,7 +104,7 @@ public class User implements Serializable {
 	public String getNotes() { return notes; }
 	public void setNotes(String notes) { this.notes = notes; }
 	
-	@Column(name = "joined_date", nullable = false, columnDefinition = "DATE")
+	@Column(name = "joined_date", nullable = false, columnDefinition = "DATETIME")
 	public Date getJoined() { return joined; }
 	public void setJoined(Date joined) { this.joined = joined; }
 

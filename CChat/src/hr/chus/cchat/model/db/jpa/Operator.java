@@ -44,7 +44,15 @@ public class Operator implements Serializable {
 	
 	public Operator() { }
 	
-	
+	public Operator(String username, String password, Role role, Boolean isActive, Boolean disabled) {
+		this.username = username;
+		this.password = password;
+		this.role = role;
+		this.isActive = isActive;
+		this.disabled = disabled;
+	}
+
+
 	@Id
 	@GeneratedValue
 	@Column(name = "id")

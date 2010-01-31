@@ -62,7 +62,7 @@ public class SMSMessage implements Serializable {
 	public Operator getOperator() { return operator; }
 	public void setOperator(Operator operator) { this.operator = operator; }
 
-	@Column(name = "time", nullable = false, columnDefinition = "TIME")
+	@Column(name = "time", nullable = false, columnDefinition = "DATETIME")
 	public Date getTime() { return time; }
 	public void setTime(Date time) { this.time = time; }
 

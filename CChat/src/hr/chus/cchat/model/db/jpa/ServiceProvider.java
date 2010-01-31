@@ -30,8 +30,15 @@ public class ServiceProvider implements Serializable {
 	private Boolean disabled;
 	
 	public ServiceProvider() { }
-
 	
+	public ServiceProvider(String sc, String providerName, String description, Boolean disabled) {
+		this.sc = sc;
+		this.providerName = providerName;
+		this.description = description;
+		this.disabled = disabled;
+	}
+
+
 	@Id
 	@GeneratedValue
 	@Column(name = "id")
