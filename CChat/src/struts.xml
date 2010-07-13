@@ -20,6 +20,17 @@
 			<result-type name="tiles" default="true" class="org.apache.struts2.views.tiles.TilesResult"/>
 		</result-types>
 		
+		<interceptors>
+			<interceptor name="authenticateAdminInterceptor" class="hr.chus.cchat.struts2.interceptor.AuthenticateInterceptor">
+				<param name="role">admin</param>
+			</interceptor>
+
+			<interceptor-stack name="adminSecureStack">
+				<interceptor-ref name="authenticateAdminInterceptor"/>
+				<interceptor-ref name="defaultStack"/>
+			</interceptor-stack>
+		</interceptors>
+		
 		<default-action-ref name="Index" />
 				
 		<global-results>
@@ -46,13 +57,17 @@
 	        <result name="moderator" type="redirectAction">ChatMain</result>
 	        <result name="admin" type="redirectAction">
                 <param name="actionName">AdminMainGWT</param>
-                <param name="namespace">/admin</param>
             </result>
 		</action>
 	        
 	    <action name="Logout" class="hr.chus.cchat.struts2.action.common.Logout">
 	    	<result type="redirectAction">Login</result>
 	    </action>
+	    
+		<action name="AdminMainGWT">
+			<interceptor-ref name="authenticateAdminInterceptor" />
+			<result>admin.MainGWT</result>
+		</action>
 		
 	</package>
 </struts>

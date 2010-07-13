@@ -1,14 +1,13 @@
 package hr.chus.cchat.struts2.action.admin;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import hr.chus.cchat.db.service.OperatorService;
 import hr.chus.cchat.model.db.jpa.Operator;
-import hr.chus.cchat.model.gwt.ext.FormPanelError;
 import hr.chus.cchat.util.StringUtil;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -27,8 +26,8 @@ public class AdminOperatorFunction extends ActionSupport implements Preparable {
 	private OperatorService operatorService;
 	private Operator operator;
 	private String operation;
-	private List<FormPanelError> errors;
-	private boolean success;
+	private Map<String, String> errorFields;
+	private String status;
 	
 	@Override
 	public void prepare() throws Exception { }
@@ -36,7 +35,9 @@ public class AdminOperatorFunction extends ActionSupport implements Preparable {
 	@Override
 	public String execute() throws Exception {
 		log.debug("AdminOperatorFunction fired...");
-		if (operation.equals("save/edit")) {
+		if (operation == null) {
+			log.error("Operation must not be null.");
+		} else if (operation.equals("save/edit")) {
 			operator = operatorService.updateOperator(operator);
 		} else if (operation.equals("delete")) {
 			operator = operatorService.getOperatorById(operator.getId());
@@ -50,40 +51,41 @@ public class AdminOperatorFunction extends ActionSupport implements Preparable {
 	@Override
 	public void validate() {
 		log.debug("Validate...");
-		errors = new LinkedList<FormPanelError>();
+		log.info(operator.getRole().getName());
+		errorFields = new LinkedHashMap<String, String>();
 		if (operator == null) {
-			errors.add(new FormPanelError("operator", getText("operator.null")));
+			errorFields.put("operator", getText("operator.null"));
 		} else if (operation == null) {
 		} else if (operation.equals("save/edit")) {
 			if (operator.getDisabled() == null) operator.setDisabled(false);
 			if (operator.getIsActive() == null) operator.setIsActive(false);
 			
 			if (operator.getUsername() == null || operator.getUsername().isEmpty()) {
-				errors.add(new FormPanelError("operator.username", getText("operator.username.empty")));
+				errorFields.put("operator.username", getText("operator.username.empty"));
 			} else if (operator.getUsername().length() > 30) {
-				errors.add(new FormPanelError("operator.username", getText("operator.username.toLong", new String[] { "30" })));
+				errorFields.put("operator.username", getText("operator.username.toLong", new String[] { "30" }));
 			} else if (operatorService.checkIfUsernameExists(operator)) {
-				errors.add(new FormPanelError("operator.username", getText("operator.username.exists")));
+				errorFields.put("operator.username", getText("operator.username.exists"));
 			}
 			
 			if (operator.getRole() == null) {
-				errors.add(new FormPanelError("operator.role", getText("operator.role.empty")));
+				errorFields.put("operator.role", getText("operator.role.empty"));
 			}
 			
 			if (operator.getId() == null && operator.getPassword() != null && operator.getPassword().length() > 15) {
-				errors.add(new FormPanelError("operator.password", getText("operator.password.toLong", new String[] { "15" })));
+				errorFields.put("operator.password", getText("operator.password.toLong", new String[] { "15" }));
 			}
 			
 			if (operator.getName() != null && operator.getName().length() > 20) {
-				errors.add(new FormPanelError("operator.name", getText("operator.name.toLong", new String[] { "20" })));
+				errorFields.put("operator.name", getText("operator.name.toLong", new String[] { "20" }));
 			}
 			
 			if (operator.getSurname() != null && operator.getSurname().length() > 30) {
-				errors.add(new FormPanelError("operator.surname", getText("operator.surname.toLong", new String[] { "30" })));
+				errorFields.put("operator.surname", getText("operator.surname.toLong", new String[] { "30" }));
 			}
 			
 			if (operator.getEmail() != null && operator.getEmail().length() > 50) {
-				errors.add(new FormPanelError("operator.email", getText("operator.email.toLong", new String[] { "50" })));
+				errorFields.put("operator.email", getText("operator.email.toLong", new String[] { "50" }));
 			}
 		}
 		
@@ -96,18 +98,18 @@ public class AdminOperatorFunction extends ActionSupport implements Preparable {
 			}
 		} else {
 			if (operator.getPassword() == null || operator.getPassword().length() == 0) {
-				errors.add(new FormPanelError("operator.password", getText("operator.password.empty")));
+				errorFields.put("operator.password", getText("operator.password.empty"));
 			} else {
 				operator.setPassword(StringUtil.encodePassword(operator.getPassword(), "SHA"));
 			}
 		}
 		
-		if (errors.size() == 0) {
-			errors = null;
-			success = true;
+		if (errorFields.size() == 0) {
+			errorFields = null;
+			status = "validation_ok";
 		} else {
-			addActionError(errors.size() + " errors found!");
-			success = false;
+			addActionError(errorFields.size() + " errors found!");
+			status = "validation_error";
 		}
 	}
 	
@@ -119,14 +121,13 @@ public class AdminOperatorFunction extends ActionSupport implements Preparable {
 	public Operator getOperator() { return operator; }
 	public void setOperator(Operator operator) { this.operator = operator; }
 
-	// TODO: FIX - Should be getErrors(). Had to be done this way because of GWT JSON build in validation.
-	public List<FormPanelError> geterrors() { return errors; }
-	public void setErrors(List<FormPanelError> errors) { this.errors = errors; }
+	public Map<String, String> getErrorFields() { return errorFields; }
+	public void setErrorFields(Map<String, String> errorFields) { this.errorFields = errorFields; }
 
 	public void setOperation(String operation) { this.operation = operation; }
 
-	public boolean isSuccess() { return success; }
-	public void setSuccess(boolean success) { this.success = success; }
+	public String getStatus() { return status; }
+	public void setStatus(String status) { this.status = status; }
 	
 }
  

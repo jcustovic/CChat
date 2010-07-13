@@ -52,6 +52,7 @@ public class OperatorServiceImpl implements OperatorService {
 	}
 	
 	@Override
+	@Transactional(readOnly = true)
 	public Operator getOperatorByUsername(String username) {
 		try {
 			return (Operator) entityManager.createNamedQuery("Operator.getByUsername").setParameter("username", username).getSingleResult();
@@ -67,6 +68,7 @@ public class OperatorServiceImpl implements OperatorService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public boolean checkIfUsernameExists(Operator operator) {
 		Operator operatorE = getOperatorByUsername(operator.getUsername());
 		if (operatorE == null) {
@@ -79,6 +81,7 @@ public class OperatorServiceImpl implements OperatorService {
 	}
 	
 	@Override
+	@Transactional(readOnly = true)
 	public Operator getOperatorById(Integer id) {
 		return entityManager.find(Operator.class, id);
 	}

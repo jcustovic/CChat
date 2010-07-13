@@ -11,7 +11,6 @@
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<meta name="gwt:module" content="com.google.gwt.examples.i18n.ColorNameLookupExample">
 	<meta name="gwt:property" content="locale=hr_HR">
 	
 	<title>
@@ -20,12 +19,37 @@
 	
 	<!-- <link rel="favicon" href="${path}/images/favicon.ico" type="image/x-icon" /> --> 
 	<link rel="stylesheet" href="${path}/style/style.css" type="text/css"/>
-	<link rel="stylesheet" href="${path}/js/ext/resources/css/ext-all.css" type="text/css"/>
 	
-	<!-- Begin ExtJS library files -->
-	<script type="text/javascript" src="${path}/js/ext/adapter/ext/ext-base.js"></script>
-	<script type="text/javascript" src="${path}/js/ext/ext-all.js"></script>
-	<!-- End ExtJS library files -->
+	 <style type="text/css">
+        body { overflow:hidden }
+        #loading {
+            border: 1px solid #ccc;
+            position: absolute;
+            left: 45%;
+            top: 40%;
+            padding: 2px;
+            z-index: 20001;
+            height: auto;
+            width: 10%;
+        }
+
+        #loading a {
+            color: #225588;
+        }
+
+        #loading .loadingIndicator {
+            background: white;
+            font: bold 13px tahoma, arial, helvetica;
+            padding: 10px;
+            margin: 0;
+            height: auto;
+            color: #444;
+        }
+
+        #loadingMsg {
+            font: normal 10px arial, tahoma, sans-serif;
+        }
+    </style>
 </head>
 
 <body>

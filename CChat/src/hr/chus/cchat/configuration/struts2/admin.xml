@@ -31,9 +31,7 @@
 		</interceptors>
 		
 		<default-interceptor-ref name="adminSecureStack"/>
-		
-		<default-action-ref name="AdminMain" />
-		
+				
 		<global-results>
 			<result name="login" type="httpheader">
 				 <param name="error">450</param>
@@ -65,14 +63,6 @@
         </action>
 		
 		<!-- Admin area -->
-	
-		<action name="AdminMain" class="hr.chus.cchat.struts2.action.admin.AdminMain">
-			<result>admin.Main</result>
-		</action>
-		
-		<action name="AdminMainGWT" class="hr.chus.cchat.struts2.action.admin.AdminMain">
-			<result>admin.MainGWT</result>
-		</action>
 		
 		<action name="Admin*List" class="hr.chus.cchat.struts2.action.admin.Admin{1}List">
 			<result>admin.{1}List</result>

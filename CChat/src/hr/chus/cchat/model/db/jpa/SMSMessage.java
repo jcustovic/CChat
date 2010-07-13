@@ -31,7 +31,7 @@ public class SMSMessage implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	public enum Direction {
-		SEND, NOTIFY
+		IN, OUT
 	}
 	
 	private Integer id;
