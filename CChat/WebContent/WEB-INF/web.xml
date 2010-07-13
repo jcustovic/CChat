@@ -43,7 +43,7 @@
 	</session-config>
 	
 	<welcome-file-list>
-		<welcome-file>index.c</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list> 
   	
   	 

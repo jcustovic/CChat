@@ -1,55 +1,32 @@
-body {
-	margin: 0;
-	padding: 0;
-	font: small Arial, Helvetica, Verdana, sans-serif;
+/** CChat application. */
+
+h1 {
+  font-size: 2em;
+  font-weight: bold;
+  color: #777777;
+  margin: 40px 0px 70px;
+  text-align: center;
 }
 
-a {
-	color: #000000;
+.application_title {
+	font-family: Arial, Verdana, tahoma, serif;
+    color: #454545;
+    font-size: 20px;
 }
 
-img {
-	border: 0;
-}
-
-form {
-	display: inline;
+.interactImageHover {
+    font-family: Verdana, Bitstream Vera Sans, sans-serif;
+    font-size: 11px;
+    border: 1px solid #808080;
+    padding: 5px;
+    background-color: #b8d0ff;
+    color: black;
 }
 
 .copyright {
 	padding-top: 10px;
 	font-size: 9px;
 	text-align: center;
-}
-
-.customerList a {
-	text-decoration: none;
-	color: #ffffff;
-}
-
-.table-list {
-	margin:5px;
-	border-collapse: collapse;
-	text-align: center;
-	border: 1px solid #000000;
-	border-spacing: 0px;
-}
-
-.table-list  th {
-	border: 1px solid #000000;
-	background-image: url("../images/table-th.gif");
-	background-repeat: repeat-x;
-	background-color: #ff8601;
-	padding-top: 3px;
-	padding-bottom: 3px;
-	padding-left: 2px;
-	padding-right: 2px;
-}
-
-.table-list td {
-	border: 1px solid #000000;
-	background-color: #f5fbeb;
-	padding: 2px;
 }
 
 .areaErrors {
@@ -63,163 +40,4 @@ form {
 	padding: 6px 10px 6px 10px;
 	font-size: 100%;
 	width: 50%;
-}
-
-/* Formatting specific to the StockWatcher application */
-
-body {
-  padding: 10px;
-}
-
-.validationFailedBorder {
-	border-color: red;
-	border-width: 2px;
-}
-
-/* operator list header row */
-.operatorListHeader {
-	background-color: #2062B8;
-	color: white;
-	font-weight: bold;
-	text-align: center;
-}
-
-/*chooser */
-.details .x-panel-body {
-	padding: 10px;
-	text-align: center;
-}
-
-.details img {
-	padding: 10px;
-	height: 90px;
-	width: 64px;
-}
-
-.details-info {
-	border-top: 1px solid #cccccc;
-	font: 11px Arial, Helvetica, sans-serif;
-	margin-top: 5px;
-	padding-top: 5px;
-	text-align: left;
-}
-
-.details-info b {
-	color: #555555;
-	display: block;
-	margin-bottom: 4px;
-}
-
-.details-info span {
-	display: block;
-	margin-bottom: 5px;
-	margin-left: 5px;
-}
-
-.ychooser-dlg select {
-	font-size: 12px;
-}
-
-#ychooser-view .x-panel-body {
-	background: white none repeat scroll 0%;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	font-size-adjust: none;
-	font-stretch: normal;
-	font-style: normal;
-	font-variant: normal;
-	font-weight: normal;
-	line-height: normal;
-}
-
-#ychooser-view .thumb {
-	background: #dddddd;
-	padding: 3px;
-}
-
-#ychooser-view .thumb img {
-	height: 90px;
-	width: 64px;
-}
-
-#ychooser-view .thumb-wrap {
-	float: left;
-	margin: 4px;
-	margin-right: 0;
-	padding: 5px;
-}
-
-#ychooser-view .thumb-wrap span {
-	display: block;
-	overflow: hidden;
-	text-align: center;
-}
-
-#ychooser-view .x-view-selected {
-	background: #c3daf9;
-	border: 2px solid #6593cf;
-	padding: 3px;
-}
-
-#ychooser-view .x-view-selected .thumb {
-	background: transparent;
-}
-
-#ychooser-view .loading-indicator {
-	font-size: 11px;
-	background-image: url( "images/ext/resources/images/default/grid/loading.gif" );
-	background-repeat: no-repeat;
-	background-position: left;
-	padding-left: 20px;
-	margin: 10px;
-}
-
-#ychooser-view .x-view-over {
-	border: 1px solid #dddddd;
-	background: #efefef url( "images/ext/resources/images/default/grid/row-over.gif" ) repeat-x left top;
-	padding: 4px;
-}
-
-.home-icon {
-	background-image: url( "images/home.png" ) !important;
-}
-
-.operators-icon {
-	background-image: url( "images/operators.png" ) !important;
-}
-
-.nicks-icon {
-	background-image: url( "images/nicks.png" ) !important;
-}
-
-.pictures-icon {
-	background-image: url( "images/pictures.png" ) !important;
-}
-
-.users-icon {
-	background-image: url( "images/users.png" ) !important;
-}
-
-.settings-icon {
-	background-image: url( "images/settings.png" ) !important;
-}
-
-.edit-icon {
-	background-image: url( "images/edit.png" ) !important;
-}
-
-.delete-icon {
-	background-image: url( "images/delete.png" ) !important;
-}
-
-.new-icon {
-	background-image: url( "images/new.png" ) !important;
-}
-
-.ok-icon {
-	background-image: url( "images/ok.png" ) !important;
-}
-
-.search-icon {
-	background-image: url( "images/find.gif" ) !important;
 }
