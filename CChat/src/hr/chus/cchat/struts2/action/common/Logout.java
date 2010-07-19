@@ -14,12 +14,17 @@ import org.apache.struts2.interceptor.SessionAware;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+/**
+ * 
+ * @author Jan Čustović (jan_custovic@yahoo.com)
+ *
+ */
 public class Logout extends ActionSupport implements SessionAware {
 	
 	private static final long serialVersionUID = 1L;
 	private Log log = LogFactory.getLog(getClass());
 	
-	private Map session;
+	private Map<String, Object> session;
 	private OperatorService operatorService;
 	
 
@@ -41,7 +46,7 @@ public class Logout extends ActionSupport implements SessionAware {
 	
 	// Getters & setters
 	
-	public void setSession(Map session) { this.session = session; }
+	public void setSession(Map<String, Object> session) { this.session = session; }
 
 	public void setOperatorService(OperatorService operatorService) { this.operatorService = operatorService; }	
 		

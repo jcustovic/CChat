@@ -15,7 +15,7 @@ import com.opensymphony.xwork2.ActionSupport;
 
 /**
  * 
- * @author Jan Čustović
+ * @author Jan Čustović (jan_custovic@yahoo.com)
  *
  */
 public class AdminUserList extends ActionSupport {
@@ -34,7 +34,6 @@ public class AdminUserList extends ActionSupport {
 	private String surname;
 	private int start;
 	private int limit;
-	private String sort;
 	private Long totalCount;
 
 
@@ -72,8 +71,6 @@ public class AdminUserList extends ActionSupport {
 	public void setStart(int start) { this.start = start; }
 
 	public void setLimit(int limit) { this.limit = limit; }
-
-	public void setSort(String sort) { this.sort = sort; }
 
 	public Long getTotalCount() { return totalCount; }
 	public void setTotalCount(Long totalCount) { this.totalCount = totalCount; }	

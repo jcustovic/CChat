@@ -6,7 +6,7 @@ import hr.chus.cchat.model.db.jpa.ServiceProvider;
 
 /**
  * 
- * @author Jan Čustović
+ * @author Jan Čustović (jan_custovic@yahoo.com)
  *
  */
 public interface ServiceProviderService {

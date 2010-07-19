@@ -11,7 +11,7 @@ import org.apache.struts2.util.StrutsTypeConverter;
 
 /**
  * 
- * @author chus
+ * @author Jan Čustović (jan_custovic@yahoo.com)
  *
  */
 public class ServiceProviderTypeConverter extends StrutsTypeConverter {

@@ -11,6 +11,11 @@ import hr.chus.cchat.model.db.jpa.Picture;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+/**
+ * 
+ * @author Jan Čustović (jan_custovic@yahoo.com)
+ *
+ */
 public class AdminPictureList extends ActionSupport {
 
 	private static final long serialVersionUID = 1L;

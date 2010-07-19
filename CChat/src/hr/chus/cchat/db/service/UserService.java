@@ -1,12 +1,15 @@
 package hr.chus.cchat.db.service;
 
-import java.util.List;
-
 import hr.chus.cchat.model.db.jpa.Nick;
 import hr.chus.cchat.model.db.jpa.Operator;
 import hr.chus.cchat.model.db.jpa.ServiceProvider;
 import hr.chus.cchat.model.db.jpa.User;
 
+/**
+ * 
+ * @author Jan Čustović (jan_custovic@yahoo.com)
+ *
+ */
 public interface UserService {
 	
 	public void addUser(User user);

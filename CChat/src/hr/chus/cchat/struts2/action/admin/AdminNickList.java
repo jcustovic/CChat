@@ -10,6 +10,11 @@ import com.opensymphony.xwork2.ActionSupport;
 import hr.chus.cchat.db.service.NickService;
 import hr.chus.cchat.model.db.jpa.Nick;
 
+/**
+ * 
+ * @author Jan Čustović (jan_custovic@yahoo.com)
+ *
+ */
 public class AdminNickList extends ActionSupport {
 
 	private static final long serialVersionUID = 1L;

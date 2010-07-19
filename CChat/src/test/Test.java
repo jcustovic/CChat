@@ -1,6 +1,10 @@
 package test;
 
-
+/**
+ * 
+ * @author Jan Čustović (jan_custovic@yahoo.com)
+ *
+ */
 public class Test {
 
 	/**

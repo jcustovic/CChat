@@ -6,7 +6,7 @@
 <struts>
 
 	<constant name="struts.objectFactory" value="spring"/>
-	<constant name="struts.objectFactory.spring.autoWire" value="type"/>
+	<constant name="struts.objectFactory.spring.autoWire" value="name"/>
 	<constant name="struts.enable.DynamicMethodInvocation" value="false"/>
 	<constant name="struts.devMode" value="false"/>
 	<constant name="struts.multipart.maxSize" value="10485760"/>

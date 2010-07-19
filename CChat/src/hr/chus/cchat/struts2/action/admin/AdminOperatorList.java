@@ -6,9 +6,10 @@ import hr.chus.cchat.db.service.OperatorService;
 import hr.chus.cchat.model.db.jpa.Operator;
 
 import com.opensymphony.xwork2.ActionSupport;
+
 /**
  * 
- * @author chus
+ * @author Jan Čustović (jan_custovic@yahoo.com)
  *
  */
 public class AdminOperatorList extends ActionSupport {

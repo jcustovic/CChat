@@ -14,7 +14,7 @@ import hr.chus.cchat.util.StringUtil;
 
 /**
  * 
- * @author chus
+ * @author Jan Čustović (jan_custovic@yahoo.com)
  *
  */
 @Transactional

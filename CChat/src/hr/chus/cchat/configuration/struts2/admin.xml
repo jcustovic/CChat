@@ -4,14 +4,6 @@
     "http://struts.apache.org/dtds/struts-2.0.dtd">
     
 <struts>
-
-	<constant name="struts.objectFactory" value="spring"/>
-	<constant name="struts.objectFactory.spring.autoWire" value="type"/>
-	<constant name="struts.enable.DynamicMethodInvocation" value="false"/>
-	<constant name="struts.devMode" value="false"/>
-	<constant name="struts.multipart.maxSize" value="10485760"/>
-	<constant name="struts.i18n.encoding" value="UTF-8"/>
-	
 	
 	<package name="admin" namespace="/admin" extends="json-default">
 	

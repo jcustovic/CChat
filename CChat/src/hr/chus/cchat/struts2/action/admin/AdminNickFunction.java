@@ -1,17 +1,21 @@
 package hr.chus.cchat.struts2.action.admin;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import hr.chus.cchat.db.service.NickService;
 import hr.chus.cchat.model.db.jpa.Nick;
-import hr.chus.cchat.model.gwt.ext.FormPanelError;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+/**
+ * 
+ * @author Jan Čustović (jan_custovic@yahoo.com)
+ *
+ */
 public class AdminNickFunction extends ActionSupport {
 	
 	private static final long serialVersionUID = 1L;
@@ -20,8 +24,8 @@ public class AdminNickFunction extends ActionSupport {
 	private NickService nickService;
 	private Nick nick;
 	private String operation;
-	private List<FormPanelError> errors;
-	private boolean success;
+	private Map<String, String> errorFields;
+	private String status;
 	
 	
 	@Override
@@ -41,29 +45,29 @@ public class AdminNickFunction extends ActionSupport {
 	@Override
 	public void validate() {
 		log.debug("Validate...");
-		errors = new LinkedList<FormPanelError>();
+		errorFields = new LinkedHashMap<String, String>();
 		if (nick == null) {
-			errors.add(new FormPanelError("nick", getText("nick.null")));
+			errorFields.put("nick", getText("nick.null"));
 		} else if (operation == null) {
 		} else if (operation.equals("save/edit")) {
 			if (nick.getName() == null || nick.getName().length() == 0) {
-				errors.add(new FormPanelError("nick.name", getText("nick.name.empty")));
+				errorFields.put("nick.name", getText("nick.name.empty"));
 			} else if (nick.getName().length() > 20) {
-				errors.add(new FormPanelError("nick.name", getText("nick.name.toLong", new String[] { "20" })));
+				errorFields.put("nick.name", getText("nick.name.toLong", new String[] { "20" }));
 			} else if (nickService.checkIfNameExists(nick)) {
-				errors.add(new FormPanelError("nick.name", getText("nick.name.exists")));
+				errorFields.put("nick.name", getText("nick.name.exists"));
 			}
 			if (nick.getDescription().length() > 300) {
-				errors.add(new FormPanelError("nick.description", getText("nick.description.toLong", new String[] { "300" })));
+				errorFields.put("nick.description", getText("nick.description.toLong", new String[] { "300" }));
 			}
 		}
 		
-		if (errors.size() == 0) {
-			errors = null;
-			success = true;
+		if (errorFields.size() == 0) {
+			errorFields = null;
+			status = "validation_ok";
 		} else {
-			addActionError(errors.size() + " errors found!");
-			success = false;
+			addActionError(errorFields.size() + " errors found!");
+			status = "validation_error";
 		}
 	}
 
@@ -76,12 +80,12 @@ public class AdminNickFunction extends ActionSupport {
 	public String getOperation() { return operation; }
 	public void setOperation(String operation) { this.operation = operation; }
 
-	// TODO: FIX - Should be getErrors(). Had to be done this way because of GWT JSON build in validation.
-	public List<FormPanelError> geterrors() { return errors; }
-	public void setErrors(List<FormPanelError> errors) { this.errors = errors; }
-
-	public boolean isSuccess() { return success; }
-
 	public void setNickService(NickService nickService) { this.nickService = nickService; }
+	
+	public Map<String, String> getErrorFields() { return errorFields; }
+	public void setErrorFields(Map<String, String> errorFields) { this.errorFields = errorFields; }
+
+	public String getStatus() { return status; }
+	public void setStatus(String status) { this.status = status; }
 
 }

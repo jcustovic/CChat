@@ -19,7 +19,7 @@ import com.opensymphony.xwork2.ActionSupport;
 
 /**
  * 
- * @author Jan Čustović
+ * @author Jan Čustović (jan_custovic@yahoo.com)
  *
  */
 public class AdminPictureUpload extends ActionSupport implements ServletContextAware {

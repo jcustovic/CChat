@@ -1,0 +1,19 @@
+{
+    "nickList": [
+        {
+            "description": "Nick 1",
+            "id": 1,
+            "name": "nick1"
+        },
+        {
+            "description": "Nick 2",
+            "id": 2,
+            "name": "nick2"
+        },
+        {
+            "description": "Nick 3",
+            "id": 3,
+            "name": "nick3"
+        }
+    ]
+}
