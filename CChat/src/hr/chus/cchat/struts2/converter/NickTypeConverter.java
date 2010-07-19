@@ -9,6 +9,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.util.StrutsTypeConverter;
 
+/**
+ * 
+ * @author Jan Čustović (jan_custovic@yahoo.com)
+ *
+ */
 public class NickTypeConverter extends StrutsTypeConverter {
 	
 	private Log log = LogFactory.getLog(getClass());

@@ -15,7 +15,7 @@ import com.opensymphony.xwork2.Preparable;
 
 /**
  * 
- * @author chus
+ * @author Jan Čustović (jan_custovic@yahoo.com)
  *
  */
 public class AdminOperatorFunction extends ActionSupport implements Preparable {
@@ -51,7 +51,6 @@ public class AdminOperatorFunction extends ActionSupport implements Preparable {
 	@Override
 	public void validate() {
 		log.debug("Validate...");
-		log.info(operator.getRole().getName());
 		errorFields = new LinkedHashMap<String, String>();
 		if (operator == null) {
 			errorFields.put("operator", getText("operator.null"));
@@ -120,11 +119,11 @@ public class AdminOperatorFunction extends ActionSupport implements Preparable {
 	
 	public Operator getOperator() { return operator; }
 	public void setOperator(Operator operator) { this.operator = operator; }
+	
+	public void setOperation(String operation) { this.operation = operation; }
 
 	public Map<String, String> getErrorFields() { return errorFields; }
 	public void setErrorFields(Map<String, String> errorFields) { this.errorFields = errorFields; }
-
-	public void setOperation(String operation) { this.operation = operation; }
 
 	public String getStatus() { return status; }
 	public void setStatus(String status) { this.status = status; }

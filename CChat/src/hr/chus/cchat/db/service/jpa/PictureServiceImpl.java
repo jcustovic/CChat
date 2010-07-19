@@ -12,6 +12,11 @@ import hr.chus.cchat.db.service.PictureService;
 import hr.chus.cchat.model.db.jpa.Nick;
 import hr.chus.cchat.model.db.jpa.Picture;
 
+/**
+ * 
+ * @author Jan Čustović (jan_custovic@yahoo.com)
+ *
+ */
 @Transactional
 public class PictureServiceImpl implements PictureService {
 	

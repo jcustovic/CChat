@@ -24,7 +24,11 @@
 	
 	<logger name="org.hibernate">
 		<level value="info"/>
-	</logger> 
+	</logger>
+	
+	<logger name="com.opensymphony.xwork2.ognl.OgnlValueStack">
+		<level value="error"/>
+	</logger>
 	
 	<root>
 		<priority value="info"></priority>

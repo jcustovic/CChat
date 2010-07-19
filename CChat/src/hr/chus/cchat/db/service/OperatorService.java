@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * 
- * @author chus
+ * @author Jan Čustović (jan_custovic@yahoo.com)
  *
  */
 public interface OperatorService {

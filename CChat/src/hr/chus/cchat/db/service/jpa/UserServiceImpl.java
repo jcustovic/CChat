@@ -14,6 +14,11 @@ import hr.chus.cchat.model.db.jpa.Operator;
 import hr.chus.cchat.model.db.jpa.ServiceProvider;
 import hr.chus.cchat.model.db.jpa.User;
 
+/**
+ * 
+ * @author Jan Čustović (jan_custovic@yahoo.com)
+ *
+ */
 @Transactional
 public class UserServiceImpl implements UserService {
 	

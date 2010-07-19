@@ -6,7 +6,7 @@ import hr.chus.cchat.model.db.jpa.Role;
 
 /**
  * 
- * @author chus
+ * @author Jan Čustović (jan_custovic@yahoo.com)
  *
  */
 public interface RoleService {

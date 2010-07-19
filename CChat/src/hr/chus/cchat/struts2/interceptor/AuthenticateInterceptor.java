@@ -13,13 +13,9 @@ import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.Interceptor;
 
 /**
- * Razred predstavlja presretač u Struts2 okviru zaduženog za autorizaciju
- * korisnika.
  * 
- * @see Operator
- * @see RoleJPA
- * @author Jan Čustović
- * 
+ * @author Jan Čustović (jan_custovic@yahoo.com)
+ *
  */
 public class AuthenticateInterceptor implements Interceptor {
 

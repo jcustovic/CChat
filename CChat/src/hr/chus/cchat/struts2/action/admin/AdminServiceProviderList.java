@@ -5,15 +5,16 @@ import hr.chus.cchat.model.db.jpa.ServiceProvider;
 
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import com.opensymphony.xwork2.ActionSupport;
 
+/**
+ * 
+ * @author Jan Čustović (jan_custovic@yahoo.com)
+ *
+ */
 public class AdminServiceProviderList  extends ActionSupport {
 
 	private static final long serialVersionUID = 1L;
-	private Log log = LogFactory.getLog(getClass());
 	
 	private List<ServiceProvider> serviceProviderList;
 	private ServiceProviderService servicProviderService;

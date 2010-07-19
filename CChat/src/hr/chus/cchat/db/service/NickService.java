@@ -6,7 +6,7 @@ import hr.chus.cchat.model.db.jpa.Nick;
 
 /**
  * 
- * @author Jan Čustović
+ * @author Jan Čustović (jan_custovic@yahoo.com)
  *
  */
 public interface NickService {

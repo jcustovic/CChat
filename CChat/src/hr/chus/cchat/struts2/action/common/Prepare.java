@@ -16,6 +16,11 @@ import hr.chus.cchat.util.StringUtil;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+/**
+ * 
+ * @author Jan Čustović (jan_custovic@yahoo.com)
+ *
+ */
 public class Prepare extends ActionSupport  {
 	
 	private static final long serialVersionUID = 1L;

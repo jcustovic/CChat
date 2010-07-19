@@ -11,6 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import hr.chus.cchat.db.service.NickService;
 import hr.chus.cchat.model.db.jpa.Nick;
 
+/**
+ * 
+ * @author Jan Čustović (jan_custovic@yahoo.com)
+ *
+ */
 @Transactional
 public class NickServiceImpl implements NickService {
 	

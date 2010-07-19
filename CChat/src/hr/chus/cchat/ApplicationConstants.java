@@ -2,9 +2,9 @@ package hr.chus.cchat;
 
 
 /**
- * Razred sadrži konstante koje se koriste kroz cijelu aplikaciju.
+ * Constants throughout the application. 
  * 
- * @author Jan Čustović
+ * @author Jan Čustović (jan_custovic@yahoo.com)
  * 
  */
 public class ApplicationConstants {
