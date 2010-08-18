@@ -39,7 +39,14 @@ public class Picture implements Serializable {
 	
 	public Picture() { }
 
-	
+	public Picture(Nick nick, String name, String type, Long length) {
+		this.nick = nick;
+		this.name = name;
+		this.type = type;
+		this.length = length;
+	}
+
+
 	@Id
 	@GeneratedValue
 	@Column(name = "id")
@@ -63,11 +70,8 @@ public class Picture implements Serializable {
 	public Long getLength() { return length; }
 	public void setLength(Long length) { this.length = length; }
 
-	// TODO: This is fixed value for picture folder! Need to change.
 	@Transient
-	public String getUrl() { 
-		url = ("../pictures/" + getName()); 
-		return url; 
-	}
+	public String getUrl() { return url; }
 	public void setUrl(String url) { this.url = url; }
+	
 }

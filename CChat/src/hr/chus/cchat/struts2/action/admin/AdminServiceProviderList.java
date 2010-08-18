@@ -17,11 +17,11 @@ public class AdminServiceProviderList  extends ActionSupport {
 	private static final long serialVersionUID = 1L;
 	
 	private List<ServiceProvider> serviceProviderList;
-	private ServiceProviderService servicProviderService;
+	private ServiceProviderService serviceProviderService;
 	
 	@Override
 	public String execute() throws Exception {
-		serviceProviderList = servicProviderService.getAll();
+		serviceProviderList = serviceProviderService.getAll();
 		return SUCCESS;
 	}
 
@@ -31,6 +31,6 @@ public class AdminServiceProviderList  extends ActionSupport {
 	public List<ServiceProvider> getServiceProviderList() { return serviceProviderList; }
 	public void setServiceProviderList(List<ServiceProvider> serviceProviderList) { this.serviceProviderList = serviceProviderList; }
 
-	public void setServicProviderService(ServiceProviderService servicProviderService) { this.servicProviderService = servicProviderService; }
+	public void setServiceProviderService(ServiceProviderService serviceProviderService) { this.serviceProviderService = serviceProviderService; }
 
 }

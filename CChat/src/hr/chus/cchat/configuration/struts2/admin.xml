@@ -25,14 +25,15 @@
 		<default-interceptor-ref name="adminSecureStack"/>
 				
 		<global-results>
-			<result name="login" type="httpheader">
+			<!-- result name="login">
 				 <param name="error">450</param>
  				 <param name="errorMessage">You must log in</param>
-			</result>
-			<result name="Exception" type="httpheader">
-				<param name="error">500</param>
-				<param name="errorMessage">Internal server error</param>
-			</result>
+			</result -->
+			<result name="login" type="redirectAction">
+                <param name="actionName">Login</param>
+                <param name="namespace">/</param>
+            </result>
+			<result name="Exception">global.Exception</result>
 		</global-results>
 		
 		<global-exception-mappings>
@@ -82,9 +83,8 @@
 				<param name="allowedTypes">image/png,image/gif,image/jpeg,image/jpg,image/pjpeg</param>
 			</interceptor-ref>
 			<interceptor-ref name="adminSecureStack" />
-			<result>admin.PictureGWT</result>
-			<result name="input">struts2.Error</result>
-			<result name="error">struts2.Error</result>
+			<result>gwt.uploadResult</result>
+			<result name="input">gwt.uploadResult</result>
 	    </action>
 	
 	</package>
