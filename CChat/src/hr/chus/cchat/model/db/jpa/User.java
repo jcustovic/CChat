@@ -58,6 +58,7 @@ public class User implements Serializable {
 	}
 
 
+	// Getters && setters
 
 	@Id
 	@GeneratedValue
@@ -109,7 +110,7 @@ public class User implements Serializable {
 	public void setJoined(Date joined) { this.joined = joined; }
 
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "Users_Pictures"
 			, joinColumns = {
 				@JoinColumn(name = "user_id")

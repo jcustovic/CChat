@@ -9,6 +9,8 @@ import hr.chus.cchat.model.db.jpa.Picture;
 
 import javax.servlet.ServletContext;
 
+import org.apache.struts2.util.ServletContextAware;
+
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
@@ -16,7 +18,7 @@ import com.opensymphony.xwork2.ActionSupport;
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *
  */
-public class AdminPictureFunction extends ActionSupport {
+public class AdminPictureFunction extends ActionSupport implements ServletContextAware {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -29,7 +31,7 @@ public class AdminPictureFunction extends ActionSupport {
 	
 	@Override
 	public String execute() throws Exception {
-		status = "validation_ok";
+		if (operation == null) return SUCCESS;
 		if (operation.equals("delete")) {
 			File theFile = new File(servletContext.getRealPath(ApplicationConstants.CONTENT_PATH) + System.getProperty("file.separator") + picture.getName());
 			if (theFile.exists()) {
@@ -56,6 +58,7 @@ public class AdminPictureFunction extends ActionSupport {
 
 	public void setPictureService(PictureService pictureService) { this.pictureService = pictureService; }
 
+	@Override
 	public void setServletContext(ServletContext servletContext) { this.servletContext = servletContext; }
 	
 	public Map<String, String> getErrorFields() { return errorFields; }

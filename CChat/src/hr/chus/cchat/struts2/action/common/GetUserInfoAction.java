@@ -3,7 +3,6 @@ package hr.chus.cchat.struts2.action.common;
 import hr.chus.cchat.ApplicationConstants;
 import hr.chus.cchat.model.db.jpa.Operator;
 
-import java.util.Date;
 import java.util.Map;
 
 import org.apache.struts2.interceptor.SessionAware;
@@ -21,12 +20,10 @@ public class GetUserInfoAction extends ActionSupport implements SessionAware {
 	
 	private Map<String, Object> session;
 	private Operator operator;
-	private Date date;
 	
 	@Override
 	public String execute() {
 		operator = (Operator) session.get(ApplicationConstants.USER_SESSION);
-		date = new Date();
 		return SUCCESS;
 	}
 
@@ -40,7 +37,4 @@ public class GetUserInfoAction extends ActionSupport implements SessionAware {
 	public Operator getOperator() { return operator; }
 	public void setOperator(Operator operator) { this.operator = operator; }
 
-	public Date getDate() { return date; }
-	public void setDate(Date date) { this.date = date; }
-		
 }

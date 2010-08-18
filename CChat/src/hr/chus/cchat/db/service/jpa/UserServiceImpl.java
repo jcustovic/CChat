@@ -93,7 +93,11 @@ public class UserServiceImpl implements UserService {
 		if (surname != null && !surname.isEmpty()) query.setParameter("surname", surname + "%");
 		
 		Object[] result = new Object[2];
-		result[1] = query.setFirstResult(start).setMaxResults(limit).getResultList();
+		if (limit == 0) {
+			result[1] = query.getResultList();
+		} else {
+			result[1] = query.setFirstResult(start).setMaxResults(limit).getResultList();
+		}
 		
 		Query queryCount = entityManager.createQuery("SELECT COUNT(u) FROM User u " + queryWhereBuffer.toString());
 		if (nick != null) queryCount.setParameter("nick", nick);

@@ -1,0 +1,9 @@
+DROP TABLE Users_Pictures;
+DROP TABLE SMS_Messages;
+DROP TABLE Users;
+DROP TABLE Operators;
+DROP TABLE Pictures;
+DROP TABLE Configuration;
+DROP TABLE Nicks;
+DROP TABLE Operator_Roles;
+DROP TABLE Service_Provider;

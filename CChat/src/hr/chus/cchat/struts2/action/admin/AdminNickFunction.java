@@ -57,7 +57,7 @@ public class AdminNickFunction extends ActionSupport {
 			} else if (nickService.checkIfNameExists(nick)) {
 				errorFields.put("nick.name", getText("nick.name.exists"));
 			}
-			if (nick.getDescription().length() > 300) {
+			if (nick.getDescription() != null && nick.getDescription().length() > 300) {
 				errorFields.put("nick.description", getText("nick.description.toLong", new String[] { "300" }));
 			}
 		}

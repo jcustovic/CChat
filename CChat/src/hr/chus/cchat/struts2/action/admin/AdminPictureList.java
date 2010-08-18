@@ -8,6 +8,7 @@ import org.apache.commons.logging.LogFactory;
 import hr.chus.cchat.db.service.PictureService;
 import hr.chus.cchat.model.db.jpa.Nick;
 import hr.chus.cchat.model.db.jpa.Picture;
+import hr.chus.cchat.spring.override.OpenPropertyPlaceholderConfigurer;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -25,16 +26,22 @@ public class AdminPictureList extends ActionSupport {
 	private PictureService pictureService;
 	private Nick nick;
 	
+	private OpenPropertyPlaceholderConfigurer propertyConfigurer;
+	
+	
 	@Override
 	public String execute() throws Exception {
-		try {
-			if (nick == null) {
-				pictureList = pictureService.getAllPictures();
-			} else {
-				pictureList = pictureService.getPicturesByNick(nick);
-			}
-		} catch (Exception e) {
-			log.error(e, e);
+		
+		String dataPath = (String) propertyConfigurer.getMergedProperties().get("data.dir");
+		if (dataPath == null) dataPath = "data";
+
+		if (nick == null) {
+			pictureList = pictureService.getAllPictures();
+		} else {
+			pictureList = pictureService.getPicturesByNick(nick);
+		}
+		for (Picture picture : pictureList) {
+			picture.setUrl(dataPath + "/" + picture.getName());
 		}
 		log.debug("Got " + pictureList.size() + " picture(s).");
 		return SUCCESS;
@@ -50,5 +57,7 @@ public class AdminPictureList extends ActionSupport {
 
 	public Nick getNick() { return nick; }
 	public void setNick(Nick nick) { this.nick = nick; }
+
+	public void setPropertyConfigurer(OpenPropertyPlaceholderConfigurer propertyConfigurer) { this.propertyConfigurer = propertyConfigurer; }
 		
 }
