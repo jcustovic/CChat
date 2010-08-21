@@ -2,21 +2,23 @@
 <!-- module rename-to='cchatadminsmartgwt' -->
 <module rename-to='admin'>
  
-    <inherits name='com.google.gwt.user.User'/>
+	<inherits name='com.google.gwt.user.User'/>
     <inherits name="com.google.gwt.core.Core"/>
     <inherits name="com.google.gwt.user.History"/>
 
     <inherits name="com.smartgwt.SmartGwt"/>
 
 
-  <!-- Other module inherits                                      -->
-
-  <!-- Specify the app entry point class.                         -->
-  <entry-point class='hr.chus.client.smartgwt.client.CChatAdminSmartGWT'/>
-  
-  <extend-property name="locale" values="hr" />
-
-  <!-- Specify the paths for translatable code -->
-  <source path='client'/>
+	<!-- Other module inherits                                      -->
+	
+	<!-- Specify the app entry point class.                         -->
+	<entry-point class='hr.chus.client.smartgwt.client.CChatAdminSmartGWT'/>
+	
+	<extend-property name="locale" values="hr" />
+	
+	<!-- Specify the paths for translatable code -->
+	<source path='client'/>
+	
+	<source path='java.util.TimeZone' />
 
 </module>

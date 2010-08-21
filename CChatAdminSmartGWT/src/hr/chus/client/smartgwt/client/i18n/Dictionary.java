@@ -4,176 +4,216 @@ import com.google.gwt.i18n.client.Constants;
 
 /**
  * 
- * @author chus
- *
+ * @author Jan Čustović
+ * 
  */
 public interface Dictionary extends Constants {
-	  @DefaultStringValue("Username")
-	  String username();
-	  
-	  @DefaultStringValue("Password")
-	  String password();
 
-	  @DefaultStringValue("Role")
-	  String role();
+	@DefaultStringValue("Username")
+	String username();
 
-	  @DefaultStringValue("Name")
-	  String name();
+	@DefaultStringValue("Password")
+	String password();
 
-	  @DefaultStringValue("Surname")
-	  String surname();
+	@DefaultStringValue("Role")
+	String role();
 
-	  @DefaultStringValue("Email")
-	  String email();
+	@DefaultStringValue("Name")
+	String name();
 
-	  @DefaultStringValue("Active")
-	  String isActive();
-	  
-	  @DefaultStringValue("Disabled")
-	  String isDisabled();
-	  
-	  @DefaultStringValue("Disable")
-	  String disable();
-	  
-	  @DefaultStringValue("Operators")
-	  String operators();
+	@DefaultStringValue("Surname")
+	String surname();
 
-	  @DefaultStringValue("Nicks")
-	  String nicks();
+	@DefaultStringValue("Email")
+	String email();
 
-	  @DefaultStringValue("Pictures")
-	  String pictures();
+	@DefaultStringValue("Active")
+	String isActive();
 
-	  @DefaultStringValue("Loading...")
-	  String loading();
+	@DefaultStringValue("Disabled")
+	String isDisabled();
 
-	  @DefaultStringValue("Menu")
-	  String menu();
+	@DefaultStringValue("Disable")
+	String disable();
 
-	  @DefaultStringValue("Settings")
-	  String settings();
+	@DefaultStringValue("Operators")
+	String operators();
 
-	  @DefaultStringValue("Main")
-	  String main();
+	@DefaultStringValue("Nicks")
+	String nicks();
 
-	  @DefaultStringValue("Operators list")
-	  String operatorsList();
+	@DefaultStringValue("Pictures")
+	String pictures();
 
-	  @DefaultStringValue("Update")
-	  String update();
+	@DefaultStringValue("Loading...")
+	String loading();
 
-	  @DefaultStringValue("Saving data...")
-	  String savingData();
+	@DefaultStringValue("Menu")
+	String menu();
 
-	  @DefaultStringValue("Delete")
-	  String delete();
+	@DefaultStringValue("Settings")
+	String settings();
 
-	  @DefaultStringValue("Add new operator")
-	  String addNewOperator();
+	@DefaultStringValue("Main")
+	String main();
 
-	  @DefaultStringValue("Add new")
-	  String addNew();
+	@DefaultStringValue("Operators list")
+	String operatorsList();
 
-	  @DefaultStringValue("Edit operator")
-	  String editOperator();
+	@DefaultStringValue("Update")
+	String update();
 
-	  @DefaultStringValue("Description")
-	  String description();
+	@DefaultStringValue("Saving data...")
+	String savingData();
 
-	  @DefaultStringValue("Nick list")
-	  String nickList();
+	@DefaultStringValue("Delete")
+	String delete();
 
-	  @DefaultStringValue("If you delete this nick, picture assigned to this nick will be unassigned! Are u sure you want this?")
-	  String nickDeleteWarning();
-	  
-	  @DefaultStringValue("Confirm")
-	  String confirm();
+	@DefaultStringValue("Add new operator")
+	String addNewOperator();
 
-	  @DefaultStringValue("Show pictures")
-	  String showPictures();
+	@DefaultStringValue("Add new")
+	String addNew();
 
-	  @DefaultStringValue("Add new nick")
-	  String addNewNick();
+	@DefaultStringValue("Edit operator")
+	String editOperator();
 
-	  @DefaultStringValue("Save")
-	  String save();
+	@DefaultStringValue("Description")
+	String description();
 
-	  @DefaultStringValue("Edit nick")
-	  String editNick();
+	@DefaultStringValue("Nick list")
+	String nickList();
 
-	  @DefaultStringValue("Type")
-	  String type();
+	@DefaultStringValue("If you delete this nick, picture assigned to this nick will be unassigned! Are u sure you want this?")
+	String nickDeleteWarning();
 
-	  @DefaultStringValue("Size (bytes)")
-	  String sizeBytes();
+	@DefaultStringValue("Confirm")
+	String confirm();
 
-	  @DefaultStringValue("Assigned nick")
-	  String assignedNick();
+	@DefaultStringValue("Show pictures")
+	String showPictures();
 
-	  @DefaultStringValue("Picture list")
-	  String pictureList();
+	@DefaultStringValue("Add new nick")
+	String addNewNick();
 
-	  @DefaultStringValue("Picture name")
-	  String imageName();
+	@DefaultStringValue("Save")
+	String save();
 
-	  @DefaultStringValue("Edit picture")
-	  String editPicture();
+	@DefaultStringValue("Edit nick")
+	String editNick();
 
-	  @DefaultStringValue("Nick")
-	  String nick();
+	@DefaultStringValue("Type")
+	String type();
 
-	  @DefaultStringValue("No images match the specified filter")
-	  String noImageFound();
+	@DefaultStringValue("Size (bytes)")
+	String sizeBytes();
 
-	  @DefaultStringValue("Find")
-	  String find();
+	@DefaultStringValue("Assigned nick")
+	String assignedNick();
 
-	  @DefaultStringValue("Picture uploader")
-	  String pictureUploader();
+	@DefaultStringValue("Picture list")
+	String pictureList();
 
-	  @DefaultStringValue("Image")
-	  String picture();
+	@DefaultStringValue("Picture name")
+	String imageName();
 
-	  @DefaultStringValue("Upload")
-	  String upload();
+	@DefaultStringValue("Edit picture")
+	String editPicture();
 
-	  @DefaultStringValue("Uploading...")
-	  String uploading();
+	@DefaultStringValue("Nick")
+	String nick();
 
-	  @DefaultStringValue("Are you sure?")
-	  String reqularConfirm();
+	@DefaultStringValue("No images match the specified filter")
+	String noImageFound();
 
-	  @DefaultStringValue("Close")
-	  String close();
+	@DefaultStringValue("Find")
+	String find();
 
-	  @DefaultStringValue("Upload done!")
-	  String uploadDone();
+	@DefaultStringValue("Picture uploader")
+	String pictureUploader();
 
-	  @DefaultStringValue("Upload failed!")
-	  String uploadFailed();
+	@DefaultStringValue("Image")
+	String picture();
 
-	  @DefaultStringValue("Don't assign nick...")
-	  String noNick();
+	@DefaultStringValue("Upload")
+	String upload();
 
-	  @DefaultStringValue("Yes")
-	  String yes();
-	  
-	  @DefaultStringValue("No")
-	  String no();
+	@DefaultStringValue("Uploading...")
+	String uploading();
 
-	  @DefaultStringValue("Users")
-	  String users();
-	  
-	  @DefaultStringValue("Empty set")
-	  String emptySet();
-	  
-	  @DefaultStringValue("Field is required")
-	  String fieldIsRequired();
-	  
-	  @DefaultStringValue("Invalid email address")
-	  String invalidEmail();
-	  
-	  @DefaultStringValue("Errors happend")
-	  String errors();
-	  
+	@DefaultStringValue("Are you sure?")
+	String reqularConfirm();
+
+	@DefaultStringValue("Close")
+	String close();
+
+	@DefaultStringValue("Upload done!")
+	String uploadDone();
+
+	@DefaultStringValue("Upload failed!")
+	String uploadFailed();
+
+	@DefaultStringValue("Don't assign nick...")
+	String noNick();
+
+	@DefaultStringValue("Yes")
+	String yes();
+
+	@DefaultStringValue("No")
+	String no();
+
+	@DefaultStringValue("Users")
+	String users();
+
+	@DefaultStringValue("Empty set")
+	String emptySet();
+
+	@DefaultStringValue("Field is required")
+	String fieldIsRequired();
+
+	@DefaultStringValue("Invalid email address")
+	String invalidEmail();
+
+	@DefaultStringValue("Errors happend")
+	String errors();
+
+	@DefaultStringValue("Not set")
+	String notSet();
+
+	@DefaultStringValue("Search")
+	String search();
+
+	@DefaultStringValue("Operator")
+	String operator();
+
+	@DefaultStringValue("Service provider")
+	String serviceProvider();
+
+	@DefaultStringValue("Phone no.")
+	String msisdn();
+
+	@DefaultStringValue("Address")
+	String address();
+
+	@DefaultStringValue("Birth date")
+	String birthDate();
+
+	@DefaultStringValue("Join date")
+	String joinedDate();
+
+	@DefaultStringValue("Notes")
+	String notes();
+
+	@DefaultStringValue("Short code")
+	String shortCode();
+
+	@DefaultStringValue("Invalid date")
+	String invalidDate();
+
+	@DefaultStringValue("Fetch size")
+	String fetchSize();
+
+	@DefaultStringValue("Send message")
+	String sendMessage();
+
 }

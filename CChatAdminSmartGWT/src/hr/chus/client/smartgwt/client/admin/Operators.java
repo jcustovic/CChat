@@ -5,7 +5,6 @@ import hr.chus.client.smartgwt.client.PanelFactory;
 import hr.chus.client.smartgwt.client.admin.ds.OperatorsDS;
 import hr.chus.client.smartgwt.client.admin.ds.RolesDS;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONString;
 import com.smartgwt.client.data.DSCallback;
@@ -39,7 +38,6 @@ import com.smartgwt.client.widgets.layout.VLayout;
 public class Operators extends HLayout {
 
 	private static final String DESCRIPTION = "Operators";
-	private static final String CONTEXT_PATH = GWT.getModuleBaseURL().replace(GWT.getModuleName() + "/", ""); 
 
 	public static class Factory implements PanelFactory {
 
@@ -67,7 +65,7 @@ public class Operators extends HLayout {
 	public Canvas getViewPanel() {
 		Canvas canvas = new Canvas();
 
-		VLayout layout = new VLayout(15);
+		VLayout layout = new VLayout(10);
 		layout.setWidth("95%");
 		layout.setHeight100();
 
@@ -85,7 +83,7 @@ public class Operators extends HLayout {
 		form.setNumCols(4);
 		
 //		DataSource ds = new DataSource("test/data/json/empty.json") {
-		DataSource ds = new DataSource(CONTEXT_PATH + "admin/AdminOperatorFunctionJSON") {
+		DataSource ds = new DataSource(CChatAdminSmartGWT.CONTEXT_PATH + "admin/AdminOperatorFunctionJSON") {
 			@Override
 			protected void transformResponse(DSResponse response, DSRequest request, Object jsonData) {
 				JSONArray value = XMLTools.selectObjects(jsonData, "/status");
@@ -125,12 +123,12 @@ public class Operators extends HLayout {
 				saveButton.setDisabled(false);
 				deleteButton.setDisabled(false);
 				
-				String[] fieldNames = OperatorsDS.getInstance().getFieldNames();
+				FormItem[] fields = form.getFields();
 				ListGridRecord selected = listGrid.getSelectedRecord();
-				for (String fieldName : fieldNames) {
-					String attribute = selected.getAttribute(fieldName);
+				for (FormItem field : fields) {
+					String attribute = selected.getAttribute(field.getName());
 					if (attribute != null) {
-						form.setValue(fieldName, attribute);
+						form.setValue(field.getName(), attribute);
 					}
 				}
 				form.setValue("operation", "save/edit");
@@ -145,7 +143,7 @@ public class Operators extends HLayout {
 
 		saveButton.setDisabled(true);
 		saveButton.setShowDisabledIcon(false);
-		saveButton.setIcon(CONTEXT_PATH + "images/edit.png");
+		saveButton.setIcon(CChatAdminSmartGWT.CONTEXT_PATH + "images/edit.png");
 		saveButton.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -158,7 +156,7 @@ public class Operators extends HLayout {
 							JSONArray value = XMLTools.selectObjects(jsonData, "/status");
 							String status = null;
 							if (value != null && value.size() > 0) {
-								status = ((JSONString)value.get(0)).stringValue();
+								status = ((JSONString) value.get(0)).stringValue();
 							}
 							if (status == null || !status.equals("validation_error")) {
 								listGrid.invalidateCache();
@@ -174,7 +172,7 @@ public class Operators extends HLayout {
 		});
 		
 		IButton addNewButton = new IButton(CChatAdminSmartGWT.dictionary.addNew());
-		addNewButton.setIcon(CONTEXT_PATH + "images/new.png");
+		addNewButton.setIcon(CChatAdminSmartGWT.CONTEXT_PATH + "images/new.png");
 		addNewButton.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -191,7 +189,7 @@ public class Operators extends HLayout {
 		
 		deleteButton.setDisabled(true);
 		deleteButton.setShowDisabledIcon(false);
-		deleteButton.setIcon(CONTEXT_PATH + "images/delete.png");
+		deleteButton.setIcon(CChatAdminSmartGWT.CONTEXT_PATH + "images/delete.png");
 		deleteButton.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -205,7 +203,7 @@ public class Operators extends HLayout {
 			}
 		});
 		
-		HLayout buttons = new HLayout();
+		HLayout buttons = new HLayout(5);
 		buttons.addMember(saveButton);
 		buttons.addMember(addNewButton);
 		buttons.addMember(deleteButton);
@@ -254,7 +252,7 @@ public class Operators extends HLayout {
 			
 			@Override
 			public void onClick(com.smartgwt.client.widgets.form.fields.events.ClickEvent event) {
-				selectRole.fetchData();
+//				selectRole.fetchData();
 			}
 		});
 		
