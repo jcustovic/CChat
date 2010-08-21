@@ -24,6 +24,10 @@
 			<interceptor name="authenticateAdminInterceptor" class="hr.chus.cchat.struts2.interceptor.AuthenticateInterceptor">
 				<param name="role">admin</param>
 			</interceptor>
+			
+			<interceptor name="authenticateUserInterceptor" class="hr.chus.cchat.struts2.interceptor.AuthenticateInterceptor">
+				<param name="role">user</param>
+			</interceptor>
 
 			<interceptor-stack name="adminSecureStack">
 				<interceptor-ref name="authenticateAdminInterceptor"/>
@@ -65,7 +69,7 @@
 	    </action>
 	    
 		<action name="AdminMainGWT">
-			<interceptor-ref name="authenticateAdminInterceptor" />
+			<interceptor-ref name="adminSecureStack" />
 			<result>admin.MainGWT</result>
 		</action>
 		

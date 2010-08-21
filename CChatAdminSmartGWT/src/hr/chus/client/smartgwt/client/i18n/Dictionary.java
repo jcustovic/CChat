@@ -4,7 +4,7 @@ import com.google.gwt.i18n.client.Constants;
 
 /**
  * 
- * @author Jan Čustović
+ * @author Jan Čustović (jan_custovic@yahoo.com)
  * 
  */
 public interface Dictionary extends Constants {
@@ -215,5 +215,26 @@ public interface Dictionary extends Constants {
 
 	@DefaultStringValue("Send message")
 	String sendMessage();
+
+	@DefaultStringValue("Next")
+	String next();
+
+	@DefaultStringValue("Previous")
+	String previous();
+
+	@DefaultStringValue("Contacting server...")
+	String contactingServer();
+
+	@DefaultStringValue("Finding Records that match your criteria...")
+	String findingRecordThatMatchCriteria();
+
+	@DefaultStringValue("Deleting Record(s)...")
+	String deletingRecord();
+
+	@DefaultStringValue("Text")
+	String text();
+
+	@DefaultStringValue("Characters allowed")
+	String charactersAllowed();
 
 }

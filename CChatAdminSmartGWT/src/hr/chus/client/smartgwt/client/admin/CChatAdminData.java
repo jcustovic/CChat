@@ -3,7 +3,11 @@ package hr.chus.client.smartgwt.client.admin;
 import hr.chus.client.smartgwt.client.CChatAdminSmartGWT;
 import hr.chus.client.smartgwt.client.ExplorerTreeNode;
 
-
+/**
+ * 
+ * @author Jan Čustović (jan_custovic@yahoo.com)
+ *
+ */
 public class CChatAdminData {
 	
 	private String idSuffix;

@@ -8,6 +8,6 @@ MYSQL
 --- CREATE DB ---
 
 CREATE DATABASE cchat DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-CREATE USER 'cchat_user'@'localhost' IDENTIFIED BY 'a54Oa#22?3fsF';
-GRANT ALL PRIVILEGES ON *.* TO 'cchat_user'@'localhost' WITH GRANT OPTION;
+CREATE USER cchat_user@localhost IDENTIFIED BY 'a54Oa#22?3fsF';
+GRANT ALL PRIVILEGES ON cchat.* TO cchat_user@localhost WITH GRANT OPTION;
 FLUSH PRIVILEGES;

@@ -16,7 +16,7 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name = "Nicks")
+@Table(name = "nicks")
 @NamedQueries({
 	@NamedQuery(name = "Nick.getAll", query = "SELECT n FROM Nick n ORDER BY n.name")
 	, @NamedQuery(name = "Nick.getByName", query = "SELECT n FROM Nick n WHERE n.name = :name")
