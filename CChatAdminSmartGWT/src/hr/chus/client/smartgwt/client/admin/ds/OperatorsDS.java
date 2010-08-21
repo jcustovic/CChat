@@ -2,7 +2,6 @@ package hr.chus.client.smartgwt.client.admin.ds;
 
 import hr.chus.client.smartgwt.client.CChatAdminSmartGWT;
 
-import com.google.gwt.core.client.GWT;
 import com.smartgwt.client.data.DataSource;
 import com.smartgwt.client.data.fields.DataSourceBooleanField;
 import com.smartgwt.client.data.fields.DataSourceIntegerField;
@@ -11,8 +10,6 @@ import com.smartgwt.client.types.DSDataFormat;
 
 public class OperatorsDS extends DataSource {
 	
-	private static final String CONTEXT_PATH = GWT.getModuleBaseURL().replace(GWT.getModuleName() + "/", "");
-
 	private static OperatorsDS instance = null;
 
 	public static OperatorsDS getInstance() {
@@ -55,7 +52,7 @@ public class OperatorsDS extends DataSource {
 
 		setDataFormat(DSDataFormat.JSON);
 //		setDataURL("test/data/json/operatorList.json");
-		setDataURL(CONTEXT_PATH + "admin/AdminOperatorListJSON");
+		setDataURL(CChatAdminSmartGWT.CONTEXT_PATH + "admin/AdminOperatorListJSON");
 	}
 	
 }

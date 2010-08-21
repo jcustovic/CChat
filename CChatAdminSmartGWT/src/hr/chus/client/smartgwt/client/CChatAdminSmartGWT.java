@@ -1,16 +1,23 @@
 package hr.chus.client.smartgwt.client;
 
+import java.util.Date;
+
 import hr.chus.client.smartgwt.client.admin.SideNavigationMenu;
 import hr.chus.client.smartgwt.client.i18n.Dictionary;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Timer;
 import com.smartgwt.client.core.KeyIdentifier;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.Overflow;
 import com.smartgwt.client.types.TabBarControls;
 import com.smartgwt.client.types.VisibilityMode;
+import com.smartgwt.client.util.DateDisplayFormatter;
+import com.smartgwt.client.util.DateInputFormatter;
+import com.smartgwt.client.util.DateUtil;
 import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.HTMLFlow;
@@ -42,15 +49,38 @@ import com.smartgwt.client.widgets.tree.events.LeafClickHandler;
  */
 public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
 	
-	private static final String CONTEXT_PATH = GWT.getModuleBaseURL().replace(GWT.getModuleName() + "/", ""); 
+	public static final String CONTEXT_PATH = GWT.getModuleBaseURL().replace(GWT.getModuleName() + "/", ""); 
 
 	private TabSet mainTabSet;
 	private SideNavigationMenu sideNav;
 	private Menu contextMenu;
 	public static Dictionary dictionary = (Dictionary) GWT.create(Dictionary.class);
+	
+	public static DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd.MM.yyyy HH:mm");
+
+	public static DateDisplayFormatter dateDisplayFormatter = new DateDisplayFormatter() {
+        public String format(Date date) {
+            if (date == null) return null;
+            return dateFormat.format(date);
+        }
+    };
+
+    public static DateInputFormatter dateInputFormatter = new DateInputFormatter() {
+        public Date parse(String s) {
+            if (s == null) return null;
+            return dateFormat.parse(s);
+        }
+    };
+
+
 
 	@Override
 	public void onModuleLoad() {
+		DateUtil.setDefaultDisplayTimezone("00:00");
+//		DateUtil.setShortDateDisplayFormatter(dateDisplayFormatter);
+//		DateUtil.setNormalDateDisplayFormatter(dateDisplayFormatter);
+//		DateUtil.setDateInputFormatter(dateInputFormatter);
+		
 		setWidth100();
 		setHeight100();
 
@@ -62,19 +92,12 @@ public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
         sgwtHomeButton.setSrc(CONTEXT_PATH + "images/cchat.png");
         sgwtHomeButton.setWidth(24);
         sgwtHomeButton.setHeight(24);
-        sgwtHomeButton.setPrompt("Chat aplication");
+        sgwtHomeButton.setPrompt("Chat application");
         sgwtHomeButton.setHoverStyle("interactImageHover");
         sgwtHomeButton.setShowRollOver(false);
         sgwtHomeButton.setShowDownIcon(false);
         sgwtHomeButton.setShowDown(false);
-        sgwtHomeButton.addClickHandler(new com.smartgwt.client.widgets.events.ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				// TODO Auto-generated method stub
-				
-			}
-        });
+   
         topBar.addMember(sgwtHomeButton);
         topBar.addSpacer(6);
 
@@ -125,11 +148,19 @@ public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
 		rightSideLayout.setVisibilityMode(VisibilityMode.MULTIPLE);
 		rightSideLayout.setAnimateSections(true);
 
-		HTMLFlow headerHtmlFlow = new HTMLFlow();
+		final HTMLFlow headerHtmlFlow = new HTMLFlow();
+		headerHtmlFlow.setContentsURL(CONTEXT_PATH + "admin/UserInfoAction");
 		headerHtmlFlow.setOverflow(Overflow.AUTO);
 		headerHtmlFlow.setPadding(10);
 		headerHtmlFlow.setHeight("10%");
-		headerHtmlFlow.setContents("<b> Header </b>");
+		
+		Timer refreshTimer = new Timer() {
+	    	@Override
+	    	public void run() {
+	    		headerHtmlFlow.setContentsURL(null);
+	    	}
+	    };
+	    refreshTimer.scheduleRepeating(1000 * 60 * 5); // 5 minutes
 
 		SectionStackSection header = new SectionStackSection("Header");
 		header.setItems(headerHtmlFlow);
