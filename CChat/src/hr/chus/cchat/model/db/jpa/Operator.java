@@ -22,7 +22,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  *
  */
 @Entity
-@Table(name = "Operators")
+@Table(name = "operators")
 @NamedQueries({
 	@NamedQuery(name = "Operator.getAll", query = "SELECT o FROM Operator o ORDER BY o.username")
 	, @NamedQuery(name = "Operator.getByUsername", query = "SELECT o FROM Operator o WHERE o.username = :username")

@@ -2,6 +2,11 @@ package hr.chus.client.smartgwt.client;
 
 import com.smartgwt.client.widgets.tree.TreeNode;
 
+/**
+ * 
+ * @author Jan Čustović (jan_custovic@yahoo.com)
+ *
+ */
 public class ExplorerTreeNode extends TreeNode {
 
     public ExplorerTreeNode(String name, String nodeID, String parentNodeID, String icon, PanelFactory factory, boolean enabled, String idSuffix) {

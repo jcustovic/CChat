@@ -1,6 +1,5 @@
 package hr.chus.client.smartgwt.client.admin;
 
-
 import hr.chus.client.smartgwt.client.ExplorerTreeNode;
 
 import com.smartgwt.client.types.SortArrow;
@@ -9,7 +8,11 @@ import com.smartgwt.client.widgets.tree.Tree;
 import com.smartgwt.client.widgets.tree.TreeGrid;
 import com.smartgwt.client.widgets.tree.TreeGridField;
 
-
+/**
+ * 
+ * @author Jan Čustović (jan_custovic@yahoo.com)
+ *
+ */
 public class SideNavigationMenu extends TreeGrid {
 
 	private String idSuffix = "";

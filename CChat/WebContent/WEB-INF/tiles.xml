@@ -12,8 +12,7 @@
 		<put-attribute name="footer" value="/WEB-INF/tiles/global/Footer.jsp" />
 	</definition>
 	
-	<definition name="global.BlankLayout" template="/WEB-INF/tiles/layouts/BlankLayout.jsp">
-	</definition>
+	<definition name="global.BlankLayout" template="/WEB-INF/tiles/layouts/BlankLayout.jsp" />
 	
 	<!-- +++++++++++++++++++++ END Layout +++++++++++++++++++++++++ -->
 	
@@ -40,11 +39,8 @@
 	<definition name="common.UserInfo" template="/WEB-INF/tiles/secured/UserInfo.jsp" />
 	
 	<!-- +++++++++++++++++++++ ADMIN area +++++++++++++++++++++ -->
-	<definition name="admin.PictureGWT" template="/WEB-INF/tiles/secured/admin/AdminPictureGWT.jsp" />
-	<definition name="admin.Main" template="/WEB-INF/tiles/secured/admin/AdminMain.jsp" />
-	
 	<definition name="admin.MainGWT" extends="global.BlankLayout">
-		<put-attribute name="title" value="admin.main.title" />
+		<put-attribute name="title" value="Admin" />
 		<put-attribute name="body" value="/WEB-INF/tiles/secured/admin/AdminMainGWT.jsp" />
 	</definition>
 	<!-- +++++++++++++++++++++ ADMIN area +++++++++++++++++++++ -->

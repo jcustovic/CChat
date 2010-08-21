@@ -1,4 +1,4 @@
-CREATE TABLE Service_Provider (
+create table service_provider (
   id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
   sc VARCHAR(20) NULL,
   provider_name VARCHAR(30) NULL,
@@ -8,7 +8,7 @@ CREATE TABLE Service_Provider (
   UNIQUE(sc, provider_name)
 );
 
-CREATE TABLE Operator_Roles (
+CREATE TABLE operator_roles (
   id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
   name VARCHAR(20) NOT NULL,
   description VARCHAR(100) NULL,
@@ -16,7 +16,7 @@ CREATE TABLE Operator_Roles (
   UNIQUE(name)
 );
 
-CREATE TABLE Nicks (
+CREATE TABLE nicks (
   id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
   name VARCHAR(20) NOT NULL,
   description VARCHAR(300) NULL,
@@ -24,25 +24,25 @@ CREATE TABLE Nicks (
   UNIQUE(name)
 );
 
-CREATE TABLE Configuration (
+CREATE TABLE configuration (
   name VARCHAR(50) NOT NULL,
   value VARCHAR(100) NOT NULL,
   PRIMARY KEY(name)
 );
 
-CREATE TABLE Pictures (
+CREATE TABLE pictures (
   id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
   nick_id INTEGER UNSIGNED,
   name VARCHAR(50) NOT NULL,
   file_type VARCHAR(15) NOT NULL,
   file_size BIGINT NOT NULL,
   PRIMARY KEY(id),
-  FOREIGN KEY(nick_id) REFERENCES Nicks(id)
+  FOREIGN KEY(nick_id) REFERENCES nicks(id)
       ON DELETE SET NULL
       ON UPDATE NO ACTION
 );
 
-CREATE TABLE Operators (
+CREATE TABLE operators (
   id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
   operator_role_id INTEGER UNSIGNED NOT NULL,
   username VARCHAR(30) NOT NULL,
@@ -53,12 +53,12 @@ CREATE TABLE Operators (
   is_active BOOL NOT NULL DEFAULT false,
   disabled BOOL NOT NULL DEFAULT false,
   PRIMARY KEY(id),
-  FOREIGN KEY(operator_role_id) REFERENCES Operator_Roles(id)
+  FOREIGN KEY(operator_role_id) REFERENCES operator_roles(id)
       ON DELETE NO ACTION
       ON UPDATE NO ACTION
 );
 
-CREATE TABLE Users (
+CREATE TABLE users (
   id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
   service_provider_id INTEGER UNSIGNED NOT NULL,
   operator_id INTEGER UNSIGNED NULL,
@@ -72,20 +72,20 @@ CREATE TABLE Users (
   joined_date DATETIME NOT NULL,
   PRIMARY KEY(id),
   FOREIGN KEY(operator_id)
-    REFERENCES Operators(id)
+    REFERENCES operators(id)
       ON DELETE NO ACTION
       ON UPDATE NO ACTION,
   FOREIGN KEY(nick_id)
-    REFERENCES Nicks(id)
+    REFERENCES nicks(id)
       ON DELETE NO ACTION
       ON UPDATE NO ACTION,
   FOREIGN KEY(service_provider_id)
-    REFERENCES Service_Provider(id)
+    REFERENCES service_provider(id)
       ON DELETE NO ACTION
       ON UPDATE NO ACTION
 );
 
-CREATE TABLE SMS_Messages (
+CREATE TABLE sms_messages (
   id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
   service_provider_id INTEGER UNSIGNED NOT NULL,
   operator_id INTEGER UNSIGNED NOT NULL,
@@ -95,25 +95,25 @@ CREATE TABLE SMS_Messages (
   sc VARCHAR(20) NOT NULL,
   direction VARCHAR(6) NOT NULL,
   PRIMARY KEY(id),
-  FOREIGN KEY(user_id) REFERENCES Users(id)
+  FOREIGN KEY(user_id) REFERENCES users(id)
       ON DELETE NO ACTION
       ON UPDATE NO ACTION,
-  FOREIGN KEY(operator_id) REFERENCES Operators(id)
+  FOREIGN KEY(operator_id) REFERENCES operators(id)
       ON DELETE NO ACTION
       ON UPDATE NO ACTION,
-  FOREIGN KEY(service_provider_id) REFERENCES Service_Provider(id)
+  FOREIGN KEY(service_provider_id) REFERENCES service_provider(id)
       ON DELETE NO ACTION
       ON UPDATE NO ACTION
 );
 
-CREATE TABLE Users_Pictures (
+CREATE TABLE users_pictures (
   picture_id INTEGER UNSIGNED NOT NULL,
   user_id INTEGER UNSIGNED NOT NULL,
   PRIMARY KEY(picture_id, user_id),
-  FOREIGN KEY(picture_id) REFERENCES Pictures(id)
+  FOREIGN KEY(picture_id) REFERENCES pictures(id)
       ON DELETE CASCADE
       ON UPDATE NO ACTION,
-  FOREIGN KEY(user_id) REFERENCES Users(id)
+  FOREIGN KEY(user_id) REFERENCES users(id)
       ON DELETE CASCADE
       ON UPDATE NO ACTION
 );

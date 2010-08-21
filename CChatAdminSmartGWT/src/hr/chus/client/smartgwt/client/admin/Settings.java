@@ -7,6 +7,11 @@ import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.HTMLFlow;
 import com.smartgwt.client.widgets.layout.HLayout;
 
+/**
+ * 
+ * @author Jan Čustović (jan_custovic@yahoo.com)
+ *
+ */
 public class Settings extends HLayout {
 	
     private static final String DESCRIPTION = "Settings";

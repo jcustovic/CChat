@@ -18,7 +18,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  *
  */
 @Entity
-@Table(name = "Configuration")
+@Table(name = "configuration")
 @NamedQueries({
 	@NamedQuery(name = "Configuration.getAll", query = "SELECT c FROM Configuration c ORDER BY c.name")
 })

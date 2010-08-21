@@ -23,7 +23,7 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name = "Users")
+@Table(name = "users")
 @NamedQueries({
 	@NamedQuery(name = "User.getAll", query = "SELECT u FROM User u")
 	, @NamedQuery(name = "User.getCount", query = "SELECT COUNT(u) FROM User u")
@@ -111,7 +111,7 @@ public class User implements Serializable {
 
 
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "Users_Pictures"
+	@JoinTable(name = "users_pictures"
 			, joinColumns = {
 				@JoinColumn(name = "user_id")
 			}

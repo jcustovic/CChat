@@ -19,7 +19,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  *
  */
 @Entity
-@Table(name = "Operator_Roles")
+@Table(name = "operator_roles")
 @NamedQueries({
 	@NamedQuery(name = "Role.getAll", query = "SELECT r FROM Role r ORDER BY r.name")
 })

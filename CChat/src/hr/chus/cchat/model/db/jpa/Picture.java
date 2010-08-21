@@ -20,7 +20,7 @@ import javax.persistence.Transient;
  */
 
 @Entity
-@Table(name = "Pictures")
+@Table(name = "pictures")
 @NamedQueries({
 	@NamedQuery(name = "Picture.getAll", query = "SELECT p FROM Picture p")
 	, @NamedQuery(name = "Picture.getByName", query = "SELECT p FROM Picture p WHERE p.name = :name")

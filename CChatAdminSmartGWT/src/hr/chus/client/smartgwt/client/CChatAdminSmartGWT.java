@@ -11,6 +11,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Timer;
 import com.smartgwt.client.core.KeyIdentifier;
+import com.smartgwt.client.rpc.RPCManager;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.Overflow;
 import com.smartgwt.client.types.TabBarControls;
@@ -45,7 +46,11 @@ import com.smartgwt.client.widgets.tree.events.LeafClickEvent;
 import com.smartgwt.client.widgets.tree.events.LeafClickHandler;
 
 /**
+ * 
  * Entry point classes define <code>onModuleLoad()</code>.
+ * 
+ * @author Jan Čustović (jan_custovic@yahoo.com)
+ * 
  */
 public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
 	
@@ -76,6 +81,11 @@ public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
 
 	@Override
 	public void onModuleLoad() {
+		RPCManager.setDefaultPrompt(dictionary.contactingServer());
+		RPCManager.setFetchDataPrompt(dictionary.findingRecordThatMatchCriteria());
+		RPCManager.setRemoveDataPrompt(dictionary.deletingRecord());
+		RPCManager.setSaveDataPrompt(dictionary.savingData());
+		
 		DateUtil.setDefaultDisplayTimezone("00:00");
 //		DateUtil.setShortDateDisplayFormatter(dateDisplayFormatter);
 //		DateUtil.setNormalDateDisplayFormatter(dateDisplayFormatter);
