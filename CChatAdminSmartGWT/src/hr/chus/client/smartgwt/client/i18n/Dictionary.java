@@ -237,4 +237,25 @@ public interface Dictionary extends Constants {
 	@DefaultStringValue("Characters allowed")
 	String charactersAllowed();
 
+	@DefaultStringValue("Direction")
+	String direction();
+
+	@DefaultStringValue("Received time")
+	String receivedTime();
+
+	@DefaultStringValue("Messages")
+	String messages();
+
+	@DefaultStringValue("Sent")
+	String sent();
+
+	@DefaultStringValue("Received")
+	String received();
+
+	@DefaultStringValue("Received time from")
+	String receivedTimeStart();
+
+	@DefaultStringValue("Received time to")
+	String receivedTimeEnd();
+
 }

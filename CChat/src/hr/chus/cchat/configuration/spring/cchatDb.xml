@@ -16,6 +16,7 @@
 	<bean id="pictureService" class="hr.chus.cchat.db.service.jpa.PictureServiceImpl" />
 	<bean id="userService" class="hr.chus.cchat.db.service.jpa.UserServiceImpl" />
 	<bean id="serviceProviderService" class="hr.chus.cchat.db.service.jpa.ServiceProviderServiceImpl" />
+	<bean id="smsMessageService" class="hr.chus.cchat.db.service.jpa.SMSMessageServiceImpl" />
 	
 	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
 

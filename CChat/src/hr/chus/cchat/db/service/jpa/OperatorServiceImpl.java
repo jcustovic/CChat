@@ -86,6 +86,7 @@ public class OperatorServiceImpl implements OperatorService {
 		return entityManager.find(Operator.class, id);
 	}
 	
+	
 	// Getters & setters
 	
 	@PersistenceContext

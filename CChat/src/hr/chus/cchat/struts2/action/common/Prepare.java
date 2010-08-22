@@ -5,11 +5,14 @@ import java.util.Date;
 import hr.chus.cchat.db.service.NickService;
 import hr.chus.cchat.db.service.OperatorService;
 import hr.chus.cchat.db.service.RoleService;
+import hr.chus.cchat.db.service.SMSMessageService;
 import hr.chus.cchat.db.service.ServiceProviderService;
 import hr.chus.cchat.db.service.UserService;
 import hr.chus.cchat.model.db.jpa.Nick;
 import hr.chus.cchat.model.db.jpa.Operator;
 import hr.chus.cchat.model.db.jpa.Role;
+import hr.chus.cchat.model.db.jpa.SMSMessage;
+import hr.chus.cchat.model.db.jpa.SMSMessage.Direction;
 import hr.chus.cchat.model.db.jpa.ServiceProvider;
 import hr.chus.cchat.model.db.jpa.User;
 import hr.chus.cchat.util.StringUtil;
@@ -30,6 +33,8 @@ public class Prepare extends ActionSupport  {
 	private ServiceProviderService serviceProviderService;
 	private NickService nickService;
 	private UserService userService;
+	private SMSMessageService smsMessageService;
+	
 	private String message;
 	
 	@Override
@@ -46,7 +51,9 @@ public class Prepare extends ActionSupport  {
 		return SUCCESS;
 	}
 	
-
+	/**
+	 * 
+	 */
 	private void developPrepare() {
 		Role admin = new Role("admin", "Tip korisnika za administratore");
 		roleService.addRole(admin);
@@ -74,16 +81,34 @@ public class Prepare extends ActionSupport  {
 		
 		for (int i = 0; i < 20; i++) {
 			User userUser = new User(nick, user, String.valueOf(i), vipServiceProvider, "Name" + String.valueOf(i), "Surname" + String.valueOf(i), new Date());
-			userService.addUser(userUser);
+			userUser = userService.editUser(userUser);
+			for (int j = 0; j < 2; j++) {
+				SMSMessage smsMessage = new SMSMessage(userUser, user, new Date(), "Text " + i + j + "IN sfdsdafkj ghkldfhg fdkjhg dkfljhg dkljh", "12346", vipServiceProvider, Direction.IN);
+				smsMessageService.addSMSMessage(smsMessage);
+			}
+			for (int j = 0; j < 2; j++) {
+				SMSMessage smsMessage = new SMSMessage(userUser, user, new Date(), "Text " + i + j + "OUT sfdsdafkj ghkldfhg fdkjhg dkfljhg dkljh", "12346", vipServiceProvider, Direction.OUT);
+				smsMessageService.addSMSMessage(smsMessage);
+			}
 		}
 		
 		for (int i = 20; i < 40; i++) {
 			User userUser = new User(null, adminUser, String.valueOf(i), tmobServiceProvider, "Name" + String.valueOf(i), "Surname" + String.valueOf(i), new Date());
-			userService.addUser(userUser);
+			userUser = userService.editUser(userUser);
+			for (int j = 0; j < 2; j++) {
+				SMSMessage smsMessage = new SMSMessage(userUser, user, new Date(), "Text " + i + j + "IN sfdsdafkj ghkldfhg fdkjhg dkfljhg dkljh", "12346", tmobServiceProvider, Direction.IN);
+				smsMessageService.addSMSMessage(smsMessage);
+			}
+			for (int j = 0; j < 2; j++) {
+				SMSMessage smsMessage = new SMSMessage(userUser, user, new Date(), "Text " + i + j + "OUT sfdsdafkj ghkldfhg fdkjhg dkfljhg dkljh", "12346", tmobServiceProvider, Direction.OUT);
+				smsMessageService.addSMSMessage(smsMessage);
+			}
 		}
 	}
 
-
+	/**
+	 * 
+	 */
 	private void productionPrepare() {		
 		Role admin = new Role("admin", "Tip korisnika za administratore");
 		roleService.addRole(admin);
@@ -113,6 +138,8 @@ public class Prepare extends ActionSupport  {
 	public void setNickService(NickService nickService) { this.nickService = nickService; }
 	
 	public void setUserService(UserService userService) { this.userService = userService; }
+	
+	public void setSmsMessageService(SMSMessageService smsMessageService) { this.smsMessageService = smsMessageService; }
 
 	public String getMessage() { return message; }
 	public void setMessage(String message) { this.message = message; }	

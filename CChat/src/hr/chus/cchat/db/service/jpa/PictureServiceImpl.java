@@ -65,6 +65,7 @@ public class PictureServiceImpl implements PictureService {
 		return entityManager.createNamedQuery("Picture.getByNick").setParameter("nick", nick).getResultList();
 	}
 	
+	
 	// Getters & setters
 	
 	@PersistenceContext
