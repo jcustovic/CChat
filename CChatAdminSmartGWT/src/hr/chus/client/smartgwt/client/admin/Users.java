@@ -311,7 +311,7 @@ public class Users extends HLayout {
 					@Override
 					public void execute(DSResponse response, Object rawData, DSRequest request) {
 						int totalCount = (int) UsersDS.getInstance().getTotalCount();
-						listLabel.setContents("Total user in database: <b>" + totalCount + "&nbsp;&nbsp;(" + offset + " - " + (offset + fetchSize) + ")</b>");
+						listLabel.setContents("Total user found in database: <b>" + totalCount + "&nbsp;&nbsp;(" + offset + " - " + (offset + fetchSize) + ")</b>");
 						listLabel.setVisible(true);
 						if ((offset + fetchSize) >= totalCount) nextButton.setVisible(false);
 						previousButton.setVisible(true);
@@ -334,7 +334,7 @@ public class Users extends HLayout {
 					@Override
 					public void execute(DSResponse response, Object rawData, DSRequest request) {
 						int totalCount = (int) UsersDS.getInstance().getTotalCount();
-						listLabel.setContents("Total user in database: <b>" + totalCount + "&nbsp;&nbsp;(" + offset + " - " + (offset + fetchSize) + ")</b>");
+						listLabel.setContents("Total user found in database: <b>" + totalCount + "&nbsp;&nbsp;(" + offset + " - " + (offset + fetchSize) + ")</b>");
 						if (offset <= 0) previousButton.setVisible(false);
 						listLabel.setVisible(true);
 						nextButton.setVisible(true);
@@ -358,7 +358,7 @@ public class Users extends HLayout {
 					@Override
 					public void execute(DSResponse response, Object rawData, DSRequest request) {
 						int totalCount = (int) UsersDS.getInstance().getTotalCount();
-						listLabel.setContents("Total user in database: <b>" + totalCount + "&nbsp;&nbsp;(" + offset + " - " + (offset + fetchSize) + ")</b>");
+						listLabel.setContents("Total user found in database: <b>" + totalCount + "&nbsp;&nbsp;(" + offset + " - " + (offset + fetchSize) + ")</b>");
 						listLabel.setVisible(true);
 						if (totalCount > fetchSize) {
 							nextButton.setVisible(true);
@@ -464,7 +464,6 @@ public class Users extends HLayout {
 				if (value == null || !(value instanceof Date)) return null;
 				Date date = (Date) value;
 				Date gmt = new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
-				birthdate.setValue(gmt);
 				return CChatAdminSmartGWT.dateFormat.format(gmt);
 			}
 		});
@@ -591,4 +590,5 @@ public class Users extends HLayout {
 		
 		return new ListGridField[] { id, msisdn, name, surname, address, notes, nickName, operator, operatorUsername, serviceProviderName, nick, joined, birthDate };
 	}
+    
 }

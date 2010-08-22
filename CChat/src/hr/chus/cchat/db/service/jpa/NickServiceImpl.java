@@ -69,6 +69,7 @@ public class NickServiceImpl implements NickService {
 		return entityManager.find(Nick.class, id);
 	}
 	
+	
 	// Getters & setters
 	
 	@PersistenceContext

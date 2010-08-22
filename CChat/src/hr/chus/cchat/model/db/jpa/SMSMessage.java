@@ -45,6 +45,18 @@ public class SMSMessage implements Serializable {
 	
 	public SMSMessage() { }
 	
+	public SMSMessage(User user, Operator operator, Date time, String text, String sc, ServiceProvider serviceProvider, Direction direction) {
+		this.user = user;
+		this.operator = operator;
+		this.time = time;
+		this.text = text;
+		this.sc = sc;
+		this.serviceProvider = serviceProvider;
+		this.direction = direction;
+	}
+
+
+	// Getters & Setters
 
 	@Id
 	@GeneratedValue

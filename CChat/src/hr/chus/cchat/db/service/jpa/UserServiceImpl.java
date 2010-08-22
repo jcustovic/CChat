@@ -23,8 +23,8 @@ import hr.chus.cchat.model.db.jpa.User;
 public class UserServiceImpl implements UserService {
 	
 	private Log log = LogFactory.getLog(getClass());
-	
 	private EntityManager entityManager;
+	
 
 	@Override
 	public void addUser(User user) {
@@ -82,8 +82,10 @@ public class UserServiceImpl implements UserService {
 		}
 		
 		queryWhereBuffer.append("ORDER BY u.joined DESC");
-		Query query = entityManager.createQuery("SELECT u FROM User u " + queryWhereBuffer.toString());
-		log.debug("Search users query: SELECT u FROM User u " + queryWhereBuffer.toString());
+		String whereString = queryWhereBuffer.toString();
+		
+		Query query = entityManager.createQuery("SELECT u FROM User u " + whereString);
+		log.debug("Search users query: SELECT u FROM User u " + whereString);
 		
 		if (nick != null) query.setParameter("nick", nick);
 		if (operator != null) query.setParameter("operator", operator);
@@ -99,7 +101,7 @@ public class UserServiceImpl implements UserService {
 			result[1] = query.setFirstResult(start).setMaxResults(limit).getResultList();
 		}
 		
-		Query queryCount = entityManager.createQuery("SELECT COUNT(u) FROM User u " + queryWhereBuffer.toString());
+		Query queryCount = entityManager.createQuery("SELECT COUNT(u) FROM User u " + whereString);
 		if (nick != null) queryCount.setParameter("nick", nick);
 		if (operator != null) queryCount.setParameter("operator", operator);
 		if (serviceProvider != null) queryCount.setParameter("serviceProvider", serviceProvider);

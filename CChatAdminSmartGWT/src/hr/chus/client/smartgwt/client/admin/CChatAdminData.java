@@ -26,6 +26,7 @@ public class CChatAdminData {
 	                    new ExplorerTreeNode(CChatAdminSmartGWT.dictionary.pictures(), "pictures-category", "root", CChatAdminSmartGWT.CONTEXT_PATH + "images/pictures.png", new Pictures.Factory(), true, idSuffix),
 	                    new ExplorerTreeNode(CChatAdminSmartGWT.dictionary.users(), "users-category", "root", CChatAdminSmartGWT.CONTEXT_PATH + "images/users.png", new Users.Factory(), true, idSuffix),
 	                    new ExplorerTreeNode(CChatAdminSmartGWT.dictionary.settings(), "settings-category", "root", CChatAdminSmartGWT.CONTEXT_PATH + "images/settings.png", new Settings.Factory(), true, idSuffix),
+	                    new ExplorerTreeNode(CChatAdminSmartGWT.dictionary.messages(), "messages-category", "root", CChatAdminSmartGWT.CONTEXT_PATH + "images/message_g.gif", new Messages.Factory(), true, idSuffix),
 			};
 		}
 		return data;

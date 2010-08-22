@@ -25,7 +25,6 @@ public class AdminUserList extends ActionSupport {
 	private Log log = LogFactory.getLog(getClass());
 	
 	private UserService userService;
-	private List<User> userList;
 	private Nick nick;
 	private Operator operator;
 	private ServiceProvider serviceProvider;
@@ -34,6 +33,8 @@ public class AdminUserList extends ActionSupport {
 	private String surname;
 	private int start;
 	private int limit;
+	
+	private List<User> userList;
 	private Long totalCount;
 
 
