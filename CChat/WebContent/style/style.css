@@ -41,3 +41,85 @@ h1 {
 	font-size: 100%;
 	width: 50%;
 }
+
+.inboundMsgGridRecord,
+.inboundMsgGridRecordDark {
+    font-size: 11px;
+    color: black;
+    border-bottom: 1px solid;
+    border-bottom-color: #ededed;
+    background-color: #9fff79;
+}
+.inboundMsgGridRecordOver,
+.inboundMsgGridRecordOverDark {
+    font-size: 11px;
+    color: black;
+    border-bottom: 1px solid;
+    border-bottom-color: #ededed;
+    background-color: #cccccc;
+}
+.inboundMsgGridRecordSelected,
+.inboundMsgGridRecordSelectedDark {
+    font-size: 11px;
+    color: black;
+    border-bottom: 1px solid;
+    border-bottom-color: #ededed;
+    background-color: #d9e4f6;
+}
+.inboundMsgGridRecordSelectedOver,
+.inboundMsgGridRecordSelectedOverDark {
+    font-size: 11px;
+    color: black;
+    border-bottom: 1px solid;
+    border-bottom-color: #ededed;
+    background-color: #d0dff6;
+}
+.inboundMsgGridRecordDisabled,
+.inboundMsgGridRecordDisabledDark {
+    font-size: 11px;
+    color:#aaaaaa;
+    border-bottom: 1px solid;
+    border-bottom-color: #ededed;
+	background-color:#ffffff;
+}
+
+.outboundMsgGridRecord,
+.outboundMsgGridRecordDark {
+    font-size: 11px;
+    color: black;
+    border-bottom: 1px solid;
+    border-bottom-color: #ededed;
+    background-color: #fafafa;
+}
+.outboundMsgGridRecordOver,
+.outboundMsgGridRecordOverDark {
+    font-size: 11px;
+    color: black;
+    border-bottom: 1px solid;
+    border-bottom-color: #ededed;
+    background-color: #cccccc;
+}
+.outboundMsgGridRecordSelected,
+.outboundMsgGridRecordSelectedDark {
+	font-size: 11px;
+    color: black;
+    border-bottom: 1px solid;
+    border-bottom-color: #ededed;
+    background-color: #d9e4f6;
+}
+.outboundMsgGridRecordSelectedOver,
+.outboundMsgGridRecordSelectedOverDark {
+    font-size: 11px;
+    color: black;
+    border-bottom: 1px solid;
+    border-bottom-color: #ededed;
+    background-color: #d0dff6;
+}
+.outboundMsgGridRecordDisabled,
+.outboundMsgGridRecordDisabledDark {
+    font-size: 11px;
+    color:#aaaaaa;
+	border-bottom: 1px solid;
+    border-bottom-color: #ededed;
+	background-color:#ffffff;
+}

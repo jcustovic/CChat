@@ -7,5 +7,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/smartgwt-skins.jar"/>
 	<classpathentry kind="lib" path="lib/smartgwt.jar"/>
+	<classpathentry kind="lib" path="lib/gwt-visualization.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

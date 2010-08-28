@@ -10,6 +10,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.smartgwt.client.core.KeyIdentifier;
 import com.smartgwt.client.rpc.RPCManager;
 import com.smartgwt.client.types.Alignment;
@@ -218,7 +219,8 @@ public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
 
 		addMember(topBar);
 		addMember(hlayout);
-		draw();
+//		draw();
+		RootPanel.get().add(this);
 	}
 
 	/**

@@ -95,11 +95,23 @@ public class Messages extends HLayout {
 		listLabel.setVisible(false);
 		listLabel.setHeight("10px");
 
-		final ListGrid listGrid = new ListGrid();
+		final ListGrid listGrid = new ListGrid() {
+			@Override
+			protected String getBaseStyle(ListGridRecord record, int rowNum, int colNum) {
+				String direction = record.getAttribute("smsMessage.direction");
+				if (direction != null) {
+					if (direction.equals("IN")) return "inboundMsgGridRecord";
+					else if (direction.equals("OUT")) return "outboundMsgGridRecord";
+					else return super.getBaseStyle(record, rowNum, colNum);
+				} else {
+					return super.getBaseStyle(record, rowNum, colNum);
+				}
+			}
+		};
 		listGrid.setLoadingDataMessage(CChatAdminSmartGWT.dictionary.loading());
 		listGrid.setEmptyMessage(CChatAdminSmartGWT.dictionary.emptySet());
 		listGrid.setLoadingMessage(CChatAdminSmartGWT.dictionary.loading());
-		listGrid.setHeight(200);
+		listGrid.setHeight(300);
 		listGrid.setDataSource(MessagesDS.getInstance());
 		listGrid.setAutoFetchData(false);
 		listGrid.setAnimateRemoveRecord(true);
@@ -110,6 +122,7 @@ public class Messages extends HLayout {
 		
 		final DynamicForm searchForm = new DynamicForm();
 //        searchForm.setWidth("60%");
+		searchForm.setHeight(120);
 		searchForm.setIsGroup(true);
 		
         searchForm.setGroupTitle(CChatAdminSmartGWT.dictionary.search());
