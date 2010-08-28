@@ -258,4 +258,7 @@ public interface Dictionary extends Constants {
 	@DefaultStringValue("Received time to")
 	String receivedTimeEnd();
 
+	@DefaultStringValue("Statistika")
+	String statistics();
+
 }

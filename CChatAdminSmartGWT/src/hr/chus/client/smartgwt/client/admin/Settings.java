@@ -53,7 +53,4 @@ public class Settings extends HLayout {
         return canvas;
     }
 
-    public String getIntro() {
-        return DESCRIPTION;
-    }
 }

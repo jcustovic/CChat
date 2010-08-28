@@ -25,8 +25,9 @@ public class CChatAdminData {
 						new ExplorerTreeNode(CChatAdminSmartGWT.dictionary.nicks(), "nicks-category", "root", CChatAdminSmartGWT.CONTEXT_PATH + "images/nicks.png", new Nicks.Factory(), true, idSuffix),
 	                    new ExplorerTreeNode(CChatAdminSmartGWT.dictionary.pictures(), "pictures-category", "root", CChatAdminSmartGWT.CONTEXT_PATH + "images/pictures.png", new Pictures.Factory(), true, idSuffix),
 	                    new ExplorerTreeNode(CChatAdminSmartGWT.dictionary.users(), "users-category", "root", CChatAdminSmartGWT.CONTEXT_PATH + "images/users.png", new Users.Factory(), true, idSuffix),
+	                    new ExplorerTreeNode(CChatAdminSmartGWT.dictionary.messages(), "messages-category", "root", CChatAdminSmartGWT.CONTEXT_PATH + "images/message_g.png", new Messages.Factory(), true, idSuffix),
+	                    new ExplorerTreeNode(CChatAdminSmartGWT.dictionary.statistics(), "statistics-category", "root", CChatAdminSmartGWT.CONTEXT_PATH + "images/statistics.png", new Statistics.Factory(), true, idSuffix),
 	                    new ExplorerTreeNode(CChatAdminSmartGWT.dictionary.settings(), "settings-category", "root", CChatAdminSmartGWT.CONTEXT_PATH + "images/settings.png", new Settings.Factory(), true, idSuffix),
-	                    new ExplorerTreeNode(CChatAdminSmartGWT.dictionary.messages(), "messages-category", "root", CChatAdminSmartGWT.CONTEXT_PATH + "images/message_g.gif", new Messages.Factory(), true, idSuffix),
 			};
 		}
 		return data;
