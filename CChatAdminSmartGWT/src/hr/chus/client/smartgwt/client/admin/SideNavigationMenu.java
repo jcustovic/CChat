@@ -1,5 +1,6 @@
 package hr.chus.client.smartgwt.client.admin;
 
+import hr.chus.client.smartgwt.client.CChatAdminSmartGWT;
 import hr.chus.client.smartgwt.client.ExplorerTreeNode;
 
 import com.smartgwt.client.types.SortArrow;
@@ -36,7 +37,7 @@ public class SideNavigationMenu extends TreeGrid {
 		TreeGridField field = new TreeGridField();
 		field.setCanFilter(true);
 		field.setName("name");
-		field.setTitle("<b>Menu</b>");
+		field.setTitle("<b>" + CChatAdminSmartGWT.dictionary.menu() + "</b>");
 		setFields(field);
 
 		Tree tree = new Tree();

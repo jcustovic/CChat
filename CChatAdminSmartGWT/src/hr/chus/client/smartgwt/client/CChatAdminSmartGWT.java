@@ -103,7 +103,7 @@ public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
         sgwtHomeButton.setSrc(CONTEXT_PATH + "images/cchat.png");
         sgwtHomeButton.setWidth(24);
         sgwtHomeButton.setHeight(24);
-        sgwtHomeButton.setPrompt("Chat application");
+        sgwtHomeButton.setPrompt(dictionary.chatApp());
         sgwtHomeButton.setHoverStyle("interactImageHover");
         sgwtHomeButton.setShowRollOver(false);
         sgwtHomeButton.setShowDownIcon(false);
@@ -121,15 +121,15 @@ public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
 		topBar.addFill();
 		
         ImgButton imgButton = new ImgButton();
-        imgButton.setWidth(18);
-        imgButton.setHeight(18);
+        imgButton.setWidth(24);
+        imgButton.setHeight(24);
         imgButton.setSrc(CONTEXT_PATH + "images/about.png");
         imgButton.setShowFocused(false);
         imgButton.setShowFocusedIcon(false);
         imgButton.setShowRollOver(false);
         imgButton.setShowDownIcon(false);
         imgButton.setShowDown(false);
-        imgButton.setPrompt("About");
+        imgButton.setPrompt(dictionary.about());
         imgButton.setHoverWidth(110);
         imgButton.setHoverStyle("interactImageHover");
 
@@ -137,7 +137,7 @@ public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
            
         	@Override
         	public void onClick(ClickEvent event) {
-            	SC.say("About", "Author: Jan Čustović, Email: jan_custovic@yahoo.com");
+            	SC.say(dictionary.about(), "Author: Jan Čustović, Email: jan_custovic@yahoo.com <br /><br /> Icons thanks to http://pixel-mixer.com");
             }
         });
         topBar.addMember(imgButton);
@@ -219,7 +219,6 @@ public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
 
 		addMember(topBar);
 		addMember(hlayout);
-//		draw();
 		RootPanel.get().add(this);
 	}
 
