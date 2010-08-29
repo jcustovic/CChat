@@ -3,9 +3,9 @@
 
 <h2 style="text-align:center;"><s:text name="global.login"/></h2>
 
-<s:form action="Login" cssStyle="margin-left:auto; margin-right:auto;">
-	<s:textfield name="username" label="%{getText('global.username')}"/>
-	<s:password name="password" label="%{getText('global.password')}"/>
+<s:form action="Login" cssStyle="text-align:center; margin-left:auto; margin-right:auto;">
+	<s:textfield name="username" label="%{getText('global.username')}" size="20"/>
+	<s:password name="password" label="%{getText('global.password')}" size="20"/>
 	<s:submit value="%{getText('global.login')}"/>
 </s:form>
 

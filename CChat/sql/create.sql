@@ -1,7 +1,7 @@
 create table service_provider (
   id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-  sc VARCHAR(20) NULL,
-  provider_name VARCHAR(30) NULL,
+  sc VARCHAR(20) NOT NULL,
+  provider_name VARCHAR(30) NOT NULL,
   description VARCHAR(200) NULL,
   disabled BOOL NULL,
   PRIMARY KEY(id),
