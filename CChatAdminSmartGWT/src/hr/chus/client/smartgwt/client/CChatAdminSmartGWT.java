@@ -163,7 +163,7 @@ public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
 		headerHtmlFlow.setContentsURL(CONTEXT_PATH + "admin/UserInfoAction");
 		headerHtmlFlow.setOverflow(Overflow.AUTO);
 		headerHtmlFlow.setPadding(10);
-		headerHtmlFlow.setHeight("10%");
+		headerHtmlFlow.setHeight("7%");
 		
 		Timer refreshTimer = new Timer() {
 	    	@Override
@@ -173,28 +173,28 @@ public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
 	    };
 	    refreshTimer.scheduleRepeating(1000 * 60 * 5); // 5 minutes
 
-		SectionStackSection header = new SectionStackSection("Header");
+		SectionStackSection header = new SectionStackSection("&nbsp;" + dictionary.header());
 		header.setItems(headerHtmlFlow);
 		header.setExpanded(true);
 
 		HTMLFlow mainHtmlFlow = new HTMLFlow();
 		mainHtmlFlow.setOverflow(Overflow.AUTO);
 		mainHtmlFlow.setPadding(10);
-		mainHtmlFlow.setHeight("80%");
+		mainHtmlFlow.setHeight("84%");
 		mainHtmlFlow.setContents("<b> Admin area </b>");
 
 		mainTabSet = createTabSet();
 		contextMenu = createContextMenu();
 
 		Tab tab = new Tab();
-		tab.setTitle("Home&nbsp;&nbsp;");
+		tab.setTitle(dictionary.home() + "&nbsp;&nbsp;");
 		tab.setWidth(80);
 		tab.setIcon(CONTEXT_PATH + "images/home.png");
 		tab.setPane(mainHtmlFlow);
 
 		mainTabSet.addTab(tab);
 
-		SectionStackSection main = new SectionStackSection("Main");
+		SectionStackSection main = new SectionStackSection("&nbsp;" + dictionary.main());
 		main.setItems(mainTabSet);
 		main.setExpanded(true);
 		main.setCanCollapse(false);
@@ -202,12 +202,12 @@ public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
 		HTMLFlow footerHtmlFlow = new HTMLFlow();
 		footerHtmlFlow.setOverflow(Overflow.AUTO);
 		footerHtmlFlow.setPadding(10);
-		footerHtmlFlow.setHeight("10%");
+		footerHtmlFlow.setHeight("7%");
 		footerHtmlFlow.setContents("<b> Footer </b>");
 
-		SectionStackSection footer = new SectionStackSection("Footer");
+		SectionStackSection footer = new SectionStackSection("&nbsp;" + dictionary.footer());
 		footer.setItems(footerHtmlFlow);
-		footer.setExpanded(true);
+		footer.setExpanded(false);
 
 		rightSideLayout.setSections(header, main, footer);
 
