@@ -76,6 +76,9 @@ public class Prepare extends ActionSupport  {
 		ServiceProvider tmobServiceProvider = new ServiceProvider("66111", "Tmobile", "TMobile mreža", false);
 		serviceProviderService.addServiceProvider(tmobServiceProvider);
 		
+		ServiceProvider tele2ServiceProvider = new ServiceProvider("66111", "Tele2", "Tele2 mreža", false);
+		serviceProviderService.addServiceProvider(tele2ServiceProvider);
+		
 		Nick nick = new Nick("Test", "Testni nick");
 		nickService.addNick(nick);
 		
@@ -101,6 +104,19 @@ public class Prepare extends ActionSupport  {
 			}
 			for (int j = 0; j < 2; j++) {
 				SMSMessage smsMessage = new SMSMessage(userUser, user, new Date(), "Text " + i + j + "OUT sfdsdafkj ghkldfhg fdkjhg dkfljhg dkljh", "12346", tmobServiceProvider, Direction.OUT);
+				smsMessageService.addSMSMessage(smsMessage);
+			}
+		}
+		
+		for (int i = 40; i < 55; i++) {
+			User userUser = new User(null, adminUser, String.valueOf(i), tele2ServiceProvider, "Name" + String.valueOf(i), "Surname" + String.valueOf(i), new Date());
+			userUser = userService.editUser(userUser);
+			for (int j = 0; j < 3; j++) {
+				SMSMessage smsMessage = new SMSMessage(userUser, user, new Date(), "Text " + i + j + "IN sfdsdafkj ghkldfhg fdkjhg dkfljhg dkljh", "12346", tele2ServiceProvider, Direction.IN);
+				smsMessageService.addSMSMessage(smsMessage);
+			}
+			for (int j = 0; j < 1; j++) {
+				SMSMessage smsMessage = new SMSMessage(userUser, user, new Date(), "Text " + i + j + "OUT sfdsdafkj ghkldfhg fdkjhg dkfljhg dkljh", "12346", tele2ServiceProvider, Direction.OUT);
 				smsMessageService.addSMSMessage(smsMessage);
 			}
 		}

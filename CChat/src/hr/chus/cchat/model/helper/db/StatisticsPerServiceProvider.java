@@ -14,14 +14,14 @@ public class StatisticsPerServiceProvider implements Serializable {
 	private String providerName;
 	private String shortCode;
 	private Integer receivedCount;
-	private Integer sendCount;
+	private Integer sentCount;
 	
 	
 	public StatisticsPerServiceProvider(String providerName, String shortCode, Integer receivedCount, Integer sendCount) {
 		this.providerName = providerName;
 		this.shortCode = shortCode;
 		this.receivedCount = receivedCount;
-		this.sendCount = sendCount;
+		this.sentCount = sendCount;
 	}
 	
 	
@@ -36,7 +36,7 @@ public class StatisticsPerServiceProvider implements Serializable {
 	public Integer getReceivedCount() { return receivedCount; }
 	public void setReceivedCount(Integer receivedCount) { this.receivedCount = receivedCount; }
 
-	public Integer getSendCount() { return sendCount; }
-	public void setSendCount(Integer sendCount) { this.sendCount = sendCount; }
+	public Integer getSentCount() { return sentCount; }
+	public void setSentCount(Integer sendCount) { this.sentCount = sendCount; }
 	
 }

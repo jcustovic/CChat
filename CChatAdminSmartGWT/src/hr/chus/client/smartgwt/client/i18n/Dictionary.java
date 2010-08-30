@@ -267,4 +267,40 @@ public interface Dictionary extends Constants {
 	@DefaultStringValue("Chat application")
 	String chatApp();
 
+	@DefaultStringValue("Statistics per service provider")
+	String statisticsPerSP();
+
+	@DefaultStringValue("Statistics per operator")
+	String statisticsPerOperator();
+
+	@DefaultStringValue("Live statistics")
+	String liveStatistics();
+
+	@DefaultStringValue("From date")
+	String fromDate();
+
+	@DefaultStringValue("To date")
+	String toDate();
+
+	@DefaultStringValue("Statistics type")
+	String statisticsType();
+
+	@DefaultStringValue("Graphics loading...")
+	String graphicsLoading();
+
+	@DefaultStringValue("Graphics loaded")
+	String graphicsLoaded();
+
+	@DefaultStringValue("Sum")
+	String sum();
+
+	@DefaultStringValue("Home")
+	String home();
+
+	@DefaultStringValue("Header")
+	String header();
+
+	@DefaultStringValue("Footer")
+	String footer();
+
 }
