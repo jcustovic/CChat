@@ -1,5 +1,7 @@
 package hr.chus.client.smartgwt.client.admin;
 
+import java.util.Iterator;
+
 import hr.chus.client.smartgwt.client.CChatAdminSmartGWT;
 import hr.chus.client.smartgwt.client.PanelFactory;
 import hr.chus.client.smartgwt.client.admin.ds.NicksDS;
@@ -203,6 +205,13 @@ public class Pictures extends HLayout {
 
 			@Override
 			public void onClick(ClickEvent event) {
+				Iterator<?> keySetIterator = form.getValues().keySet().iterator();
+				while (keySetIterator.hasNext()) {
+					String key = (String) keySetIterator.next();
+					Object value = form.getValues().get(key);
+					if (value == null) form.clearValue(key);
+				}
+				
 				if (form.validate()) {
 					form.submit(new DSCallback() {
 
