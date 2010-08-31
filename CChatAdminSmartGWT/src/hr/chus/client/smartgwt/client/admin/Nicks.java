@@ -1,5 +1,7 @@
 package hr.chus.client.smartgwt.client.admin;
 
+import java.util.Iterator;
+
 import hr.chus.client.smartgwt.client.CChatAdminSmartGWT;
 import hr.chus.client.smartgwt.client.PanelFactory;
 import hr.chus.client.smartgwt.client.admin.ds.NicksDS;
@@ -24,7 +26,6 @@ import com.smartgwt.client.widgets.form.fields.HiddenItem;
 import com.smartgwt.client.widgets.form.fields.TextItem;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
-import com.smartgwt.client.widgets.grid.ListGridRecord;
 import com.smartgwt.client.widgets.grid.events.RecordClickEvent;
 import com.smartgwt.client.widgets.grid.events.RecordClickHandler;
 import com.smartgwt.client.widgets.layout.HLayout;
@@ -123,11 +124,19 @@ public class Nicks extends HLayout {
 				deleteButton.setDisabled(false);
 				
 				FormItem[] fields = form.getFields();
-				ListGridRecord selected = listGrid.getSelectedRecord();
-				for (FormItem field : fields) {
-					String attribute = selected.getAttribute(field.getName());
-					if (attribute != null) {
-						form.setValue(field.getName(), attribute);
+				form.editSelectedData(listGrid);
+				Iterator<?> keySetIterator = form.getValues().keySet().iterator();
+				while (keySetIterator.hasNext()) {
+					String key = (String) keySetIterator.next();
+					boolean toRemove = true;
+					for (FormItem field : fields) {
+						if (key.equals(field.getName())) {
+							toRemove = false;
+							break;
+						}
+					}
+					if (toRemove) {
+						form.clearValue(key);
 					}
 				}
 				form.setValue("operation", "save/edit");
