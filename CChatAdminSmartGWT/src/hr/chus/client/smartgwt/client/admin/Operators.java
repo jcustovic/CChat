@@ -161,6 +161,13 @@ public class Operators extends HLayout {
 			@Override
 			public void onClick(ClickEvent event) {
 				if (form.validate()) {
+					Iterator<?> keySetIterator = form.getValues().keySet().iterator();
+					while (keySetIterator.hasNext()) {
+						String key = (String) keySetIterator.next();
+						Object value = form.getValues().get(key);
+						if (value == null) form.clearValue(key);
+					}
+					
 					form.submit(new DSCallback() {
 
 						@Override
