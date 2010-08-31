@@ -6,7 +6,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import hr.chus.cchat.db.service.StatisticsService;
+import hr.chus.cchat.model.db.jpa.Operator;
 import hr.chus.cchat.model.db.jpa.SMSMessage.Direction;
+import hr.chus.cchat.model.helper.db.StatisticsPerOperator;
 import hr.chus.cchat.model.helper.db.StatisticsPerServiceProvider;
 
 import javax.persistence.EntityManager;
@@ -30,9 +32,10 @@ public class StatisticsServiceImpl implements StatisticsService {
 	@Override
 	public List<StatisticsPerServiceProvider> getStatisticsPerServiceProvider(Date from, Date to) {
 		List<StatisticsPerServiceProvider> result = new LinkedList<StatisticsPerServiceProvider>();
-		Query query = entityManager.createNativeQuery("SELECT sp.provider_name, sp.sc, SUM(sms.direction = :directionIn), SUM(sms.direction = :directionOut) FROM sms_messages sms JOIN service_provider sp ON sms.service_provider_id = sp.id "
-				+ "WHERE sms.time >= :from AND sms.time <= :to "
-				+ "GROUP BY sp.id");
+		Query query = entityManager.createNativeQuery("SELECT sp.provider_name, sp.sc, SUM(sms.direction = :directionIn), SUM(sms.direction = :directionOut)"
+				+ " FROM sms_messages sms JOIN service_provider sp ON sms.service_provider_id = sp.id"
+				+ " WHERE sms.time >= :from AND sms.time <= :to"
+				+ " GROUP BY sp.id");
 		query.setParameter("directionIn", Direction.IN.toString());
 		query.setParameter("directionOut", Direction.OUT.toString());
 		query.setParameter("from", from);
@@ -46,11 +49,25 @@ public class StatisticsServiceImpl implements StatisticsService {
 		return result;
 	}
 	
-//	SELECT o.username
-//	, SUM(sms.direction = 'IN')
-//	, SUM(sms.direction = 'OUT')
-//FROM sms_messages sms JOIN operators o ON sms.operator_id = o.id  
-//GROUP BY o.id;
+	@Override
+	public List<StatisticsPerOperator> getStatisticsPerOperator(Date from, Date to, Operator operator) {
+		List<StatisticsPerOperator> result = new LinkedList<StatisticsPerOperator>();
+		Query query = entityManager.createNativeQuery("SELECT o.username, SUM(sms.direction = 'IN'), SUM(sms.direction = 'OUT')"
+				+ " FROM sms_messages sms RIGHT JOIN operators o ON sms.operator_id = o.id"
+				+ " WHERE sms.time >= :from AND sms.time <= :to"
+				+ ((operator != null) ? " AND o.id = :operatorId" : "")
+				+ " GROUP BY o.id");
+		query.setParameter("from", from);
+		query.setParameter("to", to);
+		if (operator != null) query.setParameter("operatorId", operator.getId());
+		
+		List<?> results = query.getResultList();
+		for (Object object : results) {
+			Object[] row = (Object[]) object;
+			result.add(new StatisticsPerOperator((String) row[0], ((BigDecimal) row[1]).intValue(), ((BigDecimal) row[2]).intValue()));
+		}
+		return result;
+	}
 	
 	
 	// Getters & setters

@@ -51,7 +51,15 @@ public class Operator implements Serializable {
 		this.isActive = isActive;
 		this.disabled = disabled;
 	}
+	
+	
+	@Override
+	public String toString() {
+		return String.format("Operator[ID: %s, Username: %s, Name: %s, Surname: %s, Disabled: %s, Active: %s]", new Object[] { id, username, name, surname, disabled, isActive });
+	}
 
+	
+	// Getters & setters
 
 	@Id
 	@GeneratedValue

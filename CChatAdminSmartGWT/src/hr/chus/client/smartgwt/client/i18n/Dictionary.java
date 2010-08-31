@@ -142,7 +142,7 @@ public interface Dictionary extends Constants {
 	String uploading();
 
 	@DefaultStringValue("Are you sure?")
-	String reqularConfirm();
+	String regularConfirm();
 
 	@DefaultStringValue("Close")
 	String close();
@@ -302,5 +302,8 @@ public interface Dictionary extends Constants {
 
 	@DefaultStringValue("Footer")
 	String footer();
+
+	@DefaultStringValue("Today")
+	String today();
 
 }

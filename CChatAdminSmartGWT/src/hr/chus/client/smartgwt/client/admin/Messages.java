@@ -255,7 +255,7 @@ public class Messages extends HLayout {
 					Date date = (Date) value;
 					gmt = new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
 				}
-				return CChatAdminSmartGWT.dateFormat.format(gmt, TimeZone.createTimeZone(0));
+				return CChatAdminSmartGWT.dateTimeFormat.format(gmt, TimeZone.createTimeZone(0));
 			}
 		});
         startDate.setMaskDateSeparator(".");
@@ -278,7 +278,7 @@ public class Messages extends HLayout {
 					Date date = (Date) value;
 					gmt = new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
 				}
-				return CChatAdminSmartGWT.dateFormat.format(gmt, TimeZone.createTimeZone(0));
+				return CChatAdminSmartGWT.dateTimeFormat.format(gmt, TimeZone.createTimeZone(0));
 			}
 		});
         endDate.setMaskDateSeparator(".");

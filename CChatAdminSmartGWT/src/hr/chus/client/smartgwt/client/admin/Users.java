@@ -464,7 +464,7 @@ public class Users extends HLayout {
 				if (value == null || !(value instanceof Date)) return null;
 				Date date = (Date) value;
 				Date gmt = new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
-				return CChatAdminSmartGWT.dateFormat.format(gmt);
+				return CChatAdminSmartGWT.dateTimeFormat.format(gmt);
 			}
 		});
         birthdate.setMaskDateSeparator(".");
