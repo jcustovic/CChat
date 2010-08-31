@@ -1,5 +1,7 @@
 package hr.chus.client.smartgwt.client.admin;
 
+import java.util.Iterator;
+
 import hr.chus.client.smartgwt.client.CChatAdminSmartGWT;
 import hr.chus.client.smartgwt.client.PanelFactory;
 import hr.chus.client.smartgwt.client.admin.ds.OperatorsDS;
@@ -29,7 +31,6 @@ import com.smartgwt.client.widgets.form.fields.TextItem;
 import com.smartgwt.client.widgets.form.validator.RegExpValidator;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
-import com.smartgwt.client.widgets.grid.ListGridRecord;
 import com.smartgwt.client.widgets.grid.events.RecordClickEvent;
 import com.smartgwt.client.widgets.grid.events.RecordClickHandler;
 import com.smartgwt.client.widgets.layout.HLayout;
@@ -104,8 +105,6 @@ public class Operators extends HLayout {
 		form.setDataSource(ds);
 		
 		form.setFields(getFormFields());
-//		form.setShowInlineErrors(false);
-//		form.setErrorsPreamble(CChatAdminSmartGWT.dictionary.errors());
 		
 		final IButton deleteButton = new IButton(CChatAdminSmartGWT.dictionary.delete());
 		final IButton saveButton = new IButton(CChatAdminSmartGWT.dictionary.save());
@@ -129,11 +128,19 @@ public class Operators extends HLayout {
 				deleteButton.setDisabled(false);
 				
 				FormItem[] fields = form.getFields();
-				ListGridRecord selected = listGrid.getSelectedRecord();
-				for (FormItem field : fields) {
-					String attribute = selected.getAttribute(field.getName());
-					if (attribute != null) {
-						form.setValue(field.getName(), attribute);
+				form.editSelectedData(listGrid);
+				Iterator<?> keySetIterator = form.getValues().keySet().iterator();
+				while (keySetIterator.hasNext()) {
+					String key = (String) keySetIterator.next();
+					boolean toRemove = true;
+					for (FormItem field : fields) {
+						if (key.equals(field.getName())) {
+							toRemove = false;
+							break;
+						}
+					}
+					if (toRemove) {
+						form.clearValue(key);
 					}
 				}
 				form.setValue("operation", "save/edit");
@@ -236,9 +243,11 @@ public class Operators extends HLayout {
 		surname.setRequired(true);
 		surname.setRequiredMessage(CChatAdminSmartGWT.dictionary.fieldIsRequired());
 		BooleanItem active = new BooleanItem();
-		active.setName("operator.active");
+		active.setDefaultValue(false);
+		active.setName("operator.isActive");
 		active.setTitle(CChatAdminSmartGWT.dictionary.isActive());
 		BooleanItem disabled = new BooleanItem();
+		disabled.setDefaultValue(false);
 		disabled.setName("operator.disabled");
 		disabled.setTitle(CChatAdminSmartGWT.dictionary.isDisabled());
 		PasswordItem password = new PasswordItem("operator.password", CChatAdminSmartGWT.dictionary.password());
