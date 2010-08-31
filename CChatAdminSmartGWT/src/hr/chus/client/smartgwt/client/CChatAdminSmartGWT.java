@@ -62,19 +62,20 @@ public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
 	private Menu contextMenu;
 	public static Dictionary dictionary = (Dictionary) GWT.create(Dictionary.class);
 	
-	public static DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd.MM.yyyy HH:mm");
+	public static DateTimeFormat dateTimeFormat = DateTimeFormat.getFormat("dd.MM.yyyy HH:mm");
+	public static DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd.MM.yyyy");
 
 	public static DateDisplayFormatter dateDisplayFormatter = new DateDisplayFormatter() {
         public String format(Date date) {
             if (date == null) return null;
-            return dateFormat.format(date);
+            return dateTimeFormat.format(date);
         }
     };
 
     public static DateInputFormatter dateInputFormatter = new DateInputFormatter() {
         public Date parse(String s) {
             if (s == null) return null;
-            return dateFormat.parse(s);
+            return dateTimeFormat.parse(s);
         }
     };
 

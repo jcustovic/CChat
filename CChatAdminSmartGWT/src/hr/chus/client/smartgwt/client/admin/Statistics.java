@@ -12,8 +12,8 @@ import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.visualization.client.DataTable;
 import com.google.gwt.visualization.client.DataView;
 import com.google.gwt.visualization.client.VisualizationUtils;
@@ -52,7 +52,8 @@ import com.smartgwt.client.widgets.layout.VLayout;
 public class Statistics extends HLayout {
 	
     private static final String DESCRIPTION = "Statistics";
-    private VerticalPanel verticalPanel;
+    private VLayout verticalPanel;
+    private Timer refreshTimer;
     
     
     public static class Factory implements PanelFactory {
@@ -84,6 +85,7 @@ public class Statistics extends HLayout {
         final VLayout layout = new VLayout(5);
         
         DataSource ds = new DataSource(CChatAdminSmartGWT.CONTEXT_PATH + "admin/AdminStatisticsListJSON");
+        ds.setAutoConvertRelativeDates(false);
         ds.setDataFormat(DSDataFormat.JSON);
         final DynamicForm statisticsForm = new DynamicForm();
         statisticsForm.setWidth(300);
@@ -93,24 +95,50 @@ public class Statistics extends HLayout {
 		statisticsForm.setNumCols(2);
 		statisticsForm.setDataSource(ds);
 		statisticsForm.setAutoFocus(false);
+		statisticsForm.setUseAllDataSourceFields(false);
+
 
 		statisticsForm.setFields(getStatisticsFormFields());
 		
-		IButton searchButton = new IButton(CChatAdminSmartGWT.dictionary.search());
+		final IButton searchButton = new IButton(CChatAdminSmartGWT.dictionary.search());
         searchButton.setIcon(CChatAdminSmartGWT.CONTEXT_PATH + "images/find.png");
         searchButton.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				if (verticalPanel != null) verticalPanel.removeFromParent();
+				if (verticalPanel != null) layout.removeMember(verticalPanel);
+				if (statisticsForm.getValueAsString("statisticsType").equals("LiveStatistics")) {
+					if (refreshTimer != null) refreshTimer.cancel();
+					refreshTimer = new Timer() {
+						
+						@Override
+						public void run() {
+							searchButton.fireEvent(new ClickEvent(null));
+						}
+					};
+					refreshTimer.schedule(1000 * 60 * 2); // 2 minutes
+				}
 				statisticsForm.submit(new DSCallback() {
 					@Override
 					public void execute(DSResponse response, Object jsonData, DSRequest request) {
 						JSONArray value = XMLTools.selectObjects(jsonData, "/statisticsPerServiceProviders");
 						if (value != null && value.size() > 0) {
-							verticalPanel = drawStatisticsPerServiceProviders(value, (Date) statisticsForm.getValue("fromDate"), (Date) statisticsForm.getValue("toDate"));
+							if (statisticsForm.getValueAsString("statisticsType").equals("LiveStatistics")) {
+								
+								verticalPanel = drawStatisticsPerServiceProviders(value, null, null);
+							} else {
+								verticalPanel = drawStatisticsPerServiceProviders(value, (Date) statisticsForm.getValue("fromDate"), (Date) statisticsForm.getValue("toDate"));
+							}
 							layout.addMember(verticalPanel);
+							return;
 						}
+						value = XMLTools.selectObjects(jsonData, "/statisticsPerOperators");
+						if (value != null && value.size() > 0) {
+							verticalPanel = drawStatisticsPerOperator(value, (Date) statisticsForm.getValue("fromDate"), (Date) statisticsForm.getValue("toDate"));
+							layout.addMember(verticalPanel);
+							return;	
+						}
+						
 					}
 				});
 			}
@@ -143,12 +171,16 @@ public class Statistics extends HLayout {
      * @param fromDate 
      * @return 
      */
-    private VerticalPanel drawStatisticsPerServiceProviders(JSONArray value, Date fromDate, Date toDate) {
-    	String fromDateString = CChatAdminSmartGWT.dateFormat.format(fromDate, TimeZone.createTimeZone(0));
-    	String toDateString = CChatAdminSmartGWT.dateFormat.format(toDate, TimeZone.createTimeZone(0));
-    	VerticalPanel verticalPanel = new VerticalPanel();
-    	verticalPanel.setWidth("100%");
-    	verticalPanel.setHeight("100%");
+    private VLayout drawStatisticsPerServiceProviders(JSONArray value, Date fromDate, Date toDate) {
+    	String fromDateString = null;
+    	String toDateString = null;
+    	if (fromDate != null && toDate != null) {
+	    	fromDateString = CChatAdminSmartGWT.dateTimeFormat.format(fromDate, TimeZone.createTimeZone(0));
+	    	toDateString = CChatAdminSmartGWT.dateTimeFormat.format(toDate, TimeZone.createTimeZone(0));
+    	}
+    	VLayout vlayout = new VLayout();
+    	vlayout.setWidth100();
+    	vlayout.setHeight100();
     	
     	HorizontalPanel horizontalPanel = new HorizontalPanel();
     	horizontalPanel.setWidth("100%");
@@ -158,13 +190,21 @@ public class Statistics extends HLayout {
     	sentOptions.setWidth(400);
     	sentOptions.setHeight(240);
     	sentOptions.set3D(true);
-    	sentOptions.setTitle(CChatAdminSmartGWT.dictionary.sent() + " " + CChatAdminSmartGWT.dictionary.statisticsPerSP() + " (" + fromDateString + " - " + toDateString + ")");
+    	if (fromDateString != null && toDateString != null) {
+    		sentOptions.setTitle(CChatAdminSmartGWT.dictionary.sent() + " " + CChatAdminSmartGWT.dictionary.statisticsPerSP() + " (" + fromDateString + " - " + toDateString + ")");
+    	} else {
+    		sentOptions.setTitle(CChatAdminSmartGWT.dictionary.sent() + " " + CChatAdminSmartGWT.dictionary.statisticsPerSP() + " (" + CChatAdminSmartGWT.dictionary.today() + ")");
+    	}
     	
     	Options receivedOptions = Options.create();
     	receivedOptions.setWidth(400);
     	receivedOptions.setHeight(240);
     	receivedOptions.set3D(true);
-    	receivedOptions.setTitle(CChatAdminSmartGWT.dictionary.received() + " " + CChatAdminSmartGWT.dictionary.statisticsPerSP() + " (" + fromDateString + " - " + toDateString + ")");
+    	if (fromDateString != null && toDateString != null) {
+    		receivedOptions.setTitle(CChatAdminSmartGWT.dictionary.received() + " " + CChatAdminSmartGWT.dictionary.statisticsPerSP() + " (" + fromDateString + " - " + toDateString + ")");
+    	} else {
+    		receivedOptions.setTitle(CChatAdminSmartGWT.dictionary.received() + " " + CChatAdminSmartGWT.dictionary.statisticsPerSP() + " (" + CChatAdminSmartGWT.dictionary.today() + ")");
+    	}
 		
     	DataTable allData = DataTable.create();
     	allData.addColumn(ColumnType.STRING, CChatAdminSmartGWT.dictionary.serviceProvider());
@@ -188,7 +228,7 @@ public class Statistics extends HLayout {
 		}
 		Table table = new Table(allData, Table.Options.create());
 		table.setWidth("350px");
-		verticalPanel.add(table);
+		vlayout.addMember(table);
 		
 		DataView sentPieChartDW = DataView.create(allData);
 		sentPieChartDW.setColumns(new int[] {0, 1});
@@ -214,9 +254,95 @@ public class Statistics extends HLayout {
 		sumData.setValue(1, 1, receivedTotalCount);
 		horizontalPanel.add(new PieChart(sumData, sumOptions));
 		
-		verticalPanel.add(horizontalPanel);
+		vlayout.addMember(horizontalPanel);
 		
-		return verticalPanel;
+		return vlayout;
+	}
+    
+    /**
+     * 
+     * @param value
+     * @param fromDate
+     * @param toDate
+     * @return
+     */
+	private VLayout drawStatisticsPerOperator(JSONArray value, Date fromDate, Date toDate) {
+		String fromDateString = CChatAdminSmartGWT.dateTimeFormat.format(fromDate, TimeZone.createTimeZone(0));
+    	String toDateString = CChatAdminSmartGWT.dateTimeFormat.format(toDate, TimeZone.createTimeZone(0));
+    	VLayout vlayout = new VLayout();
+    	vlayout.setWidth100();
+    	vlayout.setHeight100();
+    	
+    	HorizontalPanel horizontalPanel = new HorizontalPanel();
+    	horizontalPanel.setWidth("100%");
+    	horizontalPanel.setHeight("100%");
+    	
+    	Options sentOptions = Options.create();
+    	sentOptions.setWidth(400);
+    	sentOptions.setHeight(240);
+    	sentOptions.set3D(true);
+    	sentOptions.setTitle(CChatAdminSmartGWT.dictionary.sent() + " " + CChatAdminSmartGWT.dictionary.statisticsPerOperator() + " (" + fromDateString + " - " + toDateString + ")");
+    	
+    	Options receivedOptions = Options.create();
+    	receivedOptions.setWidth(400);
+    	receivedOptions.setHeight(240);
+    	receivedOptions.set3D(true);
+    	receivedOptions.setTitle(CChatAdminSmartGWT.dictionary.received() + " " + CChatAdminSmartGWT.dictionary.statisticsPerOperator() + " (" + fromDateString + " - " + toDateString + ")");
+    	
+    	if (value.size() == 1) {
+    		Options sumOptions = Options.create();
+    		sumOptions.setWidth(400);
+    		sumOptions.setHeight(240);
+    		sumOptions.set3D(true);
+    		
+    		DataTable allData = DataTable.create();
+	    	allData.addColumn(ColumnType.STRING, CChatAdminSmartGWT.dictionary.direction());
+	    	allData.addColumn(ColumnType.NUMBER, CChatAdminSmartGWT.dictionary.sum());
+	    	allData.addRows(2);
+	    	
+	    	JSONObject object = (JSONObject) value.get(0);
+			String operatorUsername = ((JSONString) object.get("operatorUsername")).stringValue();
+			sumOptions.setTitle(operatorUsername + " - " + CChatAdminSmartGWT.dictionary.sent() + "/" + CChatAdminSmartGWT.dictionary.received());
+			double receivedCount = ((JSONNumber) object.get("receivedCount")).doubleValue();
+			double sentCount = ((JSONNumber) object.get("sentCount")).doubleValue();
+			allData.setValue(0, 0, CChatAdminSmartGWT.dictionary.sent());
+			allData.setValue(0, 1, sentCount);
+			allData.setValue(1, 0, CChatAdminSmartGWT.dictionary.received());
+			allData.setValue(1, 1, receivedCount);
+			horizontalPanel.add(new PieChart(allData, sumOptions));
+	    	
+    	} else {
+	    	DataTable allData = DataTable.create();
+	    	allData.addColumn(ColumnType.STRING, CChatAdminSmartGWT.dictionary.operator());
+	    	allData.addColumn(ColumnType.NUMBER, CChatAdminSmartGWT.dictionary.sent() + " " + CChatAdminSmartGWT.dictionary.messages());
+	    	allData.addColumn(ColumnType.NUMBER, CChatAdminSmartGWT.dictionary.received() + " " + CChatAdminSmartGWT.dictionary.messages());
+	    	allData.addRows(value.size());
+	    	
+			for (int i = 0; i < value.size(); i++) {
+				JSONObject object = (JSONObject) value.get(i);
+				String operatorUsername = ((JSONString) object.get("operatorUsername")).stringValue();
+				double receivedCount = ((JSONNumber) object.get("receivedCount")).doubleValue();
+				double sentCount = ((JSONNumber) object.get("sentCount")).doubleValue();
+				allData.setValue(i, 0, operatorUsername);
+				allData.setValue(i, 1, sentCount);
+				allData.setValue(i, 2, receivedCount);
+			}
+			Table table = new Table(allData, Table.Options.create());
+			table.setWidth("350px");
+			vlayout.addMember(table);
+			
+			DataView sentPieChartDW = DataView.create(allData);
+			sentPieChartDW.setColumns(new int[] {0, 1});
+			horizontalPanel.add(new PieChart(sentPieChartDW, sentOptions));
+			
+			DataView receivedPieChartDW = DataView.create(allData);
+			receivedPieChartDW.setColumns(new int[] {0, 2});
+			horizontalPanel.add(new PieChart(receivedPieChartDW, receivedOptions));
+    	}
+		
+		vlayout.addMember(horizontalPanel);
+    	
+		return vlayout;
 	}
 
     /**
@@ -236,11 +362,19 @@ public class Statistics extends HLayout {
 			@Override
 			public void onChanged(ChangedEvent event) {
 				String statisticsType = (String) event.getValue();
-				if (event.getValue() == null || statisticsType.equals("LiveStatistics")) {
+				if (event.getValue() == null) {
+					if (refreshTimer != null) refreshTimer.cancel();
+					fromDate.setDisabled(true);
+					toDate.setDisabled(true);
+					operatorItem.setDisabled(true);
+				} else if (statisticsType.equals("LiveStatistics")) {
+					fromDate.setValue(new Date());
+					toDate.setValue(new Date());
 					fromDate.setDisabled(true);
 					toDate.setDisabled(true);
 					operatorItem.setDisabled(true);
 				} else {
+					if (refreshTimer != null) refreshTimer.cancel();
 					if (statisticsType.equals("StatisticsPerServiceProvider")) {
 						fromDate.setDisabled(false);
 						toDate.setDisabled(false);
@@ -275,15 +409,16 @@ public class Statistics extends HLayout {
 					gmt = (Date) value;
 				} else {
 					Date date = (Date) value;
-					gmt = new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
+					gmt = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
 				}
-				return CChatAdminSmartGWT.dateFormat.format(gmt, TimeZone.createTimeZone(0));
+				return CChatAdminSmartGWT.dateTimeFormat.format(gmt, TimeZone.createTimeZone(0));
 			}
 		});
         fromDate.setMaskDateSeparator(".");
         fromDate.setUseMask(true);
         fromDate.setUseTextField(true);
         fromDate.setRequired(true);
+        fromDate.setRequiredMessage(CChatAdminSmartGWT.dictionary.fieldIsRequired());
         fromDate.setWidth(180);
         fromDate.setDateFormatter(DateDisplayFormat.TOEUROPEANSHORTDATETIME);
         
@@ -299,15 +434,16 @@ public class Statistics extends HLayout {
 					gmt = (Date) value;
 				} else {
 					Date date = (Date) value;
-					gmt = new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
+					gmt = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
 				}
-				return CChatAdminSmartGWT.dateFormat.format(gmt, TimeZone.createTimeZone(0));
+				return CChatAdminSmartGWT.dateTimeFormat.format(gmt, TimeZone.createTimeZone(0));
 			}
 		});
         toDate.setMaskDateSeparator(".");
         toDate.setUseMask(true);
         toDate.setUseTextField(true);
         toDate.setRequired(true);
+        toDate.setRequiredMessage(CChatAdminSmartGWT.dictionary.fieldIsRequired());
         toDate.setWidth(180);
         toDate.setDateFormatter(DateDisplayFormat.TOEUROPEANSHORTDATETIME);
         
