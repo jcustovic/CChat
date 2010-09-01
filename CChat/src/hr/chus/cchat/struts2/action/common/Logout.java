@@ -33,7 +33,6 @@ public class Logout extends ActionSupport implements SessionAware {
 		Operator user = (Operator) session.get(ApplicationConstants.USER_SESSION);
 		if (user != null) {
 			try {
-				// Kad se korisnik odlogira aktiv mu se postavlja na false!
 				user.setIsActive(false);
 				operatorService.updateOperator(user);
 			} catch (OptimisticLockException ignorable) { }

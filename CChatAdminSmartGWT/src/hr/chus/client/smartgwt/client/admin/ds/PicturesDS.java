@@ -35,7 +35,7 @@ public class PicturesDS extends DataSource {
 		nickName.setValueXPath("nick/name");
 		DataSourceTextField nickId = new DataSourceTextField("picture.nick", CChatAdminSmartGWT.dictionary.nick(), 50, false);
 		nickId.setValueXPath("nick/id");
-		DataSourceTextField name = new DataSourceTextField("picture.name", CChatAdminSmartGWT.dictionary.name(), 50, true);
+		DataSourceTextField name = new DataSourceTextField("picture.name", CChatAdminSmartGWT.dictionary.name(), 100, true);
 		name.setValueXPath("name");
 		DataSourceIntegerField length = new DataSourceIntegerField("picture.length", CChatAdminSmartGWT.dictionary.sizeBytes(), 50, true);
 		length.setValueXPath("length");

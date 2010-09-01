@@ -11,6 +11,7 @@
 			<result-type name="tiles" default="true" class="org.apache.struts2.views.tiles.TilesResult"/>
 		</result-types>
 		
+		
 		<interceptors>
 			<interceptor name="authenticateAdminInterceptor" class="hr.chus.cchat.struts2.interceptor.AuthenticateInterceptor">
 				<param name="role">admin</param>

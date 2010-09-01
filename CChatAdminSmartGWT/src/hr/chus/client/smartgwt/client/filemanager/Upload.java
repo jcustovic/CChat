@@ -1,5 +1,7 @@
 package hr.chus.client.smartgwt.client.filemanager;
 
+import hr.chus.client.smartgwt.client.CChatAdminSmartGWT;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,13 +10,14 @@ import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.Encoding;
 import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Button;
-import com.smartgwt.client.widgets.Canvas;
+import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.ValuesManager;
 import com.smartgwt.client.widgets.form.fields.FormItem;
 import com.smartgwt.client.widgets.form.fields.UploadItem;
+import com.smartgwt.client.widgets.layout.Layout;
 import com.smartgwt.client.widgets.layout.VStack;
 
 /**
@@ -22,7 +25,7 @@ import com.smartgwt.client.widgets.layout.VStack;
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *
  */
-public class Upload extends Canvas {
+public class Upload extends Layout {
 	
 	private static final String TARGET = "uploadTarget";
 
@@ -35,6 +38,9 @@ public class Upload extends Canvas {
 	public Upload(String action, String fieldName, String title, FormItem... formItems) {
 		initComplete(this);
 		List<FormItem> items = new ArrayList<FormItem>();
+		
+		Label label = new Label(CChatAdminSmartGWT.dictionary.upload());
+		label.setHeight(10);
 		
 		ValuesManager vm = new ValuesManager();
 		uploadForm = new DynamicForm();
@@ -53,7 +59,7 @@ public class Upload extends Canvas {
 			items.add(formItem);
 		}
 
-		Button uploadButton = new Button("Upload");
+		Button uploadButton = new Button(CChatAdminSmartGWT.dictionary.upload());
 		uploadButton.addClickHandler(new ClickHandler() {
 			
 			@Override
@@ -62,11 +68,10 @@ public class Upload extends Canvas {
 				if (obj != null && !obj.toString().isEmpty()) {
 					uploadForm.submitForm();
 				} else
-					SC.say("Please select a file.");
+					SC.say(CChatAdminSmartGWT.dictionary.pleaseSelectAFile());
 			}
 		});
 		VStack stack = new VStack();
-		stack.setWidth100();
 		stack.setMembersMargin(10);
 		stack.setDefaultLayoutAlign(Alignment.CENTER);
 
@@ -77,8 +82,7 @@ public class Upload extends Canvas {
 		frame.setVisible(false);
 
 		VStack mainLayout = new VStack();
-		mainLayout.setWidth(300);
-		mainLayout.setHeight(200);
+		mainLayout.addMember(label);
 
 		FormItem[] fitems = new FormItem[items.size()];
 		items.toArray(fitems);
@@ -87,7 +91,8 @@ public class Upload extends Canvas {
 		stack.addMember(uploadButton);
 		mainLayout.addMember(stack);
 		mainLayout.addMember(frame);
-		addChild(mainLayout);
+		
+		addMember(mainLayout);
 	}
 
 	/**

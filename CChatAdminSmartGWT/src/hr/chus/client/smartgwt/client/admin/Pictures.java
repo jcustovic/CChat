@@ -26,8 +26,6 @@ import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.form.DynamicForm;
-import com.smartgwt.client.widgets.form.events.ItemChangedEvent;
-import com.smartgwt.client.widgets.form.events.ItemChangedHandler;
 import com.smartgwt.client.widgets.form.fields.FormItem;
 import com.smartgwt.client.widgets.form.fields.HiddenItem;
 import com.smartgwt.client.widgets.form.fields.SelectItem;
@@ -79,7 +77,6 @@ public class Pictures extends HLayout {
     	
 		VLayout layout = new VLayout(20);
 		layout.setWidth("95%");
-		layout.setHeight100();
 		
 		Label label = new Label();
 		label.setHeight(10);
@@ -88,10 +85,10 @@ public class Pictures extends HLayout {
 		layout.addMember(label);
 		
 		final DynamicForm form = new DynamicForm();
-		form.setVisible(false);
-		form.setWidth("60%");
+		form.setDisabled(true);
+		form.setWidth("550px");
 		form.setIsGroup(true);
-		form.setGroupTitle(CChatAdminSmartGWT.dictionary.addNew());
+		form.setGroupTitle(CChatAdminSmartGWT.dictionary.update());
 		form.setNumCols(4);
 		
 		DataSource ds = new DataSource(CChatAdminSmartGWT.CONTEXT_PATH + "admin/AdminPictureFunctionJSON") {
@@ -130,8 +127,10 @@ public class Pictures extends HLayout {
 		listGrid.setLoadingDataMessage(CChatAdminSmartGWT.dictionary.loading());
 		listGrid.setEmptyMessage(CChatAdminSmartGWT.dictionary.emptySet());
 		listGrid.setLoadingMessage(CChatAdminSmartGWT.dictionary.loading());
-		listGrid.setWidth100();
+		listGrid.setWidth("620px");
 		listGrid.setHeight(200);
+		listGrid.setShowFilterEditor(true);  
+		listGrid.setFilterOnKeypress(true);
 		listGrid.setDataSource(PicturesDS.getInstance());
 		listGrid.setAutoFetchData(true);
 		listGrid.setAnimateRemoveRecord(true);
@@ -139,9 +138,8 @@ public class Pictures extends HLayout {
 
 			@Override
 			public void onRecordClick(RecordClickEvent event) {
-				form.setGroupTitle(CChatAdminSmartGWT.dictionary.update());
 				form.clearValues();
-				form.setVisible(true);
+				form.setDisabled(false);
 				saveButton.setDisabled(false);
 				deleteButton.setDisabled(false);
 				
@@ -169,33 +167,6 @@ public class Pictures extends HLayout {
 		hlayout.addMember(img);
 		
 		layout.addMember(hlayout);
-		
-		final DynamicForm filterForm = new DynamicForm();
-        filterForm.setIsGroup(true);
-        filterForm.setWidth("60%");
-        filterForm.setGroupTitle(CChatAdminSmartGWT.dictionary.search());
-        filterForm.setNumCols(6);
-        filterForm.setDataSource(PicturesDS.getInstance());
-        filterForm.setAutoFocus(false);
-
-        TextItem commonNameItem = new TextItem("picture.name");
-
-        SelectItem nickItem = new SelectItem("picture.nick", CChatAdminSmartGWT.dictionary.nick());
-        nickItem.setAllowEmptyValue(true);
-        nickItem.setEmptyDisplayValue(CChatAdminSmartGWT.dictionary.notSet());
-        nickItem.setOptionDataSource(NicksDS.getInstance());
-        nickItem.setDisplayField("name");
-        nickItem.setValueField("id");
-
-        filterForm.setFields(commonNameItem, nickItem);
-        
-        filterForm.addItemChangedHandler(new ItemChangedHandler() {
-            public void onItemChanged(ItemChangedEvent event) {
-            	listGrid.fetchData(filterForm.getValuesAsCriteria());
-            }
-        });
-		
-        layout.addMember(filterForm);
 		layout.addMember(form);
 
 		saveButton.setDisabled(true);
@@ -224,7 +195,7 @@ public class Pictures extends HLayout {
 							}
 							if (status == null || !status.equals("validation_error")) {
 								listGrid.invalidateCache();
-								form.setVisible(false);
+								form.setDisabled(true);
 								deleteButton.setDisabled(true);
 								saveButton.setDisabled(true);
 							}
@@ -255,7 +226,7 @@ public class Pictures extends HLayout {
 						if (status == null || !status.equals("validation_error")) {
 							deleteButton.setDisabled(true);
 							saveButton.setDisabled(true);
-							form.setVisible(false);
+							form.setDisabled(true);
 							img.setVisible(false);
 							listGrid.invalidateCache();
 						}
@@ -266,6 +237,7 @@ public class Pictures extends HLayout {
 		});
 		
 		HLayout buttons = new HLayout(5);
+		buttons.setHeight("20px");
 		buttons.addMember(saveButton);
 		buttons.addMember(deleteButton);
 		
@@ -281,6 +253,9 @@ public class Pictures extends HLayout {
 		selectNick.setPickListWidth(250);
 		
 		Upload upload = new Upload(CChatAdminSmartGWT.CONTEXT_PATH + "admin/AdminPictureUploadAction", "picture", CChatAdminSmartGWT.dictionary.picture(), selectNick);
+		upload.setBorder("1px solid gray");
+		upload.setHeight("60px");
+		upload.setWidth("400px");
 		upload.setUploadListener(new UploadListener() {
 			
 			@Override
