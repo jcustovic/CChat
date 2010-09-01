@@ -8,12 +8,20 @@ import hr.chus.client.smartgwt.client.i18n.Dictionary;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONBoolean;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.smartgwt.client.core.KeyIdentifier;
+import com.smartgwt.client.data.DSRequest;
+import com.smartgwt.client.data.DSResponse;
+import com.smartgwt.client.data.DataSource;
+import com.smartgwt.client.data.XMLTools;
 import com.smartgwt.client.rpc.RPCManager;
 import com.smartgwt.client.types.Alignment;
+import com.smartgwt.client.types.DSDataFormat;
 import com.smartgwt.client.types.Overflow;
 import com.smartgwt.client.types.TabBarControls;
 import com.smartgwt.client.types.VisibilityMode;
@@ -144,6 +152,7 @@ public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
         topBar.addMember(imgButton);
         topBar.addSpacer(6);
         
+        loginSessionChecker();
 
 		HLayout hlayout = new HLayout();
 		hlayout.setWidth100();
@@ -163,25 +172,18 @@ public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
 		final HTMLFlow headerHtmlFlow = new HTMLFlow();
 		headerHtmlFlow.setContentsURL(CONTEXT_PATH + "admin/UserInfoAction");
 		headerHtmlFlow.setOverflow(Overflow.AUTO);
-		headerHtmlFlow.setPadding(10);
-		headerHtmlFlow.setHeight("7%");
-		
-		Timer refreshTimer = new Timer() {
-	    	@Override
-	    	public void run() {
-	    		headerHtmlFlow.setContentsURL(null);
-	    	}
-	    };
-	    refreshTimer.scheduleRepeating(1000 * 60 * 5); // 5 minutes
+		headerHtmlFlow.setPadding(5);
+		headerHtmlFlow.setHeight(30);
 
 		SectionStackSection header = new SectionStackSection("&nbsp;" + dictionary.header());
 		header.setItems(headerHtmlFlow);
 		header.setExpanded(true);
+		header.setCanCollapse(false);
 
 		HTMLFlow mainHtmlFlow = new HTMLFlow();
 		mainHtmlFlow.setOverflow(Overflow.AUTO);
 		mainHtmlFlow.setPadding(10);
-		mainHtmlFlow.setHeight("84%");
+		mainHtmlFlow.setHeight("86%");
 		mainHtmlFlow.setContents("<b> Admin area </b>");
 
 		mainTabSet = createTabSet();
@@ -204,7 +206,7 @@ public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
 		footerHtmlFlow.setOverflow(Overflow.AUTO);
 		footerHtmlFlow.setPadding(10);
 		footerHtmlFlow.setHeight("7%");
-		footerHtmlFlow.setContents("<b> Footer </b>");
+		footerHtmlFlow.setContents("<b> " + dictionary.footer() + " </b>");
 
 		SectionStackSection footer = new SectionStackSection("&nbsp;" + dictionary.footer());
 		footer.setItems(footerHtmlFlow);
@@ -221,6 +223,33 @@ public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
 		addMember(topBar);
 		addMember(hlayout);
 		RootPanel.get().add(this);
+	}
+
+	/**
+	 * 
+	 */
+	private void loginSessionChecker() {
+		final DataSource dataSource = new DataSource() {
+			@Override
+			protected void transformResponse(DSResponse response, DSRequest request, Object jsonData) {
+				JSONArray value = XMLTools.selectObjects(jsonData, "/loggedIn");
+				boolean loggedIn = ((JSONBoolean) value.get(0)).booleanValue();
+				if (!loggedIn) {
+					Window.Location.reload();
+				}
+			}
+		};
+		dataSource.setDataFormat(DSDataFormat.JSON);
+		dataSource.setDataURL(CONTEXT_PATH + "CheckLoggedIn");
+		
+		Timer refreshTimer = new Timer() {
+	    	@Override
+	    	public void run() {
+	    		dataSource.invalidateCache();
+	    		dataSource.fetchData();
+	    	}
+	    };
+	    refreshTimer.scheduleRepeating(1000 * 60); // 1 minute
 	}
 
 	/**

@@ -306,4 +306,7 @@ public interface Dictionary extends Constants {
 	@DefaultStringValue("Today")
 	String today();
 
+	@DefaultStringValue("Please select a file")
+	String pleaseSelectAFile();
+
 }

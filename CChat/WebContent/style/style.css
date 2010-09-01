@@ -1,4 +1,4 @@
-/** CChat application. */
+/** CChat application css */
 
 h1 {
   font-size: 2em;
@@ -42,13 +42,23 @@ h1 {
 	width: 50%;
 }
 
+.errorMessage {
+	text-align: center;
+	font-size: 12px;
+	font-weight: bold;
+	color: #cc0000;
+}
+	
+
+/* SmartGWT admin css */
+
 .inboundMsgGridRecord,
 .inboundMsgGridRecordDark {
     font-size: 11px;
     color: black;
     border-bottom: 1px solid;
     border-bottom-color: #ededed;
-    background-color: #9fff79;
+    background-color: #90ee90;
 }
 .inboundMsgGridRecordOver,
 .inboundMsgGridRecordOverDark {
