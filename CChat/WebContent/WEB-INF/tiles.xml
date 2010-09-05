@@ -44,6 +44,15 @@
 		<put-attribute name="body" value="/WEB-INF/tiles/secured/admin/AdminMainGWT.jsp" />
 	</definition>
 	<!-- +++++++++++++++++++++ ADMIN area +++++++++++++++++++++ -->
+	
+	<!-- +++++++++++++++++++++ Operator area +++++++++++++++++++++ -->
+	<definition name="operator.MainGWT" extends="global.BlankLayout">
+		<put-attribute name="title" value="Operator" />
+		<put-attribute name="body" value="/WEB-INF/tiles/secured/operator/OperatorMainGWT.jsp" />
+	</definition>
+	<!-- +++++++++++++++++++++ Operator area +++++++++++++++++++++ -->
+	
+	<!-- +++++++++++++++++++++ END Secured area +++++++++++++++++++++++++ -->
 
 	
 </tiles-definitions>

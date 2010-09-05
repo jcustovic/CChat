@@ -26,12 +26,17 @@
 				<param name="role">admin</param>
 			</interceptor>
 			
-			<interceptor name="authenticateUserInterceptor" class="hr.chus.cchat.struts2.interceptor.AuthenticateInterceptor">
-				<param name="role">user</param>
+			<interceptor name="authenticateOperatorInterceptor" class="hr.chus.cchat.struts2.interceptor.AuthenticateInterceptor">
+				<param name="role">operator</param>
 			</interceptor>
 
 			<interceptor-stack name="adminSecureStack">
 				<interceptor-ref name="authenticateAdminInterceptor"/>
+				<interceptor-ref name="defaultStack"/>
+			</interceptor-stack>
+			
+			<interceptor-stack name="operatorSecureStack">
+				<interceptor-ref name="authenticateOperatorInterceptor"/>
 				<interceptor-ref name="defaultStack"/>
 			</interceptor-stack>
 		</interceptors>
@@ -59,10 +64,12 @@
 		<action name="Login" class="hr.chus.cchat.struts2.action.common.Login">
 			<result name="input">global.Login</result>
 			<result name="operator" type="redirectAction">
-				<param name="actionName">ChatMainGWT</param>
+				<param name="actionName">OperatorMainGWT</param>
+				<param name="locale">${locale}</param>
 			</result>
 	        <result name="moderator" type="redirectAction">
-	        	<param name="actionName">ChatMainGWT</param>
+	        	<param name="actionName">OperatorMainGWT</param>
+	        	<param name="locale">${locale}</param>
 	        </result>
 	        <result name="admin" type="redirectAction">
                 <param name="actionName">AdminMainGWT</param>
@@ -74,9 +81,14 @@
 	    	<result type="redirectAction">Login</result>
 	    </action>
 	    
-		<action name="AdminMainGWT">
+		<action name="AdminMainGWT" class="hr.chus.cchat.struts2.action.common.Default">
 			<interceptor-ref name="adminSecureStack" />
 			<result>admin.MainGWT</result>
+		</action>
+		
+		<action name="OperatorMainGWT" class="hr.chus.cchat.struts2.action.common.Default">
+			<interceptor-ref name="operatorSecureStack" />
+			<result>operator.MainGWT</result>
 		</action>
 		
 		<action name="CheckLoggedIn" class="hr.chus.cchat.struts2.action.common.CheckLoggedIn">
