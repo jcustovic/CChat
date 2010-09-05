@@ -38,6 +38,7 @@ import com.smartgwt.client.widgets.events.CloseClickHandler;
 import com.smartgwt.client.widgets.events.CloseClientEvent;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.FormItemInputTransformer;
+import com.smartgwt.client.widgets.form.fields.BooleanItem;
 import com.smartgwt.client.widgets.form.fields.DateItem;
 import com.smartgwt.client.widgets.form.fields.DateTimeItem;
 import com.smartgwt.client.widgets.form.fields.FormItem;
@@ -480,6 +481,11 @@ public class Users extends HLayout {
         birthdate.setInvalidDateStringMessage(CChatAdminSmartGWT.dictionary.invalidDate());
         birthdate.setDateFormatter(DateDisplayFormat.TOEUROPEANSHORTDATE);
         
+        BooleanItem deleted = new BooleanItem();
+        deleted.setDefaultValue(false);
+        deleted.setName("user.deleted");
+        deleted.setTitle(CChatAdminSmartGWT.dictionary.deleted());
+        
         DateTimeItem joined = new DateTimeItem("user.joined", CChatAdminSmartGWT.dictionary.joinedDate());
         joined.setMaskDateSeparator(".");
         joined.setUseMask(true);
@@ -488,7 +494,7 @@ public class Users extends HLayout {
         joined.setDisabled(true);
         joined.setDateFormatter(DateDisplayFormat.TOEUROPEANSHORTDATETIME);
         
-        return new FormItem[] { id, msisdn, name, surname, address, notes, nickItem, operatorItem, serviceProviderItem , birthdate, joined };
+        return new FormItem[] { id, msisdn, name, surname, address, notes, nickItem, operatorItem, serviceProviderItem , birthdate, deleted, joined };
 	}
 
 	/**
@@ -556,6 +562,9 @@ public class Users extends HLayout {
 		ListGridField serviceProviderName = new ListGridField("serviceProvider.providerName");
 		serviceProviderName.setWidth(120);
 		
+		ListGridField deleted = new ListGridField("user.deleted");
+		deleted.setWidth(50);
+		
 		final DateTimeFormat joinedDateFormatter = DateTimeFormat.getFormat("dd.MM.yyyy");
 		ListGridField joined = new ListGridField("user.joined");
 		joined.setCellFormatter(new CellFormatter() {
@@ -595,7 +604,7 @@ public class Users extends HLayout {
 		birthDate.setType(ListGridFieldType.DATE);
 		birthDate.setHidden(true);
 		
-		return new ListGridField[] { id, msisdn, name, surname, address, notes, nickName, operator, operatorUsername, serviceProviderName, nick, joined, birthDate };
+		return new ListGridField[] { id, msisdn, name, surname, address, notes, nickName, operator, operatorUsername, serviceProviderName, nick, deleted, joined, birthDate };
 	}
     
 }

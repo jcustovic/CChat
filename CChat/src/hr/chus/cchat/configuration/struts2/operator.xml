@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+    
+<struts>
+	
+	<package name="operator" namespace="/operator" extends="json-default">
+	
+	    <result-types>
+			<result-type name="tiles" default="true" class="org.apache.struts2.views.tiles.TilesResult"/>
+		</result-types>
+		
+		
+		<interceptors>
+			<interceptor name="authenticateOperatorInterceptor" class="hr.chus.cchat.struts2.interceptor.AuthenticateInterceptor">
+				<param name="role">operator</param>
+			</interceptor>
+
+			<interceptor-stack name="operatorSecureStack">
+				<interceptor-ref name="authenticateOperatorInterceptor"/>
+				<interceptor-ref name="defaultStack"/>
+			</interceptor-stack>
+		</interceptors>
+		
+		<default-interceptor-ref name="operatorSecureStack"/>
+				
+		<global-results>
+			<result name="login" type="redirectAction">
+                <param name="actionName">Login</param>
+                <param name="namespace">/</param>
+            </result>
+			<result name="Exception">global.Exception</result>
+		</global-results>
+		
+		<global-exception-mappings>
+			<exception-mapping exception="java.lang.Exception" result="Exception"/>
+		</global-exception-mappings>
+		
+		<action name="Logout">
+            <result type="redirectAction">
+                <param name="actionName">Logout</param>
+                <param name="namespace">/</param>
+            </result>
+        </action>
+        
+		<action name="Login">
+			<interceptor-ref name="defaultStack" />
+            <result type="redirectAction">
+                <param name="actionName">Login</param>
+                <param name="namespace">/</param>
+            </result>
+        </action>
+		
+		<!-- Operator area -->
+						
+		<action name="UserListJSON" class="hr.chus.cchat.struts2.action.operator.UserList">
+			<result type="json">
+				<param name="excludeProperties">
+					randomUserList.*\.serviceProvider
+					, randomUserList.*\.nick
+					, randomUserList.*\.operator
+					, randomUserList.*\.msisdn
+					, newestUserList.*\.serviceProvider
+					, newestUserList.*\.nick
+					, newestUserList.*\.operator
+					, newestUserList.*\.msisdn
+					, operatorUserList.*\.serviceProvider
+					, operatorUserList.*\.nick
+					, operatorUserList.*\.operator
+					, operatorUserList.*\.msisdn
+				</param>
+			</result>
+		</action>
+	    	
+	</package>
+
+</struts>

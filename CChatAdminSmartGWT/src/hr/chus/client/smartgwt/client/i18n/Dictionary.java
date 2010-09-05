@@ -309,4 +309,7 @@ public interface Dictionary extends Constants {
 	@DefaultStringValue("Please select a file")
 	String pleaseSelectAFile();
 
+	@DefaultStringValue("Deleted")
+	String deleted();
+
 }

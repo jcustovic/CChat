@@ -170,7 +170,7 @@ public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
 		rightSideLayout.setAnimateSections(true);
 
 		final HTMLFlow headerHtmlFlow = new HTMLFlow();
-		headerHtmlFlow.setContentsURL(CONTEXT_PATH + "admin/UserInfoAction");
+		headerHtmlFlow.setContentsURL(CONTEXT_PATH + "UserInfoAction");
 		headerHtmlFlow.setOverflow(Overflow.AUTO);
 		headerHtmlFlow.setPadding(5);
 		headerHtmlFlow.setHeight(30);
@@ -249,7 +249,7 @@ public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
 	    		dataSource.fetchData();
 	    	}
 	    };
-	    refreshTimer.scheduleRepeating(1000 * 60); // 1 minute
+	    refreshTimer.scheduleRepeating(1000 * 30); // 30 seconds
 	}
 
 	/**

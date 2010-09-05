@@ -8,6 +8,7 @@ import com.smartgwt.client.data.DSRequest;
 import com.smartgwt.client.data.DSResponse;
 import com.smartgwt.client.data.DataSource;
 import com.smartgwt.client.data.XMLTools;
+import com.smartgwt.client.data.fields.DataSourceBooleanField;
 import com.smartgwt.client.data.fields.DataSourceDateField;
 import com.smartgwt.client.data.fields.DataSourceDateTimeField;
 import com.smartgwt.client.data.fields.DataSourceIntegerField;
@@ -75,12 +76,14 @@ public class UsersDS extends DataSource {
 		address.setValueXPath("address");
 		DataSourceDateField birthDate = new DataSourceDateField("user.birthDate", CChatAdminSmartGWT.dictionary.birthDate(), 50, true);
 		birthDate.setValueXPath("birthDate");
+		DataSourceBooleanField deleted = new DataSourceBooleanField("user.deleted", CChatAdminSmartGWT.dictionary.deleted());
+		deleted.setValueXPath("deleted");
 		DataSourceDateTimeField joined = new DataSourceDateTimeField("user.joined", CChatAdminSmartGWT.dictionary.joinedDate(), 50, true);
 		joined.setValueXPath("joined");
 		DataSourceTextField notes = new DataSourceTextField("user.notes", CChatAdminSmartGWT.dictionary.notes(), 100, true);
 		notes.setValueXPath("notes");
 		
-		setFields(pkField, nickName, operatorId, operatorUsername, serviceProviderId, serviceProviderName, msisdn, name, surname, address, birthDate, joined, notes, nickId);
+		setFields(pkField, nickName, operatorId, operatorUsername, serviceProviderId, serviceProviderName, msisdn, name, surname, address, birthDate, deleted, joined, notes, nickId);
 
 		setDataFormat(DSDataFormat.JSON);
 		setDataURL(CChatAdminSmartGWT.CONTEXT_PATH + "admin/AdminUserListJSON");
