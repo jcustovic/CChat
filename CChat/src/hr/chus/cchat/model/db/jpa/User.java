@@ -27,6 +27,10 @@ import javax.persistence.Table;
 @NamedQueries({
 	@NamedQuery(name = "User.getAll", query = "SELECT u FROM User u")
 	, @NamedQuery(name = "User.getCount", query = "SELECT COUNT(u) FROM User u")
+	, @NamedQuery(name = "User.getByOperator", query = "SELECT u FROM User u WHERE u.operator = :operator AND u.deleted = false")
+	, @NamedQuery(name = "User.getRandom", query = "SELECT u FROM User u WHERE u.deleted = false AND u.lastMsg < :lastMsgDate ORDER BY RAND()")
+	, @NamedQuery(name = "User.getNewest", query = "SELECT u FROM User u WHERE u.deleted = false AND u.lastMsg >= :lastMsgDate AND u.operator IS NULL")
+	, @NamedQuery(name = "User.clearOperatorField", query = "UPDATE User u SET u.operator = null WHERE u.operator = :operator")
 })
 public class User implements Serializable {
 	
@@ -43,7 +47,11 @@ public class User implements Serializable {
 	private Date birthDate;
 	private String notes;
 	private Date joined;
+	private Date lastMsg;
+	private Integer unreadMsgCount;
+	private Boolean deleted;
 	private List<Picture> sentPicturesList;
+	
 	
 	public User() { }
 
@@ -55,6 +63,7 @@ public class User implements Serializable {
 		this.name = name;
 		this.surname = surname;
 		this.joined = joined;
+		this.deleted = false;
 	}
 
 
@@ -108,7 +117,18 @@ public class User implements Serializable {
 	@Column(name = "joined_date", nullable = false, columnDefinition = "DATETIME")
 	public Date getJoined() { return joined; }
 	public void setJoined(Date joined) { this.joined = joined; }
+	
+	@Column(name = "last_message", nullable = false, columnDefinition = "DATETIME")
+	public Date getLastMsg() { return lastMsg; }
+	public void setLastMsg(Date lastMsg) { this.lastMsg = lastMsg; }
 
+	@Column(name = "unread_message_count")
+	public Integer getUnreadMsgCount() { return unreadMsgCount; }
+	public void setUnreadMsgCount(Integer unreadMsgCount) { this.unreadMsgCount = unreadMsgCount; }
+
+	@Column(name = "deleted")
+	public Boolean getDeleted() { return deleted; }
+	public void setDeleted(Boolean deleted) { this.deleted = deleted; }
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "users_pictures"

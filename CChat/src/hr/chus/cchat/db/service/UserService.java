@@ -1,5 +1,8 @@
 package hr.chus.cchat.db.service;
 
+import java.util.Date;
+import java.util.List;
+
 import hr.chus.cchat.model.db.jpa.Nick;
 import hr.chus.cchat.model.db.jpa.Operator;
 import hr.chus.cchat.model.db.jpa.ServiceProvider;
@@ -18,5 +21,9 @@ public interface UserService {
 	public User getUserId(Integer id);
 	public Object[] searchUsers(Nick nick, Operator operator, ServiceProvider serviceProvider, String msisdn, String name, String surname, int start, int limit);
 	public Long getCount();
+	public List<User> getByOperator(Operator operator);
+	public List<User> getRandom(int count, Date lastMsgDate);
+	public List<User> getNewest(Date lastMsgDate);
+	public void clearOperatorField(Operator operator);
 
 }

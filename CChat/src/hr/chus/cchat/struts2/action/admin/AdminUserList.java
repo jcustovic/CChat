@@ -40,7 +40,7 @@ public class AdminUserList extends ActionSupport {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public String execute() throws Exception {
+	public String execute() {
 		log.info("Searching for users from ..." + start + " for " + limit);
 		Object[] result = userService.searchUsers(nick, operator, serviceProvider, msisdn, name, surname, start, limit);
 		totalCount = (Long) result[0];

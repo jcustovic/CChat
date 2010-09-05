@@ -13,6 +13,7 @@
 	<constant name="struts.i18n.encoding" value="UTF-8"/>
 	
 	<include file="hr/chus/cchat/configuration/struts2/admin.xml"/>
+	<include file="hr/chus/cchat/configuration/struts2/operator.xml"/>
 	
 	<package name="mainPackage" namespace="/" extends="json-default">
 	
@@ -81,6 +82,10 @@
 		<action name="CheckLoggedIn" class="hr.chus.cchat.struts2.action.common.CheckLoggedIn">
 			<result type="json" />
 		</action>
+		
+		<action name="UserInfoAction" class="hr.chus.cchat.struts2.action.common.GetUserInfoAction">
+	    	<result>common.UserInfo</result>
+	    </action>
 		
 	</package>
 </struts>

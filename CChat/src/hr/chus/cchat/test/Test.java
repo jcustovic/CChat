@@ -1,4 +1,4 @@
-package test;
+package hr.chus.cchat.test;
 
 /**
  * 

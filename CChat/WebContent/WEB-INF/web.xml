@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
   
-  <display-name>CChat</display-name>
-  
-  
+	<display-name>CChat</display-name>
+
+
   	<!-- ++++++++++++++++++++++++++++++++ Spring ++++++++++++++++++++++++++++++++ -->
     <filter>
         <filter-name>Spring OpenEntityManagerInViewFilter</filter-name>
@@ -18,8 +18,8 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
-  
-    
+
+
   	<!-- ++++++++++++++++++++++++++++++++ Struts2, Tiles ++++++++++++++++++++++++++++++++ -->  
 	<filter>
 	 	<filter-name>struts2</filter-name>
@@ -34,12 +34,19 @@
 	<listener> 
 		<listener-class>org.apache.struts2.tiles.StrutsTilesListener</listener-class> 
 	</listener> 
-	 
+
+
+ 	<!-- ++++++++++++++++++++++++++++++++ Custom ++++++++++++++++++++++++++++++++ -->
+ 	
+	<listener>
+    	<listener-class>hr.chus.cchat.listener.SessionListener</listener-class>
+	</listener>
 	
- 	<!-- ++++++++++++++++++++++++++++++++ Global Tomcat settings ++++++++++++++++++++++++++++++++ -->
+	
+	<!-- ++++++++++++++++++++++++++++++++ Global Tomcat settings ++++++++++++++++++++++++++++++++ -->
  	
  	<session-config>
-		<session-timeout>60</session-timeout>
+		<session-timeout>30</session-timeout>
 	</session-config>
 	
 	<welcome-file-list>

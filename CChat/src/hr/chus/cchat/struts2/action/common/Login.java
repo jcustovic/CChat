@@ -44,9 +44,6 @@ public class Login extends ActionSupport implements SessionAware {
 		}
 		user = operatorService.authenticateUser(getUsername(), getPassword());
 		if (user != null) {
-			// Kad se korisnik logira postavi ga aktivnog (active==true).
-			user.setIsActive(true);
-			operatorService.updateOperator(user);
 			if (user.getRole().getName().equals(ApplicationConstants.OPERATOR)) {
 				session.put(ApplicationConstants.USER_SESSION, user);
 				log.info(user.getUsername() + " (id=" + user.getId() + ") logged in as " + ApplicationConstants.OPERATOR);

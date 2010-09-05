@@ -72,10 +72,6 @@
 			</result>
 			<result name="input" type="json" />
 		</action>
-		
-		<action name="UserInfoAction" class="hr.chus.cchat.struts2.action.common.GetUserInfoAction">
-	    	<result>common.UserInfo</result>
-	    </action>
 	    
 	    <action name="AdminPictureUploadAction" class="hr.chus.cchat.struts2.action.admin.AdminPictureUpload">
 			<interceptor-ref name="fileUpload">

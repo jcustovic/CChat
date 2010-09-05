@@ -70,6 +70,9 @@ CREATE TABLE users (
   birth_date DATE NULL,
   notes TEXT NULL,
   joined_date DATETIME NOT NULL,
+  last_message DATETIME NULL,
+  unread_message_count INTEGER UNSIGNED DEFAULT 0,
+  deleted BOOL NOT NULL DEFAULT false,
   PRIMARY KEY(id),
   FOREIGN KEY(operator_id)
     REFERENCES operators(id)

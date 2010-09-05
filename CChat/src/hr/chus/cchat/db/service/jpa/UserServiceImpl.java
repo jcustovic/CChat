@@ -1,5 +1,8 @@
 package hr.chus.cchat.db.service.jpa;
 
+import java.util.Date;
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -111,6 +114,29 @@ public class UserServiceImpl implements UserService {
 		result[0] = queryCount.getSingleResult();
 		
 		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<User> getByOperator(Operator operator) {
+		return entityManager.createNamedQuery("User.getByOperator").setParameter("operator", operator).getResultList();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<User> getRandom(int count, Date lastMsgDate) {
+		return entityManager.createNamedQuery("User.getRandom").setParameter("lastMsgDate", lastMsgDate).setMaxResults(count).getResultList();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<User> getNewest(Date lastMsgDate) {
+		return entityManager.createNamedQuery("User.getNewest").setParameter("lastMsgDate", lastMsgDate).getResultList();
+	}
+	
+	@Override
+	public void clearOperatorField(Operator operator) {
+		entityManager.createNamedQuery("User.clearOperatorField").setParameter("operator", operator).executeUpdate();
 	}
 	
 	
