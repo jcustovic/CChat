@@ -118,7 +118,7 @@ public class User implements Serializable {
 	public Date getJoined() { return joined; }
 	public void setJoined(Date joined) { this.joined = joined; }
 	
-	@Column(name = "last_message", nullable = false, columnDefinition = "DATETIME")
+	@Column(name = "last_message", columnDefinition = "DATETIME")
 	public Date getLastMsg() { return lastMsg; }
 	public void setLastMsg(Date lastMsg) { this.lastMsg = lastMsg; }
 

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to='operator'>
+ 
+	<inherits name='com.google.gwt.user.User'/>
+    <inherits name="com.google.gwt.core.Core"/>
+    <inherits name="com.google.gwt.user.History"/>
+
+    <inherits name="com.smartgwt.SmartGwt"/>
+
+
+	<!-- Specify the app entry point class. -->
+	<entry-point class='hr.chus.cchat.client.smartgwt.client.operator.CChatOperatorSmartGWT'/>
+	
+	<extend-property name="locale" values="hr" />
+	
+	<!-- Specify the paths for translatable code -->
+	<source path='client/operator'/>
+	<source path='client/common'/>
+	<source path='client/i18n'/>
+
+</module>
