@@ -1,4 +1,4 @@
-create table service_provider (
+CREATE TABLE service_provider (
   id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
   sc VARCHAR(20) NOT NULL,
   provider_name VARCHAR(30) NOT NULL,
@@ -6,7 +6,8 @@ create table service_provider (
   disabled BOOL NULL,
   PRIMARY KEY(id),
   UNIQUE(sc, provider_name)
-);
+) 
+ENGINE=INNODB;
 
 CREATE TABLE operator_roles (
   id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -14,7 +15,8 @@ CREATE TABLE operator_roles (
   description VARCHAR(100) NULL,
   PRIMARY KEY(id),
   UNIQUE(name)
-);
+) 
+ENGINE=INNODB;
 
 CREATE TABLE nicks (
   id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -22,13 +24,15 @@ CREATE TABLE nicks (
   description VARCHAR(300) NULL,
   PRIMARY KEY(id),
   UNIQUE(name)
-);
+) 
+ENGINE=INNODB;
 
 CREATE TABLE configuration (
   name VARCHAR(50) NOT NULL,
   value VARCHAR(100) NOT NULL,
   PRIMARY KEY(name)
-);
+) 
+ENGINE=INNODB;
 
 CREATE TABLE pictures (
   id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -40,7 +44,8 @@ CREATE TABLE pictures (
   FOREIGN KEY(nick_id) REFERENCES nicks(id)
       ON DELETE SET NULL
       ON UPDATE NO ACTION
-);
+) 
+ENGINE=INNODB;
 
 CREATE TABLE operators (
   id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -54,9 +59,8 @@ CREATE TABLE operators (
   disabled BOOL NOT NULL DEFAULT false,
   PRIMARY KEY(id),
   FOREIGN KEY(operator_role_id) REFERENCES operator_roles(id)
-      ON DELETE NO ACTION
-      ON UPDATE NO ACTION
-);
+) 
+ENGINE=INNODB;
 
 CREATE TABLE users (
   id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -74,19 +78,11 @@ CREATE TABLE users (
   unread_message_count INTEGER UNSIGNED DEFAULT 0,
   deleted BOOL NOT NULL DEFAULT false,
   PRIMARY KEY(id),
-  FOREIGN KEY(operator_id)
-    REFERENCES operators(id)
-      ON DELETE NO ACTION
-      ON UPDATE NO ACTION,
-  FOREIGN KEY(nick_id)
-    REFERENCES nicks(id)
-      ON DELETE NO ACTION
-      ON UPDATE NO ACTION,
-  FOREIGN KEY(service_provider_id)
-    REFERENCES service_provider(id)
-      ON DELETE NO ACTION
-      ON UPDATE NO ACTION
-);
+  FOREIGN KEY(operator_id) REFERENCES operators(id),
+  FOREIGN KEY(nick_id) REFERENCES nicks(id),
+  FOREIGN KEY(service_provider_id) REFERENCES service_provider(id)
+) 
+ENGINE=INNODB;
 
 CREATE TABLE sms_messages (
   id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -98,25 +94,20 @@ CREATE TABLE sms_messages (
   sc VARCHAR(20) NOT NULL,
   direction VARCHAR(6) NOT NULL,
   PRIMARY KEY(id),
-  FOREIGN KEY(user_id) REFERENCES users(id)
-      ON DELETE NO ACTION
-      ON UPDATE NO ACTION,
-  FOREIGN KEY(operator_id) REFERENCES operators(id)
-      ON DELETE NO ACTION
-      ON UPDATE NO ACTION,
+  FOREIGN KEY(user_id) REFERENCES users(id),
+  FOREIGN KEY(operator_id) REFERENCES operators(id),
   FOREIGN KEY(service_provider_id) REFERENCES service_provider(id)
-      ON DELETE NO ACTION
+  	  ON DELETE NO ACTION
       ON UPDATE NO ACTION
-);
+) 
+ENGINE=INNODB;
+
 
 CREATE TABLE users_pictures (
   picture_id INTEGER UNSIGNED NOT NULL,
   user_id INTEGER UNSIGNED NOT NULL,
   PRIMARY KEY(picture_id, user_id),
-  FOREIGN KEY(picture_id) REFERENCES pictures(id)
-      ON DELETE CASCADE
-      ON UPDATE NO ACTION,
+  FOREIGN KEY(picture_id) REFERENCES pictures(id),
   FOREIGN KEY(user_id) REFERENCES users(id)
-      ON DELETE CASCADE
-      ON UPDATE NO ACTION
-);
+) 
+ENGINE=INNODB;

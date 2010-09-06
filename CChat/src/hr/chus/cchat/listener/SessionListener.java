@@ -27,16 +27,34 @@ public class SessionListener implements HttpSessionListener {
 	
 	public static HashMap<String, HttpSession> sessionMap = new HashMap<String, HttpSession>();
 	
+	
+	/**
+	 * 
+	 * @param userToRemove
+	 */
+	public static void removeSessionWithUser(Operator userToRemove) {
+		for (String sessionId : sessionMap.keySet()) {
+			HttpSession session = sessionMap.get(sessionId);
+			Operator user = (Operator) session.getAttribute(ApplicationConstants.USER_SESSION);
+			if (user != null && user.getId().equals(userToRemove.getId())) {
+				session.invalidate();
+				return;
+			}
+		}
+	}
+	
 
 	@Override
 	public void sessionCreated(HttpSessionEvent sessionEvent) {
 		HttpSession session = sessionEvent.getSession();
+		log.debug("Creating session with id " + session.getId());
 		sessionMap.put(session.getId(), session);
 	}
 
 	@Override
 	public void sessionDestroyed(HttpSessionEvent sessionEvent) {
 		HttpSession session = sessionEvent.getSession();
+		log.debug("Destroying session with id " + session.getId());
 		sessionMap.remove(session.getId());
 		Operator user = (Operator) session.getAttribute(ApplicationConstants.USER_SESSION);
 		if (user != null) {

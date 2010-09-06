@@ -7,6 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import hr.chus.cchat.db.service.OperatorService;
+import hr.chus.cchat.listener.SessionListener;
 import hr.chus.cchat.model.db.jpa.Operator;
 import hr.chus.cchat.util.StringUtil;
 
@@ -38,8 +39,10 @@ public class AdminOperatorFunction extends ActionSupport implements Preparable {
 		if (operation == null) {
 			log.error("Operation must not be null.");
 		} else if (operation.equals("save/edit")) {
+			if (operator.getDisabled()) SessionListener.removeSessionWithUser(operator);
 			operator = operatorService.updateOperator(operator);
 		} else if (operation.equals("delete")) {
+			SessionListener.removeSessionWithUser(operator);
 			operator = operatorService.getOperatorById(operator.getId());
 			operatorService.removeOperator(operator);
 		} else {
@@ -65,6 +68,8 @@ public class AdminOperatorFunction extends ActionSupport implements Preparable {
 				errorFields.put("operator.username", getText("operator.username.toLong", new String[] { "30" }));
 			} else if (operatorService.checkIfUsernameExists(operator)) {
 				errorFields.put("operator.username", getText("operator.username.exists"));
+			} else if (operator.getUsername().equals("admin") && operator.getDisabled()) {
+				errorFields.put("operator.disabled", getText("operator.admin.cantBeDisabled"));
 			}
 			
 			if (operator.getRole() == null) {

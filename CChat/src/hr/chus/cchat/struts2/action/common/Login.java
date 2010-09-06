@@ -44,7 +44,9 @@ public class Login extends ActionSupport implements SessionAware {
 		}
 		user = operatorService.authenticateUser(getUsername(), getPassword());
 		if (user != null) {
-			if (user.getRole().getName().equals(ApplicationConstants.OPERATOR)) {
+			if (user.getDisabled()) {
+				addFieldError("username", getText("login.userIsDisabled"));
+			} else if (user.getRole().getName().equals(ApplicationConstants.OPERATOR)) {
 				session.put(ApplicationConstants.USER_SESSION, user);
 				log.info(user.getUsername() + " (id=" + user.getId() + ") logged in as " + ApplicationConstants.OPERATOR);
 				return ApplicationConstants.OPERATOR;
@@ -57,8 +59,9 @@ public class Login extends ActionSupport implements SessionAware {
 				log.info(user.getUsername() + " (id=" + user.getId() + ") logged in as " + ApplicationConstants.ADMIN);
 				return ApplicationConstants.ADMIN;
 			}
+		} else {
+			addFieldError("username", getText("login.wrongUsernameOrPassword"));
 		}
-		addFieldError("username", getText("login.wrongUsernameOrPassword"));
 		return INPUT;
 	}
 	
