@@ -72,6 +72,10 @@
 				</param>
 			</result>
 		</action>
+		
+		<action name="ActiveService" class="hr.chus.cchat.struts2.action.operator.ActiveService">
+			<result type="json" />
+		</action>
 	    	
 	</package>
 

@@ -1,3 +1,13 @@
+.interactImageHover {
+	text-align: center;
+    font-family: Verdana, Bitstream Vera Sans, sans-serif;
+    font-size: 11px;
+    border: 1px solid #808080;
+    padding: 5px;
+    background-color: #b8d0ff;
+    color: black;
+}
+
 .inboundMsgGridRecord,
 .inboundMsgGridRecordDark {
     font-size: 11px;
