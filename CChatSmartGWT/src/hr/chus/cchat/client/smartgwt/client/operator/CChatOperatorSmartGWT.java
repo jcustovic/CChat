@@ -1,5 +1,7 @@
 package hr.chus.cchat.client.smartgwt.client.operator;
 
+import java.util.HashMap;
+
 import hr.chus.cchat.client.smartgwt.client.common.ExplorerTreeNode;
 import hr.chus.cchat.client.smartgwt.client.common.PanelFactory;
 import hr.chus.cchat.client.smartgwt.client.common.SideNavigationMenu;
@@ -24,6 +26,7 @@ import com.smartgwt.client.types.DSDataFormat;
 import com.smartgwt.client.types.Overflow;
 import com.smartgwt.client.types.TabBarControls;
 import com.smartgwt.client.types.VisibilityMode;
+import com.smartgwt.client.util.BooleanCallback;
 import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.HTMLFlow;
@@ -64,10 +67,13 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 	private TabSet mainTabSet;
 	private SideNavigationMenu sideNav;
 	private Menu contextMenu;
+	private ImgButton activateButton = new ImgButton();
+	private boolean operatorIsActive = false;
 	
 
 	@Override
 	public void onModuleLoad() {
+		checkIfActive(null);
 		RPCManager.setDefaultPrompt(DictionaryInstance.dictionary.contactingServer());
 		RPCManager.setFetchDataPrompt(DictionaryInstance.dictionary.findingRecordThatMatchCriteria());
 		RPCManager.setRemoveDataPrompt(DictionaryInstance.dictionary.deletingRecord());
@@ -75,6 +81,7 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 		
 		setWidth100();
 		setHeight100();
+		setPadding(5);
 		
 		ToolStrip topBar = new ToolStrip();
 		topBar.setHeight(33);
@@ -92,14 +99,39 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
    
         topBar.addMember(sgwtHomeButton);
         topBar.addSpacer(6);
-
+        
 		Label title = new Label("CChat");
 		title.setStyleName("application.title");
-		title.setWidth(300);
 		title.setAlign(Alignment.LEFT);
 		topBar.addMember(title);
+		topBar.addSpacer(6);
+        
+		Layout layout = new Layout();
+		layout.setWidth("*");
+		layout.setHeight(24);
+		layout.setAlign(Alignment.CENTER);
+        activateButton.setWidth(24);
+        activateButton.setAlign(Alignment.CENTER);
+        activateButton.setHeight(24);
+        activateButton.setShowFocused(false);
+        activateButton.setShowFocusedIcon(false);
+        activateButton.setShowRollOver(false);
+        activateButton.setShowDownIcon(false);
+        activateButton.setShowDown(false);
+        activateButton.setHoverWidth(90);
+        activateButton.setHoverStyle("interactImageHover");
+
+        activateButton.addClickHandler(new com.smartgwt.client.widgets.events.ClickHandler() {
+           
+        	@Override
+        	public void onClick(ClickEvent event) {
+        		checkIfActive(!operatorIsActive);
+            }
+        });
+        layout.addMember(activateButton);
+        topBar.addMember(layout);
 		
-		topBar.addFill();
+//		topBar.addFill();
 		
         ImgButton imgButton = new ImgButton();
         imgButton.setWidth(24);
@@ -111,7 +143,7 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
         imgButton.setShowDownIcon(false);
         imgButton.setShowDown(false);
         imgButton.setPrompt(DictionaryInstance.dictionary.about());
-        imgButton.setHoverWidth(110);
+        imgButton.setHoverWidth(90);
         imgButton.setHoverStyle("interactImageHover");
 
         imgButton.addClickHandler(new com.smartgwt.client.widgets.events.ClickHandler() {
@@ -122,7 +154,6 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
             }
         });
         topBar.addMember(imgButton);
-        topBar.addSpacer(6);
         
         loginSessionChecker();
 
@@ -200,10 +231,54 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 	/**
 	 * 
 	 */
+	private void checkIfActive(final Boolean newActiveStatus) {
+		DataSource dataSource = new DataSource() {
+			@Override
+			protected void transformResponse(DSResponse response, DSRequest request, Object jsonData) {
+				JSONArray value = XMLTools.selectObjects(jsonData, "/active");
+				boolean active = ((JSONBoolean) value.get(0)).booleanValue();
+				operatorIsActive = active;
+				if (active) {
+					activateButton.setSrc(CONTEXT_PATH + "images/active.gif");
+			        activateButton.setPrompt(DictionaryInstance.dictionary.active());
+				} else {
+					activateButton.setSrc(CONTEXT_PATH + "images/notActive.png");
+			        activateButton.setPrompt(DictionaryInstance.dictionary.notActive());
+			        if (newActiveStatus == null) {
+				        SC.ask(DictionaryInstance.dictionary.wouldYouLikeToActivateYourself(), new BooleanCallback() {
+							
+							@Override
+							public void execute(Boolean value) {
+								if (value) {
+									checkIfActive(true);
+								}
+							}
+						});
+			        }
+				}
+			}
+		};
+		if (newActiveStatus != null) {
+			HashMap<String, Object> params = new HashMap<String, Object>(1);
+			params.put("newStatus", newActiveStatus);
+			dataSource.setDefaultParams(params);
+		}
+		dataSource.setDataFormat(DSDataFormat.JSON);
+		dataSource.setDataURL(CONTEXT_PATH + "operator/ActiveService");
+		dataSource.fetchData();
+	}
+	
+	/**
+	 * 
+	 */
 	private void loginSessionChecker() {
 		final DataSource dataSource = new DataSource() {
 			@Override
 			protected void transformResponse(DSResponse response, DSRequest request, Object jsonData) {
+				if (response.getStatus() < 0) {
+					Window.Location.reload();
+					return;
+				}
 				JSONArray value = XMLTools.selectObjects(jsonData, "/loggedIn");
 				boolean loggedIn = ((JSONBoolean) value.get(0)).booleanValue();
 				if (!loggedIn) {

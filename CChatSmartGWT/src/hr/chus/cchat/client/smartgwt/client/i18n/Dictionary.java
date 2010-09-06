@@ -315,4 +315,13 @@ public interface Dictionary extends Constants {
 	@DefaultStringValue("No items to show")
 	String noItemsToShow();
 
+	@DefaultStringValue("Active")
+	String active();
+
+	@DefaultStringValue("Not active")
+	String notActive();
+
+	@DefaultStringValue("You are not active. Would you like to activate yourself?")
+	String wouldYouLikeToActivateYourself();
+
 }
