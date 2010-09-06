@@ -35,13 +35,17 @@ public class Prepare extends ActionSupport  {
 	private UserService userService;
 	private SMSMessageService smsMessageService;
 	
+	private String type;
 	private String message;
 	
 	@Override
 	public String execute() {
 		try {
-			developPrepare();
-//			productionPrepare();
+			if (type != null && type.equals("development")) {
+				developPrepare();
+			} else {
+				productionPrepare();
+			}
 		} catch (Exception e) {
 			message = e.getMessage();
 		}
@@ -156,6 +160,8 @@ public class Prepare extends ActionSupport  {
 	public void setUserService(UserService userService) { this.userService = userService; }
 	
 	public void setSmsMessageService(SMSMessageService smsMessageService) { this.smsMessageService = smsMessageService; }
+	
+	public void setType(String type) { this.type = type; }
 
 	public String getMessage() { return message; }
 	public void setMessage(String message) { this.message = message; }	
