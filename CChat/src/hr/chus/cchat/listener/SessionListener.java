@@ -43,6 +43,21 @@ public class SessionListener implements HttpSessionListener {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param userToUpdate
+	 */
+	public static void updateSessionWithUser(Operator userToUpdate) {
+		for (String sessionId : sessionMap.keySet()) {
+			HttpSession session = sessionMap.get(sessionId);
+			Operator user = (Operator) session.getAttribute(ApplicationConstants.USER_SESSION);
+			if (user != null && user.getId().equals(userToUpdate.getId())) {
+				session.setAttribute(ApplicationConstants.USER_SESSION, userToUpdate);
+				return;
+			}
+		}
+	}
+	
 
 	@Override
 	public void sessionCreated(HttpSessionEvent sessionEvent) {
