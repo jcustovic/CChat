@@ -22,6 +22,7 @@ public class UserList extends ActionSupport implements UserAware {
 	
 	private UserService userService;
 	private Operator operator;
+	private String errorMsg;
 	private List<User> operatorUserList;
 	private List<User> newestUserList;
 	private List<User> randomUserList;
@@ -29,6 +30,14 @@ public class UserList extends ActionSupport implements UserAware {
 	
 	@Override
 	public String execute() {
+		if (operator.getDisabled()) { // This should not happen. When user is disabled he must not have active session!
+			errorMsg = getText("operator.disabled");
+			return ERROR;
+		}
+		if (!operator.getIsActive()) {
+			errorMsg = getText("operator.notActive");
+			return ERROR;
+		}
 		operatorUserList = userService.getByOperator(operator);
 		Date lastMsgDate = new Date(new Date().getTime() - NEWEST_TIME);
 		newestUserList = userService.getNewest(lastMsgDate);
@@ -43,6 +52,8 @@ public class UserList extends ActionSupport implements UserAware {
 
 	@Override
 	public void setUser(Operator user) { operator = user; }
+	
+	public String getErrorMsg() { return errorMsg; }
 
 	public List<User> getOperatorUserList() { return operatorUserList; }
 

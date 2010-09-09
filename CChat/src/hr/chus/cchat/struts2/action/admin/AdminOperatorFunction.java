@@ -39,7 +39,12 @@ public class AdminOperatorFunction extends ActionSupport implements Preparable {
 		if (operation == null) {
 			log.error("Operation must not be null.");
 		} else if (operation.equals("save/edit")) {
-			if (operator.getDisabled()) SessionListener.removeSessionWithUser(operator);
+			if (operator.getDisabled()) {
+				operator.setIsActive(false);
+				SessionListener.removeSessionWithUser(operator);
+			} else {
+				SessionListener.updateSessionWithUser(operator);
+			}
 			operator = operatorService.updateOperator(operator);
 		} else if (operation.equals("delete")) {
 			SessionListener.removeSessionWithUser(operator);
