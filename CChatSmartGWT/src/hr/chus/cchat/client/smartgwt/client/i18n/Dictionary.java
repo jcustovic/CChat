@@ -324,4 +324,13 @@ public interface Dictionary extends Constants {
 	@DefaultStringValue("You are not active. Would you like to activate yourself?")
 	String wouldYouLikeToActivateYourself();
 
+	@DefaultStringValue("Total sms messages found in database")
+	String totalSmsMessagesInDB();
+
+	@DefaultStringValue("Total user found in database")
+	String totalUsersInDB();
+
+	@DefaultStringValue("User id")
+	String userId();
+
 }

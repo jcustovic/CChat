@@ -1,4 +1,4 @@
-package hr.chus.cchat.client.smartgwt.client.admin.ds;
+package hr.chus.cchat.client.smartgwt.client.operator.ds;
 
 import hr.chus.cchat.client.smartgwt.client.common.Constants;
 import hr.chus.cchat.client.smartgwt.client.i18n.DictionaryInstance;
@@ -63,10 +63,14 @@ public class MessagesDS extends DataSource {
 		serviceProviderId.setValueXPath("serviceProvider/id");
 		DataSourceTextField serviceProviderName = new DataSourceTextField("serviceProvider.providerName", DictionaryInstance.dictionary.serviceProvider(), 30, false);
 		serviceProviderName.setValueXPath("serviceProvider/providerName");
-		DataSourceTextField msisdn = new DataSourceTextField("smsMessage.msisdn", DictionaryInstance.dictionary.msisdn(), 30, true);
-		msisdn.setValueXPath("user/msisdn");
 		DataSourceTextField text = new DataSourceTextField("smsMessage.text", DictionaryInstance.dictionary.text(), 30, true);
 		text.setValueXPath("text");
+		DataSourceTextField name = new DataSourceTextField("smsMessage.userName", DictionaryInstance.dictionary.name(), 30, true);
+		name.setValueXPath("user/name");
+		DataSourceTextField surname = new DataSourceTextField("smsMessage.userSurname", DictionaryInstance.dictionary.surname(), 30, true);
+		surname.setValueXPath("user/surname");
+		DataSourceTextField userId = new DataSourceTextField("smsMessage.userId", "ID", 30, true);
+		userId.setValueXPath("user/id");
 		DataSourceTextField sc = new DataSourceTextField("smsMessage.sc", DictionaryInstance.dictionary.shortCode(), 40, true);
 		sc.setValueXPath("sc");
 		DataSourceTextField direction = new DataSourceTextField("smsMessage.direction", DictionaryInstance.dictionary.direction(), 50, true);
@@ -74,10 +78,10 @@ public class MessagesDS extends DataSource {
 		DataSourceDateTimeField time = new DataSourceDateTimeField("smsMessage.time", DictionaryInstance.dictionary.receivedTime(), 50, true);
 		time.setValueXPath("time");
 		
-		setFields(pkField, operatorId, operatorUsername, serviceProviderId, serviceProviderName, msisdn, text, sc, direction, time, nickId);
+		setFields(pkField, operatorId, operatorUsername, serviceProviderId, serviceProviderName, text, name, surname, userId, sc, direction, time, nickId);
 
 		setDataFormat(DSDataFormat.JSON);
-		setDataURL(Constants.CONTEXT_PATH + "admin/AdminSMSMessageListJSON");
+		setDataURL(Constants.CONTEXT_PATH + "operator/OperatorSMSMessageListJSON");
 	}
 
 	public double getTotalCount() { return totalCount; }

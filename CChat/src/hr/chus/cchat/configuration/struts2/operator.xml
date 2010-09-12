@@ -53,6 +53,17 @@
         </action>
 		
 		<!-- Operator area -->
+		
+		<action name="Operator*JSON" class="hr.chus.cchat.struts2.action.operator.Operator{1}">
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="excludeProperties">
+					userList.*\.msisdn
+					, smsMessageList.*\.msisdn
+				</param>
+			</result>
+			<result name="input" type="json" />
+		</action>
 						
 		<action name="UserListJSON" class="hr.chus.cchat.struts2.action.operator.UserList">
 			<result type="json">

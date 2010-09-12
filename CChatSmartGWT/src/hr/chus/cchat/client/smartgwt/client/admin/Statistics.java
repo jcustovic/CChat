@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 
 import hr.chus.cchat.client.smartgwt.client.admin.ds.OperatorsDS;
+import hr.chus.cchat.client.smartgwt.client.common.Constants;
 import hr.chus.cchat.client.smartgwt.client.common.PanelFactory;
 import hr.chus.cchat.client.smartgwt.client.i18n.DictionaryInstance;
 
@@ -84,7 +85,7 @@ public class Statistics extends HLayout {
 
         final VLayout layout = new VLayout(5);
         
-        DataSource ds = new DataSource(CChatAdminSmartGWT.CONTEXT_PATH + "admin/AdminStatisticsListJSON");
+        DataSource ds = new DataSource(Constants.CONTEXT_PATH + "admin/AdminStatisticsListJSON");
         ds.setAutoConvertRelativeDates(false);
         ds.setDataFormat(DSDataFormat.JSON);
         final DynamicForm statisticsForm = new DynamicForm();
@@ -101,7 +102,7 @@ public class Statistics extends HLayout {
 		statisticsForm.setFields(getStatisticsFormFields());
 		
 		final IButton searchButton = new IButton(DictionaryInstance.dictionary.search());
-        searchButton.setIcon(CChatAdminSmartGWT.CONTEXT_PATH + "images/find.png");
+        searchButton.setIcon(Constants.CONTEXT_PATH + "images/find.png");
         searchButton.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -175,8 +176,8 @@ public class Statistics extends HLayout {
     	String fromDateString = null;
     	String toDateString = null;
     	if (fromDate != null && toDate != null) {
-	    	fromDateString = CChatAdminSmartGWT.dateTimeFormat.format(fromDate, TimeZone.createTimeZone(0));
-	    	toDateString = CChatAdminSmartGWT.dateTimeFormat.format(toDate, TimeZone.createTimeZone(0));
+	    	fromDateString = Constants.dateTimeFormat.format(fromDate, TimeZone.createTimeZone(0));
+	    	toDateString = Constants.dateTimeFormat.format(toDate, TimeZone.createTimeZone(0));
     	}
     	VLayout vlayout = new VLayout();
     	vlayout.setWidth100();
@@ -267,8 +268,8 @@ public class Statistics extends HLayout {
      * @return
      */
 	private VLayout drawStatisticsPerOperator(JSONArray value, Date fromDate, Date toDate) {
-		String fromDateString = CChatAdminSmartGWT.dateTimeFormat.format(fromDate, TimeZone.createTimeZone(0));
-    	String toDateString = CChatAdminSmartGWT.dateTimeFormat.format(toDate, TimeZone.createTimeZone(0));
+		String fromDateString = Constants.dateTimeFormat.format(fromDate, TimeZone.createTimeZone(0));
+    	String toDateString = Constants.dateTimeFormat.format(toDate, TimeZone.createTimeZone(0));
     	VLayout vlayout = new VLayout();
     	vlayout.setWidth100();
     	vlayout.setHeight100();
@@ -411,7 +412,7 @@ public class Statistics extends HLayout {
 					Date date = (Date) value;
 					gmt = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
 				}
-				return CChatAdminSmartGWT.dateTimeFormat.format(gmt, TimeZone.createTimeZone(0));
+				return Constants.dateTimeFormat.format(gmt, TimeZone.createTimeZone(0));
 			}
 		});
         fromDate.setMaskDateSeparator(".");
@@ -436,7 +437,7 @@ public class Statistics extends HLayout {
 					Date date = (Date) value;
 					gmt = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
 				}
-				return CChatAdminSmartGWT.dateTimeFormat.format(gmt, TimeZone.createTimeZone(0));
+				return Constants.dateTimeFormat.format(gmt, TimeZone.createTimeZone(0));
 			}
 		});
         toDate.setMaskDateSeparator(".");

@@ -1,6 +1,6 @@
 package hr.chus.cchat.client.smartgwt.client.admin.ds;
 
-import hr.chus.cchat.client.smartgwt.client.admin.CChatAdminSmartGWT;
+import hr.chus.cchat.client.smartgwt.client.common.Constants;
 import hr.chus.cchat.client.smartgwt.client.i18n.DictionaryInstance;
 
 import com.smartgwt.client.data.DataSource;
@@ -41,7 +41,7 @@ public class ServiceProviderDS extends DataSource {
 		setFields(pkField, sc, providerName, description);
 
 		setDataFormat(DSDataFormat.JSON);
-		setDataURL(CChatAdminSmartGWT.CONTEXT_PATH + "admin/AdminServiceProviderListJSON");
+		setDataURL(Constants.CONTEXT_PATH + "admin/AdminServiceProviderListJSON");
 	}
 
 }

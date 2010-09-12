@@ -17,7 +17,7 @@ public class SideNavigationMenu extends TreeGrid {
 
 	private ExplorerTreeNode[] menuItems;
 
-	public SideNavigationMenu(String idSuffix, ExplorerTreeNode[] menuItems) {
+	public SideNavigationMenu(String idSuffix, ExplorerTreeNode[] menuItems, String title) {
 		this.menuItems = menuItems;
 		setWidth100();
 		setHeight100();
@@ -34,7 +34,7 @@ public class SideNavigationMenu extends TreeGrid {
 		TreeGridField field = new TreeGridField();
 		field.setCanFilter(true);
 		field.setName("name");
-		field.setTitle("<b>" + DictionaryInstance.dictionary.menu() + "</b>");
+		field.setTitle(title);
 		setFields(field);
 		setEmptyMessage(DictionaryInstance.dictionary.noItemsToShow());
 

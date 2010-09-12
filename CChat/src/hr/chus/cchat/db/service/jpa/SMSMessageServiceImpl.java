@@ -49,7 +49,7 @@ public class SMSMessageServiceImpl implements SMSMessageService {
 	}
 
 	@Override
-	public Object[] search(Operator operator, ServiceProvider serviceProvider, Direction direction, String msisdn, Date startDate, Date endDate, String text, int start, int limit) {
+	public Object[] search(Operator operator, ServiceProvider serviceProvider, Direction direction, Integer userId, String userName, String userSurname, String msisdn, Date startDate, Date endDate, String text, int start, int limit) {
 		StringBuffer queryWhereBuffer = new StringBuffer();
 		boolean first = true;
 		if (operator != null) {
@@ -59,6 +59,21 @@ public class SMSMessageServiceImpl implements SMSMessageService {
 		}
 		if (serviceProvider != null) {
 			String query = "sms.serviceProvider = :serviceProvider ";
+			queryWhereBuffer.append(first ? "WHERE " + query : "AND " + query);
+			first = false;
+		}
+		if (userId != null) {
+			String query = "sms.user.id = :userId ";
+			queryWhereBuffer.append(first ? "WHERE " + query : "AND " + query);
+			first = false;
+		}
+		if (userName != null && !userName.isEmpty()) {
+			String query = "sms.user.name LIKE :userName ";
+			queryWhereBuffer.append(first ? "WHERE " + query : "AND " + query);
+			first = false;
+		}
+		if (userSurname != null && !userSurname.isEmpty()) {
+			String query = "sms.user.surname LIKE :userSurname ";
 			queryWhereBuffer.append(first ? "WHERE " + query : "AND " + query);
 			first = false;
 		}
@@ -96,6 +111,9 @@ public class SMSMessageServiceImpl implements SMSMessageService {
 		
 		if (operator != null) query.setParameter("operator", operator);
 		if (serviceProvider != null) query.setParameter("serviceProvider", serviceProvider);
+		if (userId != null) query.setParameter("userId", userId);
+		if (userName != null && !userName.isEmpty()) query.setParameter("userName", userName + "%");
+		if (userSurname != null && !userSurname.isEmpty()) query.setParameter("userSurname", msisdn + "%");
 		if (msisdn != null && !msisdn.isEmpty()) query.setParameter("msisdn", msisdn + "%");
 		if (text != null && !text.isEmpty()) query.setParameter("text", "%" + text + "%");
 		if (direction != null) query.setParameter("direction", direction);
@@ -112,6 +130,9 @@ public class SMSMessageServiceImpl implements SMSMessageService {
 		Query queryCount = entityManager.createQuery("SELECT COUNT(sms) FROM SMSMessage sms " + whereString);
 		if (operator != null) queryCount.setParameter("operator", operator);
 		if (serviceProvider != null) queryCount.setParameter("serviceProvider", serviceProvider);
+		if (userId != null) queryCount.setParameter("userId", userId);
+		if (userName != null && !userName.isEmpty()) queryCount.setParameter("userName", userName + "%");
+		if (userSurname != null && !userSurname.isEmpty()) queryCount.setParameter("userSurname", msisdn + "%");
 		if (msisdn != null && !msisdn.isEmpty()) queryCount.setParameter("msisdn", msisdn + "%");
 		if (text != null && !text.isEmpty()) queryCount.setParameter("text", "%" + text + "%");
 		if (direction != null) queryCount.setParameter("direction", direction);

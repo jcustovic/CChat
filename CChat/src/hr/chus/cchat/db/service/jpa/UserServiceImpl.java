@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Object[] searchUsers(Nick nick, Operator operator, ServiceProvider serviceProvider, String msisdn, String name, String surname, int start, int limit) {
+	public Object[] searchUsers(Nick nick, Operator operator, ServiceProvider serviceProvider, String msisdn, Integer id, String name, String surname, Boolean deleted, int start, int limit) {
 		StringBuffer queryWhereBuffer = new StringBuffer();
 		boolean first = true;
 		if (nick != null) {
@@ -73,6 +73,11 @@ public class UserServiceImpl implements UserService {
 			queryWhereBuffer.append(first ? "WHERE " + query : "AND " + query);
 			first = false;
 		}
+		if (id != null) {
+			String query = "u.id LIKE :id ";
+			queryWhereBuffer.append(first ? "WHERE " + query : "AND " + query);
+			first = false;
+		}
 		if (name != null && !name.isEmpty()) {
 			String query = "u.name LIKE :name ";
 			queryWhereBuffer.append(first ? "WHERE " + query : "AND " + query);
@@ -80,6 +85,11 @@ public class UserServiceImpl implements UserService {
 		}
 		if (surname != null && !surname.isEmpty()) {
 			String query = "u.surname LIKE :surname ";
+			queryWhereBuffer.append(first ? "WHERE " + query : "AND " + query);
+			first = false;
+		}
+		if (deleted != null) {
+			String query = "u.deleted = :deleted ";
 			queryWhereBuffer.append(first ? "WHERE " + query : "AND " + query);
 			first = false;
 		}
@@ -93,9 +103,11 @@ public class UserServiceImpl implements UserService {
 		if (nick != null) query.setParameter("nick", nick);
 		if (operator != null) query.setParameter("operator", operator);
 		if (serviceProvider != null) query.setParameter("serviceProvider", serviceProvider);
+		if (id != null) query.setParameter("id", id);
 		if (msisdn != null && !msisdn.isEmpty()) query.setParameter("msisdn", msisdn + "%");
 		if (name != null && !name.isEmpty()) query.setParameter("name", name + "%");
 		if (surname != null && !surname.isEmpty()) query.setParameter("surname", surname + "%");
+		if (deleted != null) query.setParameter("deleted", deleted);
 		
 		Object[] result = new Object[2];
 		if (limit == 0) {
@@ -108,9 +120,11 @@ public class UserServiceImpl implements UserService {
 		if (nick != null) queryCount.setParameter("nick", nick);
 		if (operator != null) queryCount.setParameter("operator", operator);
 		if (serviceProvider != null) queryCount.setParameter("serviceProvider", serviceProvider);
+		if (id != null) queryCount.setParameter("id", id);
 		if (msisdn != null && !msisdn.isEmpty()) queryCount.setParameter("msisdn", msisdn + "%");
 		if (name != null && !name.isEmpty()) queryCount.setParameter("name", name + "%");
 		if (surname != null && !surname.isEmpty()) queryCount.setParameter("surname", surname + "%");
+		if (deleted != null) queryCount.setParameter("deleted", deleted);
 		result[0] = queryCount.getSingleResult();
 		
 		return result;

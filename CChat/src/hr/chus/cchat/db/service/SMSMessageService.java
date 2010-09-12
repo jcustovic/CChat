@@ -18,6 +18,6 @@ public interface SMSMessageService {
 	public void removeSMSMessage(SMSMessage smsMessage);
 	public SMSMessage updateSMSMessage(SMSMessage smsMessage);
 	public SMSMessage getById(Integer id);
-	public Object[] search(Operator operator, ServiceProvider serviceProvider, Direction direction, String msisdn, Date startDate, Date endDate, String text, int start, int limit);
+	public Object[] search(Operator operator, ServiceProvider serviceProvider, Direction direction, Integer userId, String userName, String userSurname, String msisdn, Date startDate, Date endDate, String text, int start, int limit);
 
 }

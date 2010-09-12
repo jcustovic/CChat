@@ -1,4 +1,4 @@
-package hr.chus.cchat.client.smartgwt.client.admin.ds;
+package hr.chus.cchat.client.smartgwt.client.operator.ds;
 
 import hr.chus.cchat.client.smartgwt.client.common.Constants;
 import hr.chus.cchat.client.smartgwt.client.i18n.DictionaryInstance;
@@ -40,8 +40,7 @@ public class NicksDS extends DataSource {
 		setFields(pkField, name, description);
 
 		setDataFormat(DSDataFormat.JSON);
-//		setDataURL("test/data/json/nickList.json");
-		setDataURL(Constants.CONTEXT_PATH + "admin/AdminNickListJSON");
+		setDataURL(Constants.CONTEXT_PATH + "operator/OperatorNickListJSON");
 	}
 
 }
