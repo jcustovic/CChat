@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import hr.chus.cchat.client.smartgwt.client.admin.ds.OperatorsDS;
 import hr.chus.cchat.client.smartgwt.client.admin.ds.RolesDS;
+import hr.chus.cchat.client.smartgwt.client.common.Constants;
 import hr.chus.cchat.client.smartgwt.client.common.PanelFactory;
 import hr.chus.cchat.client.smartgwt.client.i18n.DictionaryInstance;
 
@@ -89,7 +90,7 @@ public class Operators extends HLayout {
 		form.setNumCols(4);
 		
 //		DataSource ds = new DataSource("test/data/json/empty.json") {
-		DataSource ds = new DataSource(CChatAdminSmartGWT.CONTEXT_PATH + "admin/AdminOperatorFunctionJSON") {
+		DataSource ds = new DataSource(Constants.CONTEXT_PATH + "admin/AdminOperatorFunctionJSON") {
 			@Override
 			protected void transformResponse(DSResponse response, DSRequest request, Object jsonData) {
 				JSONArray value = XMLTools.selectObjects(jsonData, "/status");
@@ -155,7 +156,7 @@ public class Operators extends HLayout {
 
 		saveButton.setDisabled(true);
 		saveButton.setShowDisabledIcon(false);
-		saveButton.setIcon(CChatAdminSmartGWT.CONTEXT_PATH + "images/edit.png");
+		saveButton.setIcon(Constants.CONTEXT_PATH + "images/edit.png");
 		saveButton.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -191,7 +192,7 @@ public class Operators extends HLayout {
 		});
 		
 		IButton addNewButton = new IButton(DictionaryInstance.dictionary.addNew());
-		addNewButton.setIcon(CChatAdminSmartGWT.CONTEXT_PATH + "images/new.png");
+		addNewButton.setIcon(Constants.CONTEXT_PATH + "images/new.png");
 		addNewButton.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -208,7 +209,7 @@ public class Operators extends HLayout {
 		
 		deleteButton.setDisabled(true);
 		deleteButton.setShowDisabledIcon(false);
-		deleteButton.setIcon(CChatAdminSmartGWT.CONTEXT_PATH + "images/delete.png");
+		deleteButton.setIcon(Constants.CONTEXT_PATH + "images/delete.png");
 		deleteButton.addClickHandler(new ClickHandler() {
 
 			@Override

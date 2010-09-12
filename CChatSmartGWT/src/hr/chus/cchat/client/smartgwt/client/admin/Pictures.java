@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import hr.chus.cchat.client.smartgwt.client.admin.ds.NicksDS;
 import hr.chus.cchat.client.smartgwt.client.admin.ds.PicturesDS;
+import hr.chus.cchat.client.smartgwt.client.common.Constants;
 import hr.chus.cchat.client.smartgwt.client.common.PanelFactory;
 import hr.chus.cchat.client.smartgwt.client.filemanager.Upload;
 import hr.chus.cchat.client.smartgwt.client.filemanager.UploadListener;
@@ -91,7 +92,7 @@ public class Pictures extends HLayout {
 		form.setGroupTitle(DictionaryInstance.dictionary.update());
 		form.setNumCols(4);
 		
-		DataSource ds = new DataSource(CChatAdminSmartGWT.CONTEXT_PATH + "admin/AdminPictureFunctionJSON") {
+		DataSource ds = new DataSource(Constants.CONTEXT_PATH + "admin/AdminPictureFunctionJSON") {
 			@Override
 			protected void transformResponse(DSResponse response, DSRequest request, Object jsonData) {
 				JSONArray value = XMLTools.selectObjects(jsonData, "/status");
@@ -149,8 +150,8 @@ public class Pictures extends HLayout {
 					String attribute = selected.getAttribute(field.getName());
 					if (field.getName().equals("picture.url")) {
 						img.setVisible(true);
-						img.setPrompt(CChatAdminSmartGWT.CONTEXT_PATH + attribute);
-						img.setSrc(CChatAdminSmartGWT.CONTEXT_PATH + attribute);
+						img.setPrompt(Constants.CONTEXT_PATH + attribute);
+						img.setSrc(Constants.CONTEXT_PATH + attribute);
 					}
 					if (attribute != null) {
 						form.setValue(field.getName(), attribute);
@@ -171,7 +172,7 @@ public class Pictures extends HLayout {
 
 		saveButton.setDisabled(true);
 		saveButton.setShowDisabledIcon(false);
-		saveButton.setIcon(CChatAdminSmartGWT.CONTEXT_PATH + "images/edit.png");
+		saveButton.setIcon(Constants.CONTEXT_PATH + "images/edit.png");
 		saveButton.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -208,7 +209,7 @@ public class Pictures extends HLayout {
 				
 		deleteButton.setDisabled(true);
 		deleteButton.setShowDisabledIcon(false);
-		deleteButton.setIcon(CChatAdminSmartGWT.CONTEXT_PATH + "images/delete.png");
+		deleteButton.setIcon(Constants.CONTEXT_PATH + "images/delete.png");
 		deleteButton.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -252,7 +253,7 @@ public class Pictures extends HLayout {
 		selectNick.setAnimatePickList(true);
 		selectNick.setPickListWidth(250);
 		
-		Upload upload = new Upload(CChatAdminSmartGWT.CONTEXT_PATH + "admin/AdminPictureUploadAction", "picture", DictionaryInstance.dictionary.picture(), selectNick);
+		Upload upload = new Upload(Constants.CONTEXT_PATH + "admin/AdminPictureUploadAction", "picture", DictionaryInstance.dictionary.picture(), selectNick);
 		upload.setBorder("1px solid gray");
 		upload.setHeight("60px");
 		upload.setWidth("400px");

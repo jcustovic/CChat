@@ -1,15 +1,12 @@
 package hr.chus.cchat.client.smartgwt.client.admin;
 
-import java.util.Date;
-
+import hr.chus.cchat.client.smartgwt.client.common.Constants;
 import hr.chus.cchat.client.smartgwt.client.common.ExplorerTreeNode;
 import hr.chus.cchat.client.smartgwt.client.common.PanelFactory;
 import hr.chus.cchat.client.smartgwt.client.common.SideNavigationMenu;
 import hr.chus.cchat.client.smartgwt.client.i18n.DictionaryInstance;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONBoolean;
 import com.google.gwt.user.client.History;
@@ -27,8 +24,6 @@ import com.smartgwt.client.types.DSDataFormat;
 import com.smartgwt.client.types.Overflow;
 import com.smartgwt.client.types.TabBarControls;
 import com.smartgwt.client.types.VisibilityMode;
-import com.smartgwt.client.util.DateDisplayFormatter;
-import com.smartgwt.client.util.DateInputFormatter;
 import com.smartgwt.client.util.DateUtil;
 import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Canvas;
@@ -63,33 +58,13 @@ import com.smartgwt.client.widgets.tree.events.LeafClickHandler;
  * @author Jan Čustović (jan_custovic@yahoo.com)
  * 
  */
-public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
-	
-	public static final String CONTEXT_PATH = GWT.getModuleBaseURL().replace(GWT.getModuleName() + "/", ""); 
+public class CChatAdminSmartGWT extends VLayout implements EntryPoint { 
 
 	private TabSet mainTabSet;
 	private SideNavigationMenu sideNav;
 	private Menu contextMenu;
 	
-	public static DateTimeFormat dateTimeFormat = DateTimeFormat.getFormat("dd.MM.yyyy HH:mm");
-	public static DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd.MM.yyyy");
-
-	public static DateDisplayFormatter dateDisplayFormatter = new DateDisplayFormatter() {
-        public String format(Date date) {
-            if (date == null) return null;
-            return dateTimeFormat.format(date);
-        }
-    };
-
-    public static DateInputFormatter dateInputFormatter = new DateInputFormatter() {
-        public Date parse(String s) {
-            if (s == null) return null;
-            return dateTimeFormat.parse(s);
-        }
-    };
-
-
-
+	
 	@Override
 	public void onModuleLoad() {
 		RPCManager.setDefaultPrompt(DictionaryInstance.dictionary.contactingServer());
@@ -110,7 +85,7 @@ public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
 		topBar.setWidth100();
 		
 		ImgButton sgwtHomeButton = new ImgButton();
-        sgwtHomeButton.setSrc(CONTEXT_PATH + "images/cchat.png");
+        sgwtHomeButton.setSrc(Constants.CONTEXT_PATH + "images/cchat.png");
         sgwtHomeButton.setWidth(24);
         sgwtHomeButton.setHeight(24);
         sgwtHomeButton.setPrompt(DictionaryInstance.dictionary.chatApp());
@@ -133,7 +108,7 @@ public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
         ImgButton imgButton = new ImgButton();
         imgButton.setWidth(24);
         imgButton.setHeight(24);
-        imgButton.setSrc(CONTEXT_PATH + "images/about.png");
+        imgButton.setSrc(Constants.CONTEXT_PATH + "images/about.png");
         imgButton.setShowFocused(false);
         imgButton.setShowFocusedIcon(false);
         imgButton.setShowRollOver(false);
@@ -171,7 +146,7 @@ public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
 		rightSideLayout.setAnimateSections(true);
 
 		final HTMLFlow headerHtmlFlow = new HTMLFlow();
-		headerHtmlFlow.setContentsURL(CONTEXT_PATH + "UserInfoAction");
+		headerHtmlFlow.setContentsURL(Constants.CONTEXT_PATH + "UserInfoAction");
 		headerHtmlFlow.setOverflow(Overflow.AUTO);
 		headerHtmlFlow.setPadding(5);
 		headerHtmlFlow.setHeight(30);
@@ -193,7 +168,7 @@ public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
 		Tab tab = new Tab();
 		tab.setTitle(DictionaryInstance.dictionary.home() + "&nbsp;&nbsp;");
 		tab.setWidth(80);
-		tab.setIcon(CONTEXT_PATH + "images/home.png");
+		tab.setIcon(Constants.CONTEXT_PATH + "images/home.png");
 		tab.setPane(mainHtmlFlow);
 
 		mainTabSet.addTab(tab);
@@ -241,7 +216,7 @@ public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
 			}
 		};
 		dataSource.setDataFormat(DSDataFormat.JSON);
-		dataSource.setDataURL(CONTEXT_PATH + "CheckLoggedIn");
+		dataSource.setDataURL(Constants.CONTEXT_PATH + "CheckLoggedIn");
 		
 		Timer refreshTimer = new Timer() {
 	    	@Override
@@ -259,7 +234,7 @@ public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
 	 */
 	private SideNavigationMenu createSideNavigation() {
 		String idSuffix = "";
-		SideNavigationMenu sideNav = new SideNavigationMenu(idSuffix, CChatAdminData.getData(idSuffix));
+		SideNavigationMenu sideNav = new SideNavigationMenu(idSuffix, CChatAdminData.getData(idSuffix), "<b>" + DictionaryInstance.dictionary.menu() + "</b>");
 		sideNav.addLeafClickHandler(new LeafClickHandler() {
 			
 			@Override
@@ -299,9 +274,6 @@ public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
 					String sampleName = explorerTreeNode.getName();
 
 					String icon = explorerTreeNode.getIcon();
-					if (icon == null) {
-						icon = "silk/plugin.png";
-					}
 					String imgHTML = Canvas.imgHTML(icon, 16, 16);
 					tab.setTitle("<span>" + imgHTML + "&nbsp;" + sampleName + "</span>");
 					tab.setPane(panel);

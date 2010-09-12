@@ -1,12 +1,11 @@
-package hr.chus.cchat.client.smartgwt.client.admin;
+package hr.chus.cchat.client.smartgwt.client.operator;
 
 import java.util.Date;
 import java.util.Iterator;
 
-import hr.chus.cchat.client.smartgwt.client.admin.ds.NicksDS;
-import hr.chus.cchat.client.smartgwt.client.admin.ds.OperatorsDS;
-import hr.chus.cchat.client.smartgwt.client.admin.ds.ServiceProviderDS;
-import hr.chus.cchat.client.smartgwt.client.admin.ds.UsersDS;
+import hr.chus.cchat.client.smartgwt.client.operator.ds.NicksDS;
+import hr.chus.cchat.client.smartgwt.client.operator.ds.OperatorsDS;
+import hr.chus.cchat.client.smartgwt.client.operator.ds.UsersDS;
 import hr.chus.cchat.client.smartgwt.client.common.Constants;
 import hr.chus.cchat.client.smartgwt.client.common.PanelFactory;
 import hr.chus.cchat.client.smartgwt.client.i18n.DictionaryInstance;
@@ -39,7 +38,6 @@ import com.smartgwt.client.widgets.events.CloseClickHandler;
 import com.smartgwt.client.widgets.events.CloseClientEvent;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.FormItemInputTransformer;
-import com.smartgwt.client.widgets.form.fields.BooleanItem;
 import com.smartgwt.client.widgets.form.fields.DateItem;
 import com.smartgwt.client.widgets.form.fields.DateTimeItem;
 import com.smartgwt.client.widgets.form.fields.FormItem;
@@ -102,7 +100,6 @@ public class Users extends HLayout {
 
     	NicksDS.getInstance().invalidateCache();
     	OperatorsDS.getInstance().invalidateCache();
-    	ServiceProviderDS.getInstance().invalidateCache();
     	
 		VLayout layout = new VLayout(20);
 		layout.setWidth(910);
@@ -121,7 +118,7 @@ public class Users extends HLayout {
 		form.setGroupTitle(DictionaryInstance.dictionary.update());
 		form.setNumCols(4);
 		
-		DataSource ds = new DataSource(Constants.CONTEXT_PATH + "admin/AdminUserFunctionJSON") {
+		DataSource ds = new DataSource(Constants.CONTEXT_PATH + "operator/OperatorUserFunctionJSON") {
 			@Override
 			protected void transformResponse(DSResponse response, DSRequest request, Object jsonData) {
 				JSONArray value = XMLTools.selectObjects(jsonData, "/status");
@@ -179,7 +176,7 @@ public class Users extends HLayout {
 	                    	window.setHeight(250);
 	                    	window.setWidth(260);
 	                    	
-	                    	DataSource ds = new DataSource(Constants.CONTEXT_PATH + "admin/SendMessageFunctionJSON");
+	                    	DataSource ds = new DataSource(Constants.CONTEXT_PATH + "operator/SendMessageFunctionJSON");
 	                    	ds.setDataFormat(DSDataFormat.JSON);
 	                    	final DynamicForm sendMsgForm = new DynamicForm();
 	                    	sendMsgForm.setDataSource(ds);
@@ -439,8 +436,6 @@ public class Users extends HLayout {
     private FormItem[] getFormFields() {
     	TextItem id = new TextItem("user.id", "ID");
     	id.setDisabled(true);
-    	TextItem msisdn = new TextItem("user.msisdn", DictionaryInstance.dictionary.msisdn());
-    	msisdn.setDisabled(true);
         TextItem name = new TextItem("user.name", DictionaryInstance.dictionary.name());
         TextItem surname = new TextItem("user.surname", DictionaryInstance.dictionary.surname());
         TextItem address = new TextItem("user.address", DictionaryInstance.dictionary.address());
@@ -460,14 +455,6 @@ public class Users extends HLayout {
         operatorItem.setDisplayField("username");
         operatorItem.setValueField("id");
         
-        SelectItem serviceProviderItem = new SelectItem("user.serviceProvider", DictionaryInstance.dictionary.serviceProvider());
-        serviceProviderItem.setAllowEmptyValue(true);
-        serviceProviderItem.setEmptyDisplayValue(DictionaryInstance.dictionary.notSet());
-        serviceProviderItem.setOptionDataSource(ServiceProviderDS.getInstance());
-        serviceProviderItem.setDisplayField("providerName");
-        serviceProviderItem.setValueField("id");
-        serviceProviderItem.setDisabled(true);
-        
         final DateItem birthdate = new DateItem("user.birthDate", DictionaryInstance.dictionary.birthDate());
 //        birthdate.setAttribute("useCustomTimezone", true);
         birthdate.setInputTransformer(new FormItemInputTransformer() {
@@ -486,12 +473,7 @@ public class Users extends HLayout {
         birthdate.setUseTextField(true);
         birthdate.setInvalidDateStringMessage(DictionaryInstance.dictionary.invalidDate());
         birthdate.setDateFormatter(DateDisplayFormat.TOEUROPEANSHORTDATE);
-        
-        BooleanItem deleted = new BooleanItem();
-        deleted.setDefaultValue(false);
-        deleted.setName("user.deleted");
-        deleted.setTitle(DictionaryInstance.dictionary.deleted());
-        
+                
         DateTimeItem joined = new DateTimeItem("user.joined", DictionaryInstance.dictionary.joinedDate());
         joined.setMaskDateSeparator(".");
         joined.setUseMask(true);
@@ -500,7 +482,7 @@ public class Users extends HLayout {
         joined.setDisabled(true);
         joined.setDateFormatter(DateDisplayFormat.TOEUROPEANSHORTDATETIME);
         
-        return new FormItem[] { id, msisdn, name, surname, address, notes, nickItem, operatorItem, serviceProviderItem , birthdate, deleted, joined };
+        return new FormItem[] { id, name, surname, address, notes, nickItem, operatorItem , birthdate, joined };
 	}
 
 	/**
@@ -511,7 +493,7 @@ public class Users extends HLayout {
     	IntegerItem userId = new IntegerItem();
     	userId.setName("id");
     	userId.setTitle(DictionaryInstance.dictionary.userId());
-        TextItem msisdn = new TextItem("msisdn", DictionaryInstance.dictionary.msisdn());
+    	userId.setAlign(Alignment.LEFT);
         TextItem name = new TextItem("name", DictionaryInstance.dictionary.name());
         TextItem surname = new TextItem("surname", DictionaryInstance.dictionary.surname());
 
@@ -528,19 +510,12 @@ public class Users extends HLayout {
         operatorItem.setOptionDataSource(OperatorsDS.getInstance());
         operatorItem.setDisplayField("username");
         operatorItem.setValueField("id");
-        
-        SelectItem serviceProviderItem = new SelectItem("serviceProvider", DictionaryInstance.dictionary.serviceProvider());
-        serviceProviderItem.setAllowEmptyValue(true);
-        serviceProviderItem.setEmptyDisplayValue(DictionaryInstance.dictionary.notSet());
-        serviceProviderItem.setOptionDataSource(ServiceProviderDS.getInstance());
-        serviceProviderItem.setDisplayField("providerName");
-        serviceProviderItem.setValueField("id");
-        
+               
         SelectItem fetchSize = new SelectItem("limit", DictionaryInstance.dictionary.fetchSize());
         fetchSize.setValueMap("20", "50", "100", "200");
         fetchSize.setDefaultToFirstOption(true);
         
-        return new FormItem[] { userId, msisdn, name, surname, nickItem, operatorItem, serviceProviderItem, fetchSize };
+        return new FormItem[] { userId, name, surname, nickItem, operatorItem, fetchSize };
 	}
 
 	/**
@@ -549,9 +524,7 @@ public class Users extends HLayout {
      */
     private ListGridField[] getGridFields() {
     	ListGridField id = new ListGridField("user.id");
-    	id.setHidden(true);
-    	ListGridField msisdn = new ListGridField("user.msisdn");
-    	msisdn.setWidth(120);
+    	id.setWidth(120);
 		ListGridField name = new ListGridField("user.name");
 		name.setWidth(100);
 		ListGridField surname = new ListGridField("user.surname");
@@ -570,9 +543,6 @@ public class Users extends HLayout {
 		operator.setHidden(true);
 		ListGridField serviceProviderName = new ListGridField("serviceProvider.providerName");
 		serviceProviderName.setWidth(120);
-		
-		ListGridField deleted = new ListGridField("user.deleted");
-		deleted.setWidth(50);
 		
 		final DateTimeFormat joinedDateFormatter = DateTimeFormat.getFormat("dd.MM.yyyy");
 		ListGridField joined = new ListGridField("user.joined");
@@ -613,7 +583,7 @@ public class Users extends HLayout {
 		birthDate.setType(ListGridFieldType.DATE);
 		birthDate.setHidden(true);
 		
-		return new ListGridField[] { id, msisdn, name, surname, address, notes, nickName, operator, operatorUsername, serviceProviderName, nick, deleted, joined, birthDate };
+		return new ListGridField[] { id, name, surname, address, notes, nickName, operator, operatorUsername, serviceProviderName, nick, joined, birthDate };
 	}
     
 }

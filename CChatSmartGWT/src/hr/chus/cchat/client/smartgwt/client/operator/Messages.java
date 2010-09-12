@@ -1,9 +1,8 @@
-package hr.chus.cchat.client.smartgwt.client.admin;
+package hr.chus.cchat.client.smartgwt.client.operator;
 
-import hr.chus.cchat.client.smartgwt.client.admin.ds.MessagesDS;
-import hr.chus.cchat.client.smartgwt.client.admin.ds.NicksDS;
-import hr.chus.cchat.client.smartgwt.client.admin.ds.OperatorsDS;
-import hr.chus.cchat.client.smartgwt.client.admin.ds.ServiceProviderDS;
+import hr.chus.cchat.client.smartgwt.client.operator.ds.MessagesDS;
+import hr.chus.cchat.client.smartgwt.client.operator.ds.NicksDS;
+import hr.chus.cchat.client.smartgwt.client.operator.ds.OperatorsDS;
 import hr.chus.cchat.client.smartgwt.client.common.Constants;
 import hr.chus.cchat.client.smartgwt.client.common.PanelFactory;
 import hr.chus.cchat.client.smartgwt.client.i18n.DictionaryInstance;
@@ -29,9 +28,9 @@ import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.FormItemInputTransformer;
 import com.smartgwt.client.widgets.form.fields.DateTimeItem;
 import com.smartgwt.client.widgets.form.fields.FormItem;
-import com.smartgwt.client.widgets.form.fields.IntegerItem;
 import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.form.fields.TextAreaItem;
+import com.smartgwt.client.widgets.form.fields.IntegerItem;
 import com.smartgwt.client.widgets.form.fields.TextItem;
 import com.smartgwt.client.widgets.grid.CellFormatter;
 import com.smartgwt.client.widgets.grid.ListGrid;
@@ -81,7 +80,6 @@ public class Messages extends HLayout {
 
     	NicksDS.getInstance().invalidateCache();
     	OperatorsDS.getInstance().invalidateCache();
-    	ServiceProviderDS.getInstance().invalidateCache();
     	
 		VLayout layout = new VLayout(20);
 		layout.setWidth(1000);
@@ -213,7 +211,6 @@ public class Messages extends HLayout {
 			}
 		});
         
-
         VLayout searchLayout = new VLayout(5);
         searchLayout.addMember(searchForm);
         
@@ -240,8 +237,7 @@ public class Messages extends HLayout {
      * @return
      */
     private FormItem[] getSearchFormFields() {
-        TextItem msisdn = new TextItem("msisdn", DictionaryInstance.dictionary.msisdn());
-        IntegerItem userId = new IntegerItem();
+    	IntegerItem userId = new IntegerItem();
     	userId.setName("userId");
     	userId.setTitle(DictionaryInstance.dictionary.userId());
     	TextItem userName = new TextItem("userName", DictionaryInstance.dictionary.name());
@@ -300,14 +296,7 @@ public class Messages extends HLayout {
         operatorItem.setOptionDataSource(OperatorsDS.getInstance());
         operatorItem.setDisplayField("username");
         operatorItem.setValueField("id");
-        
-        SelectItem serviceProviderItem = new SelectItem("serviceProvider", DictionaryInstance.dictionary.serviceProvider());
-        serviceProviderItem.setAllowEmptyValue(true);
-        serviceProviderItem.setEmptyDisplayValue(DictionaryInstance.dictionary.notSet());
-        serviceProviderItem.setOptionDataSource(ServiceProviderDS.getInstance());
-        serviceProviderItem.setDisplayField("providerName");
-        serviceProviderItem.setValueField("id");
-        
+                
         SelectItem direction = new SelectItem("direction", DictionaryInstance.dictionary.direction());
         LinkedHashMap<String, Object> directionMap = new LinkedHashMap<String, Object>(2);
         directionMap.put("OUT", DictionaryInstance.dictionary.sent());
@@ -320,7 +309,7 @@ public class Messages extends HLayout {
         fetchSize.setValueMap("20", "50", "100", "200");
         fetchSize.setDefaultToFirstOption(true);
         
-        return new FormItem[] { msisdn, userId, userName, userSurname, text, startDate, endDate, operatorItem, serviceProviderItem, direction, fetchSize };
+        return new FormItem[] { userId, userName, userSurname, text, startDate, endDate, operatorItem, direction, fetchSize };
 	}
 
 	/**
@@ -328,8 +317,12 @@ public class Messages extends HLayout {
      * @return
      */
     private ListGridField[] getGridFields() {
-    	ListGridField msisdn = new ListGridField("smsMessage.msisdn");
-    	msisdn.setWidth(110);
+    	ListGridField userName = new ListGridField("smsMessage.userName");
+    	userName.setWidth(60);
+    	ListGridField userSurname = new ListGridField("smsMessage.userSurname");
+    	userSurname.setWidth(80);
+    	ListGridField userId = new ListGridField("smsMessage.userId");
+    	userId.setWidth(30);
 		ListGridField operatorUsername = new ListGridField("operator.username");
 		operatorUsername.setWidth(90);
 		ListGridField serviceProviderName = new ListGridField("serviceProvider.providerName");
@@ -382,7 +375,7 @@ public class Messages extends HLayout {
 		ListGridField text = new ListGridField("smsMessage.text");
 		text.setWidth("*");
 		
-		return new ListGridField[] { msisdn, operatorUsername, serviceProviderName, sc, direction, time, text };
+		return new ListGridField[] { userName, userSurname, userId, operatorUsername, serviceProviderName, sc, direction, time, text };
 	}
 
 }

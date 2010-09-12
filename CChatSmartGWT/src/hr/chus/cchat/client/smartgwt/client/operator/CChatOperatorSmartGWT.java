@@ -2,13 +2,13 @@ package hr.chus.cchat.client.smartgwt.client.operator;
 
 import java.util.HashMap;
 
+import hr.chus.cchat.client.smartgwt.client.common.Constants;
 import hr.chus.cchat.client.smartgwt.client.common.ExplorerTreeNode;
 import hr.chus.cchat.client.smartgwt.client.common.PanelFactory;
 import hr.chus.cchat.client.smartgwt.client.common.SideNavigationMenu;
 import hr.chus.cchat.client.smartgwt.client.i18n.DictionaryInstance;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONBoolean;
 import com.google.gwt.user.client.History;
@@ -24,9 +24,11 @@ import com.smartgwt.client.rpc.RPCManager;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.DSDataFormat;
 import com.smartgwt.client.types.Overflow;
+import com.smartgwt.client.types.Side;
 import com.smartgwt.client.types.TabBarControls;
 import com.smartgwt.client.types.VisibilityMode;
 import com.smartgwt.client.util.BooleanCallback;
+import com.smartgwt.client.util.DateUtil;
 import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.HTMLFlow;
@@ -62,10 +64,10 @@ import com.smartgwt.client.widgets.tree.events.LeafClickHandler;
  */
 public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 	
-	public static final String CONTEXT_PATH = GWT.getModuleBaseURL().replace(GWT.getModuleName() + "/", "");
-	
 	private TabSet mainTabSet;
-	private SideNavigationMenu sideNav;
+	private SideNavigationMenu usersList;
+	private SideNavigationMenu sideMenuNav;
+	private TabSet leftTabSet;
 	private Menu contextMenu;
 	private ImgButton activateButton = new ImgButton();
 	private boolean operatorIsActive = false;
@@ -79,6 +81,8 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 		RPCManager.setRemoveDataPrompt(DictionaryInstance.dictionary.deletingRecord());
 		RPCManager.setSaveDataPrompt(DictionaryInstance.dictionary.savingData());
 		
+		DateUtil.setDefaultDisplayTimezone("00:00");
+		
 		setWidth100();
 		setHeight100();
 		setPadding(5);
@@ -88,7 +92,7 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 		topBar.setWidth100();
 		
 		ImgButton sgwtHomeButton = new ImgButton();
-        sgwtHomeButton.setSrc(CONTEXT_PATH + "images/cchat.png");
+        sgwtHomeButton.setSrc(Constants.CONTEXT_PATH + "images/cchat.png");
         sgwtHomeButton.setWidth(24);
         sgwtHomeButton.setHeight(24);
         sgwtHomeButton.setPrompt(DictionaryInstance.dictionary.chatApp());
@@ -136,7 +140,7 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
         ImgButton imgButton = new ImgButton();
         imgButton.setWidth(24);
         imgButton.setHeight(24);
-        imgButton.setSrc(CONTEXT_PATH + "images/about.png");
+        imgButton.setSrc(Constants.CONTEXT_PATH + "images/about.png");
         imgButton.setShowFocused(false);
         imgButton.setShowFocusedIcon(false);
         imgButton.setShowRollOver(false);
@@ -173,7 +177,7 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 		rightSideLayout.setAnimateSections(true);
 
 		final HTMLFlow headerHtmlFlow = new HTMLFlow();
-		headerHtmlFlow.setContentsURL(CONTEXT_PATH + "UserInfoAction");
+		headerHtmlFlow.setContentsURL(Constants.CONTEXT_PATH + "UserInfoAction");
 		headerHtmlFlow.setOverflow(Overflow.AUTO);
 		headerHtmlFlow.setPadding(5);
 		headerHtmlFlow.setHeight(30);
@@ -195,7 +199,7 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 		Tab tab = new Tab();
 		tab.setTitle(DictionaryInstance.dictionary.home() + "&nbsp;&nbsp;");
 		tab.setWidth(80);
-		tab.setIcon(CONTEXT_PATH + "images/home.png");
+		tab.setIcon(Constants.CONTEXT_PATH + "images/home.png");
 		tab.setPane(mainHtmlFlow);
 
 		mainTabSet.addTab(tab);
@@ -217,8 +221,27 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 
 		rightSideLayout.setSections(header, main, footer);
 
-		sideNav = createSideNavigation();
-		leftSideLayout.addMember(sideNav);
+		usersList = createSideUserListNavigation();
+		sideMenuNav = createSideNavigationMenu();
+		
+		leftTabSet = new TabSet();
+		leftTabSet.setTabBarPosition(Side.LEFT);
+		leftTabSet.setWidth100();
+		leftTabSet.setHeight100();
+		
+		Tab menuTab = new Tab();
+		menuTab.setIcon(Constants.CONTEXT_PATH + "images/home.png");
+		menuTab.setPane(sideMenuNav);
+		
+		Tab usersListTab = new Tab();
+		usersListTab.setIcon(Constants.CONTEXT_PATH + "images/users.png");
+		usersListTab.setPane(usersList);
+		
+		leftTabSet.addTab(menuTab);
+		leftTabSet.addTab(usersListTab);
+		leftTabSet.selectTab(1);
+		
+		leftSideLayout.addMember(leftTabSet);
 
 		hlayout.addMember(leftSideLayout);
 		hlayout.addMember(rightSideLayout);
@@ -239,10 +262,10 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 				boolean active = ((JSONBoolean) value.get(0)).booleanValue();
 				operatorIsActive = active;
 				if (active) {
-					activateButton.setSrc(CONTEXT_PATH + "images/active.gif");
+					activateButton.setSrc(Constants.CONTEXT_PATH + "images/active.gif");
 			        activateButton.setPrompt(DictionaryInstance.dictionary.active());
 				} else {
-					activateButton.setSrc(CONTEXT_PATH + "images/notActive.png");
+					activateButton.setSrc(Constants.CONTEXT_PATH + "images/notActive.png");
 			        activateButton.setPrompt(DictionaryInstance.dictionary.notActive());
 			        if (newActiveStatus == null) {
 				        SC.ask(DictionaryInstance.dictionary.wouldYouLikeToActivateYourself(), new BooleanCallback() {
@@ -251,6 +274,8 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 							public void execute(Boolean value) {
 								if (value) {
 									checkIfActive(true);
+								} else {
+									leftTabSet.selectTab(0);
 								}
 							}
 						});
@@ -264,7 +289,7 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 			dataSource.setDefaultParams(params);
 		}
 		dataSource.setDataFormat(DSDataFormat.JSON);
-		dataSource.setDataURL(CONTEXT_PATH + "operator/ActiveService");
+		dataSource.setDataURL(Constants.CONTEXT_PATH + "operator/ActiveService");
 		dataSource.fetchData();
 	}
 	
@@ -287,7 +312,7 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 			}
 		};
 		dataSource.setDataFormat(DSDataFormat.JSON);
-		dataSource.setDataURL(CONTEXT_PATH + "CheckLoggedIn");
+		dataSource.setDataURL(Constants.CONTEXT_PATH + "CheckLoggedIn");
 		
 		Timer refreshTimer = new Timer() {
 	    	@Override
@@ -404,9 +429,26 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 	 * 
 	 * @return
 	 */
-	private SideNavigationMenu createSideNavigation() {
+	private SideNavigationMenu createSideUserListNavigation() {
 		String idSuffix = "";
-		SideNavigationMenu sideNav = new SideNavigationMenu(idSuffix, null);
+		SideNavigationMenu sideNav = new SideNavigationMenu(idSuffix, null, "<b>" + DictionaryInstance.dictionary.users() + "</b>");
+		sideNav.addLeafClickHandler(new LeafClickHandler() {
+			
+			@Override
+			public void onLeafClick(LeafClickEvent event) {
+				showMenu(event.getLeaf());
+			}
+		});
+		return sideNav;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	private SideNavigationMenu createSideNavigationMenu() {
+		String idSuffix = "";
+		SideNavigationMenu sideNav = new SideNavigationMenu(idSuffix, CChatOperatorData.getData(idSuffix), "<b>" + DictionaryInstance.dictionary.menu() + "</b>");
 		sideNav.addLeafClickHandler(new LeafClickHandler() {
 			
 			@Override
@@ -444,11 +486,7 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 					tab.setContextMenu(contextMenu);
 
 					String sampleName = explorerTreeNode.getName();
-
 					String icon = explorerTreeNode.getIcon();
-					if (icon == null) {
-						icon = "silk/plugin.png";
-					}
 					String imgHTML = Canvas.imgHTML(icon, 16, 16);
 					tab.setTitle("<span>" + imgHTML + "&nbsp;" + sampleName + "</span>");
 					tab.setPane(panel);
