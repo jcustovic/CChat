@@ -36,6 +36,7 @@ public class SideNavigationMenu extends TreeGrid {
 		field.setName("name");
 		field.setTitle(title);
 		setFields(field);
+		
 		setEmptyMessage(DictionaryInstance.dictionary.noItemsToShow());
 
 		Tree tree = new Tree();
