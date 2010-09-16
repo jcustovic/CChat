@@ -30,6 +30,7 @@ import com.smartgwt.client.types.DSDataFormat;
 import com.smartgwt.client.types.Overflow;
 import com.smartgwt.client.types.Side;
 import com.smartgwt.client.types.TabBarControls;
+import com.smartgwt.client.types.TreeModelType;
 import com.smartgwt.client.types.VisibilityMode;
 import com.smartgwt.client.util.BooleanCallback;
 import com.smartgwt.client.util.DateUtil;
@@ -55,6 +56,7 @@ import com.smartgwt.client.widgets.tab.TabSet;
 import com.smartgwt.client.widgets.tab.events.TabSelectedEvent;
 import com.smartgwt.client.widgets.tab.events.TabSelectedHandler;
 import com.smartgwt.client.widgets.toolbar.ToolStrip;
+import com.smartgwt.client.widgets.tree.Tree;
 import com.smartgwt.client.widgets.tree.TreeNode;
 import com.smartgwt.client.widgets.tree.events.LeafClickEvent;
 import com.smartgwt.client.widgets.tree.events.LeafClickHandler;
@@ -224,6 +226,7 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 		rightSideLayout.setSections(header, main, footer);
 
 		usersList = createSideUserListNavigation();
+		getUsers();
 		sideMenuNav = createSideNavigationMenu();
 		
 		leftTabSet = new TabSet();
@@ -434,50 +437,81 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 	 * @return
 	 */
 	private SideNavigationMenu createSideUserListNavigation() {
-		String idSuffix = "";
-		SideNavigationMenu sideNav = new SideNavigationMenu(idSuffix, getUsers(), "<b>" + DictionaryInstance.dictionary.users() + "</b>");
-		sideNav.addLeafClickHandler(new LeafClickHandler() {
+		SideNavigationMenu usersNav = new SideNavigationMenu("", null, "<b>" + DictionaryInstance.dictionary.users() + "</b>");
+		usersNav.addLeafClickHandler(new LeafClickHandler() {
 			
 			@Override
 			public void onLeafClick(LeafClickEvent event) {
 				showMenu(event.getLeaf());
 			}
 		});
-		return sideNav;
+		return usersNav;
 	}
 	
 	/**
 	 * 
 	 * @return
 	 */
-	private ExplorerTreeNode[] getUsers() {
-		final LinkedList<ExplorerTreeNode> usersDate = new LinkedList<ExplorerTreeNode>();
-		usersDate.add(new ExplorerTreeNode(DictionaryInstance.dictionary.myUsers(), "operatorUserList", "root", Constants.CONTEXT_PATH + "images/users.png", null, true, ""));
-		usersDate.add(new ExplorerTreeNode(DictionaryInstance.dictionary.last48HourUsers(), "newestUserList", "root", Constants.CONTEXT_PATH + "images/users.png", null, true, ""));
-		usersDate.add(new ExplorerTreeNode(DictionaryInstance.dictionary.randomUsers(), "randomUserList", "root", Constants.CONTEXT_PATH + "images/users.png", null, true, ""));
+	private void getUsers() {
 		final DataSource dataSource = new DataSource() {
+			
 			@Override
 			protected void transformResponse(DSResponse response, DSRequest request, Object jsonData) {
-				JSONArray users = XMLTools.selectObjects(jsonData, "/newestUserList");
-				SC.say(users.size() + "");
-				if (users != null && users.size() > 0) {
-					for (int i = 0; i < users.size(); i++) {
-						JSONObject user = (JSONObject) users.get(i);
-						String userId = ((JSONNumber) user.get("id")).toString();
-						String userName = ((JSONString) user.get("name")).toString();
-						String userSurname = ((JSONString) user.get("surname")).toString();
-						String nameToDisplay = userId;
-						if (userName != null) nameToDisplay = userName;
-						if (userSurname != null) nameToDisplay += " " + userSurname;
-						usersDate.add(new ExplorerTreeNode(nameToDisplay, userId, "newestUserList", Constants.CONTEXT_PATH + "images/operators.png", null, true, ""));
+				LinkedList<ExplorerTreeNode> usersDate = new LinkedList<ExplorerTreeNode>();
+				usersDate.add(new ExplorerTreeNode(DictionaryInstance.dictionary.myUsers(), "operatorUserList", "root", Constants.CONTEXT_PATH + "images/users.png", null, true, ""));
+				usersDate.add(new ExplorerTreeNode(DictionaryInstance.dictionary.last48HourUsers(), "newestUserList", "root", Constants.CONTEXT_PATH + "images/users.png", null, true, ""));
+				usersDate.add(new ExplorerTreeNode(DictionaryInstance.dictionary.randomUsers(), "randomUserList", "root", Constants.CONTEXT_PATH + "images/users.png", null, true, ""));
+				
+				String[] userTypesArray = new String[] { "operatorUserList", "newestUserList", "randomUserList" };
+				for (String userType : userTypesArray) {
+					JSONArray users = XMLTools.selectObjects(jsonData, "/" + userType);
+					if (users != null && users.size() > 0) {
+						for (int i = 0; i < users.size(); i++) {
+							JSONObject user = (JSONObject) users.get(i);
+							String userId = ((JSONNumber) user.get("id")).toString();
+							String userName = ((JSONString) user.get("name")).stringValue();
+							String userSurname = ((JSONString) user.get("surname")).stringValue();
+							String nameToDisplay = "#" + userId;
+							double unreadMsgCount = ((JSONNumber) user.get("unreadMsgCount")).doubleValue();
+							if (userName != null) nameToDisplay = userName;
+							if (userSurname != null) nameToDisplay += " " + userSurname;
+							
+							String iconPath = null;
+							if (unreadMsgCount > 0) {
+								iconPath = Constants.CONTEXT_PATH + "images/new_call.gif";
+							} else {
+								iconPath = Constants.CONTEXT_PATH + "images/operators.png";
+							}
+							usersDate.add(new ExplorerTreeNode(nameToDisplay, userId, userType, iconPath, null, true, ""));
+						}
 					}
 				}
+				
+				Tree tree = new Tree();
+				tree.setModelType(TreeModelType.PARENT);
+				tree.setNameProperty("name");
+				tree.setOpenProperty("isOpen");
+				tree.setIdField("nodeID");
+				tree.setParentIdField("parentNodeID");
+				tree.setRootValue("root");
+				tree.setData(usersDate.toArray(new ExplorerTreeNode[0]));
+				
+				usersList.setData(tree);
+				usersList.getData().openAll();
 			}
 		};
 		dataSource.setDataFormat(DSDataFormat.JSON);
 		dataSource.setDataURL(Constants.CONTEXT_PATH + "operator/UserListJSON");
 		dataSource.fetchData();
-		return usersDate.toArray(new ExplorerTreeNode[0]);
+		
+		Timer refreshTimer = new Timer() {
+	    	@Override
+	    	public void run() {
+	    		dataSource.invalidateCache();
+	    		dataSource.fetchData();
+	    	}
+	    };
+	    refreshTimer.scheduleRepeating(1000 * 90); // 90 seconds
 	}
 
 	/**

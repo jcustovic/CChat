@@ -27,9 +27,9 @@ import javax.persistence.Table;
 @NamedQueries({
 	@NamedQuery(name = "User.getAll", query = "SELECT u FROM User u")
 	, @NamedQuery(name = "User.getCount", query = "SELECT COUNT(u) FROM User u")
-	, @NamedQuery(name = "User.getByOperator", query = "SELECT u FROM User u WHERE u.operator = :operator AND u.deleted = false")
+	, @NamedQuery(name = "User.getByOperator", query = "SELECT u FROM User u WHERE u.operator = :operator AND u.deleted = false ORDER BY u.lastMsg DESC")
 	, @NamedQuery(name = "User.getRandom", query = "SELECT u FROM User u WHERE u.deleted = false AND u.lastMsg < :lastMsgDate ORDER BY RAND()")
-	, @NamedQuery(name = "User.getNewest", query = "SELECT u FROM User u WHERE u.deleted = false AND u.lastMsg >= :lastMsgDate AND u.operator IS NULL")
+	, @NamedQuery(name = "User.getNewest", query = "SELECT u FROM User u WHERE u.deleted = false AND u.lastMsg >= :lastMsgDate AND u.operator IS NULL ORDER BY u.lastMsg DESC")
 	, @NamedQuery(name = "User.clearOperatorField", query = "UPDATE User u SET u.operator = null WHERE u.operator = :operator")
 })
 public class User implements Serializable {
@@ -64,6 +64,7 @@ public class User implements Serializable {
 		this.surname = surname;
 		this.joined = joined;
 		this.deleted = false;
+		this.unreadMsgCount = 0;
 	}
 
 
@@ -122,7 +123,7 @@ public class User implements Serializable {
 	public Date getLastMsg() { return lastMsg; }
 	public void setLastMsg(Date lastMsg) { this.lastMsg = lastMsg; }
 
-	@Column(name = "unread_message_count")
+	@Column(name = "unread_message_count", nullable = false)
 	public Integer getUnreadMsgCount() { return unreadMsgCount; }
 	public void setUnreadMsgCount(Integer unreadMsgCount) { this.unreadMsgCount = unreadMsgCount; }
 
