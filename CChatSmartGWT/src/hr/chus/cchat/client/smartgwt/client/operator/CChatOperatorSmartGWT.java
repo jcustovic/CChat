@@ -75,13 +75,13 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 	private SideNavigationMenu sideMenuNav;
 	private TabSet leftTabSet;
 	private Menu contextMenu;
+	private Timer usersRefreshTimer;
 	private ImgButton activateButton = new ImgButton();
 	private boolean operatorIsActive = false;
 	
 
 	@Override
 	public void onModuleLoad() {
-		checkIfActive(null);
 		RPCManager.setDefaultPrompt(DictionaryInstance.dictionary.contactingServer());
 		RPCManager.setFetchDataPrompt(DictionaryInstance.dictionary.findingRecordThatMatchCriteria());
 		RPCManager.setRemoveDataPrompt(DictionaryInstance.dictionary.deletingRecord());
@@ -139,6 +139,8 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
             }
         });
         layout.addMember(activateButton);
+        checkIfActive(null);
+        
         topBar.addMember(layout);
 		
         ImgButton imgButton = new ImgButton();
@@ -226,7 +228,6 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 		rightSideLayout.setSections(header, main, footer);
 
 		usersList = createSideUserListNavigation();
-		getUsers();
 		sideMenuNav = createSideNavigationMenu();
 		
 		leftTabSet = new TabSet();
@@ -269,7 +270,15 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 				if (active) {
 					activateButton.setSrc(Constants.CONTEXT_PATH + "images/active.jpg");
 			        activateButton.setPrompt(DictionaryInstance.dictionary.active());
+			        if (usersRefreshTimer == null) {
+			        	getUsers();
+			        } else {
+			        	usersRefreshTimer.run();
+				        usersRefreshTimer.scheduleRepeating(1000 * 90); // 90 seconds
+			        }
 				} else {
+					if (usersList != null) usersList.setData(new Tree());
+					if (usersRefreshTimer != null) usersRefreshTimer.cancel();
 					activateButton.setSrc(Constants.CONTEXT_PATH + "images/notActive.jpg");
 			        activateButton.setPrompt(DictionaryInstance.dictionary.notActive());
 			        if (newActiveStatus == null) {
@@ -504,14 +513,13 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 		dataSource.setDataURL(Constants.CONTEXT_PATH + "operator/UserListJSON");
 		dataSource.fetchData();
 		
-		Timer refreshTimer = new Timer() {
+		usersRefreshTimer = new Timer() {
 	    	@Override
 	    	public void run() {
 	    		dataSource.invalidateCache();
 	    		dataSource.fetchData();
 	    	}
 	    };
-	    refreshTimer.scheduleRepeating(1000 * 90); // 90 seconds
 	}
 
 	/**
