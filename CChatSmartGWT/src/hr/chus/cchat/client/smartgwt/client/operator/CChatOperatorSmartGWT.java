@@ -1,6 +1,7 @@
 package hr.chus.cchat.client.smartgwt.client.operator;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import hr.chus.cchat.client.smartgwt.client.common.Constants;
 import hr.chus.cchat.client.smartgwt.client.common.ExplorerTreeNode;
@@ -11,6 +12,9 @@ import hr.chus.cchat.client.smartgwt.client.i18n.DictionaryInstance;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONBoolean;
+import com.google.gwt.json.client.JSONNumber;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONString;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
@@ -135,8 +139,6 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
         layout.addMember(activateButton);
         topBar.addMember(layout);
 		
-//		topBar.addFill();
-		
         ImgButton imgButton = new ImgButton();
         imgButton.setWidth(24);
         imgButton.setHeight(24);
@@ -167,7 +169,7 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 		hlayout.setMargin(5);
 
 		SectionStack leftSideLayout = new SectionStack();
-		leftSideLayout.setWidth("10%");
+		leftSideLayout.setWidth("250px");
 		leftSideLayout.setShowResizeBar(true);
 		leftSideLayout.setVisibilityMode(VisibilityMode.MULTIPLE);
 		leftSideLayout.setAnimateSections(true);
@@ -262,10 +264,10 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 				boolean active = ((JSONBoolean) value.get(0)).booleanValue();
 				operatorIsActive = active;
 				if (active) {
-					activateButton.setSrc(Constants.CONTEXT_PATH + "images/active.gif");
+					activateButton.setSrc(Constants.CONTEXT_PATH + "images/active.jpg");
 			        activateButton.setPrompt(DictionaryInstance.dictionary.active());
 				} else {
-					activateButton.setSrc(Constants.CONTEXT_PATH + "images/notActive.png");
+					activateButton.setSrc(Constants.CONTEXT_PATH + "images/notActive.jpg");
 			        activateButton.setPrompt(DictionaryInstance.dictionary.notActive());
 			        if (newActiveStatus == null) {
 				        SC.ask(DictionaryInstance.dictionary.wouldYouLikeToActivateYourself(), new BooleanCallback() {
@@ -323,6 +325,8 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 	    };
 	    refreshTimer.scheduleRepeating(1000 * 30); // 30 seconds
 	}
+	
+	
 	
 	/**
 	 * 
@@ -431,7 +435,7 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 	 */
 	private SideNavigationMenu createSideUserListNavigation() {
 		String idSuffix = "";
-		SideNavigationMenu sideNav = new SideNavigationMenu(idSuffix, null, "<b>" + DictionaryInstance.dictionary.users() + "</b>");
+		SideNavigationMenu sideNav = new SideNavigationMenu(idSuffix, getUsers(), "<b>" + DictionaryInstance.dictionary.users() + "</b>");
 		sideNav.addLeafClickHandler(new LeafClickHandler() {
 			
 			@Override
@@ -442,6 +446,40 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 		return sideNav;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
+	private ExplorerTreeNode[] getUsers() {
+		final LinkedList<ExplorerTreeNode> usersDate = new LinkedList<ExplorerTreeNode>();
+		usersDate.add(new ExplorerTreeNode(DictionaryInstance.dictionary.myUsers(), "operatorUserList", "root", Constants.CONTEXT_PATH + "images/users.png", null, true, ""));
+		usersDate.add(new ExplorerTreeNode(DictionaryInstance.dictionary.last48HourUsers(), "newestUserList", "root", Constants.CONTEXT_PATH + "images/users.png", null, true, ""));
+		usersDate.add(new ExplorerTreeNode(DictionaryInstance.dictionary.randomUsers(), "randomUserList", "root", Constants.CONTEXT_PATH + "images/users.png", null, true, ""));
+		final DataSource dataSource = new DataSource() {
+			@Override
+			protected void transformResponse(DSResponse response, DSRequest request, Object jsonData) {
+				JSONArray users = XMLTools.selectObjects(jsonData, "/newestUserList");
+				SC.say(users.size() + "");
+				if (users != null && users.size() > 0) {
+					for (int i = 0; i < users.size(); i++) {
+						JSONObject user = (JSONObject) users.get(i);
+						String userId = ((JSONNumber) user.get("id")).toString();
+						String userName = ((JSONString) user.get("name")).toString();
+						String userSurname = ((JSONString) user.get("surname")).toString();
+						String nameToDisplay = userId;
+						if (userName != null) nameToDisplay = userName;
+						if (userSurname != null) nameToDisplay += " " + userSurname;
+						usersDate.add(new ExplorerTreeNode(nameToDisplay, userId, "newestUserList", Constants.CONTEXT_PATH + "images/operators.png", null, true, ""));
+					}
+				}
+			}
+		};
+		dataSource.setDataFormat(DSDataFormat.JSON);
+		dataSource.setDataURL(Constants.CONTEXT_PATH + "operator/UserListJSON");
+		dataSource.fetchData();
+		return usersDate.toArray(new ExplorerTreeNode[0]);
+	}
+
 	/**
 	 * 
 	 * @return
@@ -458,6 +496,8 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 		});
 		return sideNav;
 	}
+	
+	
 
 	/**
 	 * 

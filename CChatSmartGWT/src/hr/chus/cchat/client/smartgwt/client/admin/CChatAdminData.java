@@ -26,7 +26,7 @@ public class CChatAdminData {
 						new ExplorerTreeNode(DictionaryInstance.dictionary.nicks(), "nicks-category", "root", Constants.CONTEXT_PATH + "images/nicks.png", new Nicks.Factory(), true, idSuffix),
 	                    new ExplorerTreeNode(DictionaryInstance.dictionary.pictures(), "pictures-category", "root", Constants.CONTEXT_PATH + "images/pictures.png", new Pictures.Factory(), true, idSuffix),
 	                    new ExplorerTreeNode(DictionaryInstance.dictionary.users(), "users-category", "root", Constants.CONTEXT_PATH + "images/users.png", new Users.Factory(), true, idSuffix),
-	                    new ExplorerTreeNode(DictionaryInstance.dictionary.messages(), "messages-category", "root", Constants.CONTEXT_PATH + "images/message_g.png", new Messages.Factory(), true, idSuffix),
+	                    new ExplorerTreeNode(DictionaryInstance.dictionary.messages(), "messages-category", "root", Constants.CONTEXT_PATH + "images/message_g.jpg", new Messages.Factory(), true, idSuffix),
 	                    new ExplorerTreeNode(DictionaryInstance.dictionary.statistics(), "statistics-category", "root", Constants.CONTEXT_PATH + "images/statistics.png", new Statistics.Factory(), true, idSuffix),
 	                    new ExplorerTreeNode(DictionaryInstance.dictionary.settings(), "settings-category", "root", Constants.CONTEXT_PATH + "images/settings.png", new Settings.Factory(), true, idSuffix),
 			};
