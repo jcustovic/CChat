@@ -23,7 +23,7 @@ public class CChatOperatorData {
 		if (data == null) {
 			data = new ExplorerTreeNode[]{
 	                    new ExplorerTreeNode(DictionaryInstance.dictionary.users(), "users-category", "root", Constants.CONTEXT_PATH + "images/users.png", new Users.Factory(), true, idSuffix),
-	                    new ExplorerTreeNode(DictionaryInstance.dictionary.messages(), "messages-category", "root", Constants.CONTEXT_PATH + "images/message_g.png", new Messages.Factory(), true, idSuffix),
+	                    new ExplorerTreeNode(DictionaryInstance.dictionary.messages(), "messages-category", "root", Constants.CONTEXT_PATH + "images/message_g.jpg", new Messages.Factory(), true, idSuffix),
 	                    new ExplorerTreeNode(DictionaryInstance.dictionary.statistics(), "statistics-category", "root", Constants.CONTEXT_PATH + "images/statistics.png", new Statistics.Factory(), true, idSuffix),
 			};
 		}

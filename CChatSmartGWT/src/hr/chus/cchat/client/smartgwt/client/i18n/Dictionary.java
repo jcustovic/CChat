@@ -333,4 +333,13 @@ public interface Dictionary extends Constants {
 	@DefaultStringValue("User id")
 	String userId();
 
+	@DefaultStringValue("My users")
+	String myUsers();
+
+	@DefaultStringValue("Last 48h users")
+	String last48HourUsers();
+
+	@DefaultStringValue("Random users")
+	String randomUsers();
+
 }

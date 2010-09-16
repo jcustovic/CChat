@@ -136,7 +136,7 @@ public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
 		hlayout.setMargin(5);
 
 		SectionStack leftSideLayout = new SectionStack();
-		leftSideLayout.setWidth("10%");
+		leftSideLayout.setWidth("200px");
 		leftSideLayout.setShowResizeBar(true);
 		leftSideLayout.setVisibilityMode(VisibilityMode.MULTIPLE);
 		leftSideLayout.setAnimateSections(true);
