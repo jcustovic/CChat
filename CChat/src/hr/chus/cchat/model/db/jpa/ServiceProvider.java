@@ -22,6 +22,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Table(name = "service_provider")
 @NamedQueries({
 	@NamedQuery(name = "ServiceProvider.getAll", query = "SELECT sp FROM ServiceProvider sp")
+	, @NamedQuery(name = "ServiceProvider.getByNameAndSc", query = "SELECT sp FROM ServiceProvider sp WHERE sp.sc = :sc AND sp.providerName = :providerName")
 })
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class ServiceProvider implements Serializable {

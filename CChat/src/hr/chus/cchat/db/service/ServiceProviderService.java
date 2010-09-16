@@ -16,5 +16,6 @@ public interface ServiceProviderService {
 	public ServiceProvider updateServiceProvider(ServiceProvider serviceProvider);
 	public ServiceProvider getById(Integer id);
 	public List<ServiceProvider> getAll();
+	public ServiceProvider getByNameAndShortCode(String providerName, String sc);
 
 }

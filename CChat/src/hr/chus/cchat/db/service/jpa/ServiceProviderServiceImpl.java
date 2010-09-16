@@ -3,6 +3,7 @@ package hr.chus.cchat.db.service.jpa;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -45,6 +46,15 @@ public class ServiceProviderServiceImpl implements ServiceProviderService {
 	@Override
 	public ServiceProvider updateServiceProvider(ServiceProvider serviceProvider) {
 		return entityManager.merge(serviceProvider);
+	}
+	
+	@Override
+	public ServiceProvider getByNameAndShortCode(String providerName, String sc) {
+		try {
+			return (ServiceProvider) entityManager.createNamedQuery("ServiceProvider.getByNameAndSc").setParameter("providerName", providerName).setParameter("sc", sc).getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
 	
 	
