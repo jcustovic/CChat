@@ -30,8 +30,11 @@ public class Configuration implements Serializable {
 	private String name;
 	private String value;
 	
+	
 	public Configuration() { }
-
+	
+	
+	// Getters & setters
 	
 	@Id
 	@Column(name = "name", length = 50, nullable = false)

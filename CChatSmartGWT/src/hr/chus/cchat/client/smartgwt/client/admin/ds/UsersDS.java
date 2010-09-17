@@ -81,10 +81,14 @@ public class UsersDS extends DataSource {
 		deleted.setValueXPath("deleted");
 		DataSourceDateTimeField joined = new DataSourceDateTimeField("user.joined", DictionaryInstance.dictionary.joinedDate(), 50, true);
 		joined.setValueXPath("joined");
+		DataSourceDateTimeField lastMsg = new DataSourceDateTimeField("user.lastMsg", DictionaryInstance.dictionary.lastMsgDate(), 50, true);
+		lastMsg.setValueXPath("lastMsg");
+		DataSourceIntegerField unreadMsgCount = new DataSourceIntegerField("user.unreadMsgCount", DictionaryInstance.dictionary.unreadMsgCount(), 50, true);
+		unreadMsgCount.setValueXPath("unreadMsgCount");
 		DataSourceTextField notes = new DataSourceTextField("user.notes", DictionaryInstance.dictionary.notes(), 100, true);
 		notes.setValueXPath("notes");
 		
-		setFields(pkField, nickName, operatorId, operatorUsername, serviceProviderId, serviceProviderName, msisdn, name, surname, address, birthDate, deleted, joined, notes, nickId);
+		setFields(pkField, nickName, operatorId, operatorUsername, serviceProviderId, serviceProviderName, msisdn, name, surname, address, birthDate, deleted, joined, lastMsg, unreadMsgCount, notes, nickId);
 
 		setDataFormat(DSDataFormat.JSON);
 		setDataURL(Constants.CONTEXT_PATH + "admin/AdminUserListJSON");

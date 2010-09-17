@@ -63,6 +63,9 @@
 				</param>
 			</result>
 			<result name="input" type="json" />
+			<result name="error" type="json">
+				<param name="excludeNullProperties">true</param>
+			</result>
 		</action>
 						
 		<action name="UserListJSON" class="hr.chus.cchat.struts2.action.operator.UserList">
@@ -73,14 +76,17 @@
 					, randomUserList.*\.nick
 					, randomUserList.*\.operator
 					, randomUserList.*\.msisdn
+					, randomUserList.*\.sentPicturesList
 					, newestUserList.*\.serviceProvider
 					, newestUserList.*\.nick
 					, newestUserList.*\.operator
 					, newestUserList.*\.msisdn
+					, newestUserList.*\.sentPicturesList
 					, operatorUserList.*\.serviceProvider
 					, operatorUserList.*\.nick
 					, operatorUserList.*\.operator
 					, operatorUserList.*\.msisdn
+					, operatorUserList.*\.sentPicturesList
 				</param>
 			</result>
 			<result name="error" type="json">

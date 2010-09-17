@@ -272,10 +272,9 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 			        activateButton.setPrompt(DictionaryInstance.dictionary.active());
 			        if (usersRefreshTimer == null) {
 			        	getUsers();
-			        } else {
-			        	usersRefreshTimer.run();
-				        usersRefreshTimer.scheduleRepeating(1000 * 90); // 90 seconds
 			        }
+			        usersRefreshTimer.run();
+			        usersRefreshTimer.scheduleRepeating(1000 * 90); // 90 seconds
 				} else {
 					if (usersList != null) usersList.setData(new Tree());
 					if (usersRefreshTimer != null) usersRefreshTimer.cancel();
@@ -451,8 +450,9 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 			
 			@Override
 			public void onLeafClick(LeafClickEvent event) {
-				showMenu(event.getLeaf());
+				showUserMenu(event.getLeaf());
 			}
+
 		});
 		return usersNav;
 	}
@@ -478,12 +478,12 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 						for (int i = 0; i < users.size(); i++) {
 							JSONObject user = (JSONObject) users.get(i);
 							String userId = ((JSONNumber) user.get("id")).toString();
-							String userName = ((JSONString) user.get("name")).stringValue();
-							String userSurname = ((JSONString) user.get("surname")).stringValue();
+							JSONString userName = (JSONString) user.get("name");
+							JSONString userSurname = (JSONString) user.get("surname");
 							String nameToDisplay = "#" + userId;
 							double unreadMsgCount = ((JSONNumber) user.get("unreadMsgCount")).doubleValue();
-							if (userName != null) nameToDisplay = userName;
-							if (userSurname != null) nameToDisplay += " " + userSurname;
+							if (userName != null) nameToDisplay = userName.stringValue();
+							if (userSurname != null) nameToDisplay += " " + userSurname.stringValue();
 							
 							String iconPath = null;
 							if (unreadMsgCount > 0) {
@@ -491,7 +491,12 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 							} else {
 								iconPath = Constants.CONTEXT_PATH + "images/operators.png";
 							}
-							usersDate.add(new ExplorerTreeNode(nameToDisplay, userId, userType, iconPath, null, true, ""));
+							usersDate.add(new ExplorerTreeNode(nameToDisplay, userId, userType, iconPath, new UserConsole.Factory(userId), true, ""));
+							Tab tab = mainTabSet.getTab(userId + "_tab");
+							if (tab != null) {
+								String imgHTML = Canvas.imgHTML(iconPath, 16, 16);
+								tab.setTitle("<span>" + imgHTML + "&nbsp;" + nameToDisplay + "</span>");
+							}
 						}
 					}
 				}
@@ -520,6 +525,48 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 	    		dataSource.fetchData();
 	    	}
 	    };
+	}
+	
+	/**
+	 * 
+	 * @param leaf
+	 */
+	private void showUserMenu(TreeNode leaf) {
+		boolean isExplorerTreeNode = leaf instanceof ExplorerTreeNode;
+		if (isExplorerTreeNode) {
+			ExplorerTreeNode explorerTreeNode = (ExplorerTreeNode) leaf;
+			PanelFactory factory = explorerTreeNode.getFactory();
+			if (factory != null) {
+				String panelID = factory.getID();
+				Tab tab = null;
+				if (panelID != null) {
+					String tabID = panelID + "_tab";
+					tab = mainTabSet.getTab(tabID);
+				}
+				if (tab == null) {
+					Canvas panel = factory.create();
+					tab = new Tab();
+					tab.setID(factory.getID() + "_tab");
+					// store history token on tab so that when an already open
+					// is selected, one can retrieve the
+					// history token and update the URL
+					tab.setAttribute("historyToken", explorerTreeNode.getNodeID());
+					tab.setContextMenu(contextMenu);
+
+					String name = explorerTreeNode.getName();
+					String icon = explorerTreeNode.getIcon();
+					String imgHTML = Canvas.imgHTML(icon, 16, 16);
+					tab.setTitle("<span>" + imgHTML + "&nbsp;" + name + "</span>");
+					tab.setPane(panel);
+					tab.setCanClose(true);
+					mainTabSet.addTab(tab);
+					mainTabSet.selectTab(tab);
+				} else {
+					mainTabSet.selectTab(tab);
+				}
+				History.newItem(explorerTreeNode.getNodeID(), false);
+			}
+		}
 	}
 
 	/**

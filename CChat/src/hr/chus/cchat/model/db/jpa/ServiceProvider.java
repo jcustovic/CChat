@@ -35,6 +35,7 @@ public class ServiceProvider implements Serializable {
 	private String description;
 	private Boolean disabled;
 	
+	
 	public ServiceProvider() { }
 	
 	public ServiceProvider(String sc, String providerName, String description, Boolean disabled) {
@@ -44,6 +45,8 @@ public class ServiceProvider implements Serializable {
 		this.disabled = disabled;
 	}
 
+	
+	// Getters & setters
 
 	@Id
 	@GeneratedValue

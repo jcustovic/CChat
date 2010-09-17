@@ -42,6 +42,7 @@ public class Operator implements Serializable {
 	private Boolean isActive;
 	private Boolean disabled;
 	
+	
 	public Operator() { }
 	
 	public Operator(String username, String password, Role role, Boolean isActive, Boolean disabled) {
@@ -56,6 +57,14 @@ public class Operator implements Serializable {
 	@Override
 	public String toString() {
 		return String.format("Operator[ID: %s, Username: %s, Name: %s, Surname: %s, Disabled: %s, Active: %s]", new Object[] { id, username, name, surname, disabled, isActive });
+	}
+	
+	@Override
+	public boolean equals(Object object) {
+		if (this == object) return true;
+		if (!(object instanceof Operator) ) return false;
+		Operator operator = (Operator) object;
+		return (operator.getId().equals(getId()));
 	}
 
 	

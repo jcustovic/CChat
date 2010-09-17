@@ -31,6 +31,7 @@ import javax.persistence.Table;
 	, @NamedQuery(name = "User.getRandom", query = "SELECT u FROM User u WHERE u.deleted = false AND u.lastMsg < :lastMsgDate ORDER BY RAND()")
 	, @NamedQuery(name = "User.getNewest", query = "SELECT u FROM User u WHERE u.deleted = false AND u.lastMsg >= :lastMsgDate AND u.operator IS NULL ORDER BY u.lastMsg DESC")
 	, @NamedQuery(name = "User.clearOperatorField", query = "UPDATE User u SET u.operator = null WHERE u.operator = :operator")
+	, @NamedQuery(name = "User.assignUsersWithNewMsgToOperator", query = "UPDATE User u SET u.operator = :operator WHERE u.operator IS NULL AND u.unreadMsgCount > 0")
 })
 public class User implements Serializable {
 	
@@ -66,6 +67,12 @@ public class User implements Serializable {
 		this.deleted = false;
 		this.unreadMsgCount = 0;
 	}
+	
+	
+	@Override
+	public String toString() {
+		return String.format("User[ID: %s, Msisdn: %s, Name: %s, Surname: %s, Deleted: %s]", new Object[] { id, msisdn, name, surname, deleted });
+	}
 
 
 	// Getters && setters
@@ -86,7 +93,7 @@ public class User implements Serializable {
 	public Operator getOperator() { return operator; }
 	public void setOperator(Operator operator) { this.operator = operator; }
 
-	@Column(name = "msisdn", length = 20, nullable = false)
+	@Column(name = "msisdn", length = 20, nullable = false, updatable = false)
 	public String getMsisdn() { return msisdn; }
 	public void setMsisdn(String msisdn) { this.msisdn = msisdn; }
 
@@ -115,7 +122,7 @@ public class User implements Serializable {
 	public String getNotes() { return notes; }
 	public void setNotes(String notes) { this.notes = notes; }
 	
-	@Column(name = "joined_date", nullable = false, columnDefinition = "DATETIME")
+	@Column(name = "joined_date", nullable = false, columnDefinition = "DATETIME", updatable = false)
 	public Date getJoined() { return joined; }
 	public void setJoined(Date joined) { this.joined = joined; }
 	
@@ -123,7 +130,7 @@ public class User implements Serializable {
 	public Date getLastMsg() { return lastMsg; }
 	public void setLastMsg(Date lastMsg) { this.lastMsg = lastMsg; }
 
-	@Column(name = "unread_message_count", nullable = false)
+	@Column(name = "unread_message_count")
 	public Integer getUnreadMsgCount() { return unreadMsgCount; }
 	public void setUnreadMsgCount(Integer unreadMsgCount) { this.unreadMsgCount = unreadMsgCount; }
 
@@ -138,7 +145,8 @@ public class User implements Serializable {
 			}
 			, inverseJoinColumns = {
 				@JoinColumn(name = "picture_id")
-			})
+			}
+	)
 	public List<Picture> getSentPicturesList() { return sentPicturesList; }
 	public void setSentPicturesList(List<Picture> sentPicturesList) { this.sentPicturesList = sentPicturesList; }
 		
