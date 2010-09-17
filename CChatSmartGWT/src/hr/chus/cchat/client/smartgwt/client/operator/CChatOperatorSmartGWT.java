@@ -20,6 +20,7 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.smartgwt.client.core.KeyIdentifier;
+import com.smartgwt.client.data.Criteria;
 import com.smartgwt.client.data.DSRequest;
 import com.smartgwt.client.data.DSResponse;
 import com.smartgwt.client.data.DataSource;
@@ -510,13 +511,13 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 				tree.setRootValue("root");
 				tree.setData(usersDate.toArray(new ExplorerTreeNode[0]));
 				
+//				usersList.filterData(new Criteria("nodeID", "15"));
 				usersList.setData(tree);
 				usersList.getData().openAll();
 			}
 		};
 		dataSource.setDataFormat(DSDataFormat.JSON);
 		dataSource.setDataURL(Constants.CONTEXT_PATH + "operator/UserListJSON");
-		dataSource.fetchData();
 		
 		usersRefreshTimer = new Timer() {
 	    	@Override
