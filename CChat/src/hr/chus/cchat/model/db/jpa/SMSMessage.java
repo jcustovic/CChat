@@ -43,6 +43,7 @@ public class SMSMessage implements Serializable {
 	private ServiceProvider serviceProvider;
 	private Direction direction;
 	
+	
 	public SMSMessage() { }
 	
 	public SMSMessage(User user, Operator operator, Date time, String text, String sc, ServiceProvider serviceProvider, Direction direction) {

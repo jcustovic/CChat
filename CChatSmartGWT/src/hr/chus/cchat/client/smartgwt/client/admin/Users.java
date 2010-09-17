@@ -500,7 +500,20 @@ public class Users extends HLayout {
         joined.setDisabled(true);
         joined.setDateFormatter(DateDisplayFormat.TOEUROPEANSHORTDATETIME);
         
-        return new FormItem[] { id, msisdn, name, surname, address, notes, nickItem, operatorItem, serviceProviderItem , birthdate, deleted, joined };
+        DateTimeItem lastMsgDate = new DateTimeItem("user.lastMsg", DictionaryInstance.dictionary.lastMsgDate());
+        lastMsgDate.setMaskDateSeparator(".");
+        lastMsgDate.setUseMask(true);
+        lastMsgDate.setUseTextField(true);
+        lastMsgDate.setWidth(180);
+        lastMsgDate.setDisabled(true);
+        lastMsgDate.setDateFormatter(DateDisplayFormat.TOEUROPEANSHORTDATETIME);
+        
+        IntegerItem unreadMsgCount = new IntegerItem();
+        unreadMsgCount.setName("user.unreadMsgCount");
+        unreadMsgCount.setTitle(DictionaryInstance.dictionary.unreadMsgCount());
+        unreadMsgCount.setDisabled(true);
+        
+        return new FormItem[] { id, msisdn, name, surname, address, notes, nickItem, operatorItem, serviceProviderItem , birthdate, deleted, joined, lastMsgDate, unreadMsgCount };
 	}
 
 	/**

@@ -153,6 +153,11 @@ public class UserServiceImpl implements UserService {
 		entityManager.createNamedQuery("User.clearOperatorField").setParameter("operator", operator).executeUpdate();
 	}
 	
+	@Override
+	public void assignUsersWithNewMsgToOperator(Operator operator) {
+		entityManager.createNamedQuery("User.assignUsersWithNewMsgToOperator").setParameter("operator", operator).executeUpdate();
+	}
+	
 	
 	// Getters & setters
 	

@@ -29,6 +29,7 @@ public class Nick implements Serializable {
 	private String name;
 	private String description;
 	
+	
 	public Nick() { }
 	
 	public Nick(String name, String description) {
@@ -37,6 +38,7 @@ public class Nick implements Serializable {
 	}
 
 
+	// Getters & setters
 
 	@Id
 	@GeneratedValue

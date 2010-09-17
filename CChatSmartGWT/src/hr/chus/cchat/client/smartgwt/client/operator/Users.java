@@ -12,6 +12,7 @@ import hr.chus.cchat.client.smartgwt.client.i18n.DictionaryInstance;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONBoolean;
 import com.google.gwt.json.client.JSONString;
 import com.smartgwt.client.data.Criteria;
 import com.smartgwt.client.data.DSCallback;
@@ -38,6 +39,7 @@ import com.smartgwt.client.widgets.events.CloseClickHandler;
 import com.smartgwt.client.widgets.events.CloseClientEvent;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.FormItemInputTransformer;
+import com.smartgwt.client.widgets.form.fields.BooleanItem;
 import com.smartgwt.client.widgets.form.fields.DateItem;
 import com.smartgwt.client.widgets.form.fields.DateTimeItem;
 import com.smartgwt.client.widgets.form.fields.FormItem;
@@ -393,11 +395,11 @@ public class Users extends HLayout {
 						@Override
 						public void execute(DSResponse response, Object jsonData, DSRequest request) {
 							JSONArray value = XMLTools.selectObjects(jsonData, "/status");
-							String status = null;
+							boolean status = false;
 							if (value != null && value.size() > 0) {
-								status = ((JSONString) value.get(0)).stringValue();
+								status = ((JSONBoolean) value.get(0)).booleanValue();
 							}
-							if (status == null || !status.equals("validation_error")) {
+							if (status) {
 								listGrid.invalidateCache();
 								listGrid.fetchData(searchForm.getValuesAsCriteria());
 								form.setVisible(false);
@@ -455,6 +457,9 @@ public class Users extends HLayout {
         operatorItem.setDisplayField("username");
         operatorItem.setValueField("id");
         
+        TextItem serviceProvider = new TextItem("user.serviceProvider");
+        serviceProvider.setVisible(false);
+        
         final DateItem birthdate = new DateItem("user.birthDate", DictionaryInstance.dictionary.birthDate());
 //        birthdate.setAttribute("useCustomTimezone", true);
         birthdate.setInputTransformer(new FormItemInputTransformer() {
@@ -474,6 +479,12 @@ public class Users extends HLayout {
         birthdate.setInvalidDateStringMessage(DictionaryInstance.dictionary.invalidDate());
         birthdate.setDateFormatter(DateDisplayFormat.TOEUROPEANSHORTDATE);
                 
+        BooleanItem deleted = new BooleanItem();
+        deleted.setDefaultValue(false);
+        deleted.setName("user.deleted");
+        deleted.setTitle(DictionaryInstance.dictionary.deleted());
+        deleted.setDisabled(true);
+        
         DateTimeItem joined = new DateTimeItem("user.joined", DictionaryInstance.dictionary.joinedDate());
         joined.setMaskDateSeparator(".");
         joined.setUseMask(true);
@@ -482,7 +493,20 @@ public class Users extends HLayout {
         joined.setDisabled(true);
         joined.setDateFormatter(DateDisplayFormat.TOEUROPEANSHORTDATETIME);
         
-        return new FormItem[] { id, name, surname, address, notes, nickItem, operatorItem , birthdate, joined };
+        DateTimeItem lastMsgDate = new DateTimeItem("user.lastMsg", DictionaryInstance.dictionary.lastMsgDate());
+        lastMsgDate.setMaskDateSeparator(".");
+        lastMsgDate.setUseMask(true);
+        lastMsgDate.setUseTextField(true);
+        lastMsgDate.setWidth(180);
+        lastMsgDate.setDisabled(true);
+        lastMsgDate.setDateFormatter(DateDisplayFormat.TOEUROPEANSHORTDATETIME);
+        
+        IntegerItem unreadMsgCount = new IntegerItem();
+        unreadMsgCount.setName("user.unreadMsgCount");
+        unreadMsgCount.setTitle(DictionaryInstance.dictionary.unreadMsgCount());
+        unreadMsgCount.setDisabled(true);
+        
+        return new FormItem[] { id, name, surname, address, notes, serviceProvider, nickItem, operatorItem , birthdate, deleted, joined, lastMsgDate, unreadMsgCount };
 	}
 
 	/**
@@ -524,7 +548,7 @@ public class Users extends HLayout {
      */
     private ListGridField[] getGridFields() {
     	ListGridField id = new ListGridField("user.id");
-    	id.setWidth(120);
+    	id.setWidth(135);
 		ListGridField name = new ListGridField("user.name");
 		name.setWidth(100);
 		ListGridField surname = new ListGridField("user.surname");

@@ -25,5 +25,6 @@ public interface UserService {
 	public List<User> getRandom(int count, Date lastMsgDate);
 	public List<User> getNewest(Date lastMsgDate);
 	public void clearOperatorField(Operator operator);
+	public void assignUsersWithNewMsgToOperator(Operator operator);
 
 }

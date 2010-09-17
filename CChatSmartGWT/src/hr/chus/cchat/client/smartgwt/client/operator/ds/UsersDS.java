@@ -9,6 +9,7 @@ import com.smartgwt.client.data.DSRequest;
 import com.smartgwt.client.data.DSResponse;
 import com.smartgwt.client.data.DataSource;
 import com.smartgwt.client.data.XMLTools;
+import com.smartgwt.client.data.fields.DataSourceBooleanField;
 import com.smartgwt.client.data.fields.DataSourceDateField;
 import com.smartgwt.client.data.fields.DataSourceDateTimeField;
 import com.smartgwt.client.data.fields.DataSourceIntegerField;
@@ -74,12 +75,18 @@ public class UsersDS extends DataSource {
 		address.setValueXPath("address");
 		DataSourceDateField birthDate = new DataSourceDateField("user.birthDate", DictionaryInstance.dictionary.birthDate(), 50, true);
 		birthDate.setValueXPath("birthDate");
+		DataSourceBooleanField deleted = new DataSourceBooleanField("user.deleted", DictionaryInstance.dictionary.deleted());
+		deleted.setValueXPath("deleted");
 		DataSourceDateTimeField joined = new DataSourceDateTimeField("user.joined", DictionaryInstance.dictionary.joinedDate(), 50, true);
 		joined.setValueXPath("joined");
+		DataSourceDateTimeField lastMsg = new DataSourceDateTimeField("user.lastMsg", DictionaryInstance.dictionary.lastMsgDate(), 50, true);
+		lastMsg.setValueXPath("lastMsg");
+		DataSourceIntegerField unreadMsgCount = new DataSourceIntegerField("user.unreadMsgCount", DictionaryInstance.dictionary.unreadMsgCount(), 50, true);
+		unreadMsgCount.setValueXPath("unreadMsgCount");
 		DataSourceTextField notes = new DataSourceTextField("user.notes", DictionaryInstance.dictionary.notes(), 100, true);
 		notes.setValueXPath("notes");
 		
-		setFields(pkField, nickName, operatorId, operatorUsername, serviceProviderId, serviceProviderName, name, surname, address, birthDate, joined, notes, nickId);
+		setFields(pkField, nickName, operatorId, operatorUsername, serviceProviderId, serviceProviderName, name, surname, address, birthDate, deleted, joined, lastMsg, unreadMsgCount, notes, nickId);
 
 		setDataFormat(DSDataFormat.JSON);
 		setDataURL(Constants.CONTEXT_PATH + "operator/OperatorUserListJSON");

@@ -342,4 +342,10 @@ public interface Dictionary extends Constants {
 	@DefaultStringValue("Random users")
 	String randomUsers();
 
+	@DefaultStringValue("Last message date")
+	String lastMsgDate();
+
+	@DefaultStringValue("Unread message count")
+	String unreadMsgCount();
+
 }

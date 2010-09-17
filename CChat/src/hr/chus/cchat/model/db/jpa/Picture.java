@@ -37,6 +37,7 @@ public class Picture implements Serializable {
 	private Long length;
 	private String url;
 	
+	
 	public Picture() { }
 
 	public Picture(Nick nick, String name, String type, Long length) {
@@ -47,6 +48,8 @@ public class Picture implements Serializable {
 	}
 
 
+	// Getters & setters
+	
 	@Id
 	@GeneratedValue
 	@Column(name = "id")

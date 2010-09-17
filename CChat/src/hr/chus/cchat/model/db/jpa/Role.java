@@ -32,6 +32,7 @@ public class Role implements Serializable {
 	private String name;
 	private String description;
 	
+	
 	public Role() { }
 
 	public Role(String name, String description) {
@@ -39,7 +40,9 @@ public class Role implements Serializable {
 		this.name = name;
 		this.description = description;
 	}
-
+	
+	
+	// Getters & setters
 
 	@Id
 	@GeneratedValue
