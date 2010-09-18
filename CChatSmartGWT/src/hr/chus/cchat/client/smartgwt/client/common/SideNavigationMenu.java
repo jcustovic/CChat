@@ -51,10 +51,11 @@ public class SideNavigationMenu extends TreeGrid {
 
 		setData(tree);
 	}
+	
+	
+	// Getters & setters
 
-	public ExplorerTreeNode[] getInterfaceData() {
-		return menuItems;
-	}
+	public ExplorerTreeNode[] getInterfaceData() { return menuItems; }
 
 	public ExplorerTreeNode[] getMenuItems() { return menuItems; }
 	

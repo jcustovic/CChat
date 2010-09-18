@@ -120,10 +120,9 @@ public class Messages extends HLayout {
 		listGrid.setUseAllDataSourceFields(false);
 		listGrid.setFields(getGridFields());
 		listGrid.setWrapCells(true);  
-		listGrid.setCellHeight(60);
+		listGrid.setFixedRecordHeights(false);
 		
 		final DynamicForm searchForm = new DynamicForm();
-//        searchForm.setWidth("60%");
 		searchForm.setHeight(120);
 		searchForm.setIsGroup(true);
 		
