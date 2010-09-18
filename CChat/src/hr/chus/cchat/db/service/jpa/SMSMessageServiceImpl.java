@@ -1,6 +1,8 @@
 package hr.chus.cchat.db.service.jpa;
 
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,6 +17,7 @@ import hr.chus.cchat.model.db.jpa.Operator;
 import hr.chus.cchat.model.db.jpa.SMSMessage;
 import hr.chus.cchat.model.db.jpa.SMSMessage.Direction;
 import hr.chus.cchat.model.db.jpa.ServiceProvider;
+import hr.chus.cchat.model.helper.db.Conversation;
 
 /**
  * 
@@ -141,6 +144,17 @@ public class SMSMessageServiceImpl implements SMSMessageService {
 		result[0] = queryCount.getSingleResult();
 		
 		return result;
+	}
+	
+	@Override
+	public List<Conversation> getConversationByUserId(Integer userId, int start, int limit) {
+		List<?> resultList = entityManager.createQuery("SELECT sms.text, sms.time FROM SMSMessage sms WHERE sms.user.id = :userId ORDER BY sms.time DESC").setParameter("userId", userId).setFirstResult(start).setMaxResults(limit).getResultList();
+		List<Conversation> conversationList = new LinkedList<Conversation>();
+		for (Object object : resultList) {
+			Object[] row = (Object[]) object;
+			conversationList.add(new Conversation((Date) row[1], (String) row[0]));
+		}
+		return conversationList;
 	}
 
 	
