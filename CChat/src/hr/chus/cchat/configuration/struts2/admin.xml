@@ -69,6 +69,13 @@
 		<action name="Admin*JSON" class="hr.chus.cchat.struts2.action.admin.Admin{1}">
 			<result type="json">
 				<param name="excludeNullProperties">true</param>
+				<param name="excludeProperties">
+					smsMessageList.*\.operator.*\.role
+					, smsMessageList.*\.operator.*\.password
+					, smsMessageList.*\.user.*\.sentPicturesList
+					, smsMessageList.*\.user.*\.serviceProvider
+					, userList.*\.sentPicturesList
+				</param>
 			</result>
 			<result name="input" type="json" />
 		</action>

@@ -60,6 +60,11 @@
 				<param name="excludeProperties">
 					userList.*\.msisdn
 					, smsMessageList.*\.msisdn
+					, smsMessageList.*\.operator.*\.role
+					, smsMessageList.*\.operator.*\.password
+					, smsMessageList.*\.user.*\.sentPicturesList
+					, smsMessageList.*\.user.*\.serviceProvider
+					, userList.*\.sentPicturesList
 				</param>
 			</result>
 			<result name="input" type="json" />
@@ -95,6 +100,10 @@
 		</action>
 		
 		<action name="ActiveService" class="hr.chus.cchat.struts2.action.operator.ActiveService">
+			<result type="json" />
+		</action>
+		
+		<action name="UserConversationJSON" class="hr.chus.cchat.struts2.action.operator.UserConversation">
 			<result type="json" />
 		</action>
 	    	
