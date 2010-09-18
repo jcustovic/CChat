@@ -20,7 +20,6 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.smartgwt.client.core.KeyIdentifier;
-import com.smartgwt.client.data.Criteria;
 import com.smartgwt.client.data.DSRequest;
 import com.smartgwt.client.data.DSResponse;
 import com.smartgwt.client.data.DataSource;
@@ -511,7 +510,6 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 				tree.setRootValue("root");
 				tree.setData(usersDate.toArray(new ExplorerTreeNode[0]));
 				
-//				usersList.filterData(new Criteria("nodeID", "15"));
 				usersList.setData(tree);
 				usersList.getData().openAll();
 			}
@@ -561,6 +559,16 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 					tab.setPane(panel);
 					tab.setCanClose(true);
 					mainTabSet.addTab(tab);
+					mainTabSet.addTabSelectedHandler(new TabSelectedHandler() {
+						
+						@Override
+						public void onTabSelected(TabSelectedEvent event) {
+							Canvas tabPane = event.getTab().getPane();
+							if (tabPane instanceof UserConsole) {
+								// TODO: 
+							}
+						}
+					});
 					mainTabSet.selectTab(tab);
 				} else {
 					mainTabSet.selectTab(tab);

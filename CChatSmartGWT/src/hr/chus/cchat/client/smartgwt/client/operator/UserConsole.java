@@ -5,6 +5,8 @@ import hr.chus.cchat.client.smartgwt.client.common.PanelFactory;
 import com.smartgwt.client.types.Overflow;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.HTMLFlow;
+import com.smartgwt.client.widgets.grid.ListGrid;
+import com.smartgwt.client.widgets.grid.ListGridRecord;
 import com.smartgwt.client.widgets.layout.HLayout;
 
 /**
@@ -48,6 +50,19 @@ public class UserConsole extends HLayout {
 
 	public Canvas getViewPanel() {
 		Canvas canvas = new Canvas();
+		HLayout hlayout = new HLayout(20);
+		
+		ListGrid listGrid = new ListGrid() {
+			
+			@Override
+			protected Canvas getExpansionComponent(ListGridRecord record) {
+				Canvas canvas = super.getExpansionComponent(record);
+				canvas.setMargin(5);
+				return canvas;
+			}
+		};
+		listGrid.setWidth(600);
+		listGrid.setHeight(500);
 		
 		HTMLFlow mainHtmlFlow = new HTMLFlow();
 		mainHtmlFlow.setOverflow(Overflow.AUTO);
