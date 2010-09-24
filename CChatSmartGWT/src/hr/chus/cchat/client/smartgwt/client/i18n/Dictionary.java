@@ -348,4 +348,7 @@ public interface Dictionary extends Constants {
 	@DefaultStringValue("Unread message count")
 	String unreadMsgCount();
 
+	@DefaultStringValue("time")
+	String time();
+
 }

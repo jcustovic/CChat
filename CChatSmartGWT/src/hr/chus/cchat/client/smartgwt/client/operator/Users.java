@@ -311,7 +311,7 @@ public class Users extends HLayout {
 				offset += fetchSize;
 				criteria.setAttribute("limit", fetchSize);
 				criteria.setAttribute("start", offset);
-				listGrid.invalidateCache();
+				if (!listGrid.willFetchData(criteria)) listGrid.invalidateCache();
 				listGrid.fetchData(criteria, new DSCallback() {
 					
 					@Override
@@ -334,7 +334,7 @@ public class Users extends HLayout {
 				offset -= fetchSize;
 				criteria.setAttribute("limit", fetchSize);
 				criteria.setAttribute("start", offset);
-				listGrid.invalidateCache();
+				if (!listGrid.willFetchData(criteria)) listGrid.invalidateCache();
 				listGrid.fetchData(criteria, new DSCallback() {
 					
 					@Override

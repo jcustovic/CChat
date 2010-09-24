@@ -26,5 +26,6 @@ public interface UserService {
 	public List<User> getNewest(Date lastMsgDate);
 	public void clearOperatorField(Operator operator);
 	public void assignUsersWithNewMsgToOperator(Operator operator);
+	public void updateAllMessagesRead(Integer userId);
 
 }

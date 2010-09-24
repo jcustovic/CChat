@@ -130,7 +130,7 @@ public class SMSMessageServiceImpl implements SMSMessageService {
 			result[1] = query.setFirstResult(start).setMaxResults(limit).getResultList();
 		}
 		
-		Query queryCount = entityManager.createQuery("SELECT COUNT(sms) FROM SMSMessage sms " + whereString);
+		Query queryCount = entityManager.createQuery("SELECT COUNT(sms.id) FROM SMSMessage sms " + whereString);
 		if (operator != null) queryCount.setParameter("operator", operator);
 		if (serviceProvider != null) queryCount.setParameter("serviceProvider", serviceProvider);
 		if (userId != null) queryCount.setParameter("userId", userId);
@@ -147,14 +147,15 @@ public class SMSMessageServiceImpl implements SMSMessageService {
 	}
 	
 	@Override
-	public List<Conversation> getConversationByUserId(Integer userId, int start, int limit) {
-		List<?> resultList = entityManager.createQuery("SELECT sms.text, sms.time FROM SMSMessage sms WHERE sms.user.id = :userId ORDER BY sms.time DESC").setParameter("userId", userId).setFirstResult(start).setMaxResults(limit).getResultList();
+	public Object[] getConversationByUserId(Integer userId, int start, int limit) {
+		List<?> resultList = entityManager.createQuery("SELECT sms.id, sms.text, sms.time, sms.operator.username, sms.direction FROM SMSMessage sms WHERE sms.user.id = :userId ORDER BY sms.time DESC").setParameter("userId", userId).setFirstResult(start).setMaxResults(limit).getResultList();
+		Object count = entityManager.createQuery("SELECT COUNT(sms.id) FROM SMSMessage sms  WHERE sms.user.id = :userId ORDER BY sms.time DESC").setParameter("userId", userId).getSingleResult();
 		List<Conversation> conversationList = new LinkedList<Conversation>();
 		for (Object object : resultList) {
 			Object[] row = (Object[]) object;
-			conversationList.add(new Conversation((Date) row[1], (String) row[0]));
+			conversationList.add(new Conversation((Integer) row[0], (Date) row[2], (String) row[1], (String) row[3], (Direction) row[4]));
 		}
-		return conversationList;
+		return new Object[] { count, conversationList };
 	}
 
 	
