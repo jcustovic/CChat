@@ -158,15 +158,20 @@ public class UserServiceImpl implements UserService {
 		entityManager.createNamedQuery("User.assignUsersWithNewMsgToOperator").setParameter("operator", operator).executeUpdate();
 	}
 	
+	@Override
+	public Long getCount() {
+		return (Long) entityManager.createNamedQuery("User.getCount").getSingleResult();
+	}
+	
+	@Override
+	public void updateAllMessagesRead(Integer userId) {
+		entityManager.createQuery("UPDATE User u SET u.unreadMsgCount = 0 WHERE u.id = :userId").setParameter("userId", userId).executeUpdate();
+	}
+	
 	
 	// Getters & setters
 	
 	@PersistenceContext
 	public void setEntityManager(EntityManager entityManager) { this.entityManager = entityManager; }
-
-	@Override
-	public Long getCount() {
-		return (Long) entityManager.createNamedQuery("User.getCount").getSingleResult();
-	}
 
 }
