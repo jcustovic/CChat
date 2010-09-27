@@ -34,6 +34,20 @@ public class Configuration implements Serializable {
 	public Configuration() { }
 	
 	
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object object) {
+		if (this == object) return true;
+		if (!(object instanceof Configuration)) return false;
+		Configuration configuration = (Configuration) object;
+		return configuration.getName().equals(name);
+	}
+	
+	
 	// Getters & setters
 	
 	@Id

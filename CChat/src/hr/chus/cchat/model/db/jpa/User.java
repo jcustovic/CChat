@@ -10,12 +10,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  * 
@@ -72,6 +71,18 @@ public class User implements Serializable {
 	@Override
 	public String toString() {
 		return String.format("User[ID: %s, Msisdn: %s, Name: %s, Surname: %s, Deleted: %s]", new Object[] { id, msisdn, name, surname, deleted });
+	}
+	
+	@Override
+	public int hashCode() {
+		return id;
+	}
+
+	@Override
+	public boolean equals(Object object) {
+		if (!(object instanceof User)) return false;
+		User user = (User) object;
+		return user.getId().equals(id);
 	}
 
 
@@ -138,15 +149,7 @@ public class User implements Serializable {
 	public Boolean getDeleted() { return deleted; }
 	public void setDeleted(Boolean deleted) { this.deleted = deleted; }
 
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "users_pictures"
-			, joinColumns = {
-				@JoinColumn(name = "user_id")
-			}
-			, inverseJoinColumns = {
-				@JoinColumn(name = "picture_id")
-			}
-	)
+	@Transient
 	public List<Picture> getSentPicturesList() { return sentPicturesList; }
 	public void setSentPicturesList(List<Picture> sentPicturesList) { this.sentPicturesList = sentPicturesList; }
 		

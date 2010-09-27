@@ -36,6 +36,20 @@ public class Nick implements Serializable {
 		this.name = name;
 		this.description = description;
 	}
+	
+	
+	@Override
+	public int hashCode() {
+		return id;
+	}
+
+	@Override
+	public boolean equals(Object object) {
+		if (this == object) return true;
+		if (!(object instanceof Nick)) return false;
+		Nick nick = (Nick) object;
+		return nick.getId().equals(id);
+	}
 
 
 	// Getters & setters
