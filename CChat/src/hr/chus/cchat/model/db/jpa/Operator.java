@@ -60,11 +60,16 @@ public class Operator implements Serializable {
 	}
 	
 	@Override
+	public int hashCode() {
+		return id;
+	}
+	
+	@Override
 	public boolean equals(Object object) {
 		if (this == object) return true;
 		if (!(object instanceof Operator) ) return false;
 		Operator operator = (Operator) object;
-		return (operator.getId().equals(getId()));
+		return (operator.getId().equals(id));
 	}
 
 	

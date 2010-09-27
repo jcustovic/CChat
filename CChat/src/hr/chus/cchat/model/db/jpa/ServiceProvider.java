@@ -44,6 +44,20 @@ public class ServiceProvider implements Serializable {
 		this.description = description;
 		this.disabled = disabled;
 	}
+	
+	
+	@Override
+	public int hashCode() {
+		return id;
+	}
+	
+	@Override
+	public boolean equals(Object object) {
+		if (this == object) return true;
+		if (!(object instanceof ServiceProvider) ) return false;
+		ServiceProvider serviceProvider = (ServiceProvider) object;
+		return (serviceProvider.getId().equals(id));
+	}
 
 	
 	// Getters & setters

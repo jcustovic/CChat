@@ -9,8 +9,15 @@ import com.smartgwt.client.widgets.tree.TreeNode;
  *
  */
 public class ExplorerTreeNode extends TreeNode {
+	
+	private int position;
 
     public ExplorerTreeNode(String name, String nodeID, String parentNodeID, String icon, PanelFactory factory, boolean enabled, String idSuffix) {
+    	this(name, nodeID, parentNodeID, 0, icon, factory, enabled, idSuffix);
+    }
+    
+    public ExplorerTreeNode(String name, String nodeID, String parentNodeID, int position, String icon, PanelFactory factory, boolean enabled, String idSuffix) {
+    	this.position = position;
         if (enabled) {
             setName(name);
         } else {
@@ -58,5 +65,7 @@ public class ExplorerTreeNode extends TreeNode {
     public void setIconSrc(String iconSrc) { setAttribute("iconSrc", iconSrc); }
 
     public String getIconSrc() { return getAttributeAsString("iconSrc"); }
+
+	public int getPosition() { return position; } 
     
 }

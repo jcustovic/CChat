@@ -46,6 +46,20 @@ public class Picture implements Serializable {
 		this.type = type;
 		this.length = length;
 	}
+	
+	
+	@Override
+	public int hashCode() {
+		return id;
+	}
+	
+	@Override
+	public boolean equals(Object object) {
+		if (this == object) return true;
+		if (!(object instanceof Picture) ) return false;
+		Picture picture = (Picture) object;
+		return (picture.getId().equals(id));
+	}
 
 
 	// Getters & setters
