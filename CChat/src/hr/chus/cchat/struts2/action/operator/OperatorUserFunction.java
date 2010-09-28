@@ -75,6 +75,6 @@ public class OperatorUserFunction extends ActionSupport implements UserAware {
 	public String getErrorMsg() { return errorMsg; }
 
 	@Override
-	public void setUser(Operator operator) { this.operator = operator; }
+	public void setAuthenticatedUser(Operator operator) { this.operator = operator; }
 	
 }

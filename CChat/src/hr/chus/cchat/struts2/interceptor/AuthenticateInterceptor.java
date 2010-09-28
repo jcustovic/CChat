@@ -41,7 +41,7 @@ public class AuthenticateInterceptor implements Interceptor {
 		if (user != null && user.getRole().getName().equals(getRole())) {
 			Action action = (Action) actionInvocation.getAction();
 			if (action instanceof UserAware) {
-				((UserAware) action).setUser(user);
+				((UserAware) action).setAuthenticatedUser(user);
 			}
 			return actionInvocation.invoke();
 		} else {

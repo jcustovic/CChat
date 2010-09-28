@@ -39,7 +39,7 @@ public class OperatorOperatorList extends ActionSupport implements UserAware {
 	// Getters & setters
 	
 	@Override
-	public void setUser(Operator user) { this.user = user; }
+	public void setAuthenticatedUser(Operator user) { this.user = user; }
 	
 	public void setOperatorService(OperatorService operatorService) { this.operatorService = operatorService; }
 

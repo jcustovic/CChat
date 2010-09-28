@@ -57,7 +57,7 @@ public class OperatorStatisticsList extends ActionSupport implements UserAware {
 	// Getters & setters
 	
 	@Override
-	public void setUser(Operator user) { this.operator = user; }
+	public void setAuthenticatedUser(Operator user) { this.operator = user; }
 	
 	public void setStatisticsService(StatisticsService statisticsService) { this.statisticsService = statisticsService; }
 	

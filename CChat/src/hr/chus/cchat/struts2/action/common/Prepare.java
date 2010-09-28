@@ -88,6 +88,7 @@ public class Prepare extends ActionSupport  {
 		
 		for (int i = 0; i < 20; i++) {
 			User userUser = new User(nick, user, String.valueOf(i), vipServiceProvider, "Name" + String.valueOf(i), "Surname" + String.valueOf(i), new Date());
+			userUser.setLastMsg(new Date());
 			userUser = userService.editUser(userUser);
 			for (int j = 0; j < 2; j++) {
 				SMSMessage smsMessage = new SMSMessage(userUser, user, new Date(), "Text " + i + j + "IN sfdsdafkj ghkldfhg fdkjhg dkfljhg dkljh", "12346", vipServiceProvider, Direction.IN);
@@ -101,6 +102,7 @@ public class Prepare extends ActionSupport  {
 		
 		for (int i = 20; i < 40; i++) {
 			User userUser = new User(null, adminUser, String.valueOf(i), tmobServiceProvider, "Name" + String.valueOf(i), "Surname" + String.valueOf(i), new Date());
+			userUser.setLastMsg(new Date());
 			userUser = userService.editUser(userUser);
 			for (int j = 0; j < 2; j++) {
 				SMSMessage smsMessage = new SMSMessage(userUser, user, new Date(), "Text " + i + j + "IN sfdsdafkj ghkldfhg fdkjhg dkfljhg dkljh", "12346", tmobServiceProvider, Direction.IN);
@@ -114,6 +116,7 @@ public class Prepare extends ActionSupport  {
 		
 		for (int i = 40; i < 55; i++) {
 			User userUser = new User(null, adminUser, String.valueOf(i), tele2ServiceProvider, "Name" + String.valueOf(i), "Surname" + String.valueOf(i), new Date());
+			userUser.setLastMsg(new Date());
 			userUser = userService.editUser(userUser);
 			for (int j = 0; j < 3; j++) {
 				SMSMessage smsMessage = new SMSMessage(userUser, user, new Date(), "Text " + i + j + "IN sfdsdafkj ghkldfhg fdkjhg dkfljhg dkljh", "12346", tele2ServiceProvider, Direction.IN);
