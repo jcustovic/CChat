@@ -56,7 +56,7 @@ public class OperatorUserList extends ActionSupport implements UserAware {
 	public void setUserService(UserService userService) { this.userService = userService; }
 	
 	@Override
-	public void setUser(Operator user) { this.user = user; }
+	public void setAuthenticatedUser(Operator user) { this.user = user; }
 
 	public List<User> getUserList() { return userList; }
 	public void setUserList(List<User> userList) { this.userList = userList; }

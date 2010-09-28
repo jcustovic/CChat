@@ -580,7 +580,7 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 										String imgHTML = Canvas.imgHTML(Constants.CONTEXT_PATH + "images/operators.png", 16, 16);
 										event.getTab().setTitle("<span>" + imgHTML + "&nbsp;" + userConsole.getNameToDisplay() + "</span>");
 										
-										TreeNode selectedTreeNode = usersList.getData().findById(userConsole.getUserId());
+										ExplorerTreeNode selectedTreeNode = (ExplorerTreeNode) usersList.getData().findById(userConsole.getUserId());
 										updateLeafIcon(selectedTreeNode, Constants.CONTEXT_PATH + "images/operators.png");
 									} else {
 										userConsole.loadConversation(false);
@@ -602,9 +602,9 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 	 * 
 	 * @param selectedTreeNode
 	 */
-	private void updateLeafIcon(TreeNode selectedTreeNode, String iconPath) {
+	private void updateLeafIcon(ExplorerTreeNode selectedTreeNode, String iconPath) {
 		selectedTreeNode.setIcon(iconPath);
-		usersList.getData().add(selectedTreeNode, usersList.getData().findById(selectedTreeNode.getAttribute("parentNodeID")));
+		usersList.getData().add(selectedTreeNode, usersList.getData().findById(selectedTreeNode.getAttribute("parentNodeID")), selectedTreeNode.getPosition());
 		usersList.deselectAllRecords();
 		usersList.selectRecord(selectedTreeNode);
 	}

@@ -40,7 +40,7 @@ public class ActiveService extends ActionSupport implements UserAware {
 	// Getters & setters
 
 	@Override
-	public void setUser(Operator user) { this.operator = user; }
+	public void setAuthenticatedUser(Operator user) { this.operator = user; }
 	
 	public void setOperatorService(OperatorService operatorService) { this.operatorService = operatorService; }
 	

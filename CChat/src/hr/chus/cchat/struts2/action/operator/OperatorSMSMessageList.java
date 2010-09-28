@@ -61,7 +61,7 @@ public class OperatorSMSMessageList extends ActionSupport implements UserAware {
 	public void setSmsMessageService(SMSMessageService smsMessageService) { this.smsMessageService = smsMessageService; }
 	
 	@Override
-	public void setUser(Operator user) { this.user = user; }
+	public void setAuthenticatedUser(Operator user) { this.user = user; }
 	
 	public List<SMSMessage> getSmsMessageList() { return smsMessageList; }
 	public void setSmsMessageList(List<SMSMessage> smsMessageList) { this.smsMessageList = smsMessageList; }
