@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User getUserId(Integer id) {
+	public User getUserById(Integer id) {
 		return entityManager.find(User.class, id);
 	}
 
