@@ -351,4 +351,7 @@ public interface Dictionary extends Constants {
 	@DefaultStringValue("time")
 	String time();
 
+	@DefaultStringValue("Edit user")
+	String editUser();
+
 }
