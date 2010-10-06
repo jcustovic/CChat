@@ -8,22 +8,25 @@ import hr.chus.cchat.client.smartgwt.client.i18n.DictionaryInstance;
 import hr.chus.cchat.client.smartgwt.client.operator.ds.ConversationDS;
 import hr.chus.cchat.client.smartgwt.client.operator.ds.NicksDS;
 import hr.chus.cchat.client.smartgwt.client.operator.ds.OperatorsDS;
-import hr.chus.cchat.client.smartgwt.client.operator.ds.UsersDS;
 
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.smartgwt.client.data.Criteria;
 import com.smartgwt.client.data.DSCallback;
 import com.smartgwt.client.data.DSRequest;
 import com.smartgwt.client.data.DSResponse;
 import com.smartgwt.client.data.DataSource;
+import com.smartgwt.client.data.Record;
 import com.smartgwt.client.data.XMLTools;
-import com.smartgwt.client.rpc.RPCResponse;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.DSDataFormat;
 import com.smartgwt.client.types.DateDisplayFormat;
 import com.smartgwt.client.types.Overflow;
+import com.smartgwt.client.util.JSOHelper;
+import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.HTMLFlow;
 import com.smartgwt.client.widgets.IButton;
@@ -49,7 +52,7 @@ import com.smartgwt.client.widgets.layout.VLayout;
 
 /**
  * 
- * @author Jan Čustović
+ * @author Jan Čustović (jan_custovic@yahoo.com)
  *
  */
 public class UserConsole extends HLayout {
@@ -67,6 +70,7 @@ public class UserConsole extends HLayout {
     private Label listLabel;
     private Criteria criteria;
 
+    
 	public static class Factory implements PanelFactory {
         
 		private String id;
@@ -195,30 +199,43 @@ public class UserConsole extends HLayout {
         userForm.setIsGroup(true);
         userForm.setGroupTitle(DictionaryInstance.dictionary.update());
         userForm.setNumCols(4);
+        userForm.setFields(getFormFields());
 		
-		UsersDS ds = new UsersDS("userDs_userConsole") {
+		DataSource ds = new DataSource(Constants.CONTEXT_PATH + "operator/OperatorUserFunctionJSON") {
+						
 			@Override
 			protected void transformResponse(DSResponse response, DSRequest request, Object jsonData) {
-				JSONArray value = XMLTools.selectObjects(jsonData, "/status");
-				String status = ((JSONString)value.get(0)).stringValue();
-				if (!status.equals("validation_ok")) {
-					response.setStatus(RPCResponse.STATUS_VALIDATION_ERROR);
-					JSONArray errors = XMLTools.selectObjects(jsonData, "/errorFields");
-					response.setErrors(errors.getJavaScriptObject());
+//				JSONArray value = XMLTools.selectObjects(jsonData, "/status");
+//				String status = ((JSONString) value.get(0)).stringValue();
+//				if (!status.equals("validation_ok")) {
+//					response.setStatus(RPCResponse.STATUS_VALIDATION_ERROR);
+//					JSONArray errors = XMLTools.selectObjects(jsonData, "/errorFields");
+//					response.setErrors(errors.getJavaScriptObject());
+//				}
+				JSONArray value = XMLTools.selectObjects(jsonData, "/user");
+				JSONObject user = (JSONObject) value.get(0);
+				Record userRecord = new Record();
+				for (String key : user.keySet()) {
+					JavaScriptObject attribute = JSOHelper.getAttributeAsJavaScriptObject(user.getJavaScriptObject(), key);
+					userRecord.setAttribute("user." + key, attribute);
 				}
+				
+				userForm.editRecord(userRecord);
+				SC.say(userRecord.getAttribute("user.operator"));
 				super.transformResponse(response, request, jsonData);
 			}
 		};
-//		ds.setDataFormat(DSDataFormat.JSON);
-		ds.setRecordXPath(null);
-		ds.setDataURL(Constants.CONTEXT_PATH + "operator/OperatorUserFunctionJSON");
+		ds.setDataFormat(DSDataFormat.JSON);
+//		ds.setRecordXPath(null);
 		userForm.setDataSource(ds);
-		userForm.setFields(getFormFields());
+		userForm.setUseAllDataSourceFields(false);
+		
 		Criteria userFormCriteria = new Criteria("user", userId);
 		userFormCriteria.addCriteria("operation", "get");
-		userForm.setInitialCriteria(userFormCriteria);
-		userForm.setAutoFetchData(true);
-
+		ds.fetchData(userFormCriteria);
+//		userForm.setInitialCriteria(userFormCriteria);
+//		userForm.setAutoFetchData(true);
+		
 //		ds.fetchData(userFormCriteria);
 		
 		VLayout userFormlistLayout = new VLayout(5);
