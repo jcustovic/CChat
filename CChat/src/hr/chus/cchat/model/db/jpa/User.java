@@ -1,5 +1,7 @@
 package hr.chus.cchat.model.db.jpa;
 
+import hr.chus.cchat.hibernate.DateTimeType;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -14,7 +16,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+
+import org.apache.struts2.json.annotations.JSON;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 
 /**
  * 
@@ -23,6 +31,9 @@ import javax.persistence.Transient;
  */
 @Entity
 @Table(name = "users")
+@TypeDefs ({
+	@TypeDef(name = "customDateTime", typeClass = DateTimeType.class)
+})
 @NamedQueries({
 	@NamedQuery(name = "User.getAll", query = "SELECT u FROM User u")
 	, @NamedQuery(name = "User.getCount", query = "SELECT COUNT(u) FROM User u")
@@ -125,7 +136,9 @@ public class User implements Serializable {
 	public String getAddress() { return address; }
 	public void setAddress(String address) { this.address = address; }
 
-	@Column(name = "birth_date", nullable = true, columnDefinition = "DATE")
+	@JSON(format = "yyyy-MM-dd'T'HH:mm:ssZ")
+	@Temporal(TemporalType.DATE)
+	@Column(name = "birth_date", nullable = true)
 	public Date getBirthDate() { return birthDate; }
 	public void setBirthDate(Date birthDate) { this.birthDate = birthDate; }
 
@@ -133,11 +146,16 @@ public class User implements Serializable {
 	public String getNotes() { return notes; }
 	public void setNotes(String notes) { this.notes = notes; }
 	
-	@Column(name = "joined_date", nullable = false, columnDefinition = "DATETIME", updatable = false)
+	@JSON(format = "yyyy-MM-dd'T'HH:mm:ssZ")
+//	@Type(type = "customDateTime")
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "joined_date", nullable = false, updatable = false)
 	public Date getJoined() { return joined; }
 	public void setJoined(Date joined) { this.joined = joined; }
 	
-	@Column(name = "last_message", columnDefinition = "DATETIME")
+	@JSON(format = "yyyy-MM-dd'T'HH:mm:ssZ")
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "last_message")
 	public Date getLastMsg() { return lastMsg; }
 	public void setLastMsg(Date lastMsg) { this.lastMsg = lastMsg; }
 

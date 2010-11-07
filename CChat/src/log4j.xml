@@ -19,11 +19,23 @@
 
 
 	<logger name="hr.chus.cchat">
-		<level value="debug"/>
+		<level value="debug" />
 	</logger>
 	
 	<logger name="org.hibernate">
-		<level value="info"/>
+		<level value="error" />
+	</logger>
+	
+	<!-- Show SQL queries -->
+	<logger name="org.hibernate.SQL">
+		<level value="debug" />
+		<!--<level value="error" />-->
+	</logger>
+	
+	<!-- Show SQL query parameters -->
+	<logger name="org.hibernate.type">
+		<!--<level value="trace" />-->
+		<level value="error" />
 	</logger>
 	
 	<logger name="com.opensymphony.xwork2.ognl.OgnlValueStack">

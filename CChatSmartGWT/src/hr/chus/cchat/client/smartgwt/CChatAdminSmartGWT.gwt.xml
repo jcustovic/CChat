@@ -21,5 +21,6 @@
 	<source path='client/common'/>
 	<source path='client/filemanager'/>
 	<source path='client/i18n'/>
+	<source path='client/utils'/>
 
 </module>

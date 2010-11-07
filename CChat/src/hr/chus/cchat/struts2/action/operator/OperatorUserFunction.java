@@ -33,8 +33,6 @@ public class OperatorUserFunction extends ActionSupport implements UserAware {
 	
 	@Override
 	public void validate() {
-		log.info(operator.getRole());
-		log.info(operator.getRole().getName().equals("operator"));
 		if (operation != null && operation.equals("get")) return;
 		if (user == null) {
 			errorMsg = "User must be set";
@@ -52,6 +50,7 @@ public class OperatorUserFunction extends ActionSupport implements UserAware {
 	public String execute() throws Exception {
 		if (operation == null) {
 		} else if (operation.equals("update")) {
+			log.debug(user.getNotes());
 			log.debug("Updating user " + user + " ...");
 			user = userService.editUser(user);
 		}

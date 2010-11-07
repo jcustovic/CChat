@@ -1,6 +1,7 @@
 package hr.chus.cchat.client.smartgwt.client.operator;
 
 import java.util.Date;
+import java.util.Iterator;
 
 import hr.chus.cchat.client.smartgwt.client.common.Constants;
 import hr.chus.cchat.client.smartgwt.client.common.PanelFactory;
@@ -8,24 +9,22 @@ import hr.chus.cchat.client.smartgwt.client.i18n.DictionaryInstance;
 import hr.chus.cchat.client.smartgwt.client.operator.ds.ConversationDS;
 import hr.chus.cchat.client.smartgwt.client.operator.ds.NicksDS;
 import hr.chus.cchat.client.smartgwt.client.operator.ds.OperatorsDS;
+import hr.chus.cchat.client.smartgwt.client.utils.JSONUtils;
 
-import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.TimeZone;
 import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONString;
+import com.google.gwt.json.client.JSONBoolean;
 import com.smartgwt.client.data.Criteria;
 import com.smartgwt.client.data.DSCallback;
 import com.smartgwt.client.data.DSRequest;
 import com.smartgwt.client.data.DSResponse;
 import com.smartgwt.client.data.DataSource;
-import com.smartgwt.client.data.Record;
 import com.smartgwt.client.data.XMLTools;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.DSDataFormat;
 import com.smartgwt.client.types.DateDisplayFormat;
 import com.smartgwt.client.types.Overflow;
-import com.smartgwt.client.util.JSOHelper;
 import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.HTMLFlow;
@@ -199,48 +198,83 @@ public class UserConsole extends HLayout {
         userForm.setIsGroup(true);
         userForm.setGroupTitle(DictionaryInstance.dictionary.update());
         userForm.setNumCols(4);
-        userForm.setFields(getFormFields());
 		
 		DataSource ds = new DataSource(Constants.CONTEXT_PATH + "operator/OperatorUserFunctionJSON") {
-						
+			
+			@Override
+			protected Object transformRequest(DSRequest dsRequest) {
+				dsRequest.setContentType("application/json; charset=utf-8");
+				return super.transformRequest(dsRequest);
+			}
+			
 			@Override
 			protected void transformResponse(DSResponse response, DSRequest request, Object jsonData) {
-//				JSONArray value = XMLTools.selectObjects(jsonData, "/status");
-//				String status = ((JSONString) value.get(0)).stringValue();
-//				if (!status.equals("validation_ok")) {
-//					response.setStatus(RPCResponse.STATUS_VALIDATION_ERROR);
-//					JSONArray errors = XMLTools.selectObjects(jsonData, "/errorFields");
-//					response.setErrors(errors.getJavaScriptObject());
-//				}
-				JSONArray value = XMLTools.selectObjects(jsonData, "/user");
-				JSONObject user = (JSONObject) value.get(0);
-				Record userRecord = new Record();
-				for (String key : user.keySet()) {
-					JavaScriptObject attribute = JSOHelper.getAttributeAsJavaScriptObject(user.getJavaScriptObject(), key);
-					userRecord.setAttribute("user." + key, attribute);
+				for (FormItem formItem : userForm.getFields())  {
+					JSONArray value = XMLTools.selectObjects(jsonData, formItem.getAttribute("jsonPath"));
+					if (formItem instanceof DateTimeItem) {
+						userForm.setValue(formItem.getName(), Constants.dateTimeFormat.format(JSONUtils.getDate(value.getJavaScriptObject().toString())));
+					} else if (formItem instanceof DateItem) {
+						Date date = JSONUtils.getDate(value.getJavaScriptObject().toString());
+						Date gmt = new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
+						userForm.setValue(formItem.getName(), Constants.dateTimeFormat.format(gmt));
+					} else if (formItem instanceof BooleanItem) {
+						userForm.setValue(formItem.getName(), value.get(0).isBoolean().booleanValue());
+					} else {
+						userForm.setValue(formItem.getName(), value.getJavaScriptObject());
+					}
 				}
-				
-				userForm.editRecord(userRecord);
-				SC.say(userRecord.getAttribute("user.operator"));
-				super.transformResponse(response, request, jsonData);
 			}
 		};
 		ds.setDataFormat(DSDataFormat.JSON);
-//		ds.setRecordXPath(null);
 		userForm.setDataSource(ds);
+		
 		userForm.setUseAllDataSourceFields(false);
+		userForm.setFields(getFormFields());
 		
 		Criteria userFormCriteria = new Criteria("user", userId);
 		userFormCriteria.addCriteria("operation", "get");
 		ds.fetchData(userFormCriteria);
-//		userForm.setInitialCriteria(userFormCriteria);
-//		userForm.setAutoFetchData(true);
 		
-//		ds.fetchData(userFormCriteria);
+		final IButton updateButton = new IButton(DictionaryInstance.dictionary.update());
+		updateButton.setIcon(Constants.CONTEXT_PATH + "images/edit.png");
+        updateButton.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				if (userForm.validate()) {
+					updateButton.setDisabled(true);
+					Iterator<?> keySetIterator = userForm.getValues().keySet().iterator();
+					while (keySetIterator.hasNext()) {
+						String key = (String) keySetIterator.next();
+						Object value = userForm.getValues().get(key);
+						if (value == null) userForm.clearValue(key);
+					}
+					userForm.setValue("operation", "update");
+					
+					userForm.submit(new DSCallback() {
+
+						@Override
+						public void execute(DSResponse response, Object jsonData, DSRequest request) {
+							JSONArray value = XMLTools.selectObjects(jsonData, "/status");
+							boolean status = false;
+							updateButton.setDisabled(false);
+							if (value != null && value.size() > 0) {
+								status = ((JSONBoolean) value.get(0)).booleanValue();
+							}
+							if (status) {
+								// Successful update
+							}
+						}
+						
+					});
+				}
+			}
+		});
 		
 		VLayout userFormlistLayout = new VLayout(5);
 		userFormlistLayout.addMember(userFormLabel);
 		userFormlistLayout.addMember(userForm);
+		userFormlistLayout.addMember(updateButton);
         
         HLayout searchPagingLayout = new HLayout(5);
         searchPagingLayout.addMember(previousButton);
@@ -327,19 +361,19 @@ public class UserConsole extends HLayout {
 	
     private FormItem[] getFormFields() {
     	TextItem id = new TextItem("user.id", "ID");
-//    	id.setDataPath("user/id");
+    	id.setAttribute("jsonPath", "user/id");
     	id.setDisabled(true);
         TextItem name = new TextItem("user.name", DictionaryInstance.dictionary.name());
-//        name.setDataPath("user/name");
+        name.setAttribute("jsonPath", "user/name");
         TextItem surname = new TextItem("user.surname", DictionaryInstance.dictionary.surname());
-//        surname.setDataPath("user/surname");
+        surname.setAttribute("jsonPath", "user/surname");
         TextItem address = new TextItem("user.address", DictionaryInstance.dictionary.address());
-//        address.setDataPath("user/address");
+        address.setAttribute("jsonPath", "user/address");
         TextAreaItem notes = new TextAreaItem("user.notes", DictionaryInstance.dictionary.notes());
-//        notes.setDataPath("user/notes");
+        notes.setAttribute("jsonPath", "user/notes");
 
         SelectItem nickItem = new SelectItem("user.nick", DictionaryInstance.dictionary.nick());
-//        nickItem.setDataPath("user/nick");
+        nickItem.setAttribute("jsonPath", "user/nick/id");
         nickItem.setAllowEmptyValue(true);
         nickItem.setEmptyDisplayValue(DictionaryInstance.dictionary.notSet());
         nickItem.setOptionDataSource(NicksDS.getInstance());
@@ -347,7 +381,7 @@ public class UserConsole extends HLayout {
         nickItem.setValueField("id");
         
         SelectItem operatorItem = new SelectItem("user.operator", DictionaryInstance.dictionary.operator());
-        operatorItem.setDataPath("user/operator");
+        operatorItem.setAttribute("jsonPath", "user/operator/id");
         operatorItem.setAllowEmptyValue(true);
         operatorItem.setEmptyDisplayValue(DictionaryInstance.dictionary.notSet());
         operatorItem.setOptionDataSource(OperatorsDS.getInstance());
@@ -355,7 +389,7 @@ public class UserConsole extends HLayout {
         operatorItem.setValueField("id");
         
         TextItem serviceProvider = new TextItem("user.serviceProvider");
-//        serviceProvider.setDataPath("user/serviceProvider");
+        serviceProvider.setAttribute("jsonPath", "user/serviceProvider/id");
         serviceProvider.setVisible(false);
         
         final DateItem birthdate = new DateItem("user.birthDate", DictionaryInstance.dictionary.birthDate());
@@ -370,22 +404,15 @@ public class UserConsole extends HLayout {
 				return Constants.dateTimeFormat.format(gmt);
 			}
 		});
-//        birthdate.setDataPath("user/birthDate");
+        birthdate.setAttribute("jsonPath", "user/birthDate");
         birthdate.setMaskDateSeparator(".");
         birthdate.setUseMask(true);
         birthdate.setUseTextField(true);
         birthdate.setInvalidDateStringMessage(DictionaryInstance.dictionary.invalidDate());
         birthdate.setDateFormatter(DateDisplayFormat.TOEUROPEANSHORTDATE);
                 
-        BooleanItem deleted = new BooleanItem();
-//        deleted.setDataPath("user/deleted");
-        deleted.setDefaultValue(false);
-        deleted.setName("user.deleted");
-        deleted.setTitle(DictionaryInstance.dictionary.deleted());
-        deleted.setDisabled(true);
-        
         DateTimeItem joined = new DateTimeItem("user.joined", DictionaryInstance.dictionary.joinedDate());
-//        joined.setDataPath("user/joined");
+        joined.setAttribute("jsonPath", "user/joined");
         joined.setMaskDateSeparator(".");
         joined.setUseMask(true);
         joined.setUseTextField(true);
@@ -394,7 +421,7 @@ public class UserConsole extends HLayout {
         joined.setDateFormatter(DateDisplayFormat.TOEUROPEANSHORTDATETIME);
         
         DateTimeItem lastMsgDate = new DateTimeItem("user.lastMsg", DictionaryInstance.dictionary.lastMsgDate());
-//        lastMsgDate.setDataPath("user/lastMsg");
+        lastMsgDate.setAttribute("jsonPath", "user/lastMsg");
         lastMsgDate.setMaskDateSeparator(".");
         lastMsgDate.setUseMask(true);
         lastMsgDate.setUseTextField(true);
@@ -403,12 +430,19 @@ public class UserConsole extends HLayout {
         lastMsgDate.setDateFormatter(DateDisplayFormat.TOEUROPEANSHORTDATETIME);
         
         IntegerItem unreadMsgCount = new IntegerItem();
-//        unreadMsgCount.setDataPath("user/unreadMsgCount");
+        unreadMsgCount.setAttribute("jsonPath", "user/unreadMsgCount");
         unreadMsgCount.setName("user.unreadMsgCount");
         unreadMsgCount.setTitle(DictionaryInstance.dictionary.unreadMsgCount());
         unreadMsgCount.setDisabled(true);
         
-        return new FormItem[] { id, name, surname, address, notes, serviceProvider, nickItem, operatorItem , birthdate, deleted, joined, lastMsgDate, unreadMsgCount };
+        BooleanItem deleted = new BooleanItem();
+        deleted.setDefaultValue(false);
+        deleted.setAttribute("jsonPath", "user/deleted");
+        deleted.setName("user.deleted");
+        deleted.setTitle(DictionaryInstance.dictionary.deleted());
+        deleted.setVisible(false);
+        
+        return new FormItem[] { id, name, surname, address, notes, serviceProvider, nickItem, operatorItem , birthdate, joined, lastMsgDate, unreadMsgCount, deleted };
 	}
 
 	

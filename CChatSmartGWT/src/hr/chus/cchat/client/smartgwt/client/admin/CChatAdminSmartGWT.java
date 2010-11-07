@@ -73,9 +73,6 @@ public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
 		RPCManager.setSaveDataPrompt(DictionaryInstance.dictionary.savingData());
 		
 		DateUtil.setDefaultDisplayTimezone("00:00");
-//		DateUtil.setShortDateDisplayFormatter(dateDisplayFormatter);
-//		DateUtil.setNormalDateDisplayFormatter(dateDisplayFormatter);
-//		DateUtil.setDateInputFormatter(dateInputFormatter);
 		
 		setWidth100();
 		setHeight100();
