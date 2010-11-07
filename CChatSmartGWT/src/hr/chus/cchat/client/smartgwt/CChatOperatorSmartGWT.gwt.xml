@@ -18,5 +18,6 @@
 	<source path='client/operator'/>
 	<source path='client/common'/>
 	<source path='client/i18n'/>
+	<source path='client/utils'/>
 
 </module>

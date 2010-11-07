@@ -98,6 +98,10 @@
 		<action name="UserInfoAction" class="hr.chus.cchat.struts2.action.common.GetUserInfoAction">
 	    	<result>common.UserInfo</result>
 	    </action>
+	    
+	    <action name="Test" class="hr.chus.cchat.struts2.action.common.Test">
+			<result type="json" />
+		</action>
 		
 	</package>
 </struts>
