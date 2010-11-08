@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -47,6 +48,15 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User getUserById(Integer id) {
 		return entityManager.find(User.class, id);
+	}
+	
+	@Override
+	public User getByMsisdn(String msisdn) {
+		try {
+			return (User) entityManager.createNamedQuery("User.getByMsisdn").setParameter("msisdn", msisdn).getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
 
 	@Override

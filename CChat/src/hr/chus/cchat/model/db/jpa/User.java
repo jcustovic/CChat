@@ -37,6 +37,7 @@ import org.hibernate.annotations.TypeDefs;
 @NamedQueries({
 	@NamedQuery(name = "User.getAll", query = "SELECT u FROM User u")
 	, @NamedQuery(name = "User.getCount", query = "SELECT COUNT(u) FROM User u")
+	, @NamedQuery(name = "User.getByMsisdn", query = "SELECT u FROM User u WHERE u.msisdn = :msisdn")
 	, @NamedQuery(name = "User.getByOperator", query = "SELECT u FROM User u WHERE u.operator = :operator AND u.deleted = false ORDER BY u.lastMsg DESC")
 	, @NamedQuery(name = "User.getRandom", query = "SELECT u FROM User u WHERE u.deleted = false AND u.lastMsg < :lastMsgDate AND u.operator IS NULL ORDER BY RAND()")
 	, @NamedQuery(name = "User.getNewest", query = "SELECT u FROM User u WHERE u.deleted = false AND u.lastMsg >= :lastMsgDate AND u.operator IS NULL ORDER BY u.lastMsg DESC")
@@ -64,7 +65,15 @@ public class User implements Serializable {
 	private List<Picture> sentPicturesList;
 	
 	
-	public User() { }
+	public User(String msisdn, ServiceProvider serviceProvider) {
+		Date date = new Date();
+		this.msisdn = msisdn;
+		this.serviceProvider = serviceProvider;
+		this.joined = date;
+		this.lastMsg = date;
+		this.deleted = false;
+		this.unreadMsgCount = 0;
+	}
 
 	public User(Nick nick, Operator operator, String msisdn, ServiceProvider serviceProvider, String name, String surname, Date joined) {
 		this.nick = nick;
@@ -115,7 +124,7 @@ public class User implements Serializable {
 	public Operator getOperator() { return operator; }
 	public void setOperator(Operator operator) { this.operator = operator; }
 
-	@Column(name = "msisdn", length = 20, nullable = false, updatable = false)
+	@Column(name = "msisdn", length = 20, nullable = false, unique = true, updatable = false)
 	public String getMsisdn() { return msisdn; }
 	public void setMsisdn(String msisdn) { this.msisdn = msisdn; }
 

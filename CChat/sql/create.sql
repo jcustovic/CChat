@@ -80,7 +80,8 @@ CREATE TABLE users (
   PRIMARY KEY(id),
   FOREIGN KEY(operator_id) REFERENCES operators(id),
   FOREIGN KEY(nick_id) REFERENCES nicks(id),
-  FOREIGN KEY(service_provider_id) REFERENCES service_provider(id)
+  FOREIGN KEY(service_provider_id) REFERENCES service_provider(id),
+  UNIQUE(msisdn)
 ) 
 ENGINE=INNODB;
 

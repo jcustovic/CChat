@@ -8,12 +8,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import org.hibernate.type.TimestampType;
+
 /**
  * 
  * @author Jan Čustović
  *
  */
-public class DateTimeType extends org.hibernate.type.TimestampType {
+public class DateTimeType extends TimestampType {
 
 	private static final long serialVersionUID = 1L;
 

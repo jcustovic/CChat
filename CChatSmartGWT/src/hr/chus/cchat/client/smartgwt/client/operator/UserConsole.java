@@ -12,7 +12,6 @@ import hr.chus.cchat.client.smartgwt.client.operator.ds.OperatorsDS;
 import hr.chus.cchat.client.smartgwt.client.utils.JSONUtils;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.TimeZone;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONBoolean;
 import com.smartgwt.client.data.Criteria;
@@ -25,7 +24,6 @@ import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.DSDataFormat;
 import com.smartgwt.client.types.DateDisplayFormat;
 import com.smartgwt.client.types.Overflow;
-import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.HTMLFlow;
 import com.smartgwt.client.widgets.IButton;
@@ -61,6 +59,7 @@ public class UserConsole extends HLayout {
 	private String userId;
 	private String userType;
 	private String nameToDisplay;
+	private boolean displayUserForm;
 	private ListGrid conversationListGrid;
 	private int offset = 0;
     private int fetchSize = 50;
@@ -68,6 +67,7 @@ public class UserConsole extends HLayout {
     private IButton previousButton;
     private Label listLabel;
     private Criteria criteria;
+    private DynamicForm userForm;
 
     
 	public static class Factory implements PanelFactory {
@@ -75,11 +75,13 @@ public class UserConsole extends HLayout {
 		private String id;
 		private String userType;
 		private String nameToDisplay;
+		private boolean displayUserForm;
 
-        public Factory(String userId, String userType, String nameToDisplay) {
+        public Factory(String userId, String userType, String nameToDisplay, boolean displayUserForm) {
 			this.id = userId;
 			this.userType = userType;
 			this.nameToDisplay = nameToDisplay;
+			this.displayUserForm = displayUserForm;
 		}
 
 		public Canvas create() {
@@ -87,6 +89,7 @@ public class UserConsole extends HLayout {
 			panel.setUserId(id);
 			panel.setUserType(userType);
 			panel.setNameToDisplay(nameToDisplay);
+			panel.setDisplayUserForm(displayUserForm);
             panel.setMargin(5);
             panel.setWidth100();
             panel.setHeight100();
@@ -189,12 +192,45 @@ public class UserConsole extends HLayout {
 			}
         });
         
+        HLayout searchPagingLayout = new HLayout(5);
+        searchPagingLayout.addMember(previousButton);
+        searchPagingLayout.addMember(nextButton);
+        
+        conversationLayout.addMember(searchPagingLayout);
+        
+        VLayout listLayout = new VLayout(0);
+		listLayout.addMember(listLabel);
+		listLayout.addMember(conversationListGrid);
+		
+        conversationLayout.addMember(listLayout);
+        
+		conversationUserInfoLayout.addMember(conversationLayout);
+		if (displayUserForm) conversationUserInfoLayout.addMember(createUserForm());
+		
+		vlayout.addMember(conversationUserInfoLayout);
+		
+		HTMLFlow mainHtmlFlow = new HTMLFlow();
+		mainHtmlFlow.setOverflow(Overflow.AUTO);
+		mainHtmlFlow.setPadding(10);
+		mainHtmlFlow.setHeight("50");
+		mainHtmlFlow.setContents("<b> " + userId + " </b>");
+		vlayout.addMember(mainHtmlFlow);
+		
+		// TODO: Create send message dialog
+		
+		// TODO: Create picture dialog with send option
+		
+		canvas.addChild(vlayout);
+		return canvas;
+    }
+	
+	private VLayout createUserForm() {
 		Label userFormLabel = new Label();
 		userFormLabel.setHeight(10);
 		userFormLabel.setWidth(200);
 		userFormLabel.setContents(DictionaryInstance.dictionary.editUser());
-        
-        final DynamicForm userForm = new DynamicForm();
+		
+		userForm = new DynamicForm();
         userForm.setIsGroup(true);
         userForm.setGroupTitle(DictionaryInstance.dictionary.update());
         userForm.setNumCols(4);
@@ -209,21 +245,9 @@ public class UserConsole extends HLayout {
 			
 			@Override
 			protected void transformResponse(DSResponse response, DSRequest request, Object jsonData) {
-				for (FormItem formItem : userForm.getFields())  {
-					JSONArray value = XMLTools.selectObjects(jsonData, formItem.getAttribute("jsonPath"));
-					if (formItem instanceof DateTimeItem) {
-						userForm.setValue(formItem.getName(), Constants.dateTimeFormat.format(JSONUtils.getDate(value.getJavaScriptObject().toString())));
-					} else if (formItem instanceof DateItem) {
-						Date date = JSONUtils.getDate(value.getJavaScriptObject().toString());
-						Date gmt = new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
-						userForm.setValue(formItem.getName(), Constants.dateTimeFormat.format(gmt));
-					} else if (formItem instanceof BooleanItem) {
-						userForm.setValue(formItem.getName(), value.get(0).isBoolean().booleanValue());
-					} else {
-						userForm.setValue(formItem.getName(), value.getJavaScriptObject());
-					}
-				}
+				populateUserForm(jsonData);
 			}
+
 		};
 		ds.setDataFormat(DSDataFormat.JSON);
 		userForm.setDataSource(ds);
@@ -262,7 +286,7 @@ public class UserConsole extends HLayout {
 								status = ((JSONBoolean) value.get(0)).booleanValue();
 							}
 							if (status) {
-								// Successful update
+								populateUserForm(XMLTools.selectObjects(jsonData, "/user"));
 							}
 						}
 						
@@ -270,41 +294,33 @@ public class UserConsole extends HLayout {
 				}
 			}
 		});
-		
-		VLayout userFormlistLayout = new VLayout(5);
-		userFormlistLayout.addMember(userFormLabel);
-		userFormlistLayout.addMember(userForm);
-		userFormlistLayout.addMember(updateButton);
         
-        HLayout searchPagingLayout = new HLayout(5);
-        searchPagingLayout.addMember(previousButton);
-        searchPagingLayout.addMember(nextButton);
+        VLayout formLayout = new VLayout(5);
+        formLayout.addMember(userFormLabel);
+        formLayout.addMember(userForm);
+        formLayout.addMember(updateButton);
         
-        conversationLayout.addMember(searchPagingLayout);
-        
-        VLayout listLayout = new VLayout(0);
-		listLayout.addMember(listLabel);
-		listLayout.addMember(conversationListGrid);
-		
-        conversationLayout.addMember(listLayout);
-        
-		conversationUserInfoLayout.addMember(conversationLayout);
-		conversationUserInfoLayout.addMember(userFormlistLayout);
-		
-		vlayout.addMember(conversationUserInfoLayout);
-		
-		HTMLFlow mainHtmlFlow = new HTMLFlow();
-		mainHtmlFlow.setOverflow(Overflow.AUTO);
-		mainHtmlFlow.setPadding(10);
-		mainHtmlFlow.setHeight("50");
-		mainHtmlFlow.setContents("<b> " + userId + " </b>");
-		
-		vlayout.addMember(mainHtmlFlow);
-		
-		canvas.addChild(vlayout);
-		return canvas;
-    }
+        return formLayout;
+	}
 	
+	private void populateUserForm(Object jsonData) {
+		for (FormItem formItem : userForm.getFields())  {
+			JSONArray value = XMLTools.selectObjects(jsonData, formItem.getAttribute("jsonPath"));
+			if (value == null || value.size() == 0) continue;
+			if (formItem instanceof DateTimeItem) {
+				userForm.setValue(formItem.getName(), Constants.dateTimeFormat.format(JSONUtils.getDate(value.getJavaScriptObject().toString())));
+			} else if (formItem instanceof DateItem) {
+				Date date = JSONUtils.getDate(value.getJavaScriptObject().toString());
+				Date gmt = new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
+				userForm.setValue(formItem.getName(), Constants.dateTimeFormat.format(gmt));
+			} else if (formItem instanceof BooleanItem) {
+				userForm.setValue(formItem.getName(), value.get(0).isBoolean().booleanValue());
+			} else {
+				userForm.setValue(formItem.getName(), value.getJavaScriptObject());
+			}
+		}
+	}
+
 	private ListGridField[] getConversationFields() {
 		ListGridField text = new ListGridField("text");
 		text.setAlign(Alignment.CENTER);
@@ -456,5 +472,8 @@ public class UserConsole extends HLayout {
 
 	public String getNameToDisplay() { return nameToDisplay; }
 	public void setNameToDisplay(String nameToDisplay) { this.nameToDisplay = nameToDisplay; }
-		
+
+	public boolean isDisplayUserForm() { return displayUserForm; }
+	public void setDisplayUserForm(boolean displayUserForm) { this.displayUserForm = displayUserForm; }
+			
 }
