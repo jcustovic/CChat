@@ -7,9 +7,7 @@
     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
-	
-	<import resource="classpath:hr/chus/cchat/configuration/spring/cchatDb.xml"/>
-	<import resource="classpath:hr/chus/cchat/configuration/spring/propertiesLoader.xml"/>
-	<import resource="classpath:hr/chus/cchat/configuration/spring/cchat.xml"/>
 
+	<bean id="operatorChooser" class="hr.chus.cchat.helper.OperatorChooser" init-method="init" />
+	
 </beans>

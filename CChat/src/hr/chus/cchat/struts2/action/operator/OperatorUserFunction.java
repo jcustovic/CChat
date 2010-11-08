@@ -20,6 +20,7 @@ import com.opensymphony.xwork2.ActionSupport;
 public class OperatorUserFunction extends ActionSupport implements UserAware {
 
 	private static final long serialVersionUID = 1L;
+	
 	private Log log = LogFactory.getLog(getClass());
 	
 	private UserService userService;

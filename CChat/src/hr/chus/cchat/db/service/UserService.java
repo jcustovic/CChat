@@ -19,6 +19,7 @@ public interface UserService {
 	public User editUser(User user);
 	public void deleteUser(User user);
 	public User getUserById(Integer id);
+	public User getByMsisdn(String msisdn);
 	public Object[] searchUsers(Nick nick, Operator operator, ServiceProvider serviceProvider, String msisdn, Integer id, String name, String surname, Boolean deleted, int start, int limit);
 	public Long getCount();
 	public List<User> getByOperator(Operator operator);

@@ -27,8 +27,6 @@ public class Test extends ActionSupport implements ServletRequestAware {
 	public String execute() throws Exception {
 		log.info(request.getCharacterEncoding());
 		log.info(test);
-		log.info(new String(test.getBytes(), "UTF-8"));
-		log.info(new String(test.getBytes("ISO-8859-1"), "UTF-8"));
 		return SUCCESS;
 	}
 

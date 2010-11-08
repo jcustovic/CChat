@@ -499,7 +499,8 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 									iconPath = Constants.CONTEXT_PATH + "images/new_call.gif";
 								}
 							}
-							usersDate.add(new ExplorerTreeNode(nameToDisplay, userId, userType, i, iconPath, new UserConsole.Factory(userId, userType, nameToDisplay), true, ""));
+							boolean displayUserForm = userType.equals("operatorUserList");
+							usersDate.add(new ExplorerTreeNode(nameToDisplay, userId, userType, i, iconPath, new UserConsole.Factory(userId, userType, nameToDisplay, displayUserForm), true, ""));
 							Tab tab = mainTabSet.getTab(userId + "_tab");
 							if (tab != null) {
 								String imgHTML = Canvas.imgHTML(iconPath, 16, 16);
