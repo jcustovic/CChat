@@ -3,6 +3,7 @@ package hr.chus.cchat.struts2.action.common;
 import hr.chus.cchat.db.service.SMSMessageService;
 import hr.chus.cchat.db.service.ServiceProviderService;
 import hr.chus.cchat.db.service.UserService;
+import hr.chus.cchat.helper.OperatorChooser;
 import hr.chus.cchat.model.db.jpa.Operator;
 import hr.chus.cchat.model.db.jpa.SMSMessage;
 import hr.chus.cchat.model.db.jpa.ServiceProvider;
@@ -34,6 +35,7 @@ public class ReceiveSms extends ActionSupport {
 	private ServiceProviderService serviceProviderService;
 	private UserService userService;
 	private SMSMessageService smsMessageService;
+	private OperatorChooser operatorChooser;
 	
 	private String msisdn;
 	private String time;
@@ -66,42 +68,53 @@ public class ReceiveSms extends ActionSupport {
 	@Override
 	public String execute() throws Exception {
 		log.info("Got message from " + msisdn + " (ServiceProvider: " + serviceProviderName + ", SC: " + sc + ") with text --> " + text);
+		Date date = new Date();
+		if (time != null && !time.isEmpty()) {
+			try {
+				date = sdf.parse(time);
+			} catch (ParseException e) {
+				log.info("Error parsing time " + time);
+			}
+		}
+		
 		ServiceProvider serviceProvider = serviceProviderService.getByNameAndShortCode(serviceProviderName, sc);
 		if (serviceProvider == null) {
 			errorMsg = "ServiceProvider not found for provider " + serviceProviderName + " and sc " + sc;
 			status = false;
 			return SUCCESS;
 		}
+		Operator operator = null;
 		User user = userService.getByMsisdn(msisdn);
 		if (user == null) {
 			user = new User(msisdn, serviceProvider);
 			user.setUnreadMsgCount(1);
+			operator = chooseOperator();
+			user.setOperator(operator);
 			user = userService.editUser(user);
 			log.info("Creating new user " + user);
 		} else {
 			user.setUnreadMsgCount(user.getUnreadMsgCount() + 1);
 			user.setLastMsg(new Date());
+			operator = user.getOperator();
+			if (operator == null || !operator.getIsActive()) {
+				operator = chooseOperator();
+			}
+			user.setOperator(operator);
 			userService.editUser(user);
 		}
 		
-		Operator operator = user.getOperator();
-		if (operator == null) {
-			operator = chooseOperator();
-		}
-		Date date = null;
-		try {
-			date = sdf.parse(time);
-		} catch (ParseException e) {
-			log.info("Error parsing time " + time);
-		}
 		SMSMessage message = new SMSMessage(user, operator, date, text, sc, serviceProvider, Direction.IN);
 		smsMessageService.addSMSMessage(message);
 		status = true;
 		return SUCCESS;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	private Operator chooseOperator() {
-		return null;
+		return operatorChooser.chooseOperator();
 	}
 	
 
@@ -116,6 +129,8 @@ public class ReceiveSms extends ActionSupport {
 	public void setUserService(UserService userService) { this.userService = userService; }
 
 	public void setSmsMessageService(SMSMessageService smsMessageService) { this.smsMessageService = smsMessageService; }
+	
+	public void setOperatorChooser(OperatorChooser operatorChooser) { this.operatorChooser = operatorChooser; }
 
 	public void setMsisdn(String msisdn) { this.msisdn = msisdn; }
 

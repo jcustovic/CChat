@@ -6,12 +6,17 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *
  */
 public class OperatorChooser {
+	
+	private Log log = LogFactory.getLog(getClass());
 	
 	private Integer lastChoosenOperatorId;
 	private List<Operator> activeOperatorList;
@@ -32,8 +37,10 @@ public class OperatorChooser {
 	}
 	
 	public Operator chooseOperator() {
+		log.debug("Choosing operator...");
 		Operator operator = null;
 		if (activeOperatorList.size() == 0) {
+			log.info("No active operators to choose from.");
 			return null;
 		} else if (activeOperatorList.size() == 1) {
 			operator = activeOperatorList.get(0);
@@ -59,6 +66,7 @@ public class OperatorChooser {
 			}
 		}
 		if (operator != null) lastChoosenOperatorId = operator.getId();
+		log.info("Operator " + operator + " chosen.");
 		return operator;
 	}
 	

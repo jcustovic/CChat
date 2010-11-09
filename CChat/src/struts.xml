@@ -103,5 +103,10 @@
 			<result type="json" />
 		</action>
 		
+		<action name="ReceiveSms" class="hr.chus.cchat.struts2.action.common.ReceiveSms">
+			<result type="json" />
+			<result name="input" type="json" />
+		</action>
+		
 	</package>
 </struts>

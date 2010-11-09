@@ -157,11 +157,17 @@ public class SMSMessageServiceImpl implements SMSMessageService {
 		}
 		return new Object[] { count, conversationList };
 	}
+	
+	@Override
+	public void updateSMSMessageOperatorIfNull(Integer operatorId, Integer userId) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	
 	// Getters & setters
 	
 	@PersistenceContext
 	public void setEntityManager(EntityManager entityManager) { this.entityManager = entityManager; }
-	
+
 }
