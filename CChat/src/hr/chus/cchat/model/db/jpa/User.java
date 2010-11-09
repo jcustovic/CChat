@@ -65,6 +65,8 @@ public class User implements Serializable {
 	private List<Picture> sentPicturesList;
 	
 	
+	public User() { }
+	
 	public User(String msisdn, ServiceProvider serviceProvider) {
 		Date date = new Date();
 		this.msisdn = msisdn;

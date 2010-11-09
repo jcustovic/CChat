@@ -2,6 +2,7 @@ package hr.chus.cchat.struts2.action.operator;
 
 import hr.chus.cchat.db.service.OperatorService;
 import hr.chus.cchat.db.service.UserService;
+import hr.chus.cchat.helper.OperatorChooser;
 import hr.chus.cchat.helper.UserAware;
 import hr.chus.cchat.model.db.jpa.Operator;
 
@@ -19,6 +20,7 @@ public class ActiveService extends ActionSupport implements UserAware {
 	private Operator operator;
 	private OperatorService operatorService;
 	private UserService userService;
+	private OperatorChooser operatorChooser;
 	private Boolean newStatus;
 	private boolean active;
 
@@ -29,7 +31,10 @@ public class ActiveService extends ActionSupport implements UserAware {
 			operator.setIsActive(newStatus);
 			operator = operatorService.updateOperator(operator);
 			if (operator.getIsActive()) {
+				operatorChooser.addActiveOperator(operator);
 				userService.assignUsersWithNewMsgToOperator(operator);
+			} else {
+				operatorChooser.removeActiveOperator(operator);
 			}
 		}
 		active = operator.getIsActive();
@@ -45,6 +50,8 @@ public class ActiveService extends ActionSupport implements UserAware {
 	public void setOperatorService(OperatorService operatorService) { this.operatorService = operatorService; }
 	
 	public void setUserService(UserService userService) { this.userService = userService; }
+	
+	public void setOperatorChooser(OperatorChooser operatorChooser) { this.operatorChooser = operatorChooser; }
 
 	public void setNewStatus(Boolean newStatus) { this.newStatus = newStatus; }
 
