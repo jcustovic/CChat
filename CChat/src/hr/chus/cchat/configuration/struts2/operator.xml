@@ -106,6 +106,15 @@
 		<action name="UserConversationJSON" class="hr.chus.cchat.struts2.action.operator.UserConversation">
 			<result type="json" />
 		</action>
+		
+		<action name="SendSms" class="hr.chus.cchat.struts2.action.common.SendSms">
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+			</result>
+			<result name="input" type="json">
+				<param name="excludeNullProperties">true</param>
+			</result>
+		</action>
 	    	
 	</package>
 

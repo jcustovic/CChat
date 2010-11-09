@@ -104,8 +104,12 @@
 		</action>
 		
 		<action name="ReceiveSms" class="hr.chus.cchat.struts2.action.common.ReceiveSms">
-			<result type="json" />
-			<result name="input" type="json" />
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+			</result>
+			<result name="input" type="json">
+				<param name="excludeNullProperties">true</param>
+			</result>
 		</action>
 		
 	</package>
