@@ -160,8 +160,7 @@ public class SMSMessageServiceImpl implements SMSMessageService {
 	
 	@Override
 	public void updateSMSMessageOperatorIfNull(Integer operatorId, Integer userId) {
-		// TODO Auto-generated method stub
-		
+		entityManager.createQuery("UPDATE SMSMessage sms SET sms.operator.id = :operatorId WHERE sms.user.id = :userId AND sms.operator IS NULL").setParameter("operatorId", operatorId).setParameter("userId", userId).executeUpdate();
 	}
 
 	
