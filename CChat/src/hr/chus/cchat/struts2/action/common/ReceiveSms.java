@@ -84,6 +84,9 @@ public class ReceiveSms extends ActionSupport {
 			return SUCCESS;
 		}
 		Operator operator = null;
+		/* TODO: Get by msisdn and serviceProvider, change User model (and create.sql) so msisdn is not unique, because the same user can 
+		 * subscribe to different serviceProviders (same provider name different short code).
+		 */
 		User user = userService.getByMsisdn(msisdn);
 		if (user == null) {
 			user = new User(msisdn, serviceProvider);

@@ -3,6 +3,7 @@ package hr.chus.cchat.struts2.action.common;
 import hr.chus.cchat.ApplicationConstants;
 import hr.chus.cchat.db.service.OperatorService;
 import hr.chus.cchat.db.service.UserService;
+import hr.chus.cchat.helper.OperatorChooser;
 import hr.chus.cchat.model.db.jpa.Operator;
 
 import java.util.Map;
@@ -27,6 +28,7 @@ public class Logout extends ActionSupport implements SessionAware {
 	private Map<String, Object> session;
 	private OperatorService operatorService;
 	private UserService userService;
+	private OperatorChooser operatorChooser;
 	
 
 	@Override
@@ -36,6 +38,7 @@ public class Logout extends ActionSupport implements SessionAware {
 			user.setIsActive(false);
 			operatorService.updateOperator(user);
 			userService.clearOperatorField(user);
+			operatorChooser.removeActiveOperator(user);
 			log.info(user.getUsername() + " (id=" + user.getId() + ") logged out");
 			session.remove(ApplicationConstants.USER_SESSION);
 		}
@@ -50,5 +53,7 @@ public class Logout extends ActionSupport implements SessionAware {
 	public void setOperatorService(OperatorService operatorService) { this.operatorService = operatorService; }
 
 	public void setUserService(UserService userService) { this.userService = userService; }
-			
+
+	public void setOperatorChooser(OperatorChooser operatorChooser) { this.operatorChooser = operatorChooser; }
+				
 }
