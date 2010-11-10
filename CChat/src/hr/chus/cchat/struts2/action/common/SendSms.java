@@ -2,10 +2,12 @@ package hr.chus.cchat.struts2.action.common;
 
 import java.util.Date;
 
+import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import hr.chus.cchat.db.service.SMSMessageService;
+import hr.chus.cchat.db.service.UserService;
 import hr.chus.cchat.gateway.SendMessageService;
 import hr.chus.cchat.helper.UserAware;
 import hr.chus.cchat.model.db.jpa.Operator;
@@ -28,6 +30,7 @@ public class SendSms extends ActionSupport implements UserAware {
 	
 	private SMSMessageService smsMessageService;
 	private SendMessageService sendMessageService;
+	private UserService userService;
 	private Operator operator;
 	
 	private User user;
@@ -41,13 +44,19 @@ public class SendSms extends ActionSupport implements UserAware {
 	@Override
 	public void validate() {
 		if (operator == null) {
-			errorMsg = "Operator not recognized";
+			errorMsg = getText("sendSms.operator.notRecognized");
+		} else if (!operator.getIsActive() && !operator.getRole().getName().equals("admin")) {
+			errorMsg = getText("sendSms.operator.mustBeActive");
 		} else if (user == null) {
-			errorMsg = "User not found";
+			errorMsg = getText("sendSms.user.notFound");
+		} else if (user.getServiceProvider().getDisabled()) {
+			errorMsg = getText("sendSms.serviceProvider.disabled", new String[] { user.getServiceProvider().getProviderName(), user.getServiceProvider().getSc() });
+		} else if (user.getOperator() != null && !user.getOperator().equals(operator) && !operator.getRole().getName().equals("admin")) {
+			errorMsg = getText("sendSms.user.belongsToAnotherOperator", new String[] { user.getOperator().getUsername() });
 		} else if (msgType == null || msgType.isEmpty()) {
-			errorMsg = "MsgType must be set";
+			errorMsg = getText("sendSms.msgType.notDefiend");
 		} else if (text == null) {
-			errorMsg = "Text must not be null";
+			errorMsg = getText("sendSms.text.notNull");
 		}
 		if (errorMsg != null) {
 			log.error(errorMsg);
@@ -60,20 +69,30 @@ public class SendSms extends ActionSupport implements UserAware {
 	public String execute() throws Exception {
 		log.info("Sending message to user " + user + " --> type: " + msgType + ", text: " + text);
 		SMSMessage smsMessage = new SMSMessage(user, operator, new Date(), text, user.getServiceProvider().getSc(), user.getServiceProvider(), Direction.OUT);
+		String gatewayResponse = null;
 		try {
 			if (msgType.equals("wapPush")) {
-				sendMessageService.sendWapPushMessage(smsMessage);
+				gatewayResponse = sendMessageService.sendWapPushMessage(smsMessage);
 			} else {
-				sendMessageService.sendSmsMessage(smsMessage);
+				gatewayResponse = sendMessageService.sendSmsMessage(smsMessage);
 			}
+		} catch (HttpException e) {
+			log.error(e, e);
+			errorMsg = getText("sendSms.httpException");
+			status = false;
+			return SUCCESS;
 		} catch (Exception e) {
 			log.error(e, e);
-			errorMsg = e.getMessage();
+			errorMsg = getText("sendSms.exception", new String[] { e.getMessage() });
 			status = false;
 			return SUCCESS;
 		}
 		smsMessage = smsMessageService.updateSMSMessage(smsMessage);
-		log.info("Message " + smsMessage + " sent.");
+		log.info("Message " + smsMessage + " sent. Gateway response: " + gatewayResponse);
+		if (user.getOperator() == null && !operator.getRole().getName().equals("admin")) {
+			user.setOperator(operator);
+			user = userService.editUser(user);
+		}
 		status = true;
 		return SUCCESS;
 	}
@@ -87,6 +106,8 @@ public class SendSms extends ActionSupport implements UserAware {
 	public void setSmsMessageService(SMSMessageService smsMessageService) { this.smsMessageService = smsMessageService; }
 	
 	public void setSendMessageService(SendMessageService sendMessageService) { this.sendMessageService = sendMessageService; }
+	
+	public void setUserService(UserService userService) { this.userService = userService; }
 
 	public Boolean getStatus() { return status; }
 

@@ -10,9 +10,11 @@
 
 	<bean id="operatorChooser" class="hr.chus.cchat.helper.OperatorChooser" init-method="init" />
 	
-	<bean id="sendMessageService" class="hr.chus.cchat.gateway.SendMessageService">
-		<property name="sendSmsUrlTemplate" value="${gateway.sendSmsUrlTemplate}" />
-		<property name="sendWapPushUrlTemplate" value="${gateway.sendWapPushUrlTemplate}" />
+	<bean id="sendMessageService" class="hr.chus.cchat.gateway.SendMessageServiceCGateway">
+		<property name="username" value="${gateway.username}" />
+		<property name="password" value="${gateway.password}" />
+		<property name="sendSmsUrl" value="${gateway.sendSmsUrl}" />
+		<property name="sendWapPushUrl" value="${gateway.sendWapPushUrl}" />
 	</bean>
 	
 </beans>
