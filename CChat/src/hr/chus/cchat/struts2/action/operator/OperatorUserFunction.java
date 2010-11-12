@@ -51,7 +51,6 @@ public class OperatorUserFunction extends ActionSupport implements UserAware {
 	public String execute() throws Exception {
 		if (operation == null) {
 		} else if (operation.equals("update")) {
-			log.debug(user.getNotes());
 			log.debug("Updating user " + user + " ...");
 			user = userService.editUser(user);
 		}
