@@ -10,9 +10,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 /**
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
@@ -24,7 +21,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 	@NamedQuery(name = "ServiceProvider.getAll", query = "SELECT sp FROM ServiceProvider sp")
 	, @NamedQuery(name = "ServiceProvider.getByNameAndSc", query = "SELECT sp FROM ServiceProvider sp WHERE sp.sc = :sc AND sp.providerName = :providerName")
 })
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class ServiceProvider implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

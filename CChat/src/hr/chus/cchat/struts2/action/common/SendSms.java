@@ -39,6 +39,7 @@ public class SendSms extends ActionSupport implements UserAware {
 	
 	private Boolean status;
 	private String errorMsg;
+	private SMSMessage smsMessage;
 	
 	
 	@Override
@@ -68,13 +69,13 @@ public class SendSms extends ActionSupport implements UserAware {
 	@Override
 	public String execute() throws Exception {
 		log.info("Sending message to user " + user + " --> type: " + msgType + ", text: " + text);
-		SMSMessage smsMessage = new SMSMessage(user, operator, new Date(), text, user.getServiceProvider().getSc(), user.getServiceProvider(), Direction.OUT);
+		SMSMessage newSmsMessage = new SMSMessage(user, operator, new Date(), text, user.getServiceProvider().getSc(), user.getServiceProvider(), Direction.OUT);
 		String gatewayResponse = null;
 		try {
 			if (msgType.equals("wapPush")) {
-				gatewayResponse = sendMessageService.sendWapPushMessage(smsMessage);
+				gatewayResponse = sendMessageService.sendWapPushMessage(newSmsMessage);
 			} else {
-				gatewayResponse = sendMessageService.sendSmsMessage(smsMessage);
+				gatewayResponse = sendMessageService.sendSmsMessage(newSmsMessage);
 			}
 		} catch (HttpException e) {
 			log.error(e, e);
@@ -87,7 +88,7 @@ public class SendSms extends ActionSupport implements UserAware {
 			status = false;
 			return SUCCESS;
 		}
-		smsMessage = smsMessageService.updateSMSMessage(smsMessage);
+		smsMessage = smsMessageService.updateSMSMessage(newSmsMessage);
 		log.info("Message " + smsMessage + " sent. Gateway response: " + gatewayResponse);
 		if (user.getOperator() == null && !operator.getRole().getName().equals("admin")) {
 			user.setOperator(operator);
@@ -119,4 +120,6 @@ public class SendSms extends ActionSupport implements UserAware {
 
 	public void setText(String text) { this.text = text; }
 
+	public SMSMessage getSmsMessage() { return smsMessage; }
+	
 }

@@ -18,6 +18,7 @@
 	<bean id="serviceProviderService" class="hr.chus.cchat.db.service.jpa.ServiceProviderServiceImpl" />
 	<bean id="smsMessageService" class="hr.chus.cchat.db.service.jpa.SMSMessageServiceImpl" />
 	<bean id="statisticsService" class="hr.chus.cchat.db.service.jpa.StatisticsServiceImpl" />
+	<bean id="configurationService" class="hr.chus.cchat.db.service.jpa.ConfigurationServiceImpl" />
 	
 	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
 

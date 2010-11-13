@@ -2,12 +2,14 @@ package hr.chus.cchat.struts2.action.common;
 
 import java.util.Date;
 
+import hr.chus.cchat.db.service.ConfigurationService;
 import hr.chus.cchat.db.service.NickService;
 import hr.chus.cchat.db.service.OperatorService;
 import hr.chus.cchat.db.service.RoleService;
 import hr.chus.cchat.db.service.SMSMessageService;
 import hr.chus.cchat.db.service.ServiceProviderService;
 import hr.chus.cchat.db.service.UserService;
+import hr.chus.cchat.model.db.jpa.Configuration;
 import hr.chus.cchat.model.db.jpa.Nick;
 import hr.chus.cchat.model.db.jpa.Operator;
 import hr.chus.cchat.model.db.jpa.Role;
@@ -34,6 +36,7 @@ public class Prepare extends ActionSupport {
 	private NickService nickService;
 	private UserService userService;
 	private SMSMessageService smsMessageService;
+	private ConfigurationService configurationService;
 	
 	private String type;
 	private String message;
@@ -73,6 +76,9 @@ public class Prepare extends ActionSupport {
 		
 		Operator user = new Operator("user", StringUtil.encodePassword("user", "SHA"), operator, false, false);
 		operatorService.addOperator(user);
+		
+		Configuration smsMaxLength = new Configuration("smsMaxLength", "160");
+		configurationService.addConfiguration(smsMaxLength);
 		
 		ServiceProvider vipServiceProvider = new ServiceProvider("66111", "VIP", "VIP mreža", false);
 		serviceProviderService.addServiceProvider(vipServiceProvider);
@@ -147,6 +153,9 @@ public class Prepare extends ActionSupport {
 		
 		Operator user = new Operator("user", StringUtil.encodePassword("user", "SHA"), operator, false, false);
 		operatorService.addOperator(user);
+		
+		Configuration smsMaxLength = new Configuration("smsMaxLength", "160");
+		configurationService.addConfiguration(smsMaxLength);
 	}
 	
 	
@@ -164,6 +173,8 @@ public class Prepare extends ActionSupport {
 	
 	public void setSmsMessageService(SMSMessageService smsMessageService) { this.smsMessageService = smsMessageService; }
 	
+	public void setConfigurationService(ConfigurationService configurationService) { this.configurationService = configurationService; }
+
 	public void setType(String type) { this.type = type; }
 
 	public String getMessage() { return message; }

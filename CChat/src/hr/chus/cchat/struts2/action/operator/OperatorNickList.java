@@ -18,6 +18,7 @@ import hr.chus.cchat.model.db.jpa.Nick;
 public class OperatorNickList extends ActionSupport {
 
 	private static final long serialVersionUID = 1L;
+	
 	private Log log = LogFactory.getLog(getClass());
 	
 	private List<Nick> nickList;

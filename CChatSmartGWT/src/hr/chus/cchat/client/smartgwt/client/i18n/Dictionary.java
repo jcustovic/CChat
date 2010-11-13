@@ -354,4 +354,10 @@ public interface Dictionary extends Constants {
 	@DefaultStringValue("Edit user")
 	String editUser();
 
+	@DefaultStringValue("Message sent successfully")
+	String messageSentSuccessfully();
+	
+	@DefaultStringValue("Sending message failed")
+	String sendingMessageFailed();
+
 }

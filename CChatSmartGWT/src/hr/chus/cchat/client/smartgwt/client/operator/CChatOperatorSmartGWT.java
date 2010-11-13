@@ -81,6 +81,8 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 	private ImgButton activateButton = new ImgButton();
 	private boolean operatorIsActive = false;
 	
+	public static Integer maxMsgLength;
+	
 
 	@Override
 	public void onModuleLoad() {
@@ -94,6 +96,8 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 		setWidth100();
 		setHeight100();
 		setPadding(5);
+		
+		getMaxMsgLength();
 		
 		ToolStrip topBar = new ToolStrip();
 		topBar.setHeight(33);
@@ -259,6 +263,22 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 		RootPanel.get().add(this);		
 	}
 	
+	private void getMaxMsgLength() {
+		DataSource dataSource = new DataSource() {
+			
+			@Override
+			protected void transformResponse(DSResponse response, DSRequest request, Object jsonData) {
+				JSONArray object = XMLTools.selectObjects(jsonData, "/value");
+				if (object != null && object.get(0).isNull() == null) 
+					maxMsgLength = Integer.valueOf(((JSONString) object.get(0)).stringValue());
+			}
+		};
+		dataSource.setDataFormat(DSDataFormat.JSON);
+		dataSource.setDataURL(Constants.CONTEXT_PATH + "operator/GetConfiguration?name=smsMaxLength");
+		dataSource.invalidateCache();
+		dataSource.fetchData();
+	}
+
 	/**
 	 * 
 	 */
