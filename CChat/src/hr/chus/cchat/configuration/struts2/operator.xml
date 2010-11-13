@@ -115,6 +115,10 @@
 				<param name="excludeNullProperties">true</param>
 			</result>
 		</action>
+		
+		<action name="GetConfiguration" class="hr.chus.cchat.struts2.action.common.GetConfiguration">
+			<result type="json" />
+		</action>
 	    	
 	</package>
 

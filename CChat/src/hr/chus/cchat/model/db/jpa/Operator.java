@@ -13,9 +13,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 /**
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
@@ -27,7 +24,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 	@NamedQuery(name = "Operator.getAll", query = "SELECT o FROM Operator o ORDER BY o.username")
 	, @NamedQuery(name = "Operator.getByUsername", query = "SELECT o FROM Operator o WHERE o.username = :username")
 })
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Operator implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

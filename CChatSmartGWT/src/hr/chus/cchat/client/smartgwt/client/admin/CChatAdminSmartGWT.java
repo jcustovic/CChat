@@ -9,6 +9,7 @@ import hr.chus.cchat.client.smartgwt.client.i18n.DictionaryInstance;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONBoolean;
+import com.google.gwt.json.client.JSONString;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
@@ -64,6 +65,8 @@ public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
 	private SideNavigationMenu sideNav;
 	private Menu contextMenu;
 	
+	public static Integer maxMsgLength;
+	
 	
 	@Override
 	public void onModuleLoad() {
@@ -76,6 +79,9 @@ public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
 		
 		setWidth100();
 		setHeight100();
+		setPadding(5);
+		
+		getMaxMsgLength();
 
 		ToolStrip topBar = new ToolStrip();
 		topBar.setHeight(33);
@@ -196,6 +202,22 @@ public class CChatAdminSmartGWT extends VLayout implements EntryPoint {
 		addMember(topBar);
 		addMember(hlayout);
 		RootPanel.get().add(this);
+	}
+
+	private void getMaxMsgLength() {
+		DataSource dataSource = new DataSource() {
+			
+			@Override
+			protected void transformResponse(DSResponse response, DSRequest request, Object jsonData) {
+				JSONArray object = XMLTools.selectObjects(jsonData, "/value");
+				if (object != null && object.get(0).isNull() == null) 
+					maxMsgLength = Integer.valueOf(((JSONString) object.get(0)).stringValue());
+			}
+		};
+		dataSource.setDataFormat(DSDataFormat.JSON);
+		dataSource.setDataURL(Constants.CONTEXT_PATH + "admin/GetConfiguration?name=smsMaxLength");
+		dataSource.invalidateCache();
+		dataSource.fetchData();
 	}
 
 	/**

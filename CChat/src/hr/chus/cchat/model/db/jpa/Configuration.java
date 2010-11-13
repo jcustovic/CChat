@@ -33,7 +33,12 @@ public class Configuration implements Serializable {
 	
 	public Configuration() { }
 	
-	
+	public Configuration(String name, String value) {
+		this.name = name;
+		this.value = value;
+	}
+
+
 	@Override
 	public int hashCode() {
 		return name.hashCode();

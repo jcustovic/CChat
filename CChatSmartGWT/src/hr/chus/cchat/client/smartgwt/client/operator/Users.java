@@ -70,9 +70,11 @@ public class Users extends HLayout {
     
     private HLayout rollOverCanvas;
     private ListGridRecord rollOverRecord;
+    private ListGrid listGrid;
     private int offset = 0;
     private int fetchSize = 0;
     private Criteria criteria = null;
+
     
     public static class Factory implements PanelFactory {
         
@@ -144,11 +146,11 @@ public class Users extends HLayout {
 		listLabel.setVisible(false);
 		listLabel.setHeight("10px");
 
-		final ListGrid listGrid = new ListGrid() {
+		listGrid = new ListGrid() {
 			
 			@Override
 			protected Canvas getRollOverCanvas(Integer rowNum, Integer colNum) {
-				rollOverRecord = this.getRecord(rowNum);
+				rollOverRecord = getRecord(rowNum);
 
 	            if (rollOverCanvas == null) {
 	                rollOverCanvas = new HLayout(3);
@@ -178,35 +180,43 @@ public class Users extends HLayout {
 	                    	window.setHeight(250);
 	                    	window.setWidth(260);
 	                    	
-	                    	DataSource ds = new DataSource(Constants.CONTEXT_PATH + "operator/SendMessageFunctionJSON");
+	                    	DataSource ds = new DataSource(Constants.CONTEXT_PATH + "operator/SendSms");
 	                    	ds.setDataFormat(DSDataFormat.JSON);
 	                    	final DynamicForm sendMsgForm = new DynamicForm();
+	                    	sendMsgForm.setAutoFocus(true);
 	                    	sendMsgForm.setDataSource(ds);
 	                    	sendMsgForm.setWidth(220);
 	                    	sendMsgForm.setHeight(120);
 	                    	sendMsgForm.setPadding(5);
-	                    	form.setLayoutAlign(VerticalAlignment.BOTTOM);
+	                    	sendMsgForm.setLayoutAlign(VerticalAlignment.BOTTOM);
 	                    	HiddenItem userId = new HiddenItem("user");
 	                    	userId.setValue(rollOverRecord.getAttribute("user.id"));
+	                    	HiddenItem msgType = new HiddenItem("msgType");
+	                    	msgType.setValue("sms");
 	                    	
 	                    	final IntegerItem characterCount = new IntegerItem();
 	                    	characterCount.setTitle(DictionaryInstance.dictionary.charactersAllowed());
-	                    	characterCount.setValue(160);
+	                    	characterCount.setValue(CChatOperatorSmartGWT.maxMsgLength);
 	                    	characterCount.setDisabled(true);
 	                    	characterCount.setWidth(50);
-	                    	final TextAreaItem text = new TextAreaItem("textMsg", DictionaryInstance.dictionary.text());
-	                    	text.setLength(160);
-	                    	text.addKeyUpHandler(new KeyUpHandler() {
+	                    	final TextAreaItem smsTextArea = new TextAreaItem("text", DictionaryInstance.dictionary.text());
+	                    	String nickName = rollOverRecord.getAttribute("nick.name");
+	                    	if (nickName != null && !nickName.isEmpty()) smsTextArea.setValue(nickName + ": ");
+	                    	smsTextArea.setSelectOnFocus(false);
+	                    	smsTextArea.setLength(CChatOperatorSmartGWT.maxMsgLength);
+	                    	smsTextArea.addKeyUpHandler(new KeyUpHandler() {
 								
 								@Override
 								public void onKeyUp(KeyUpEvent event) {
-									characterCount.setValue(160 - text.getValue().toString().length());
+									characterCount.setValue(CChatOperatorSmartGWT.maxMsgLength - smsTextArea.getValue().toString().length());
 								}
 							});
-	                    	sendMsgForm.setFields(userId, text, characterCount);
+	                    	sendMsgForm.setFields(userId, msgType, smsTextArea, characterCount);
+	                    	sendMsgForm.focusInItem(smsTextArea.getName());
 	                    	
 	                    	IButton sendMsg = new IButton(DictionaryInstance.dictionary.sendMessage());
-	                    	sendMsg.setPadding(5);
+	                    	sendMsg.setIcon(Constants.CONTEXT_PATH + "images/message.png");
+	                    	sendMsg.setAutoFit(true);
 	                    	sendMsg.addClickHandler(new ClickHandler() {
 								
 								@Override
@@ -215,7 +225,19 @@ public class Users extends HLayout {
 										
 										@Override
 										public void execute(DSResponse response, Object rawData, DSRequest request) {
-											SC.say("Sent...", new BooleanCallback() {
+//											RecordList rl = new RecordList(listGrid.getRecordList().toArray());
+//											rl.removeAt(0);
+//											rl.removeAt(0);
+//											listGrid.setData(rl);
+											JSONArray value = XMLTools.selectObjects(rawData, "/status");
+											boolean status = ((JSONBoolean) value.get(0)).booleanValue();
+											String msg = DictionaryInstance.dictionary.messageSentSuccessfully();
+											if (!status) {
+												value = XMLTools.selectObjects(rawData, "/errorMsg");
+												String errorMsg = ((JSONString) value.get(0)).stringValue();
+												msg = DictionaryInstance.dictionary.sendingMessageFailed() + " --> " + errorMsg;
+											}
+											SC.say(msg, new BooleanCallback() {
 												
 												@Override
 												public void execute(Boolean value) {

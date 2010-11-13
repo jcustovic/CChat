@@ -14,6 +14,7 @@ import hr.chus.cchat.client.smartgwt.client.utils.JSONUtils;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONBoolean;
+import com.google.gwt.json.client.JSONString;
 import com.smartgwt.client.data.Criteria;
 import com.smartgwt.client.data.DSCallback;
 import com.smartgwt.client.data.DSRequest;
@@ -23,23 +24,30 @@ import com.smartgwt.client.data.XMLTools;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.DSDataFormat;
 import com.smartgwt.client.types.DateDisplayFormat;
-import com.smartgwt.client.types.Overflow;
+import com.smartgwt.client.types.KeyNames;
+import com.smartgwt.client.types.VerticalAlignment;
+import com.smartgwt.client.util.BooleanCallback;
+import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Canvas;
-import com.smartgwt.client.widgets.HTMLFlow;
 import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
+import com.smartgwt.client.widgets.events.KeyPressEvent;
+import com.smartgwt.client.widgets.events.KeyPressHandler;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.FormItemInputTransformer;
 import com.smartgwt.client.widgets.form.fields.BooleanItem;
 import com.smartgwt.client.widgets.form.fields.DateItem;
 import com.smartgwt.client.widgets.form.fields.DateTimeItem;
 import com.smartgwt.client.widgets.form.fields.FormItem;
+import com.smartgwt.client.widgets.form.fields.HiddenItem;
 import com.smartgwt.client.widgets.form.fields.IntegerItem;
 import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.form.fields.TextAreaItem;
 import com.smartgwt.client.widgets.form.fields.TextItem;
+import com.smartgwt.client.widgets.form.fields.events.KeyUpEvent;
+import com.smartgwt.client.widgets.form.fields.events.KeyUpHandler;
 import com.smartgwt.client.widgets.grid.CellFormatter;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
@@ -68,7 +76,10 @@ public class UserConsole extends HLayout {
     private Label listLabel;
     private Criteria criteria;
     private DynamicForm userForm;
-
+    private DynamicForm sendMsgForm;
+    private TextAreaItem smsTextArea;
+    private String nickName;
+    
     
 	public static class Factory implements PanelFactory {
         
@@ -109,8 +120,6 @@ public class UserConsole extends HLayout {
 
 	public Canvas getViewPanel() {
 		Canvas canvas = new Canvas();
-		VLayout vlayout = new VLayout(20);
-		
 		VLayout conversationLayout = new VLayout(8);
 		HLayout conversationUserInfoLayout = new HLayout(20);
 		
@@ -204,19 +213,14 @@ public class UserConsole extends HLayout {
 		
         conversationLayout.addMember(listLayout);
         
+        VLayout sendMsgForm = createSendMsgForm();
+        
 		conversationUserInfoLayout.addMember(conversationLayout);
 		if (displayUserForm) conversationUserInfoLayout.addMember(createUserForm());
 		
+		VLayout vlayout = new VLayout(3);
 		vlayout.addMember(conversationUserInfoLayout);
-		
-		HTMLFlow mainHtmlFlow = new HTMLFlow();
-		mainHtmlFlow.setOverflow(Overflow.AUTO);
-		mainHtmlFlow.setPadding(10);
-		mainHtmlFlow.setHeight("50");
-		mainHtmlFlow.setContents("<b> " + userId + " </b>");
-		vlayout.addMember(mainHtmlFlow);
-		
-		// TODO: Create send message dialog
+		vlayout.addMember(sendMsgForm);
 		
 		// TODO: Create picture dialog with send option
 		
@@ -224,6 +228,85 @@ public class UserConsole extends HLayout {
 		return canvas;
     }
 	
+	private VLayout createSendMsgForm() {
+		DataSource sendSmsDS = new DataSource(Constants.CONTEXT_PATH + "operator/SendSms");
+    	sendSmsDS.setDataFormat(DSDataFormat.JSON);
+    	sendMsgForm = new DynamicForm();
+    	sendMsgForm.setAutoFocus(true);
+    	sendMsgForm.setIsGroup(true);
+    	sendMsgForm.setGroupTitle(DictionaryInstance.dictionary.sendMessage());
+    	sendMsgForm.setDataSource(sendSmsDS);
+    	sendMsgForm.setWidth(350);
+    	sendMsgForm.setHeight(120);
+    	sendMsgForm.setPadding(5);
+    	sendMsgForm.setLayoutAlign(VerticalAlignment.BOTTOM);
+    	HiddenItem userId = new HiddenItem("user");
+    	userId.setValue(this.userId);
+    	HiddenItem msgType = new HiddenItem("msgType");
+    	msgType.setValue("sms");
+    	
+    	final IntegerItem characterCount = new IntegerItem();
+    	characterCount.setTitle(DictionaryInstance.dictionary.charactersAllowed());
+    	characterCount.setValue(CChatOperatorSmartGWT.maxMsgLength);
+    	characterCount.setDisabled(true);
+    	characterCount.setWidth(50);
+    	
+    	final IButton sendMsgButton = new IButton(DictionaryInstance.dictionary.sendMessage());
+    	
+    	smsTextArea = new TextAreaItem("text", DictionaryInstance.dictionary.text());
+    	smsTextArea.setWidth(280);
+    	smsTextArea.setSelectOnFocus(false);
+    	smsTextArea.setLength(CChatOperatorSmartGWT.maxMsgLength);
+    	smsTextArea.addKeyUpHandler(new KeyUpHandler() {
+			
+			@Override
+			public void onKeyUp(KeyUpEvent event) {
+				if (event.getKeyName().equals(KeyNames.ENTER)) sendMsgButton.fireEvent(new ClickEvent(null));
+				characterCount.setValue(CChatOperatorSmartGWT.maxMsgLength - smsTextArea.getValue().toString().length());
+			}
+		});
+    	sendMsgForm.setFields(userId, msgType, smsTextArea, characterCount);
+    	
+    	
+    	sendMsgButton.setIcon(Constants.CONTEXT_PATH + "images/message.png");
+    	sendMsgButton.setAutoFit(true);
+    	sendMsgButton.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				if (smsTextArea.getValue() != null) 
+					smsTextArea.setValue(smsTextArea.getValue().toString().trim());
+				sendMsgForm.submit(new DSCallback() {
+					
+					@Override
+					public void execute(DSResponse response, Object rawData, DSRequest request) {
+//						
+						JSONArray value = XMLTools.selectObjects(rawData, "/status");
+						boolean status = ((JSONBoolean)value.get(0)).booleanValue();
+						if (status) {
+							if (nickName != null && !nickName.isEmpty()) smsTextArea.setValue(nickName + ": ");
+							// TODO: Add new msg to conversationList
+//							RecordList rl = new RecordList(listGrid.getRecordList().toArray());
+//							rl.removeAt(0);
+//							rl.removeAt(0);
+//							listGrid.setData(rl);
+						} else {
+							value = XMLTools.selectObjects(rawData, "/errorMsg");
+							String errorMsg = ((JSONString)value.get(0)).stringValue();
+							SC.say(DictionaryInstance.dictionary.sendingMessageFailed() + " --> " + errorMsg);
+						}
+					};
+				});
+			}
+    	});
+    	
+    	VLayout formLayout = new VLayout(5);
+        formLayout.addMember(sendMsgForm);
+        formLayout.addMember(sendMsgButton);
+        
+        return formLayout;
+	}
+
 	private VLayout createUserForm() {
 		Label userFormLabel = new Label();
 		userFormLabel.setHeight(10);
@@ -274,7 +357,6 @@ public class UserConsole extends HLayout {
 						if (value == null) userForm.clearValue(key);
 					}
 					userForm.setValue("operation", "update");
-					
 					userForm.submit(new DSCallback() {
 
 						@Override
@@ -286,7 +368,9 @@ public class UserConsole extends HLayout {
 								status = ((JSONBoolean) value.get(0)).booleanValue();
 							}
 							if (status) {
-								populateUserForm(XMLTools.selectObjects(jsonData, "/user"));
+								populateUserForm(jsonData);
+							} else {
+								// TODO: Some kind of error so user knows what's going on.
 							}
 						}
 						
@@ -319,6 +403,16 @@ public class UserConsole extends HLayout {
 				userForm.setValue(formItem.getName(), value.getJavaScriptObject());
 			}
 		}
+		// Edit smsTextArea with nick name
+		JSONArray value = XMLTools.selectObjects(jsonData, "user/nick/name");
+		if (value != null && value.size() > 0) {
+			nickName = ((JSONString) value.get(0)).stringValue();
+			smsTextArea.setValue(nickName + ": ");
+		} else {
+			nickName = null;
+			smsTextArea.clearValue();
+		}
+		sendMsgForm.focusInItem(smsTextArea.getName());
 	}
 
 	private ListGridField[] getConversationFields() {

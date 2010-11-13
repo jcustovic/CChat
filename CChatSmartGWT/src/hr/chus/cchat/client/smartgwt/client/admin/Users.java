@@ -13,6 +13,7 @@ import hr.chus.cchat.client.smartgwt.client.i18n.DictionaryInstance;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONBoolean;
 import com.google.gwt.json.client.JSONString;
 import com.smartgwt.client.data.Criteria;
 import com.smartgwt.client.data.DSCallback;
@@ -179,35 +180,43 @@ public class Users extends HLayout {
 	                    	window.setHeight(250);
 	                    	window.setWidth(260);
 	                    	
-	                    	DataSource ds = new DataSource(Constants.CONTEXT_PATH + "admin/SendMessageFunctionJSON");
+	                    	DataSource ds = new DataSource(Constants.CONTEXT_PATH + "admin/SendSms");
 	                    	ds.setDataFormat(DSDataFormat.JSON);
 	                    	final DynamicForm sendMsgForm = new DynamicForm();
+	                    	sendMsgForm.setAutoFocus(true);
 	                    	sendMsgForm.setDataSource(ds);
 	                    	sendMsgForm.setWidth(220);
 	                    	sendMsgForm.setHeight(120);
 	                    	sendMsgForm.setPadding(5);
-	                    	form.setLayoutAlign(VerticalAlignment.BOTTOM);
+	                    	sendMsgForm.setLayoutAlign(VerticalAlignment.BOTTOM);
 	                    	HiddenItem userId = new HiddenItem("user");
 	                    	userId.setValue(rollOverRecord.getAttribute("user.id"));
+	                    	HiddenItem msgType = new HiddenItem("msgType");
+	                    	msgType.setValue("sms");
 	                    	
 	                    	final IntegerItem characterCount = new IntegerItem();
 	                    	characterCount.setTitle(DictionaryInstance.dictionary.charactersAllowed());
-	                    	characterCount.setValue(160);
+	                    	characterCount.setValue(CChatAdminSmartGWT.maxMsgLength);
 	                    	characterCount.setDisabled(true);
 	                    	characterCount.setWidth(50);
-	                    	final TextAreaItem text = new TextAreaItem("textMsg", DictionaryInstance.dictionary.text());
-	                    	text.setLength(160);
-	                    	text.addKeyUpHandler(new KeyUpHandler() {
+	                    	final TextAreaItem smsTextArea = new TextAreaItem("textMsg", DictionaryInstance.dictionary.text());
+	                    	String nickName = rollOverRecord.getAttribute("nick.name");
+	                    	if (nickName != null && !nickName.isEmpty()) smsTextArea.setValue(nickName + ": ");
+	                    	smsTextArea.setSelectOnFocus(false);
+	                    	smsTextArea.setLength(CChatAdminSmartGWT.maxMsgLength);
+	                    	smsTextArea.addKeyUpHandler(new KeyUpHandler() {
 								
 								@Override
 								public void onKeyUp(KeyUpEvent event) {
-									characterCount.setValue(160 - text.getValue().toString().length());
+									characterCount.setValue(CChatAdminSmartGWT.maxMsgLength - smsTextArea.getValue().toString().length());
 								}
 							});
-	                    	sendMsgForm.setFields(userId, text, characterCount);
+	                    	sendMsgForm.setFields(userId, msgType, smsTextArea, characterCount);
+	                    	sendMsgForm.focusInItem(smsTextArea.getName());
 	                    	
 	                    	IButton sendMsg = new IButton(DictionaryInstance.dictionary.sendMessage());
-	                    	sendMsg.setPadding(5);
+	                    	sendMsg.setIcon(Constants.CONTEXT_PATH + "images/message.png");
+	                    	sendMsg.setAutoFit(true);
 	                    	sendMsg.addClickHandler(new ClickHandler() {
 								
 								@Override
@@ -216,7 +225,15 @@ public class Users extends HLayout {
 										
 										@Override
 										public void execute(DSResponse response, Object rawData, DSRequest request) {
-											SC.say("Sent...", new BooleanCallback() {
+											JSONArray value = XMLTools.selectObjects(rawData, "/status");
+											boolean status = ((JSONBoolean)value.get(0)).booleanValue();
+											String msg = DictionaryInstance.dictionary.messageSentSuccessfully();
+											if (!status) {
+												value = XMLTools.selectObjects(rawData, "/errorMsg");
+												String errorMsg = ((JSONString)value.get(0)).stringValue();
+												msg = DictionaryInstance.dictionary.sendingMessageFailed() + " --> " + errorMsg;
+											}
+											SC.say(msg, new BooleanCallback() {
 												
 												@Override
 												public void execute(Boolean value) {
