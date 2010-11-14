@@ -94,6 +94,12 @@
 	    <action name="SendSms" class="hr.chus.cchat.struts2.action.common.SendSms">
 			<result type="json">
 				<param name="excludeNullProperties">true</param>
+				<param name="excludeProperties">
+					smsMessage.*\.operator.*\.role
+					, smsMessage.*\.operator.*\.password
+					, smsMessage.*\.serviceProvider
+					, smsMessage.*\.user
+				</param>
 			</result>
 			<result name="input" type="json">
 				<param name="excludeNullProperties">true</param>

@@ -16,7 +16,7 @@ public class Constants {
 	
 	public static final String CONTEXT_PATH = GWT.getModuleBaseURL().replace(GWT.getModuleName() + "/", "");
 	
-	public static DateTimeFormat dateTimeFormat = DateTimeFormat.getFormat("dd.MM.yyyy HH:mm");
+	public static DateTimeFormat dateTimeFormat = DateTimeFormat.getFormat("dd.MM.yyyy HH:mm:ss");
 	public static DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd.MM.yyyy");
 
 	public static DateDisplayFormatter dateDisplayFormatter = new DateDisplayFormatter() {

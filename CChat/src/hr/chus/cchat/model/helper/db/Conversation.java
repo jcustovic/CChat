@@ -4,6 +4,8 @@ import hr.chus.cchat.model.db.jpa.SMSMessage.Direction;
 
 import java.util.Date;
 
+import org.apache.struts2.json.annotations.JSON;
+
 /**
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
@@ -32,6 +34,7 @@ public class Conversation {
 	public Integer getMessageId() { return messageId; }
 	public void setMessageId(Integer messageId) { this.messageId = messageId; }
 	
+	@JSON(format = "yyyy-MM-dd'T'HH:mm:ssZ")
 	public Date getTime() { return time; }
 	public void setTime(Date time) { this.time = time; }
 	

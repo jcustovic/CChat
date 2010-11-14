@@ -69,11 +69,11 @@ public class SendMessageServiceCGateway implements SendMessageService {
 				return sb.toString();
 			} else {
 				log.warn("StatusCode: " + returnCode + "; Response text: " + sb.toString());
+				throw new HttpException("Gateway error code " + returnCode);
 			}
 		} finally {
 			post.releaseConnection();
 		}
-		return null;
 	}
 	
 	@Override

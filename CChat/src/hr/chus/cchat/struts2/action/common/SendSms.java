@@ -59,6 +59,7 @@ public class SendSms extends ActionSupport implements UserAware {
 		} else if (text == null) {
 			errorMsg = getText("sendSms.text.notNull");
 		}
+		// TODO: Check max msg length from configurationService
 		if (errorMsg != null) {
 			log.error(errorMsg);
 			addActionError(errorMsg);
@@ -71,23 +72,23 @@ public class SendSms extends ActionSupport implements UserAware {
 		log.info("Sending message to user " + user + " --> type: " + msgType + ", text: " + text);
 		SMSMessage newSmsMessage = new SMSMessage(user, operator, new Date(), text, user.getServiceProvider().getSc(), user.getServiceProvider(), Direction.OUT);
 		String gatewayResponse = null;
-		try {
-			if (msgType.equals("wapPush")) {
-				gatewayResponse = sendMessageService.sendWapPushMessage(newSmsMessage);
-			} else {
-				gatewayResponse = sendMessageService.sendSmsMessage(newSmsMessage);
-			}
-		} catch (HttpException e) {
-			log.error(e, e);
-			errorMsg = getText("sendSms.httpException");
-			status = false;
-			return SUCCESS;
-		} catch (Exception e) {
-			log.error(e, e);
-			errorMsg = getText("sendSms.exception", new String[] { e.getMessage() });
-			status = false;
-			return SUCCESS;
-		}
+//		try {
+//			if (msgType.equals("wapPush")) {
+//				gatewayResponse = sendMessageService.sendWapPushMessage(newSmsMessage);
+//			} else {
+//				gatewayResponse = sendMessageService.sendSmsMessage(newSmsMessage);
+//			}
+//		} catch (HttpException e) {
+//			log.error(e, e);
+//			errorMsg = getText("sendSms.httpException");
+//			status = false;
+//			return SUCCESS;
+//		} catch (Exception e) {
+//			log.error(e, e);
+//			errorMsg = getText("sendSms.exception", new String[] { e.getMessage() });
+//			status = false;
+//			return SUCCESS;
+//		}
 		smsMessage = smsMessageService.updateSMSMessage(newSmsMessage);
 		log.info("Message " + smsMessage + " sent. Gateway response: " + gatewayResponse);
 		if (user.getOperator() == null && !operator.getRole().getName().equals("admin")) {

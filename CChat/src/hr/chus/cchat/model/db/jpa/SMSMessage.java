@@ -16,6 +16,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.apache.struts2.json.annotations.JSON;
+
 /**
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
@@ -89,6 +91,7 @@ public class SMSMessage implements Serializable {
 	public Operator getOperator() { return operator; }
 	public void setOperator(Operator operator) { this.operator = operator; }
 
+	@JSON(format = "yyyy-MM-dd'T'HH:mm:ssZ")
 	@Column(name = "time", nullable = false, columnDefinition = "DATETIME")
 	public Date getTime() { return time; }
 	public void setTime(Date time) { this.time = time; }
