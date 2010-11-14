@@ -225,10 +225,6 @@ public class Users extends HLayout {
 										
 										@Override
 										public void execute(DSResponse response, Object rawData, DSRequest request) {
-//											RecordList rl = new RecordList(listGrid.getRecordList().toArray());
-//											rl.removeAt(0);
-//											rl.removeAt(0);
-//											listGrid.setData(rl);
 											JSONArray value = XMLTools.selectObjects(rawData, "/status");
 											boolean status = ((JSONBoolean) value.get(0)).booleanValue();
 											String msg = DictionaryInstance.dictionary.messageSentSuccessfully();

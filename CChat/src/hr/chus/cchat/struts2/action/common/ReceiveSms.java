@@ -79,6 +79,7 @@ public class ReceiveSms extends ActionSupport {
 		
 		ServiceProvider serviceProvider = serviceProviderService.getByNameAndShortCode(serviceProviderName, sc);
 		if (serviceProvider == null) {
+			log.error("ServiceProvider not found for provider " + serviceProviderName + " and sc " + sc);
 			errorMsg = "ServiceProvider not found for provider " + serviceProviderName + " and sc " + sc;
 			status = false;
 			return SUCCESS;

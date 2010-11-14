@@ -359,8 +359,6 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 	    refreshTimer.scheduleRepeating(1000 * 30); // 30 seconds
 	}
 	
-	
-	
 	/**
 	 * 
 	 * @return
@@ -508,24 +506,33 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 							if (userSurname != null) nameToDisplay += " " + userSurname.stringValue();
 							
 							String iconPath = Constants.CONTEXT_PATH + "images/operators.png";
-							if (unreadMsgCount > 0) {
-								Tab selectedTab = mainTabSet.getSelectedTab();
-								if (selectedTab != null && selectedTab.getID().equals(userId + "_tab")) {
-									Canvas tabPane = selectedTab.getPane();
-									if (tabPane instanceof UserConsole) {
-										((UserConsole) tabPane).loadConversation(true);
-									}
-								} else {
-									iconPath = Constants.CONTEXT_PATH + "images/new_call.gif";
-								}
-							}
-							boolean displayUserForm = userType.equals("operatorUserList");
-							usersDate.add(new ExplorerTreeNode(nameToDisplay, userId, userType, i, iconPath, new UserConsole.Factory(userId, userType, nameToDisplay, displayUserForm), true, ""));
 							Tab tab = mainTabSet.getTab(userId + "_tab");
+							boolean displayUserForm = userType.equals("operatorUserList");
+							if (unreadMsgCount > 0) {
+								iconPath = Constants.CONTEXT_PATH + "images/new_call.gif";
+							}
 							if (tab != null) {
+								if (tab.getPane() instanceof UserConsole) {
+									UserConsole userConsole = (UserConsole) tab.getPane();
+									userConsole.setUserType(userType);
+									if (unreadMsgCount > 0) {
+										Tab selectedTab = mainTabSet.getSelectedTab();
+										if (selectedTab != null && selectedTab.getID().equals(userId + "_tab")) {
+											if (selectedTab.getPane() instanceof UserConsole) {
+												((UserConsole) selectedTab.getPane()).loadConversation(true);
+												iconPath = Constants.CONTEXT_PATH + "images/operators.png";
+											}
+										} else {
+											userConsole.setUnreadMsgCount(unreadMsgCount);
+										}
+									}
+								}
+								
 								String imgHTML = Canvas.imgHTML(iconPath, 16, 16);
 								tab.setTitle("<span>" + imgHTML + "&nbsp;" + nameToDisplay + "</span>");
 							}
+							
+							usersDate.add(new ExplorerTreeNode(nameToDisplay, userId, userType, i, iconPath, new UserConsole.Factory(userId, userType, nameToDisplay, displayUserForm), true, ""));
 						}
 					}
 				}
@@ -597,13 +604,15 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 								if (tabPane instanceof UserConsole) {
 									UserConsole userConsole = (UserConsole) tabPane;
 									if (userConsole.getUserType().equals("operatorUserList")) {
-										userConsole.loadConversation(true);
+										if (userConsole.getUnreadMsgCount() > 0 || userConsole.getUnreadMsgCount() == -1) {
+											userConsole.loadConversation(true);
+										}
 										String imgHTML = Canvas.imgHTML(Constants.CONTEXT_PATH + "images/operators.png", 16, 16);
 										event.getTab().setTitle("<span>" + imgHTML + "&nbsp;" + userConsole.getNameToDisplay() + "</span>");
 										
 										ExplorerTreeNode selectedTreeNode = (ExplorerTreeNode) usersList.getData().findById(userConsole.getUserId());
 										updateLeafIcon(selectedTreeNode, Constants.CONTEXT_PATH + "images/operators.png");
-									} else {
+									} else if (userConsole.getUnreadMsgCount() == -1) {
 										userConsole.loadConversation(false);
 									}
 								}

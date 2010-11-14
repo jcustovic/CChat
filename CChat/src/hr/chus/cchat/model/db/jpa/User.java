@@ -166,11 +166,11 @@ public class User implements Serializable {
 	
 	@JSON(format = "yyyy-MM-dd'T'HH:mm:ssZ")
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "last_message")
+	@Column(name = "last_message", nullable = false)
 	public Date getLastMsg() { return lastMsg; }
 	public void setLastMsg(Date lastMsg) { this.lastMsg = lastMsg; }
 
-	@Column(name = "unread_message_count")
+	@Column(name = "unread_message_count", nullable = false)
 	public Integer getUnreadMsgCount() { return unreadMsgCount; }
 	public void setUnreadMsgCount(Integer unreadMsgCount) { this.unreadMsgCount = unreadMsgCount; }
 

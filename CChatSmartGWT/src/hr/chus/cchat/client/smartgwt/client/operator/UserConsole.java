@@ -11,30 +11,30 @@ import hr.chus.cchat.client.smartgwt.client.operator.ds.NicksDS;
 import hr.chus.cchat.client.smartgwt.client.operator.ds.OperatorsDS;
 import hr.chus.cchat.client.smartgwt.client.utils.JSONUtils;
 
-import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.TimeZone;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONBoolean;
+import com.google.gwt.json.client.JSONNumber;
+import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.smartgwt.client.data.Criteria;
 import com.smartgwt.client.data.DSCallback;
 import com.smartgwt.client.data.DSRequest;
 import com.smartgwt.client.data.DSResponse;
 import com.smartgwt.client.data.DataSource;
+import com.smartgwt.client.data.RecordList;
 import com.smartgwt.client.data.XMLTools;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.DSDataFormat;
 import com.smartgwt.client.types.DateDisplayFormat;
 import com.smartgwt.client.types.KeyNames;
 import com.smartgwt.client.types.VerticalAlignment;
-import com.smartgwt.client.util.BooleanCallback;
 import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
-import com.smartgwt.client.widgets.events.KeyPressEvent;
-import com.smartgwt.client.widgets.events.KeyPressHandler;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.FormItemInputTransformer;
 import com.smartgwt.client.widgets.form.fields.BooleanItem;
@@ -67,6 +67,7 @@ public class UserConsole extends HLayout {
 	private String userId;
 	private String userType;
 	private String nameToDisplay;
+	private double unreadMsgCount;
 	private boolean displayUserForm;
 	private ListGrid conversationListGrid;
 	private int offset = 0;
@@ -78,6 +79,7 @@ public class UserConsole extends HLayout {
     private DynamicForm userForm;
     private DynamicForm sendMsgForm;
     private TextAreaItem smsTextArea;
+    private VLayout userFormLayout;
     private String nickName;
     
     
@@ -101,6 +103,7 @@ public class UserConsole extends HLayout {
 			panel.setUserType(userType);
 			panel.setNameToDisplay(nameToDisplay);
 			panel.setDisplayUserForm(displayUserForm);
+			panel.setUnreadMsgCount(-1);
             panel.setMargin(5);
             panel.setWidth100();
             panel.setHeight100();
@@ -170,7 +173,7 @@ public class UserConsole extends HLayout {
 					@Override
 					public void execute(DSResponse response, Object rawData, DSRequest request) {
 						int totalCount = (int) ConversationDS.getInstance().getTotalCount();
-						listLabel.setContents(DictionaryInstance.dictionary.totalUsersInDB() + ": <b>" + totalCount + "&nbsp;&nbsp;(" + offset + " - " + (offset + fetchSize) + ")</b>");
+						listLabel.setContents(DictionaryInstance.dictionary.totalSmsMessagesInDB() + ": <b>" + totalCount + "&nbsp;&nbsp;(" + offset + " - " + (offset + fetchSize) + ")</b>");
 						listLabel.setVisible(true);
 						if ((offset + fetchSize) >= totalCount) nextButton.setVisible(false);
 						previousButton.setVisible(true);
@@ -192,7 +195,7 @@ public class UserConsole extends HLayout {
 					@Override
 					public void execute(DSResponse response, Object rawData, DSRequest request) {
 						int totalCount = (int) ConversationDS.getInstance().getTotalCount();
-						listLabel.setContents(DictionaryInstance.dictionary.totalUsersInDB() + ": <b>" + totalCount + "&nbsp;&nbsp;(" + offset + " - " + (offset + fetchSize) + ")</b>");
+						listLabel.setContents(DictionaryInstance.dictionary.totalSmsMessagesInDB() + ": <b>" + totalCount + "&nbsp;&nbsp;(" + offset + " - " + (offset + fetchSize) + ")</b>");
 						listLabel.setVisible(true);
 						if (offset <= 0) previousButton.setVisible(false);
 						nextButton.setVisible(true);
@@ -216,8 +219,9 @@ public class UserConsole extends HLayout {
         VLayout sendMsgForm = createSendMsgForm();
         
 		conversationUserInfoLayout.addMember(conversationLayout);
-		if (displayUserForm) conversationUserInfoLayout.addMember(createUserForm());
-		
+		userFormLayout = createUserForm();
+		if (!displayUserForm) userFormLayout.setVisible(false);
+		conversationUserInfoLayout.addMember(userFormLayout);
 		VLayout vlayout = new VLayout(3);
 		vlayout.addMember(conversationUserInfoLayout);
 		vlayout.addMember(sendMsgForm);
@@ -246,6 +250,7 @@ public class UserConsole extends HLayout {
     	msgType.setValue("sms");
     	
     	final IntegerItem characterCount = new IntegerItem();
+    	characterCount.setName("msgLength");
     	characterCount.setTitle(DictionaryInstance.dictionary.charactersAllowed());
     	characterCount.setValue(CChatOperatorSmartGWT.maxMsgLength);
     	characterCount.setDisabled(true);
@@ -261,12 +266,11 @@ public class UserConsole extends HLayout {
 			
 			@Override
 			public void onKeyUp(KeyUpEvent event) {
-				if (event.getKeyName().equals(KeyNames.ENTER)) sendMsgButton.fireEvent(new ClickEvent(null));
 				characterCount.setValue(CChatOperatorSmartGWT.maxMsgLength - smsTextArea.getValue().toString().length());
-			}
+				if (event.getKeyName().equals(KeyNames.ENTER)) sendMsgButton.fireEvent(new ClickEvent(null));
+			} 
 		});
     	sendMsgForm.setFields(userId, msgType, smsTextArea, characterCount);
-    	
     	
     	sendMsgButton.setIcon(Constants.CONTEXT_PATH + "images/message.png");
     	sendMsgButton.setAutoFit(true);
@@ -274,27 +278,47 @@ public class UserConsole extends HLayout {
 			
 			@Override
 			public void onClick(ClickEvent event) {
-				if (smsTextArea.getValue() != null) 
-					smsTextArea.setValue(smsTextArea.getValue().toString().trim());
+				Iterator<?> keySetIterator = sendMsgForm.getValues().keySet().iterator();
+				while (keySetIterator.hasNext()) {
+					String key = (String) keySetIterator.next();
+					if (sendMsgForm.getField(key) == null) {
+						sendMsgForm.clearValue(key);
+					} else {
+						Object value = sendMsgForm.getValues().get(key);
+						if (value == null) sendMsgForm.clearValue(key);
+					}
+				}
+				smsTextArea.setValue(smsTextArea.getDisplayValue().trim());
 				sendMsgForm.submit(new DSCallback() {
 					
 					@Override
 					public void execute(DSResponse response, Object rawData, DSRequest request) {
-//						
 						JSONArray value = XMLTools.selectObjects(rawData, "/status");
-						boolean status = ((JSONBoolean)value.get(0)).booleanValue();
+						boolean status = ((JSONBoolean) value.get(0)).booleanValue();
 						if (status) {
+							sendMsgForm.reset();
 							if (nickName != null && !nickName.isEmpty()) smsTextArea.setValue(nickName + ": ");
-							// TODO: Add new msg to conversationList
-//							RecordList rl = new RecordList(listGrid.getRecordList().toArray());
-//							rl.removeAt(0);
-//							rl.removeAt(0);
-//							listGrid.setData(rl);
+							userFormLayout.setVisible(true);
+							JSONObject sms = XMLTools.selectObjects(rawData, "/smsMessage").get(0).isObject();
+							// Add new msg to conversationList
+							RecordList recordList = new RecordList(conversationListGrid.getRecordList().toArray());
+							ListGridRecord conversationRecord = new ListGridRecord();
+							conversationRecord.setAttribute("text", ((JSONString) sms.get("text")).stringValue());
+							conversationRecord.setAttribute("time", JSONUtils.getDate(((JSONString) sms.get("time")).stringValue()));
+							conversationRecord.setAttribute("operator", ((JSONString)((JSONObject) sms.get("operator")).get("username")).stringValue());
+							conversationRecord.setAttribute("direction", "OUT");
+							conversationRecord.setAttribute("messageId", ((JSONNumber) sms.get("id")).doubleValue());
+							conversationRecord.setCustomStyle("outboundMsgGridRecord");
+							recordList.addAt(conversationRecord, 0);
+							conversationListGrid.setData(recordList);
+							conversationListGrid.scrollToRow(0);
 						} else {
 							value = XMLTools.selectObjects(rawData, "/errorMsg");
-							String errorMsg = ((JSONString)value.get(0)).stringValue();
-							SC.say(DictionaryInstance.dictionary.sendingMessageFailed() + " --> " + errorMsg);
+							String errorMsg = ((JSONString) value.get(0)).stringValue();
+							SC.warn(DictionaryInstance.dictionary.sendingMessageFailed() + " --> " + errorMsg);
 						}
+						sendMsgForm.focusInItem(smsTextArea.getName());
+						smsTextArea.fireEvent(new KeyUpEvent(null));
 					};
 				});
 			}
@@ -319,12 +343,6 @@ public class UserConsole extends HLayout {
         userForm.setNumCols(4);
 		
 		DataSource ds = new DataSource(Constants.CONTEXT_PATH + "operator/OperatorUserFunctionJSON") {
-			
-			@Override
-			protected Object transformRequest(DSRequest dsRequest) {
-				dsRequest.setContentType("application/json; charset=utf-8");
-				return super.transformRequest(dsRequest);
-			}
 			
 			@Override
 			protected void transformResponse(DSResponse response, DSRequest request, Object jsonData) {
@@ -353,8 +371,12 @@ public class UserConsole extends HLayout {
 					Iterator<?> keySetIterator = userForm.getValues().keySet().iterator();
 					while (keySetIterator.hasNext()) {
 						String key = (String) keySetIterator.next();
-						Object value = userForm.getValues().get(key);
-						if (value == null) userForm.clearValue(key);
+						if (userForm.getField(key) == null) {
+							userForm.clearValue(key);
+						} else {
+							Object value = userForm.getValues().get(key);
+							if (value == null) userForm.clearValue(key);
+						}
 					}
 					userForm.setValue("operation", "update");
 					userForm.submit(new DSCallback() {
@@ -405,14 +427,16 @@ public class UserConsole extends HLayout {
 		}
 		// Edit smsTextArea with nick name
 		JSONArray value = XMLTools.selectObjects(jsonData, "user/nick/name");
+		sendMsgForm.reset();
 		if (value != null && value.size() > 0) {
 			nickName = ((JSONString) value.get(0)).stringValue();
 			smsTextArea.setValue(nickName + ": ");
 		} else {
+			smsTextArea.setValue("");
 			nickName = null;
-			smsTextArea.clearValue();
 		}
 		sendMsgForm.focusInItem(smsTextArea.getName());
+		smsTextArea.fireEvent(new KeyUpEvent(null));
 	}
 
 	private ListGridField[] getConversationFields() {
@@ -424,7 +448,6 @@ public class UserConsole extends HLayout {
     	operator.setAlign(Alignment.CENTER);
     	operator.setWidth(100);
     	
-		final DateTimeFormat dateTime = DateTimeFormat.getFormat("dd.MM.yyyy hh:mm:ss");
 		ListGridField time = new ListGridField("time");
 		time.setAlign(Alignment.LEFT);
 		time.setCellFormatter(new CellFormatter() {
@@ -432,7 +455,7 @@ public class UserConsole extends HLayout {
                 if (value != null) {
                     try {
                         Date dateValue = (Date) value;
-                        return dateTime.format(dateValue);
+                        return Constants.dateTimeFormat.format(dateValue, TimeZone.createTimeZone(0));
                     } catch (Exception e) {
                         return value.toString();
                     }
@@ -447,6 +470,7 @@ public class UserConsole extends HLayout {
 	}
 
 	public void loadConversation(boolean setMessagesAsRead) {
+		unreadMsgCount = 0;
 		criteria = new Criteria("userId", userId);
 		criteria.setAttribute("limit", fetchSize);
 		criteria.setAttribute("start", 0);
@@ -457,7 +481,7 @@ public class UserConsole extends HLayout {
 			@Override
 			public void execute(DSResponse response, Object rawData, DSRequest request) {
 				int totalCount = (int) ConversationDS.getInstance().getTotalCount();
-				listLabel.setContents(DictionaryInstance.dictionary.totalUsersInDB() + ": <b>" + totalCount + "&nbsp;&nbsp;(" + offset + " - " + (offset + fetchSize) + ")</b>");
+				listLabel.setContents(DictionaryInstance.dictionary.totalSmsMessagesInDB() + ": <b>" + totalCount + "&nbsp;&nbsp;(" + offset + " - " + (offset + fetchSize) + ")</b>");
 				listLabel.setVisible(true);
 				if (totalCount > fetchSize) {
 					nextButton.setVisible(true);
@@ -569,5 +593,8 @@ public class UserConsole extends HLayout {
 
 	public boolean isDisplayUserForm() { return displayUserForm; }
 	public void setDisplayUserForm(boolean displayUserForm) { this.displayUserForm = displayUserForm; }
-			
+
+	public void setUnreadMsgCount(double unreadMsgCount) { this.unreadMsgCount = unreadMsgCount; }
+	public double getUnreadMsgCount() { return unreadMsgCount; }
+				
 }
