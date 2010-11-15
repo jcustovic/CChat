@@ -1,5 +1,6 @@
 package hr.chus.cchat.helper;
 
+import hr.chus.cchat.db.service.OperatorService;
 import hr.chus.cchat.model.db.jpa.Operator;
 
 import java.util.Iterator;
@@ -18,12 +19,15 @@ public class OperatorChooser {
 	
 	private Log log = LogFactory.getLog(getClass());
 	
+	private OperatorService operatorService;
+	
 	private Integer lastChoosenOperatorId;
 	private List<Operator> activeOperatorList;
 	
 	
 	public void init() {
 		activeOperatorList = new LinkedList<Operator>();
+		activeOperatorList.addAll(operatorService.getAllActiveOperators());
 	}
 	
 	public void addActiveOperator(Operator operator) {
@@ -72,6 +76,8 @@ public class OperatorChooser {
 	
 	
 	// Getters & setters
+	
+	public void setOperatorService(OperatorService operatorService) { this.operatorService = operatorService; }
 	
 	public Integer getLastChoosedOperatorId() { return lastChoosenOperatorId; }
 	

@@ -8,7 +8,9 @@
     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
 
-	<bean id="operatorChooser" class="hr.chus.cchat.helper.OperatorChooser" init-method="init" />
+	<bean id="operatorChooser" class="hr.chus.cchat.helper.OperatorChooser" init-method="init">
+		<property name="operatorService" ref="operatorService" />
+	</bean>
 	
 	<bean id="sendMessageService" class="hr.chus.cchat.gateway.SendMessageServiceCGateway">
 		<property name="username" value="${gateway.username}" />

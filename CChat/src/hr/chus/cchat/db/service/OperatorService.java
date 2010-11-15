@@ -16,7 +16,8 @@ public interface OperatorService {
 	public Operator updateOperator(Operator operator);
 	public Operator authenticateUser(String username, String password);
 	public Operator getOperatorByUsername(String username);
-	public List<Operator> getAllOperetors();
+	public List<Operator> getAllOperators();
+	public List<Operator> getAllActiveOperators();
 	public boolean checkIfUsernameExists(Operator operator);
 	public Operator getOperatorById(Integer id);
 

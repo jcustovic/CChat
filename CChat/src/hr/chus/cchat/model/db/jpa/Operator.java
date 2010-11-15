@@ -23,6 +23,7 @@ import javax.persistence.Table;
 @NamedQueries({
 	@NamedQuery(name = "Operator.getAll", query = "SELECT o FROM Operator o ORDER BY o.username")
 	, @NamedQuery(name = "Operator.getByUsername", query = "SELECT o FROM Operator o WHERE o.username = :username")
+	, @NamedQuery(name = "Operator.getAllByActiveFlag", query = "SELECT o FROM Operator o WHERE o.isActive = :active")
 })
 public class Operator implements Serializable {
 	
