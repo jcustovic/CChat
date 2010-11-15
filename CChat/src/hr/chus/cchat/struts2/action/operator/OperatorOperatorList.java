@@ -29,7 +29,7 @@ public class OperatorOperatorList extends ActionSupport implements UserAware {
 		if (user.getRole().getName().equals("operator")) {
 			operatorList = Arrays.asList(new Operator[] { user });
 		} else {
-			operatorList = operatorService.getAllOperetors();
+			operatorList = operatorService.getAllOperators();
 		}
 		return SUCCESS;
 	}

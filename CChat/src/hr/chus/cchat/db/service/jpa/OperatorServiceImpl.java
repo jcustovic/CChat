@@ -63,7 +63,7 @@ public class OperatorServiceImpl implements OperatorService {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Operator> getAllOperetors() {
+	public List<Operator> getAllOperators() {
 		return entityManager.createNamedQuery("Operator.getAll").getResultList();
 	}
 
@@ -84,6 +84,12 @@ public class OperatorServiceImpl implements OperatorService {
 	@Transactional(readOnly = true)
 	public Operator getOperatorById(Integer id) {
 		return entityManager.find(Operator.class, id);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Operator> getAllActiveOperators() {
+		return entityManager.createNamedQuery("Operator.getAllByActiveFlag").setParameter("active", true).getResultList();
 	}
 	
 	
