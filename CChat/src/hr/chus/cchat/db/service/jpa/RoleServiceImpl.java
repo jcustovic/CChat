@@ -27,6 +27,7 @@ public class RoleServiceImpl implements RoleService {
 
 	@Override
 	public void removeRole(Role role) {
+		role = entityManager.getReference(Role.class, role.getId());
 		entityManager.remove(role);
 	}
 

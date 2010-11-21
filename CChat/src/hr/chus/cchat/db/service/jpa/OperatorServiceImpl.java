@@ -43,6 +43,7 @@ public class OperatorServiceImpl implements OperatorService {
 
 	@Override
 	public void removeOperator(Operator operator) {
+		operator = entityManager.getReference(Operator.class, operator.getId());
 		entityManager.remove(operator);
 	}
 

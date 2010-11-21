@@ -7,10 +7,12 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.QueryHint;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.ejb.QueryHints;
 
 /**
  * 
@@ -20,7 +22,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "configuration")
 @NamedQueries({
-	@NamedQuery(name = "Configuration.getAll", query = "SELECT c FROM Configuration c ORDER BY c.name")
+	@NamedQuery(name = "Configuration.getAll", query = "SELECT c FROM Configuration c ORDER BY c.name", hints = { @QueryHint(name = QueryHints.HINT_CACHEABLE, value = "true") })
 })
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Configuration implements Serializable {

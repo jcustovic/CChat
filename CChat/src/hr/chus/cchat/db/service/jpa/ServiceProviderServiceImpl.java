@@ -29,6 +29,7 @@ public class ServiceProviderServiceImpl implements ServiceProviderService {
 
 	@Override
 	public void deleteServiceProvider(ServiceProvider serviceProvider) {
+		serviceProvider = entityManager.getReference(ServiceProvider.class, serviceProvider.getId());
 		entityManager.remove(serviceProvider);
 	}
 

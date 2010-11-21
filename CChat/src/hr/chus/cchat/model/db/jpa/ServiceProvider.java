@@ -8,7 +8,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.QueryHint;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.ejb.QueryHints;
 
 /**
  * 
@@ -18,9 +23,10 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "service_provider")
 @NamedQueries({
-	@NamedQuery(name = "ServiceProvider.getAll", query = "SELECT sp FROM ServiceProvider sp")
-	, @NamedQuery(name = "ServiceProvider.getByNameAndSc", query = "SELECT sp FROM ServiceProvider sp WHERE sp.sc = :sc AND sp.providerName = :providerName")
+	@NamedQuery(name = "ServiceProvider.getAll", query = "SELECT sp FROM ServiceProvider sp", hints = { @QueryHint(name = QueryHints.HINT_CACHEABLE, value = "true") })
+	, @NamedQuery(name = "ServiceProvider.getByNameAndSc", query = "SELECT sp FROM ServiceProvider sp WHERE sp.sc = :sc AND sp.providerName = :providerName", hints = { @QueryHint(name = QueryHints.HINT_CACHEABLE, value = "true") })
 })
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class ServiceProvider implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

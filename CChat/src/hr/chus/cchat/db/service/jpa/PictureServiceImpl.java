@@ -41,6 +41,7 @@ public class PictureServiceImpl implements PictureService {
 
 	@Override
 	public void removePicture(Picture picture) {
+		picture = entityManager.getReference(Picture.class, picture.getId());
 		entityManager.remove(picture);
 	}
 

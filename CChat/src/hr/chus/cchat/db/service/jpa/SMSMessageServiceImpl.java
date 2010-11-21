@@ -38,6 +38,7 @@ public class SMSMessageServiceImpl implements SMSMessageService {
 
 	@Override
 	public void removeSMSMessage(SMSMessage smsMessage) {
+		smsMessage = entityManager.getReference(SMSMessage.class, smsMessage.getId());
 		entityManager.remove(smsMessage);
 	}
 

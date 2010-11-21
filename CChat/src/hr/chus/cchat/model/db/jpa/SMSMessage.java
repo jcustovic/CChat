@@ -17,6 +17,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.apache.struts2.json.annotations.JSON;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * 
@@ -28,6 +30,7 @@ import org.apache.struts2.json.annotations.JSON;
 @NamedQueries({
 	@NamedQuery(name = "SMSMessage.getAll", query = "SELECT sms FROM SMSMessage sms")
 })
+@Cache(usage = CacheConcurrencyStrategy.NONE)
 public class SMSMessage implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

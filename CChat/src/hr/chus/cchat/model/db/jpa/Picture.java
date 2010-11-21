@@ -11,8 +11,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.QueryHint;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.ejb.QueryHints;
 /**
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
@@ -22,10 +27,11 @@ import javax.persistence.Transient;
 @Entity
 @Table(name = "pictures")
 @NamedQueries({
-	@NamedQuery(name = "Picture.getAll", query = "SELECT p FROM Picture p")
-	, @NamedQuery(name = "Picture.getByName", query = "SELECT p FROM Picture p WHERE p.name = :name")
-	, @NamedQuery(name = "Picture.getByNick", query = "SELECT p FROM Picture p WHERE p.nick = :nick")
+	@NamedQuery(name = "Picture.getAll", query = "SELECT p FROM Picture p", hints = { @QueryHint(name = QueryHints.HINT_CACHEABLE, value = "true") })
+	, @NamedQuery(name = "Picture.getByName", query = "SELECT p FROM Picture p WHERE p.name = :name", hints = { @QueryHint(name = QueryHints.HINT_CACHEABLE, value = "true") })
+	, @NamedQuery(name = "Picture.getByNick", query = "SELECT p FROM Picture p WHERE p.nick = :nick", hints = { @QueryHint(name = QueryHints.HINT_CACHEABLE, value = "true") })
 })
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Picture implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
