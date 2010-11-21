@@ -11,7 +11,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.QueryHint;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.ejb.QueryHints;
 
 /**
  * 
@@ -21,10 +26,11 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "operators")
 @NamedQueries({
-	@NamedQuery(name = "Operator.getAll", query = "SELECT o FROM Operator o ORDER BY o.username")
-	, @NamedQuery(name = "Operator.getByUsername", query = "SELECT o FROM Operator o WHERE o.username = :username")
-	, @NamedQuery(name = "Operator.getAllByActiveFlag", query = "SELECT o FROM Operator o WHERE o.isActive = :active")
+	@NamedQuery(name = "Operator.getAll", query = "SELECT o FROM Operator o ORDER BY o.username", hints = { @QueryHint(name = QueryHints.HINT_CACHEABLE, value = "true") })
+	, @NamedQuery(name = "Operator.getByUsername", query = "SELECT o FROM Operator o WHERE o.username = :username", hints = { @QueryHint(name = QueryHints.HINT_CACHEABLE, value = "true") })
+	, @NamedQuery(name = "Operator.getAllByActiveFlag", query = "SELECT o FROM Operator o WHERE o.isActive = :active", hints = { @QueryHint(name = QueryHints.HINT_CACHEABLE, value = "true") })
 })
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Operator implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

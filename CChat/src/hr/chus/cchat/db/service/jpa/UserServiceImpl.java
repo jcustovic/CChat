@@ -27,6 +27,7 @@ import hr.chus.cchat.model.db.jpa.User;
 public class UserServiceImpl implements UserService {
 	
 	private Log log = LogFactory.getLog(getClass());
+	
 	private EntityManager entityManager;
 	
 
@@ -37,6 +38,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void deleteUser(User user) {
+		user = entityManager.getReference(User.class, user.getId());
 		entityManager.remove(user);
 	}
 

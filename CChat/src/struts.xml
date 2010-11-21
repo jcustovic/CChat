@@ -103,6 +103,10 @@
 			<result type="json" />
 		</action>
 		
+		<action name="EntityManagerStatistics" class="hr.chus.cchat.struts2.action.common.EntityManagerStatistics">
+			<result type="json" />
+		</action>
+		
 		<action name="ReceiveSms" class="hr.chus.cchat.struts2.action.common.ReceiveSms">
 			<result type="json">
 				<param name="excludeNullProperties">true</param>

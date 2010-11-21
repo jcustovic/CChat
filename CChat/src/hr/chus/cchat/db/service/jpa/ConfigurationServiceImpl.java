@@ -28,6 +28,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 	@Override
 	public void removeConfiguration(Configuration configuration) {
+		configuration = entityManager.getReference(Configuration.class, configuration.getName());
 		entityManager.remove(configuration);
 	}
 

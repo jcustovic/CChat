@@ -21,6 +21,8 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import org.apache.struts2.json.annotations.JSON;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 
@@ -44,6 +46,7 @@ import org.hibernate.annotations.TypeDefs;
 	, @NamedQuery(name = "User.clearOperatorField", query = "UPDATE User u SET u.operator = null WHERE u.operator = :operator")
 	, @NamedQuery(name = "User.assignUsersWithNewMsgToOperator", query = "UPDATE User u SET u.operator = :operator WHERE u.operator IS NULL AND u.unreadMsgCount > 0")
 })
+@Cache(usage = CacheConcurrencyStrategy.NONE)
 public class User implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

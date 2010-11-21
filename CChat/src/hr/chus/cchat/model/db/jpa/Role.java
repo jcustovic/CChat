@@ -8,10 +8,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.QueryHint;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.ejb.QueryHints;
 
 /**
  * 
@@ -21,7 +23,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "operator_roles")
 @NamedQueries({
-	@NamedQuery(name = "Role.getAll", query = "SELECT r FROM Role r ORDER BY r.name")
+	@NamedQuery(name = "Role.getAll", query = "SELECT r FROM Role r ORDER BY r.name", hints = { @QueryHint(name = QueryHints.HINT_CACHEABLE, value = "true") })
 })
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Role implements Serializable {

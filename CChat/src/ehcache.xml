@@ -8,10 +8,10 @@
         maxElementsInMemory="10000"
         eternal="false"
         timeToIdleSeconds="120"
-        timeToLiveSeconds="120"
+        timeToLiveSeconds="240"
         overflowToDisk="true"
         diskPersistent="false"
-        diskExpiryThreadIntervalSeconds="120"
+        diskExpiryThreadIntervalSeconds="240"
         memoryStoreEvictionPolicy="LRU"
     />
     
@@ -27,7 +27,7 @@
     />
     
     <cache name="hr.chus.cchat.model.db.jpa.ServiceProvider"
-        maxElementsInMemory="3"
+        maxElementsInMemory="10"
 		eternal="false"
         timeToIdleSeconds="3600"
         timeToLiveSeconds="3600"
@@ -35,7 +35,7 @@
         diskPersistent="false"
         diskExpiryThreadIntervalSeconds="3600"
         memoryStoreEvictionPolicy="LRU"
-    /> 
+    />
     
     <cache name="hr.chus.cchat.model.db.jpa.Configuration"
         maxElementsInMemory="20"
@@ -57,7 +57,18 @@
         diskPersistent="false"
         diskExpiryThreadIntervalSeconds="240"
         memoryStoreEvictionPolicy="LRU"
-    />    
+    />
+    
+    <cache name="hr.chus.cchat.model.db.jpa.Operator"
+        maxElementsInMemory="100"
+        eternal="false"
+        timeToIdleSeconds="240"
+        timeToLiveSeconds="240"
+        overflowToDisk="true"
+        diskPersistent="false"
+        diskExpiryThreadIntervalSeconds="240"
+        memoryStoreEvictionPolicy="LRU"
+    />
         
 
 </ehcache>

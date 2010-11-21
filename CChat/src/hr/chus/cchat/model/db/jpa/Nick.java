@@ -8,7 +8,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.QueryHint;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.ejb.QueryHints;
 
 /**
  * 
@@ -18,9 +23,10 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "nicks")
 @NamedQueries({
-	@NamedQuery(name = "Nick.getAll", query = "SELECT n FROM Nick n ORDER BY n.name")
-	, @NamedQuery(name = "Nick.getByName", query = "SELECT n FROM Nick n WHERE n.name = :name")
+	@NamedQuery(name = "Nick.getAll", query = "SELECT n FROM Nick n ORDER BY n.name", hints = { @QueryHint(name = QueryHints.HINT_CACHEABLE, value = "true") })
+	, @NamedQuery(name = "Nick.getByName", query = "SELECT n FROM Nick n WHERE n.name = :name", hints = { @QueryHint(name = QueryHints.HINT_CACHEABLE, value = "true") })
 })
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Nick implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

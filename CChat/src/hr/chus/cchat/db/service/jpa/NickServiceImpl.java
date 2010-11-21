@@ -35,6 +35,7 @@ public class NickServiceImpl implements NickService {
 
 	@Override
 	public void removeNick(Nick nick) {
+		nick = entityManager.getReference(Nick.class, nick.getId());
 		entityManager.remove(nick);
 	}
 
