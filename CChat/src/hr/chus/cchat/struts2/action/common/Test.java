@@ -9,6 +9,7 @@ import org.apache.struts2.interceptor.ServletRequestAware;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
+ * Web GET or POST action used for testing.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

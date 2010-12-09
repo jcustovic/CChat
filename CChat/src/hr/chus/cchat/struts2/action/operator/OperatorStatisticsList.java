@@ -15,6 +15,7 @@ import org.apache.commons.logging.LogFactory;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
+ * Web GET or POST action that return operator statistics from some date to some date.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

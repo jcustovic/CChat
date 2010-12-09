@@ -6,6 +6,7 @@ import hr.chus.cchat.model.db.jpa.Configuration;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
+ * Web GET or POST action that gets configuration parameter by name.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

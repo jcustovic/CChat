@@ -8,6 +8,7 @@ import hr.chus.cchat.model.db.jpa.SMSMessage.Direction;
 import hr.chus.cchat.model.db.jpa.ServiceProvider;
 
 /**
+ * SMS message services that DAO needs to implement.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

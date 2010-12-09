@@ -13,6 +13,7 @@ import org.apache.struts2.interceptor.SessionAware;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
+ * Web GET or POST action trys to login user using username and password.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

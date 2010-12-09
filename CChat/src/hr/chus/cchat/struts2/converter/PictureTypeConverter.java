@@ -10,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.util.StrutsTypeConverter;
 
 /**
+ * Custom Struts2 Picture type converter (picture id gets converted to picture object).
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

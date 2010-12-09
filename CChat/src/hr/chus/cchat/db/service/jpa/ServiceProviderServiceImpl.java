@@ -12,6 +12,7 @@ import hr.chus.cchat.db.service.ServiceProviderService;
 import hr.chus.cchat.model.db.jpa.ServiceProvider;
 
 /**
+ * JPA/Hibernate DAO implementation of service provider services.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

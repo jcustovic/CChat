@@ -12,6 +12,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.type.TimestampType;
 
 /**
+ * Class implements custom time date time conversion from DB java.sql.Timestamp to java.util.Date 
  * 
  * @author Jan Čustović
  *
@@ -25,7 +26,7 @@ public class DateTimeType extends TimestampType {
 	public Date get(ResultSet rs, String name) throws SQLException {
         Timestamp timestamp = rs.getTimestamp(name, Calendar.getInstance(TimeZone.getDefault()));
         if (timestamp == null) return null;
-        return new Date(timestamp.getTime()+timestamp.getNanos()/1000000);
+        return new Date(timestamp.getTime() + timestamp.getNanos() / 1000000);
 	}
 	
 	@Override

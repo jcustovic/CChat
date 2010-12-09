@@ -14,6 +14,9 @@ import hr.chus.cchat.model.db.jpa.User;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
+ * Web GET or POST action that searches users using different parameters. Supports pagination.
+ * 
+ * User that have the role of "operators" can only search users that they are assigned to.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

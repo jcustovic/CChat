@@ -11,6 +11,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
+ * This class is used for determining how users are going to be assigned to operators.
+ * We need to keep track of active operators and assign users, that do not have assigned
+ * operators, to them. Users are assigned to operators sequentially.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *
@@ -51,7 +54,7 @@ public class OperatorChooser {
 		} else if (lastChoosenOperatorId == null && activeOperatorList.size() > 1) {
 			operator = activeOperatorList.get(0);
 		} else {
-			// Choose next operator by lowest id after last choosen id
+			// Choose next operator by lowest id after last chosen id
 			Integer nextOperatorId = null;
 			Operator lowestOperatorById = null;
 			Iterator<Operator> operatorsIterator = activeOperatorList.iterator();

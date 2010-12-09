@@ -6,6 +6,7 @@ import hr.chus.cchat.model.db.jpa.Nick;
 import hr.chus.cchat.model.db.jpa.Picture;
 
 /**
+ * Picture services that DAO needs to implement.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

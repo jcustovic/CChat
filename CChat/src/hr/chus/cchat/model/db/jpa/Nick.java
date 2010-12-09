@@ -16,6 +16,11 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.ejb.QueryHints;
 
 /**
+ * Class describes Nikc DAO model which will be used for JPA/Hibernate implementation.
+ * Class defines queries, table and column names and cache.
+ * 
+ * Operators can represent them selves to users using different Nicks (just like a different "personas")
+ * Nick have their description and picture set.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

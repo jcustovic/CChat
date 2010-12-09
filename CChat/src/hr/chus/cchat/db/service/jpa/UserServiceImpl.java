@@ -20,6 +20,8 @@ import hr.chus.cchat.model.db.jpa.User;
 
 /**
  * 
+ * JPA/Hibernate DAO implementation of user services.
+ * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *
  */

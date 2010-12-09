@@ -16,6 +16,8 @@ import org.apache.commons.logging.LogFactory;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
+ * Web GET or POST action that searches SMS messages using different parameters. Supports pagination.
+ * User that have the role of "operators" can only search sms messages of users that they are assigned to.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

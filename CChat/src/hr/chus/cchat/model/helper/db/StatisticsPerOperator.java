@@ -1,6 +1,7 @@
 package hr.chus.cchat.model.helper.db;
 
 /**
+ * Class that represent operators statistics (sent and received messages) in defined time.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

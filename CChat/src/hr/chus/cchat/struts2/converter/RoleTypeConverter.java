@@ -10,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.util.StrutsTypeConverter;
 
 /**
+ * Custom Struts2 Role type converter (role id gets converted to role object).
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

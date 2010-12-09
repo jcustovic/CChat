@@ -7,6 +7,8 @@ import java.util.Date;
 import org.apache.struts2.json.annotations.JSON;
 
 /**
+ * This class is a helper class for SMS messages and are just a different conversation view of SMS messages
+ * with mobile user. 
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

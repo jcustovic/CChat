@@ -9,6 +9,7 @@ import org.springframework.orm.jpa.EntityManagerFactoryInfo;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
+ * Web GET or POST action that gets Hibernate/JPA entity manager statistics (database statistics).
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

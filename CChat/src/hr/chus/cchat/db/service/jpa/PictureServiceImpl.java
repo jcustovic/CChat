@@ -13,6 +13,7 @@ import hr.chus.cchat.model.db.jpa.Nick;
 import hr.chus.cchat.model.db.jpa.Picture;
 
 /**
+ * JPA/Hibernate DAO implementation of picture services.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

@@ -8,6 +8,8 @@ import hr.chus.cchat.model.db.jpa.SMSMessage;
 
 /**
  * 
+ * This is the interface that must be implemented for sending messages.
+ * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *
  */

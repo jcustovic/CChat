@@ -15,6 +15,10 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.ejb.QueryHints;
 
 /**
+ * Class describes Configuration DAO model which will be used for JPA/Hibernate implementation.
+ * Class defines queries, table and column names and cache.
+ * 
+ * Application specific name/value parameters are represented by this class. 
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

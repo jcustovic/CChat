@@ -11,6 +11,9 @@ import hr.chus.cchat.model.db.jpa.User;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
+ * Web GET or POST action that return users that are assigned to operator (users that operator communicates with),
+ * newest user that do not have assigned operator that contacted this application in the last 48 hours so operators
+ * can contact them and random users that are randomly grabbed from the database so operators can contact them.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

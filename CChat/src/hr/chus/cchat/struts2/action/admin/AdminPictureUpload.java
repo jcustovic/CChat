@@ -20,6 +20,7 @@ import org.springframework.context.ApplicationContextAware;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
+ * Web GET or POST action that implement picture upload function.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

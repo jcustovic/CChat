@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 /**
+ * JPA/Hibernate DAO implementation of statistic services.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

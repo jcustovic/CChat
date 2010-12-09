@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * Statistic services that DAO needs to implement.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

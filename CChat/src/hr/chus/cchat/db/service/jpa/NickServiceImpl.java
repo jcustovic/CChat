@@ -12,6 +12,7 @@ import hr.chus.cchat.db.service.NickService;
 import hr.chus.cchat.model.db.jpa.Nick;
 
 /**
+ * JPA/Hibernate DAO implementation of nick services.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

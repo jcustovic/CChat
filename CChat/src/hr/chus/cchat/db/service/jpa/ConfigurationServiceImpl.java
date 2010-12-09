@@ -11,6 +11,7 @@ import hr.chus.cchat.db.service.ConfigurationService;
 import hr.chus.cchat.model.db.jpa.Configuration;
 
 /**
+ * JPA/Hibernate DAO implementation of configuration services.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

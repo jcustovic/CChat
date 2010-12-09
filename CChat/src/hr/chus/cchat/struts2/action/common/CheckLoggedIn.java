@@ -9,6 +9,7 @@ import org.apache.struts2.interceptor.SessionAware;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
+ * Web GET or POST action that check if user session exists (is user logged in).
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  * 
