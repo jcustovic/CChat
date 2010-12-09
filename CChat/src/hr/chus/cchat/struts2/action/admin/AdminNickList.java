@@ -11,6 +11,7 @@ import hr.chus.cchat.db.service.NickService;
 import hr.chus.cchat.model.db.jpa.Nick;
 
 /**
+ * Web GET or POST action that returns all nicks.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

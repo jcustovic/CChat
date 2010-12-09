@@ -20,6 +20,8 @@ import org.apache.commons.logging.LogFactory;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
+ * Web GET or POST action that receives SMS messages. Gateways should invoke this service in order for
+ * this application to receive SMS messages.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

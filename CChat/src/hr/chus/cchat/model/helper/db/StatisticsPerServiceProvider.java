@@ -3,6 +3,7 @@ package hr.chus.cchat.model.helper.db;
 import java.io.Serializable;
 
 /**
+ * Class that represent statistics per service provider (sent and received messages) in defined time.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

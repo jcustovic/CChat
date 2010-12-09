@@ -11,6 +11,8 @@ import com.opensymphony.xwork2.ActionSupport;
 import edu.emory.mathcs.backport.java.util.Arrays;
 
 /**
+ * Web GET or POST action that returns all operators. If operator role is "operator" he will not see
+ * other operators (action will return only one operator - him/here).
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

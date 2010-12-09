@@ -10,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.util.StrutsTypeConverter;
 
 /**
+ * Custom Struts2 User type converter (user id gets converted to user object).
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

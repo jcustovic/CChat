@@ -8,6 +8,7 @@ import hr.chus.cchat.model.db.jpa.Operator;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
+ * Web GET or POST action that returns all operators.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

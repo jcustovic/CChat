@@ -11,6 +11,8 @@ import org.apache.commons.logging.LogFactory;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
+ * Web GET or POST action that implements user functions. Thru this web service users can be created,
+ * updated or deleted (dao services are invoked).
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

@@ -18,6 +18,7 @@ import hr.chus.cchat.model.db.jpa.SMSMessage.Direction;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
+ * Web GET or POST action that we invoke to send messages thru message gateway.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

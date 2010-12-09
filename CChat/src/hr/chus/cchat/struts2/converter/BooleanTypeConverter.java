@@ -7,6 +7,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.util.StrutsTypeConverter;
 
 /**
+ * Custom Struts2 boolean type converter.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

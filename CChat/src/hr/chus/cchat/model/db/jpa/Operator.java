@@ -19,6 +19,10 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.ejb.QueryHints;
 
 /**
+ * Class describes Operator DAO model which will be used for JPA/Hibernate implementation.
+ * Class defines queries, table and column names and cache.
+ * 
+ * User that uses this application and replays to SMS messages.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

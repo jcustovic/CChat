@@ -13,6 +13,7 @@ import hr.chus.cchat.spring.override.OpenPropertyPlaceholderConfigurer;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
+ * Web GET or POST action that returns all pictures or if nick is provided just pictures for that nick.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

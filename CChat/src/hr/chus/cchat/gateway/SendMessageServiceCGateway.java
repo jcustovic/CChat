@@ -18,6 +18,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
+ * Implementation for sending messages using CGateway.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

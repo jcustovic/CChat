@@ -15,6 +15,8 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
 /**
+ * Web GET or POST action that implements operator functions. Thru this web service operators can be created,
+ * updated or deleted (dao services are invoked).
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

@@ -20,6 +20,7 @@ import hr.chus.cchat.model.db.jpa.ServiceProvider;
 import hr.chus.cchat.model.helper.db.Conversation;
 
 /**
+ * JPA/Hibernate DAO implementation of SMS message services.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

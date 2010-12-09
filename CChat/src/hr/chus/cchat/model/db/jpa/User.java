@@ -27,6 +27,10 @@ import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 
 /**
+ * Class describes User DAO model which will be used for JPA/Hibernate implementation.
+ * Class defines queries, table and column names and cache.
+ * 
+ * Mobile user who send SMS messages to SC is represented by this class.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

@@ -13,6 +13,7 @@ import hr.chus.cchat.model.db.jpa.Operator;
 import hr.chus.cchat.util.StringUtil;
 
 /**
+ * JPA/Hibernate DAO implementation of operator services.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

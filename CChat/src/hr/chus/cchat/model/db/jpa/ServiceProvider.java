@@ -17,6 +17,11 @@ import org.hibernate.ejb.QueryHints;
 
 /**
  * 
+ * Class describes ServiceProvider DAO model which will be used for JPA/Hibernate implementation.
+ * Class defines queries, table and column names and cache.
+ * 
+ * Service providers are telcos which we use to send messages. Every user has its service provider.
+ * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *
  */

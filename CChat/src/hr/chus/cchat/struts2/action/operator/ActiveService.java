@@ -9,6 +9,8 @@ import hr.chus.cchat.model.db.jpa.Operator;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
+ * Web GET or POST action that activates or deactivates operator. When operator is active he/she can
+ * receive messages.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

@@ -22,6 +22,8 @@ import hr.chus.cchat.util.StringUtil;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
+ * Web GET or POST action that prepares database. Type parameter tells us what data we want to import.
+ * we can define "?type=development" to import test data. Default admin username and password are "admin".
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

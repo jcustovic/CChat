@@ -10,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.util.StrutsTypeConverter;
 
 /**
+ * Custom Struts2 Service provider type converter (serviceProvider id gets converted to serviceProvider object).
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

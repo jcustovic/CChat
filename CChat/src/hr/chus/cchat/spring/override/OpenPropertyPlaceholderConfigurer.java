@@ -6,6 +6,7 @@ import java.util.Properties;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 
 /**
+ * Custom extension of PropertyPlaceholderConfigurer so I can get properties later on in the application.
  * 
  * @author Jan Čustović
  *

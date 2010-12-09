@@ -14,6 +14,8 @@ import org.apache.struts2.util.ServletContextAware;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
+ * Web GET or POST action that implement picture functions. Thru this web service picture can be update,
+ * or deleted (dao services are invoked).
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

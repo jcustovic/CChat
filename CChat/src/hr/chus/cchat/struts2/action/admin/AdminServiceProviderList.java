@@ -8,6 +8,7 @@ import java.util.List;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
+ * Web GET or POST action that returns all service providers.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

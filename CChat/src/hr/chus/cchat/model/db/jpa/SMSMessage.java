@@ -21,6 +21,10 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
+ * Class describes SMSMessage DAO model which will be used for JPA/Hibernate implementation.
+ * Class defines queries, table and column names and cache.
+ * 
+ * SMS messages are represented by this class.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

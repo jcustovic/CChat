@@ -16,6 +16,10 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.ejb.QueryHints;
 
 /**
+ * Class describes Role DAO model which will be used for JPA/Hibernate implementation.
+ * Class defines queries, table and column names and cache.
+ * 
+ * We use this class for operator access type (operator, moderator or admin).
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

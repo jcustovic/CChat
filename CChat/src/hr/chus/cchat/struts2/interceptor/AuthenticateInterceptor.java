@@ -13,6 +13,9 @@ import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.Interceptor;
 
 /**
+ * Struts2 custom authentication interceptor. Before executing protected actions this interceptor
+ * check if there is user information in session (is user logged in) and if not redirects to
+ * login page.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

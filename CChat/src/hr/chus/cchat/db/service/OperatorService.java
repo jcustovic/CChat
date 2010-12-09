@@ -5,6 +5,7 @@ import hr.chus.cchat.model.db.jpa.Operator;
 import java.util.List;
 
 /**
+ * Operator services that DAO needs to implement.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

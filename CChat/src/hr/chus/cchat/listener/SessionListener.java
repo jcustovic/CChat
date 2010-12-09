@@ -17,6 +17,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
+ * This class keeps track of Tomcat sessions (created or destroyed). We are interested in the part when
+ * session gets destroyed so we can logout user and deactivate him if he forgets to logout or is 
+ * inactive for session timeout period. 
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

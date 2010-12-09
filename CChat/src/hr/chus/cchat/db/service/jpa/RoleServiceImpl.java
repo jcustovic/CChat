@@ -11,6 +11,7 @@ import hr.chus.cchat.db.service.RoleService;
 import hr.chus.cchat.model.db.jpa.Role;
 
 /**
+ * JPA/Hibernate DAO implementation of role services.
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *
