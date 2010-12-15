@@ -48,6 +48,7 @@ public class UserConversation extends ActionSupport implements UserAware {
 		}
 		totalCount = (Long) result[0];
 		conversationList = (List<Conversation>) result[1];
+		log.info("Returning " + totalCount + " messages...");
 		return SUCCESS;
 	}
 	

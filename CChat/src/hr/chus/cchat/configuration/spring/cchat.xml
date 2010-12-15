@@ -17,6 +17,7 @@
 		<property name="password" value="${gateway.password}" />
 		<property name="sendSmsUrl" value="${gateway.sendSmsUrl}" />
 		<property name="sendWapPushUrl" value="${gateway.sendWapPushUrl}" />
+		<property name="testSending" value="${gateway.testSending}" />
 	</bean>
 	
 </beans>
