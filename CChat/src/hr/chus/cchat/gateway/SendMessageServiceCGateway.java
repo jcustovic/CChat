@@ -31,6 +31,7 @@ public class SendMessageServiceCGateway implements SendMessageService {
 	private String password;
 	private String sendSmsUrl;
 	private String sendWapPushUrl;
+	private boolean testSending;
 	
 	
 	/**
@@ -42,6 +43,7 @@ public class SendMessageServiceCGateway implements SendMessageService {
 	 */
 	@Override
 	public String sendSmsMessage(SMSMessage smsMessage) throws HttpException, IOException {
+		if (testSending) return "testSmsResponse";
 		PostMethod post = new PostMethod(sendSmsUrl);
 		StringBuffer sb = new StringBuffer();
 		try {
@@ -79,6 +81,7 @@ public class SendMessageServiceCGateway implements SendMessageService {
 	
 	@Override
 	public String sendWapPushMessage(SMSMessage smsMessage) {
+		if (testSending) return "testWapPushResponse";
 		// TODO: Implement
 		throw new NotImplementedException("Sending wap push is not supported yet");
 	}
@@ -94,4 +97,6 @@ public class SendMessageServiceCGateway implements SendMessageService {
 
 	public void setSendWapPushUrl(String sendWapPushUrl) { this.sendWapPushUrl = sendWapPushUrl; }
 
+	public void setTestSending(boolean testSending) { this.testSending = testSending; }
+	
 }
