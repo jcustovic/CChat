@@ -4,7 +4,7 @@ import hr.chus.cchat.hibernate.DateTimeType;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,13 +12,14 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 import org.apache.struts2.json.annotations.JSON;
 import org.hibernate.annotations.Cache;
@@ -49,6 +50,7 @@ import org.hibernate.annotations.TypeDefs;
 	, @NamedQuery(name = "User.getNewest", query = "SELECT u FROM User u WHERE u.deleted = false AND u.lastMsg >= :lastMsgDate AND u.operator IS NULL ORDER BY u.lastMsg DESC")
 	, @NamedQuery(name = "User.clearOperatorField", query = "UPDATE User u SET u.operator = null WHERE u.operator = :operator")
 	, @NamedQuery(name = "User.assignUsersWithNewMsgToOperator", query = "UPDATE User u SET u.operator = :operator WHERE u.operator IS NULL AND u.unreadMsgCount > 0")
+	, @NamedQuery(name = "User.getSentPictureList", query = "SELECT u.sentPictures FROM User u WHERE u.id = :userId")
 })
 @Cache(usage = CacheConcurrencyStrategy.NONE)
 public class User implements Serializable {
@@ -69,7 +71,7 @@ public class User implements Serializable {
 	private Date lastMsg;
 	private Integer unreadMsgCount;
 	private Boolean deleted;
-	private List<Picture> sentPicturesList;
+	private Set<Picture> sentPictures;
 	
 	
 	public User() { }
@@ -96,7 +98,6 @@ public class User implements Serializable {
 		this.unreadMsgCount = 0;
 	}
 	
-	
 	@Override
 	public String toString() {
 		return String.format("User[ID: %s, Msisdn: %s, Name: %s, Surname: %s, Deleted: %s]", new Object[] { id, msisdn, name, surname, deleted });
@@ -109,6 +110,8 @@ public class User implements Serializable {
 
 	@Override
 	public boolean equals(Object object) {
+		if (object == null) return false;
+		if (this == object) return true;
 		if (!(object instanceof User)) return false;
 		User user = (User) object;
 		return user.getId().equals(id);
@@ -185,8 +188,15 @@ public class User implements Serializable {
 	public Boolean getDeleted() { return deleted; }
 	public void setDeleted(Boolean deleted) { this.deleted = deleted; }
 
-	@Transient
-	public List<Picture> getSentPicturesList() { return sentPicturesList; }
-	public void setSentPicturesList(List<Picture> sentPicturesList) { this.sentPicturesList = sentPicturesList; }
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "users_pictures"
+			, joinColumns = {
+				@JoinColumn(name = "user_id", referencedColumnName = "id")
+			}
+			, inverseJoinColumns = {
+				@JoinColumn(name = "picture_id", referencedColumnName = "id")
+			})
+	public Set<Picture> getSentPictures() { return sentPictures; }
+	public void setSentPictures(Set<Picture> sentPictures) { this.sentPictures = sentPictures; }
 		
 }

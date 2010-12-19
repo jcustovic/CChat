@@ -56,6 +56,7 @@ public class Nick implements Serializable {
 
 	@Override
 	public boolean equals(Object object) {
+		if (object == null) return false;
 		if (this == object) return true;
 		if (!(object instanceof Nick)) return false;
 		Nick nick = (Nick) object;

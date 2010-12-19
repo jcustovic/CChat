@@ -26,7 +26,7 @@ public class UserTypeConverter extends StrutsTypeConverter {
 		log.debug("Started converting String to User");
 		User user = null;
 		try {
-			user = userService.getUserById(Integer.valueOf(values[0]));
+			user = userService.getUserById(Integer.valueOf(values[0]), false);
 		} catch (Exception e) {
 			return null;
 		}

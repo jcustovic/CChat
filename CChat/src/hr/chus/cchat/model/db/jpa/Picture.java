@@ -1,6 +1,7 @@
 package hr.chus.cchat.model.db.jpa;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -15,6 +17,7 @@ import javax.persistence.QueryHint;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.apache.struts2.json.annotations.JSON;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.ejb.QueryHints;
@@ -47,6 +50,7 @@ public class Picture implements Serializable {
 	private String type;
 	private Long length;
 	private String url;
+	private Set<User> userList;
 	
 	
 	public Picture() { }
@@ -66,6 +70,7 @@ public class Picture implements Serializable {
 	
 	@Override
 	public boolean equals(Object object) {
+		if (object == null) return false;
 		if (this == object) return true;
 		if (!(object instanceof Picture) ) return false;
 		Picture picture = (Picture) object;
@@ -101,5 +106,10 @@ public class Picture implements Serializable {
 	@Transient
 	public String getUrl() { return url; }
 	public void setUrl(String url) { this.url = url; }
-	
+
+	@JSON(deserialize = false, serialize = false)
+	@ManyToMany(mappedBy = "sentPictures", fetch = FetchType.LAZY)
+	public Set<User> getUserList() { return userList; }
+	public void setUserList(Set<User> userList) { this.userList = userList; }
+		
 }

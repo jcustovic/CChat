@@ -62,9 +62,10 @@
 					, smsMessageList.*\.msisdn
 					, smsMessageList.*\.operator.*\.role
 					, smsMessageList.*\.operator.*\.password
-					, smsMessageList.*\.user.*\.sentPicturesList
+					, smsMessageList.*\.user.*\.sentPictures
 					, smsMessageList.*\.user.*\.serviceProvider
-					, userList.*\.sentPicturesList
+					, userList.*\.sentPictures
+					, user.*\.sentPictures
 				</param>
 			</result>
 			<result name="input" type="json" />
@@ -81,17 +82,17 @@
 					, randomUserList.*\.nick
 					, randomUserList.*\.operator
 					, randomUserList.*\.msisdn
-					, randomUserList.*\.sentPicturesList
+					, randomUserList.*\.sentPictures
 					, newestUserList.*\.serviceProvider
 					, newestUserList.*\.nick
 					, newestUserList.*\.operator
 					, newestUserList.*\.msisdn
-					, newestUserList.*\.sentPicturesList
+					, newestUserList.*\.sentPictures
 					, operatorUserList.*\.serviceProvider
 					, operatorUserList.*\.nick
 					, operatorUserList.*\.operator
 					, operatorUserList.*\.msisdn
-					, operatorUserList.*\.sentPicturesList
+					, operatorUserList.*\.sentPictures
 				</param>
 			</result>
 			<result name="error" type="json">
