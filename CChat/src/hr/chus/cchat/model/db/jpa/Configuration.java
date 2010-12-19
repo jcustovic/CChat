@@ -52,6 +52,7 @@ public class Configuration implements Serializable {
 
 	@Override
 	public boolean equals(Object object) {
+		if (object == null) return false;
 		if (this == object) return true;
 		if (!(object instanceof Configuration)) return false;
 		Configuration configuration = (Configuration) object;

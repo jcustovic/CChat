@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import hr.chus.cchat.db.service.UserService;
 import hr.chus.cchat.model.db.jpa.Nick;
 import hr.chus.cchat.model.db.jpa.Operator;
+import hr.chus.cchat.model.db.jpa.Picture;
 import hr.chus.cchat.model.db.jpa.ServiceProvider;
 import hr.chus.cchat.model.db.jpa.User;
 
@@ -50,14 +51,18 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User getUserById(Integer id) {
-		return entityManager.find(User.class, id);
+	public User getUserById(Integer id, boolean loadSentPictures) {
+		User user = entityManager.find(User.class, id);
+		if (loadSentPictures) user.getSentPictures().size();
+		return user;
 	}
 	
 	@Override
-	public User getByMsisdn(String msisdn) {
+	public User getByMsisdn(String msisdn, boolean loadSentPictures) {
 		try {
-			return (User) entityManager.createNamedQuery("User.getByMsisdn").setParameter("msisdn", msisdn).getSingleResult();
+			User user = (User) entityManager.createNamedQuery("User.getByMsisdn").setParameter("msisdn", msisdn).getSingleResult();
+			if (loadSentPictures) user.getSentPictures().size();
+			return user;
 		} catch (NoResultException e) {
 			return null;
 		}
@@ -180,6 +185,18 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void updateAllMessagesRead(Integer userId) {
 		entityManager.createQuery("UPDATE User u SET u.unreadMsgCount = 0 WHERE u.id = :userId").setParameter("userId", userId).executeUpdate();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Picture> getSentPictureList(Integer userId) {
+		return entityManager.createNamedQuery("User.getSentPictureList").setParameter("userId", userId).getResultList();
+	}
+	
+	@Override
+	public void addPicture(Integer userId, Picture picture) {
+		User user = getUserById(userId, false);
+		user.getSentPictures().add(picture);
+		entityManager.merge(user);
 	}
 	
 	

@@ -73,6 +73,7 @@ public class Operator implements Serializable {
 	
 	@Override
 	public boolean equals(Object object) {
+		if (object == null) return false;
 		if (this == object) return true;
 		if (!(object instanceof Operator) ) return false;
 		Operator operator = (Operator) object;

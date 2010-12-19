@@ -72,9 +72,9 @@
 				<param name="excludeProperties">
 					smsMessageList.*\.operator.*\.role
 					, smsMessageList.*\.operator.*\.password
-					, smsMessageList.*\.user.*\.sentPicturesList
+					, smsMessageList.*\.user.*\.sentPictures
 					, smsMessageList.*\.user.*\.serviceProvider
-					, userList.*\.sentPicturesList
+					, userList.*\.sentPictures
 				</param>
 			</result>
 			<result name="input" type="json" />

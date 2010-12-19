@@ -73,6 +73,7 @@ public class SMSMessage implements Serializable {
 	
 	@Override
 	public boolean equals(Object object) {
+		if (object == null) return false;
 		if (this == object) return true;
 		if (!(object instanceof SMSMessage) ) return false;
 		SMSMessage smsMessage = (SMSMessage) object;

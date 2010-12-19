@@ -42,7 +42,6 @@ public class Role implements Serializable {
 	public Role() { }
 
 	public Role(String name, String description) {
-		super();
 		this.name = name;
 		this.description = description;
 	}
@@ -55,6 +54,7 @@ public class Role implements Serializable {
 	
 	@Override
 	public boolean equals(Object object) {
+		if (object == null) return false;
 		if (this == object) return true;
 		if (!(object instanceof Role) ) return false;
 		Role role = (Role) object;
