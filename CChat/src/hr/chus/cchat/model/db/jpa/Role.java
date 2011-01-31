@@ -25,7 +25,7 @@ import org.hibernate.ejb.QueryHints;
  *
  */
 @Entity
-@Table(name = "operator_roles")
+@Table(name = "operator_role")
 @NamedQueries({
 	@NamedQuery(name = "Role.getAll", query = "SELECT r FROM Role r ORDER BY r.name", hints = { @QueryHint(name = QueryHints.HINT_CACHEABLE, value = "true") })
 })

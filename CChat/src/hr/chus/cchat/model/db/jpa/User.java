@@ -189,7 +189,7 @@ public class User implements Serializable {
 	public void setDeleted(Boolean deleted) { this.deleted = deleted; }
 
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "users_pictures"
+	@JoinTable(name = "users_picture"
 			, joinColumns = {
 				@JoinColumn(name = "user_id", referencedColumnName = "id")
 			}

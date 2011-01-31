@@ -30,7 +30,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  *
  */
 @Entity
-@Table(name = "sms_messages")
+@Table(name = "sms_message")
 @NamedQueries({
 	@NamedQuery(name = "SMSMessage.getAll", query = "SELECT sms FROM SMSMessage sms")
 })
@@ -51,6 +51,7 @@ public class SMSMessage implements Serializable {
 	private String sc;
 	private ServiceProvider serviceProvider;
 	private Direction direction;
+	private Nick nick;
 	
 	
 	public SMSMessage() { }
@@ -121,5 +122,10 @@ public class SMSMessage implements Serializable {
 	@Enumerated(EnumType.STRING)
 	public Direction getDirection() { return direction; }
 	public void setDirection(Direction direction) { this.direction = direction; }
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "nick_id", nullable = true)
+	public Nick getNick() { return nick; }
+	public void setNick(Nick nick) { this.nick = nick; }
 
 }

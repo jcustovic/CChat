@@ -41,11 +41,12 @@ public class ServiceProvider implements Serializable {
 	private String providerName;
 	private String description;
 	private Boolean disabled;
+	private String sendServiceBeanName;
 	
 	
 	public ServiceProvider() { }
 	
-	public ServiceProvider(String sc, String providerName, String description, Boolean disabled) {
+	public ServiceProvider(String sc, String providerName, String description, boolean disabled) {
 		this.sc = sc;
 		this.providerName = providerName;
 		this.description = description;
@@ -88,8 +89,12 @@ public class ServiceProvider implements Serializable {
 	public String getDescription() { return description; }
 	public void setDescription(String description) { this.description = description; }
 
-	@Column(name = "disabled")
+	@Column(name = "disabled", nullable = false)
 	public Boolean getDisabled() { return disabled; }
 	public void setDisabled(Boolean disabled) { this.disabled = disabled; }
-		
+
+	@Column(name = "send_service_bean", length = 30)
+	public String getSendServiceBeanName() { return sendServiceBeanName; }
+	public void setSendServiceBeanName(String sendServiceBeanName) { this.sendServiceBeanName = sendServiceBeanName; }
+			
 }

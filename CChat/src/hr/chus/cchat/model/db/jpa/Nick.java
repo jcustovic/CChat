@@ -1,11 +1,14 @@
 package hr.chus.cchat.model.db.jpa;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.QueryHint;
@@ -26,7 +29,7 @@ import org.hibernate.ejb.QueryHints;
  *
  */
 @Entity
-@Table(name = "nicks")
+@Table(name = "nick")
 @NamedQueries({
 	@NamedQuery(name = "Nick.getAll", query = "SELECT n FROM Nick n ORDER BY n.name", hints = { @QueryHint(name = QueryHints.HINT_CACHEABLE, value = "true") })
 	, @NamedQuery(name = "Nick.getByName", query = "SELECT n FROM Nick n WHERE n.name = :name", hints = { @QueryHint(name = QueryHints.HINT_CACHEABLE, value = "true") })
@@ -39,13 +42,16 @@ public class Nick implements Serializable {
 	private Integer id;
 	private String name;
 	private String description;
+	private Boolean isKeyword;
+	private Set<Operator> operators;
 	
 	
 	public Nick() { }
 	
-	public Nick(String name, String description) {
+	public Nick(String name, String description, boolean isKeyword) {
 		this.name = name;
 		this.description = description;
+		this.isKeyword = isKeyword;
 	}
 	
 	
@@ -78,6 +84,14 @@ public class Nick implements Serializable {
 
 	@Column(name = "description", length = 300, nullable = true)
 	public String getDescription() {return description; }
-	public void setDescription(String description) { this.description = description; }	
+	public void setDescription(String description) { this.description = description; }
+
+	@Column(name = "is_keyword", nullable = false)
+	public Boolean getIsKeyword() { return isKeyword; }
+	public void setIsKeyword(Boolean isKeyword) { this.isKeyword = isKeyword; }
+	
+	@ManyToMany(mappedBy = "nicks", fetch = FetchType.LAZY)
+	public Set<Operator> getOperators() { return operators; }
+	public void setOperators(Set<Operator> operators) { this.operators = operators; }
 
 }
