@@ -34,7 +34,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 	public List<StatisticsPerServiceProvider> getStatisticsPerServiceProvider(Date from, Date to) {
 		List<StatisticsPerServiceProvider> result = new LinkedList<StatisticsPerServiceProvider>();
 		Query query = entityManager.createNativeQuery("SELECT sp.provider_name, sp.sc, SUM(sms.direction = :directionIn), SUM(sms.direction = :directionOut)"
-				+ " FROM sms_messages sms JOIN service_provider sp ON sms.service_provider_id = sp.id"
+				+ " FROM sms_message sms JOIN service_provider sp ON sms.service_provider_id = sp.id"
 				+ " WHERE sms.time >= :from AND sms.time <= :to"
 				+ " GROUP BY sp.id");
 		query.setParameter("directionIn", Direction.IN.toString());
@@ -54,7 +54,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 	public List<StatisticsPerOperator> getStatisticsPerOperator(Date from, Date to, Operator operator) {
 		List<StatisticsPerOperator> result = new LinkedList<StatisticsPerOperator>();
 		Query query = entityManager.createNativeQuery("SELECT o.username, SUM(sms.direction = 'IN'), SUM(sms.direction = 'OUT')"
-				+ " FROM sms_messages sms RIGHT JOIN operators o ON sms.operator_id = o.id"
+				+ " FROM sms_message sms RIGHT JOIN operators o ON sms.operator_id = o.id"
 				+ " WHERE sms.time >= :from AND sms.time <= :to"
 				+ ((operator != null) ? " AND o.id = :operatorId" : "")
 				+ " GROUP BY o.id");

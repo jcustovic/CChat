@@ -91,7 +91,7 @@ public class Prepare extends ActionSupport {
 		ServiceProvider tele2ServiceProvider = new ServiceProvider("66111", "Tele2", "Tele2 mreža", false);
 		serviceProviderService.addServiceProvider(tele2ServiceProvider);
 		
-		Nick nick = new Nick("Test", "Testni nick");
+		Nick nick = new Nick("Test", "Testni nick", false);
 		nickService.addNick(nick);
 		
 		for (int i = 0; i < 20; i++) {

@@ -1,6 +1,7 @@
 package hr.chus.cchat.model.db.jpa;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +9,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -28,7 +31,7 @@ import org.hibernate.ejb.QueryHints;
  *
  */
 @Entity
-@Table(name = "operators")
+@Table(name = "operator")
 @NamedQueries({
 	@NamedQuery(name = "Operator.getAll", query = "SELECT o FROM Operator o ORDER BY o.username", hints = { @QueryHint(name = QueryHints.HINT_CACHEABLE, value = "true") })
 	, @NamedQuery(name = "Operator.getByUsername", query = "SELECT o FROM Operator o WHERE o.username = :username", hints = { @QueryHint(name = QueryHints.HINT_CACHEABLE, value = "true") })
@@ -48,6 +51,7 @@ public class Operator implements Serializable {
 	private String email;
 	private Boolean isActive;
 	private Boolean disabled;
+	private Set<Nick> nicks;
 	
 	
 	public Operator() { }
@@ -121,5 +125,16 @@ public class Operator implements Serializable {
 	@Column(name = "disabled")
 	public Boolean getDisabled() { return disabled; }
 	public void setDisabled(Boolean disabled) { this.disabled = disabled;}
-		
+
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "operator_nick"
+			, joinColumns = {
+				@JoinColumn(name = "operator_id", referencedColumnName = "id")
+			}
+			, inverseJoinColumns = {
+				@JoinColumn(name = "nick_id", referencedColumnName = "id")
+			})
+	public Set<Nick> getNicks() { return nicks; }
+	public void setNicks(Set<Nick> nicks) { this.nicks = nicks; }
+	
 }

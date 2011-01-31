@@ -33,7 +33,7 @@ import org.hibernate.ejb.QueryHints;
  */
 
 @Entity
-@Table(name = "pictures")
+@Table(name = "picture")
 @NamedQueries({
 	@NamedQuery(name = "Picture.getAll", query = "SELECT p FROM Picture p", hints = { @QueryHint(name = QueryHints.HINT_CACHEABLE, value = "true") })
 	, @NamedQuery(name = "Picture.getByName", query = "SELECT p FROM Picture p WHERE p.name = :name", hints = { @QueryHint(name = QueryHints.HINT_CACHEABLE, value = "true") })

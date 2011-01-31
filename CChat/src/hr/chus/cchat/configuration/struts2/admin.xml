@@ -74,6 +74,7 @@
 					, smsMessageList.*\.operator.*\.password
 					, smsMessageList.*\.user.*\.sentPictures
 					, smsMessageList.*\.user.*\.serviceProvider
+					, smsMessageList.*\.nick
 					, userList.*\.sentPictures
 				</param>
 			</result>
@@ -99,6 +100,7 @@
 					, smsMessage.*\.operator.*\.password
 					, smsMessage.*\.serviceProvider
 					, smsMessage.*\.user
+					, smsMessage.*\.nick
 				</param>
 			</result>
 			<result name="input" type="json">
