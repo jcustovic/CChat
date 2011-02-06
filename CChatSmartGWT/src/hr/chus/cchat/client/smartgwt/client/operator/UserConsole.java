@@ -24,6 +24,7 @@ import com.smartgwt.client.data.DSResponse;
 import com.smartgwt.client.data.DataSource;
 import com.smartgwt.client.data.RecordList;
 import com.smartgwt.client.data.XMLTools;
+import com.smartgwt.client.rpc.RPCResponse;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.DSDataFormat;
 import com.smartgwt.client.types.DateDisplayFormat;
@@ -244,7 +245,7 @@ public class UserConsole extends HLayout {
     	sendMsgForm.setHeight(120);
     	sendMsgForm.setPadding(5);
     	sendMsgForm.setLayoutAlign(VerticalAlignment.BOTTOM);
-    	HiddenItem userId = new HiddenItem("user");
+    	final HiddenItem userId = new HiddenItem("user");
     	userId.setValue(this.userId);
     	HiddenItem msgType = new HiddenItem("msgType");
     	msgType.setValue("sms");
@@ -298,6 +299,10 @@ public class UserConsole extends HLayout {
 						if (status) {
 							sendMsgForm.reset();
 							if (nickName != null && !nickName.isEmpty()) smsTextArea.setValue(nickName + ": ");
+							userForm.getDataSource().invalidateCache();
+							Criteria userFormCriteria = new Criteria("user", (String) userId.getValue());
+							userFormCriteria.addCriteria("operation", "get");
+							userForm.getDataSource().fetchData(userFormCriteria);
 							userFormLayout.setVisible(true);
 							JSONObject sms = XMLTools.selectObjects(rawData, "/smsMessage").get(0).isObject();
 							// Add new msg to conversationList
@@ -342,11 +347,24 @@ public class UserConsole extends HLayout {
         userForm.setGroupTitle(DictionaryInstance.dictionary.update());
         userForm.setNumCols(4);
 		
+        final IButton updateButton = new IButton(DictionaryInstance.dictionary.update());
 		DataSource ds = new DataSource(Constants.CONTEXT_PATH + "operator/OperatorUserFunctionJSON") {
 			
 			@Override
 			protected void transformResponse(DSResponse response, DSRequest request, Object jsonData) {
-				populateUserForm(jsonData);
+				JSONArray value = XMLTools.selectObjects(jsonData, "/status");
+				boolean status = false;
+				updateButton.setDisabled(false);
+				if (value != null && value.size() > 0) {
+					status = ((JSONBoolean) value.get(0)).booleanValue();
+				}
+				if (!status) {
+					response.setStatus(RPCResponse.STATUS_VALIDATION_ERROR);
+					JSONArray errors = XMLTools.selectObjects(jsonData, "/errorFields");
+					response.setErrors(errors.getJavaScriptObject());
+				} else {
+					populateUserForm(jsonData);
+				}
 			}
 
 		};
@@ -360,7 +378,6 @@ public class UserConsole extends HLayout {
 		userFormCriteria.addCriteria("operation", "get");
 		ds.fetchData(userFormCriteria);
 		
-		final IButton updateButton = new IButton(DictionaryInstance.dictionary.update());
 		updateButton.setIcon(Constants.CONTEXT_PATH + "images/edit.png");
         updateButton.addClickHandler(new ClickHandler() {
 
@@ -379,24 +396,7 @@ public class UserConsole extends HLayout {
 						}
 					}
 					userForm.setValue("operation", "update");
-					userForm.submit(new DSCallback() {
-
-						@Override
-						public void execute(DSResponse response, Object jsonData, DSRequest request) {
-							JSONArray value = XMLTools.selectObjects(jsonData, "/status");
-							boolean status = false;
-							updateButton.setDisabled(false);
-							if (value != null && value.size() > 0) {
-								status = ((JSONBoolean) value.get(0)).booleanValue();
-							}
-							if (status) {
-								populateUserForm(jsonData);
-							} else {
-								// TODO: Some kind of error so user knows what's going on.
-							}
-						}
-						
-					});
+					userForm.submit();
 				}
 			}
 		});

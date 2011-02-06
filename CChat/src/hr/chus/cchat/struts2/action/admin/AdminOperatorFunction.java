@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import hr.chus.cchat.db.service.OperatorService;
 import hr.chus.cchat.listener.SessionListener;
@@ -24,36 +25,49 @@ import com.opensymphony.xwork2.Preparable;
 public class AdminOperatorFunction extends ActionSupport implements Preparable {
 
 	private static final long serialVersionUID = 1L;
+	
 	private Log log = LogFactory.getLog(getClass());
 	
 	private OperatorService operatorService;
+	
 	private Operator operator;
 	private String operation;
 	private Map<String, String> errorFields;
 	private String status;
+	
 	
 	@Override
 	public void prepare() throws Exception { }
 	
 	@Override
 	public String execute() throws Exception {
-		log.debug("AdminOperatorFunction fired...");
-		if (operation == null) {
-			log.error("Operation must not be null.");
-		} else if (operation.equals("save/edit")) {
-			if (operator.getDisabled()) {
-				operator.setIsActive(false);
-				SessionListener.removeSessionWithUser(operator);
-			} else {
-				SessionListener.updateSessionWithUser(operator);
+		if (operation.equals("save/edit")) {
+			if (operator.getId() != null) {
+				if (operator.getDisabled()) {
+					operator.setIsActive(false);
+					SessionListener.removeSessionWithUser(operator);
+				} else {
+					SessionListener.updateSessionWithUser(operator);
+				}
 			}
 			operator = operatorService.updateOperator(operator);
 		} else if (operation.equals("delete")) {
+			if (operator.getId() == 1) {
+				errorFields = new LinkedHashMap<String, String>();
+				errorFields.put("operator.username", getText("operator.canNotBeDeleted"));
+				status = "validation_error";
+				return INPUT;
+			}
 			SessionListener.removeSessionWithUser(operator);
 			operator = operatorService.getOperatorById(operator.getId());
-			operatorService.removeOperator(operator);
-		} else {
-			log.warn("Unsupported operation: " + operation);
+			try {
+				operatorService.removeOperator(operator);
+			} catch (DataIntegrityViolationException e) {
+				errorFields = new LinkedHashMap<String, String>();
+				errorFields.put("operator.username", getText("operator.deleteNotAllowed.linkedToMessages"));
+				status = "validation_error";
+				return INPUT;
+			}
 		}
 		return SUCCESS;
 	}
@@ -64,7 +78,12 @@ public class AdminOperatorFunction extends ActionSupport implements Preparable {
 		errorFields = new LinkedHashMap<String, String>();
 		if (operator == null) {
 			errorFields.put("operator", getText("operator.null"));
-		} else if (operation == null) {
+		} else if (operation == null  || operation.isEmpty()) {
+			log.warn("Operation must not be null.");
+			errorFields.put("operation", getText("operation.empty"));
+		} else if (!(operation.equals("save/edit") || operation.equals("delete"))) {
+			log.warn("Unsupported operation: " + operation);
+			errorFields.put("operation", getText("operation.notSupported"));
 		} else if (operation.equals("save/edit")) {
 			if (operator.getDisabled() == null) operator.setDisabled(false);
 			if (operator.getIsActive() == null) operator.setIsActive(false);

@@ -68,8 +68,13 @@ public class SMSMessage implements Serializable {
 	
 	
 	@Override
+	public String toString() {
+		return String.format("SMSMessage[ID: %s, Msisdn: %s, Operator: %s, Text: %s, SC: %s, ServiceName: %s]", new Object[] { id, user.getMsisdn(), operator.getName(), text, sc, serviceProvider.getServiceName() });
+	}
+	
+	@Override
 	public int hashCode() {
-		return id;
+		return id.hashCode();
 	}
 	
 	@Override

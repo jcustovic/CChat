@@ -58,7 +58,10 @@
 			<result type="json">
 				<param name="excludeNullProperties">true</param>
 				<param name="excludeProperties">
-					userList.*\.msisdn
+				    user.sentPictures
+				    , user.msisdn
+				    , user.serviceProvider
+					, userList.*\.msisdn
 					, smsMessageList.*\.msisdn
 					, smsMessageList.*\.operator.*\.role
 					, smsMessageList.*\.operator.*\.password
@@ -66,12 +69,23 @@
 					, smsMessageList.*\.user.*\.serviceProvider
 					, smsMessageList.*\.nick
 					, userList.*\.sentPictures
-					, user.*\.sentPictures
 				</param>
 			</result>
-			<result name="input" type="json" />
+			<result name="input" type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="excludeProperties">
+				    user.sentPictures
+				    , user.msisdn
+				    , user.serviceProvider
+				</param>
+			</result>
 			<result name="error" type="json">
 				<param name="excludeNullProperties">true</param>
+				<param name="excludeProperties">
+				    user.sentPictures
+				    , user.msisdn
+				    , user.serviceProvider
+				</param>
 			</result>
 		</action>
 						
@@ -121,6 +135,9 @@
 				</param>
 			</result>
 			<result name="input" type="json">
+				<param name="excludeNullProperties">true</param>
+			</result>
+			<result name="error" type="json">
 				<param name="excludeNullProperties">true</param>
 			</result>
 		</action>

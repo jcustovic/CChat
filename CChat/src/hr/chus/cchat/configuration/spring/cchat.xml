@@ -12,7 +12,7 @@
 		<property name="operatorService" ref="operatorService" />
 	</bean>
 	
-	<bean id="sendMessageService" class="hr.chus.cchat.gateway.SendMessageServiceCGateway">
+	<bean id="defaultSendMessageService" class="hr.chus.cchat.gateway.SendMessageServiceCGateway">
 		<property name="username" value="${gateway.username}" />
 		<property name="password" value="${gateway.password}" />
 		<property name="sendSmsUrl" value="${gateway.sendSmsUrl}" />

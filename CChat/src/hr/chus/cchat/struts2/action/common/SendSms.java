@@ -5,6 +5,9 @@ import java.util.Date;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 import hr.chus.cchat.db.service.SMSMessageService;
 import hr.chus.cchat.db.service.UserService;
@@ -23,21 +26,21 @@ import com.opensymphony.xwork2.ActionSupport;
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *
  */
-public class SendSms extends ActionSupport implements UserAware {
+public class SendSms extends ActionSupport implements UserAware, ApplicationContextAware {
 
 	private static final long serialVersionUID = 1L;
 	
 	private Log log = LogFactory.getLog(getClass());
 	
+	private ApplicationContext applicationContext;
 	private SMSMessageService smsMessageService;
-	private SendMessageService sendMessageService;
+	private SendMessageService defaultSendMessageService;
 	private UserService userService;
-	private Operator operator;
 	
+	private Operator operator;
 	private User user;
 	private String msgType;
 	private String text;
-	
 	private Boolean status;
 	private String errorMsg;
 	private SMSMessage smsMessage;
@@ -73,6 +76,17 @@ public class SendSms extends ActionSupport implements UserAware {
 		log.info("Sending message to user " + user + " --> type: " + msgType + ", text: " + text);
 		SMSMessage newSmsMessage = new SMSMessage(user, operator, new Date(), text, user.getServiceProvider().getSc(), user.getServiceProvider(), Direction.OUT);
 		String gatewayResponse = null;
+		SendMessageService sendMessageService = defaultSendMessageService;
+		if (user.getServiceProvider().getSendServiceBeanName() != null && !user.getServiceProvider().getSendServiceBeanName().isEmpty()) {
+			try {
+				sendMessageService = (SendMessageService) applicationContext.getBean(user.getServiceProvider().getSendServiceBeanName());
+			} catch (BeansException e) {
+				log.error(e, e);
+				errorMsg = e.getMessage();
+				status = false;
+				return ERROR;
+			}
+		}
 		try {
 			if (msgType.equals("wapPush")) {
 				gatewayResponse = sendMessageService.sendWapPushMessage(newSmsMessage);
@@ -104,12 +118,15 @@ public class SendSms extends ActionSupport implements UserAware {
 	// Getters & setters
 	
 	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException { this.applicationContext = applicationContext; }
+	
+	@Override
 	public void setAuthenticatedUser(Operator operator) { this.operator = operator; }
 	
 	public void setSmsMessageService(SMSMessageService smsMessageService) { this.smsMessageService = smsMessageService; }
 	
-	public void setSendMessageService(SendMessageService sendMessageService) { this.sendMessageService = sendMessageService; }
-	
+	public void setDefaultSendMessageService(SendMessageService defaultSendMessageService) { this.defaultSendMessageService = defaultSendMessageService; }
+
 	public void setUserService(UserService userService) { this.userService = userService; }
 
 	public Boolean getStatus() { return status; }
@@ -123,5 +140,5 @@ public class SendSms extends ActionSupport implements UserAware {
 	public void setText(String text) { this.text = text; }
 
 	public SMSMessage getSmsMessage() { return smsMessage; }
-	
+
 }

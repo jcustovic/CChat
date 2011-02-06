@@ -126,8 +126,11 @@ public class Users extends HLayout {
 			@Override
 			protected void transformResponse(DSResponse response, DSRequest request, Object jsonData) {
 				JSONArray value = XMLTools.selectObjects(jsonData, "/status");
-				String status = ((JSONString)value.get(0)).stringValue();
-				if (!status.equals("validation_ok")) {
+				boolean status = false;
+				if (value != null && value.size() > 0) {
+					status = ((JSONBoolean) value.get(0)).booleanValue();
+				}
+				if (!status) {
 					response.setStatus(RPCResponse.STATUS_VALIDATION_ERROR);
 					JSONArray errors = XMLTools.selectObjects(jsonData, "/errorFields");
 					response.setErrors(errors.getJavaScriptObject());
@@ -475,9 +478,6 @@ public class Users extends HLayout {
         operatorItem.setDisplayField("username");
         operatorItem.setValueField("id");
         
-        TextItem serviceProvider = new TextItem("user.serviceProvider");
-        serviceProvider.setVisible(false);
-        
         final DateItem birthdate = new DateItem("user.birthDate", DictionaryInstance.dictionary.birthDate());
 //        birthdate.setAttribute("useCustomTimezone", true);
         birthdate.setInputTransformer(new FormItemInputTransformer() {
@@ -524,7 +524,7 @@ public class Users extends HLayout {
         unreadMsgCount.setTitle(DictionaryInstance.dictionary.unreadMsgCount());
         unreadMsgCount.setDisabled(true);
         
-        return new FormItem[] { id, name, surname, address, notes, serviceProvider, nickItem, operatorItem , birthdate, deleted, joined, lastMsgDate, unreadMsgCount };
+        return new FormItem[] { id, name, surname, address, notes, nickItem, operatorItem , birthdate, deleted, joined, lastMsgDate, unreadMsgCount };
 	}
 
 	/**
@@ -583,8 +583,6 @@ public class Users extends HLayout {
 		nick.setHidden(true);
 		ListGridField operator = new ListGridField("user.operator");
 		operator.setHidden(true);
-		ListGridField serviceProviderName = new ListGridField("serviceProvider.providerName");
-		serviceProviderName.setWidth(120);
 		
 		final DateTimeFormat joinedDateFormatter = DateTimeFormat.getFormat("dd.MM.yyyy");
 		ListGridField joined = new ListGridField("user.joined");
@@ -625,7 +623,7 @@ public class Users extends HLayout {
 		birthDate.setType(ListGridFieldType.DATE);
 		birthDate.setHidden(true);
 		
-		return new ListGridField[] { id, name, surname, address, notes, nickName, operator, operatorUsername, serviceProviderName, nick, joined, birthDate };
+		return new ListGridField[] { id, name, surname, address, notes, nickName, operator, operatorUsername, nick, joined, birthDate };
 	}
     
 }

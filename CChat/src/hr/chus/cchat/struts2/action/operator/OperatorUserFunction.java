@@ -5,6 +5,7 @@ import hr.chus.cchat.helper.UserAware;
 import hr.chus.cchat.model.db.jpa.Operator;
 import hr.chus.cchat.model.db.jpa.User;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -28,6 +29,7 @@ public class OperatorUserFunction extends ActionSupport implements UserAware {
 	private Log log = LogFactory.getLog(getClass());
 	
 	private UserService userService;
+	
 	private String operation;
 	private User user;
 	private Map<String, String> errorFields;
@@ -39,24 +41,31 @@ public class OperatorUserFunction extends ActionSupport implements UserAware {
 	@Override
 	public void validate() {
 		if (operation != null && operation.equals("get")) return;
-		if (user == null) {
+		errorFields = new HashMap<String, String>();
+		if (operation == null) {
+			log.warn("Operation must not be null.");
+			errorFields.put("operation", getText("operation.empty"));
+		} else if (!(operation.equals("update") || operation.equals("get"))) {
+			log.warn("Unsupported operation: " + operation);
+			errorFields.put("operation", getText("operation.notSupported"));
+		} else if (user == null) {
 			errorMsg = "User must be set";
 		} else if (operator.getRole().getName().equals("operator") && (user.getOperator() == null || !user.getOperator().equals(operator))) {
-			errorMsg = "Operator " + operator.getUsername() + " can't change user with id " + user.getId() + " because he isn't assigned to that user.";
-			log.warn("Operator " + operator.getUsername() + " can't change user with id " + user.getId() + " because he isn't assigned to that user.");
+			errorMsg = "Operator " + operator.getUsername() + " can't change/get user with id " + user.getId() + " because he isn't assigned to that user.";
+			log.warn("Operator " + operator.getUsername() + " can't change/get user with id " + user.getId() + " because he isn't assigned to that user.");
+			errorFields.put("user.operator", getText("user.notAllowedToEdit"));
 		}
-		if (errorMsg != null) {
-			addActionError(errorMsg);
+		if (errorMsg != null || errorFields.size() > 0) {
+			addActionError(errorMsg + "; Error count: " + errorFields.size());
 			status = false;
 		}
 	}
 	
 	@Override
 	public String execute() throws Exception {
-		if (operation == null) {
-		} else if (operation.equals("update")) {
+		if (operation.equals("update")) {
 			log.debug("Updating user " + user + " ...");
-			user = userService.editUser(user);
+			user = userService.editUserOperator(user);
 		}
 		status = true;
 		return SUCCESS;

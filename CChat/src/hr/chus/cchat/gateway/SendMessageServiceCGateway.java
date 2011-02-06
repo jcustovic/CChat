@@ -82,7 +82,6 @@ public class SendMessageServiceCGateway implements SendMessageService {
 	@Override
 	public String sendWapPushMessage(SMSMessage smsMessage) {
 		if (testSending) return "testWapPushResponse";
-		// TODO: Implement
 		throw new NotImplementedException("Sending wap push is not supported yet");
 	}
 

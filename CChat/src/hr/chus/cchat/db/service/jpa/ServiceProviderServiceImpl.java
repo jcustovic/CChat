@@ -51,7 +51,7 @@ public class ServiceProviderServiceImpl implements ServiceProviderService {
 	}
 	
 	@Override
-	public ServiceProvider getByNameAndShortCode(String providerName, String sc) {
+	public ServiceProvider getByProviderNameAndShortCode(String providerName, String sc) {
 		try {
 			return (ServiceProvider) entityManager.createNamedQuery("ServiceProvider.getByNameAndSc").setParameter("providerName", providerName).setParameter("sc", sc).getSingleResult();
 		} catch (NoResultException e) {

@@ -2,6 +2,7 @@ CREATE TABLE service_provider (
   id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT
   , sc VARCHAR(20) NOT NULL
   , provider_name VARCHAR(30) NOT NULL
+  , service_name VARCHAR(30) NOT NULL
   , description VARCHAR(200) NULL
   , disabled BOOL NULL
   , send_service_bean VARCHAR(30) NULL
@@ -30,6 +31,7 @@ CREATE TABLE operator (
   , surname VARCHAR(30) NULL
   , email VARCHAR(50) NULL
   , is_active BOOL NOT NULL DEFAULT false
+  , is_external BOOL NOT NULL DEFAULT false
   , disabled BOOL NOT NULL DEFAULT false
   , PRIMARY KEY(id)
   , FOREIGN KEY(operator_role_id) REFERENCES operator_role(id)
@@ -48,12 +50,16 @@ CREATE TABLE nick (
 ENGINE=INNODB;
 
 
-CREATE TABLE operator_nick (
-  operator_id INTEGER UNSIGNED NOT NULL
+CREATE TABLE keyword_conf (
+  id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT
+  , operator_id INTEGER UNSIGNED NOT NULL
   , nick_id INTEGER UNSIGNED NOT NULL
-  , PRIMARY KEY(operator_id, nick_id)
+  , service_provider_id INTEGER UNSIGNED NOT NULL
+  , PRIMARY KEY(id)
   , FOREIGN KEY(operator_id) REFERENCES operator(id)
+  , FOREIGN KEY(service_provider_id) REFERENCES service_provider(id)
   , FOREIGN KEY(nick_id) REFERENCES nick(id)
+  , UNIQUE(operator_id, service_provider_id, nick_id)
 )
 ENGINE=INNODB;
 
@@ -98,8 +104,10 @@ CREATE TABLE users (
   , PRIMARY KEY(id)
   , FOREIGN KEY(operator_id) REFERENCES operator(id)
   , FOREIGN KEY(nick_id) REFERENCES nick(id)
+	  ON DELETE SET NULL
+      ON UPDATE NO ACTION
   , FOREIGN KEY(service_provider_id) REFERENCES service_provider(id)
-  , UNIQUE(msisdn)
+  , UNIQUE(msisdn, service_provider_id)
 ) 
 ENGINE=INNODB;
 
@@ -118,6 +126,8 @@ CREATE TABLE sms_message (
   , FOREIGN KEY(user_id) REFERENCES users(id)
   , FOREIGN KEY(operator_id) REFERENCES operator(id)
   , FOREIGN KEY(nick_id) REFERENCES nick(id)
+  	  ON DELETE SET NULL
+      ON UPDATE NO ACTION
   , FOREIGN KEY(service_provider_id) REFERENCES service_provider(id)
   	  ON DELETE NO ACTION
       ON UPDATE NO ACTION

@@ -27,6 +27,7 @@ public class OperatorStatisticsList extends ActionSupport implements UserAware {
 	private Log log = LogFactory.getLog(getClass());
 	
 	private StatisticsService statisticsService;
+	
 	private Date fromDate;
 	private Date toDate;
 	private Operator operator;

@@ -26,6 +26,7 @@ public class AdminUserList extends ActionSupport {
 	private Log log = LogFactory.getLog(getClass());
 	
 	private UserService userService;
+	
 	private Nick nick;
 	private Operator operator;
 	private ServiceProvider serviceProvider;

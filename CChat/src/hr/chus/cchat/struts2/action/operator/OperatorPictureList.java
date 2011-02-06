@@ -21,13 +21,14 @@ import com.opensymphony.xwork2.ActionSupport;
 public class OperatorPictureList extends ActionSupport {
 
 	private static final long serialVersionUID = 1L;
+	
 	private Log log = LogFactory.getLog(getClass());
 	
-	private List<Picture> pictureList;
-	private PictureService pictureService;
-	private Nick nick;
-	
 	private OpenPropertyPlaceholderConfigurer propertyConfigurer;
+	private PictureService pictureService;
+	
+	private List<Picture> pictureList;
+	private Nick nick;
 	
 	
 	@Override

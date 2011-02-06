@@ -21,9 +21,11 @@ import com.opensymphony.xwork2.ActionSupport;
 public class UserList extends ActionSupport implements UserAware {
 	
 	private static final long serialVersionUID = 1L;
+	
 	private static final long NEWEST_TIME = 172800000L; // 48 hours
 	
 	private UserService userService;
+	
 	private Operator operator;
 	private String errorMsg;
 	private List<User> operatorUserList;

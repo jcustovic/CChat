@@ -19,10 +19,13 @@ import hr.chus.cchat.model.db.jpa.Nick;
 public class AdminNickList extends ActionSupport {
 
 	private static final long serialVersionUID = 1L;
+	
 	private Log log = LogFactory.getLog(getClass());
+
+	private NickService nickService;
 	
 	private List<Nick> nickList;
-	private NickService nickService;
+	
 	
 	@Override
 	public String execute() {
@@ -33,10 +36,11 @@ public class AdminNickList extends ActionSupport {
 
 	
 	// Getters & setters
+
+	public void setNickService(NickService nickService) { this.nickService = nickService; }
 	
 	public List<Nick> getNickList() { return nickList; }
 	public void setNickList(List<Nick> nickList) { this.nickList = nickList; }
 
-	public void setNickService(NickService nickService) { this.nickService = nickService; }
 	
 }

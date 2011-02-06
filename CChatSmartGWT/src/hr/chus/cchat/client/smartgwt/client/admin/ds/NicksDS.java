@@ -4,6 +4,7 @@ import hr.chus.cchat.client.smartgwt.client.common.Constants;
 import hr.chus.cchat.client.smartgwt.client.i18n.DictionaryInstance;
 
 import com.smartgwt.client.data.DataSource;
+import com.smartgwt.client.data.fields.DataSourceBooleanField;
 import com.smartgwt.client.data.fields.DataSourceIntegerField;
 import com.smartgwt.client.data.fields.DataSourceTextField;
 import com.smartgwt.client.types.DSDataFormat;
@@ -36,8 +37,10 @@ public class NicksDS extends DataSource {
 		name.setValueXPath("name");
 		DataSourceTextField description = new DataSourceTextField("nick.description", DictionaryInstance.dictionary.description(), 200, false);
 		description.setValueXPath("description");
+		DataSourceBooleanField keyword = new DataSourceBooleanField("nick.isKeyword", DictionaryInstance.dictionary.keyword());
+		keyword.setValueXPath("isKeyword");
 
-		setFields(pkField, name, description);
+		setFields(pkField, name, description, keyword);
 
 		setDataFormat(DSDataFormat.JSON);
 //		setDataURL("test/data/json/nickList.json");

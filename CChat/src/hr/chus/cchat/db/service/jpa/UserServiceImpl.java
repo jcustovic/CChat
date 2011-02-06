@@ -44,6 +44,40 @@ public class UserServiceImpl implements UserService {
 		user = entityManager.getReference(User.class, user.getId());
 		entityManager.remove(user);
 	}
+	
+	@Override
+	public User editUserAdmin(User user) {
+		if (user.getId() != null) {
+			User us = getUserById(user.getId(), false);
+			us.setAddress(user.getAddress());
+			us.setBirthDate(user.getBirthDate());
+			us.setDeleted(user.getDeleted());
+			us.setName(user.getName());
+			us.setNick(user.getNick());
+			us.setNotes(user.getNotes());
+			us.setOperator(user.getOperator());
+			us.setSurname(user.getSurname());
+			us.setUnreadMsgCount(user.getUnreadMsgCount());
+			return editUser(us);
+		}
+		return editUser(user);
+	}
+	
+	@Override
+	public User editUserOperator(User user) {
+		if (user.getId() != null) {
+			User us = getUserById(user.getId(), false);
+			us.setAddress(user.getAddress());
+			us.setBirthDate(user.getBirthDate());
+			us.setName(user.getName());
+			us.setNick(user.getNick());
+			us.setNotes(user.getNotes());
+			us.setSurname(user.getSurname());
+			us.setUnreadMsgCount(user.getUnreadMsgCount());
+			return editUser(us);
+		}
+		return editUser(user);
+	}
 
 	@Override
 	public User editUser(User user) {
@@ -58,9 +92,9 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public User getByMsisdn(String msisdn, boolean loadSentPictures) {
+	public User getByMsisdnAndServiceName(String msisdn, String serviceName, boolean loadSentPictures) {
 		try {
-			User user = (User) entityManager.createNamedQuery("User.getByMsisdn").setParameter("msisdn", msisdn).getSingleResult();
+			User user = (User) entityManager.createNamedQuery("User.getByMsisdnAndServiceName").setParameter("msisdn", msisdn).setParameter("serviceName", serviceName).getSingleResult();
 			if (loadSentPictures) user.getSentPictures().size();
 			return user;
 		} catch (NoResultException e) {

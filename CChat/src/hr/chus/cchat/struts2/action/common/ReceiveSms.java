@@ -44,7 +44,6 @@ public class ReceiveSms extends ActionSupport {
 	private String text;
 	private String sc;
 	private String serviceProviderName;
-	
 	private Boolean status;
 	private String errorMsg;
 	
@@ -79,50 +78,41 @@ public class ReceiveSms extends ActionSupport {
 			}
 		}
 		
-		ServiceProvider serviceProvider = serviceProviderService.getByNameAndShortCode(serviceProviderName, sc);
+		ServiceProvider serviceProvider = serviceProviderService.getByProviderNameAndShortCode(serviceProviderName, sc);
 		if (serviceProvider == null) {
 			log.error("ServiceProvider not found for provider " + serviceProviderName + " and sc " + sc);
 			errorMsg = "ServiceProvider not found for provider " + serviceProviderName + " and sc " + sc;
 			status = false;
 			return SUCCESS;
 		}
-		Operator operator = null;
-		/* TODO: Get by msisdn and serviceProvider, change User model (and create.sql) so msisdn is not unique, because the same user can 
-		 * subscribe to different serviceProviders (same provider name different short code).
-		 */
-		User user = userService.getByMsisdn(msisdn, false);
+		
+		User user = userService.getByMsisdnAndServiceName(msisdn, serviceProvider.getServiceName(), false);
 		if (user == null) {
 			user = new User(msisdn, serviceProvider);
 			user.setUnreadMsgCount(1);
-			operator = chooseOperator();
-			user.setOperator(operator);
+			user.setOperator(operatorChooser.chooseOperator());
 			user = userService.editUser(user);
-			log.info("Creating new user " + user);
+			log.info("New user (" + user + ") registred to service " + serviceProvider.getServiceName());
 		} else {
 			user.setUnreadMsgCount(user.getUnreadMsgCount() + 1);
 			user.setLastMsg(new Date());
-			operator = user.getOperator();
+			Operator operator = user.getOperator();
 			if (operator == null || !operator.getIsActive()) {
-				operator = chooseOperator();
+				user.setOperator(operatorChooser.chooseOperator());
 			}
-			user.setOperator(operator);
+			if (!user.getServiceProvider().equals(serviceProvider)) {
+				log.info("User " + user + ") changed service provider from " + user.getServiceProvider() + " to " + serviceProvider);
+				user.setServiceProvider(serviceProvider);
+			}
 			userService.editUser(user);
 		}
 		
-		SMSMessage message = new SMSMessage(user, operator, date, text, sc, serviceProvider, Direction.IN);
+		SMSMessage message = new SMSMessage(user, user.getOperator(), date, text, sc, serviceProvider, Direction.IN);
 		smsMessageService.addSMSMessage(message);
 		status = true;
 		return SUCCESS;
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
-	private Operator chooseOperator() {
-		return operatorChooser.chooseOperator();
-	}
-	
 
 	// Getters & setters
 	

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hr.chus.cchat.db.service.NickService;
 import hr.chus.cchat.model.db.jpa.Nick;
+import hr.chus.cchat.model.db.jpa.Picture;
 
 /**
  * JPA/Hibernate DAO implementation of nick services.
@@ -38,10 +39,18 @@ public class NickServiceImpl implements NickService {
 	public void removeNick(Nick nick) {
 		nick = entityManager.getReference(Nick.class, nick.getId());
 		entityManager.remove(nick);
+		entityManager.getEntityManagerFactory().getCache().evict(Picture.class);
 	}
 
 	@Override
 	public Nick updateNick(Nick nick) {
+		if (nick.getId() != null) {
+			Nick ni = getNickById(nick.getId());
+			ni.setDescription(nick.getDescription());
+			ni.setIsKeyword(nick.getIsKeyword());
+			ni.setName(nick.getName());
+			return entityManager.merge(ni);
+		}
 		return entityManager.merge(nick);
 	}
 	

@@ -27,6 +27,7 @@ public class AdminSMSMessageList extends ActionSupport {
 	private Log log = LogFactory.getLog(getClass());
 	
 	private SMSMessageService smsMessageService;
+	
 	private Operator operator;
 	private ServiceProvider serviceProvider;
 	private String msisdn;
@@ -42,6 +43,7 @@ public class AdminSMSMessageList extends ActionSupport {
 	
 	private List<SMSMessage> smsMessageList;
 	private Long totalCount;
+	
 	
 	@SuppressWarnings("unchecked")
 	@Override

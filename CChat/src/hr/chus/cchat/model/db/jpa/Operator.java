@@ -1,7 +1,6 @@
 package hr.chus.cchat.model.db.jpa;
 
 import java.io.Serializable;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,8 +8,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -19,6 +16,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.ejb.QueryHints;
 
 /**
@@ -50,18 +49,19 @@ public class Operator implements Serializable {
 	private String surname;
 	private String email;
 	private Boolean isActive;
+	private Boolean isExternal;
 	private Boolean disabled;
-	private Set<Nick> nicks;
 	
 	
 	public Operator() { }
 	
-	public Operator(String username, String password, Role role, Boolean isActive, Boolean disabled) {
+	public Operator(String username, String password, Role role, Boolean isActive, Boolean disabled, Boolean isExternal) {
 		this.username = username;
 		this.password = password;
 		this.role = role;
 		this.isActive = isActive;
 		this.disabled = disabled;
+		this.isExternal = isExternal;
 	}
 	
 	
@@ -72,7 +72,7 @@ public class Operator implements Serializable {
 	
 	@Override
 	public int hashCode() {
-		return id;
+		return id.hashCode();
 	}
 	
 	@Override
@@ -103,6 +103,7 @@ public class Operator implements Serializable {
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "operator_role_id", nullable = false)
+	@Fetch(FetchMode.JOIN)
 	public Role getRole() { return  role; }
 	public void setRole(Role role) { this.role = role; }
 	
@@ -121,20 +122,13 @@ public class Operator implements Serializable {
 	@Column(name = "is_active")
 	public Boolean getIsActive() { return isActive; }
 	public void setIsActive(Boolean isActive) { this.isActive = isActive; }
+	
+	@Column(name = "is_external")
+	public Boolean getIsExternal() { return isExternal; }
+	public void setIsExternal(Boolean isExternal) { this.isExternal = isExternal; }
 
 	@Column(name = "disabled")
 	public Boolean getDisabled() { return disabled; }
 	public void setDisabled(Boolean disabled) { this.disabled = disabled;}
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "operator_nick"
-			, joinColumns = {
-				@JoinColumn(name = "operator_id", referencedColumnName = "id")
-			}
-			, inverseJoinColumns = {
-				@JoinColumn(name = "nick_id", referencedColumnName = "id")
-			})
-	public Set<Nick> getNicks() { return nicks; }
-	public void setNicks(Set<Nick> nicks) { this.nicks = nicks; }
-	
 }

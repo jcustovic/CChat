@@ -1,14 +1,11 @@
 package hr.chus.cchat.model.db.jpa;
 
 import java.io.Serializable;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.QueryHint;
@@ -43,7 +40,6 @@ public class Nick implements Serializable {
 	private String name;
 	private String description;
 	private Boolean isKeyword;
-	private Set<Operator> operators;
 	
 	
 	public Nick() { }
@@ -57,7 +53,7 @@ public class Nick implements Serializable {
 	
 	@Override
 	public int hashCode() {
-		return id;
+		return id.hashCode();
 	}
 
 	@Override
@@ -90,8 +86,4 @@ public class Nick implements Serializable {
 	public Boolean getIsKeyword() { return isKeyword; }
 	public void setIsKeyword(Boolean isKeyword) { this.isKeyword = isKeyword; }
 	
-	@ManyToMany(mappedBy = "nicks", fetch = FetchType.LAZY)
-	public Set<Operator> getOperators() { return operators; }
-	public void setOperators(Set<Operator> operators) { this.operators = operators; }
-
 }

@@ -45,6 +45,8 @@ public class OperatorsDS extends DataSource {
 		disabled.setValueXPath("disabled");
 		DataSourceBooleanField active = new DataSourceBooleanField("operator.isActive", DictionaryInstance.dictionary.isActive());
 		active.setValueXPath("isActive");
+		DataSourceBooleanField external = new DataSourceBooleanField("operator.isExternal", DictionaryInstance.dictionary.external());
+		external.setValueXPath("isExternal");
 		DataSourceTextField password = new DataSourceTextField("operator.password", DictionaryInstance.dictionary.password(), 50, true);
 		password.setValueXPath("password");
 		
@@ -54,7 +56,7 @@ public class OperatorsDS extends DataSource {
 		DataSourceTextField roleName = new DataSourceTextField("role.name", DictionaryInstance.dictionary.role(), 50, true);
 		roleName.setValueXPath("role/name");
 		
-		setFields(pkField, username, name, surname, email, active, disabled, roleId, roleName, password);
+		setFields(pkField, username, name, surname, email, active, external, disabled, roleId, roleName, password);
 
 		setDataFormat(DSDataFormat.JSON);
 //		setDataURL("test/data/json/operatorList.json");

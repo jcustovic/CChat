@@ -20,19 +20,22 @@ import com.opensymphony.xwork2.ActionSupport;
 public class AdminUserFunction extends ActionSupport {
 
 	private static final long serialVersionUID = 1L;
+	
 	private Log log = LogFactory.getLog(getClass());
 	
 	private UserService userService;
+	
 	private String operation;
 	private User user;
 	private Map<String, String> errorFields;
 	private String status;
 	
+	
 	@Override
 	public String execute() throws Exception {
 		if (operation != null && operation.equals("update")) {
 			log.debug("Updating user " + user + " ...");
-			user = userService.editUser(user);
+			user = userService.editUserAdmin(user);
 		}
 		return SUCCESS;
 	}
