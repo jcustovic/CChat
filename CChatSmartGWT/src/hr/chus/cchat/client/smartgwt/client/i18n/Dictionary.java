@@ -360,4 +360,10 @@ public interface Dictionary extends Constants {
 	@DefaultStringValue("Sending message failed")
 	String sendingMessageFailed();
 
+	@DefaultStringValue("Keyword")
+	String keyword();
+
+	@DefaultStringValue("External")
+	String external();
+
 }

@@ -18,7 +18,9 @@ public class AdminRoleList extends ActionSupport {
 	private static final long serialVersionUID = 1L;
 	
 	private RoleService roleService;
+	
 	private List<Role> roleList;
+	
 	
 	@Override
 	public String execute() throws Exception {

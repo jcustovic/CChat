@@ -73,22 +73,26 @@ public class Prepare extends ActionSupport {
 		Role operator = new Role("operator", "Tip korisnika za operatore");
 		roleService.addRole(operator);
 		
-		Operator adminUser = new Operator("admin", StringUtil.encodePassword("admin", "SHA"), admin, false, false);
+		Operator adminUser = new Operator("admin", StringUtil.encodePassword("admin", "SHA"), admin, false, false, false);
+		adminUser.setName("admin");
+		adminUser.setSurname("admin");
 		operatorService.addOperator(adminUser);
 		
-		Operator user = new Operator("user", StringUtil.encodePassword("user", "SHA"), operator, false, false);
+		Operator user = new Operator("user", StringUtil.encodePassword("user", "SHA"), operator, false, false, false);
+		user.setName("user");
+		user.setSurname("user");
 		operatorService.addOperator(user);
 		
 		Configuration smsMaxLength = new Configuration("smsMaxLength", "160");
 		configurationService.addConfiguration(smsMaxLength);
 		
-		ServiceProvider vipServiceProvider = new ServiceProvider("66111", "VIP", "VIP mreža", false);
+		ServiceProvider vipServiceProvider = new ServiceProvider("66111", "VIP", "testService", "VIP mreža", false);
 		serviceProviderService.addServiceProvider(vipServiceProvider);
 		
-		ServiceProvider tmobServiceProvider = new ServiceProvider("66111", "Tmobile", "TMobile mreža", false);
+		ServiceProvider tmobServiceProvider = new ServiceProvider("66111", "Tmobile", "testService", "TMobile mreža", false);
 		serviceProviderService.addServiceProvider(tmobServiceProvider);
 		
-		ServiceProvider tele2ServiceProvider = new ServiceProvider("66111", "Tele2", "Tele2 mreža", false);
+		ServiceProvider tele2ServiceProvider = new ServiceProvider("66111", "Tele2", "testService", "Tele2 mreža", false);
 		serviceProviderService.addServiceProvider(tele2ServiceProvider);
 		
 		Nick nick = new Nick("Test", "Testni nick", false);
@@ -114,11 +118,13 @@ public class Prepare extends ActionSupport {
 			userUser = userService.editUser(userUser);
 			for (int j = 0; j < 2; j++) {
 				SMSMessage smsMessage = new SMSMessage(userUser, user, new Date(), "Text " + i + j + "IN sfdsdafkj ghkldfhg fdkjhg dkfljhg dkljh", "12346", tmobServiceProvider, Direction.IN);
+				smsMessage.setNick(nick);
 				smsMessageService.addSMSMessage(smsMessage);
 			}
 			for (int j = 0; j < 2; j++) {
 				SMSMessage smsMessage = new SMSMessage(userUser, user, new Date(), "Text " + i + j + "OUT sfdsdafkj ghkldfhg fdkjhg dkfljhg dkljh", "12346", tmobServiceProvider, Direction.OUT);
 				smsMessageService.addSMSMessage(smsMessage);
+				smsMessage.setNick(nick);
 			}
 		}
 		
@@ -150,10 +156,10 @@ public class Prepare extends ActionSupport {
 		Role operator = new Role("operator", "Tip korisnika za operatore");
 		roleService.addRole(operator);
 		
-		Operator adminUser = new Operator("admin", StringUtil.encodePassword("admin", "SHA"), admin, false, false);
+		Operator adminUser = new Operator("admin", StringUtil.encodePassword("admin", "SHA"), admin, false, false, false);
 		operatorService.addOperator(adminUser);
 		
-		Operator user = new Operator("user", StringUtil.encodePassword("user", "SHA"), operator, false, false);
+		Operator user = new Operator("user", StringUtil.encodePassword("user", "SHA"), operator, false, false, false);
 		operatorService.addOperator(user);
 		
 		Configuration smsMaxLength = new Configuration("smsMaxLength", "160");

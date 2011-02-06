@@ -10,6 +10,7 @@ import javax.persistence.Query;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.ejb.QueryHints;
 import org.springframework.transaction.annotation.Transactional;
 
 import hr.chus.cchat.db.service.SMSMessageService;
@@ -150,8 +151,11 @@ public class SMSMessageServiceImpl implements SMSMessageService {
 	
 	@Override
 	public Object[] getConversationByUserId(Integer userId, int start, int limit) {
-		List<?> resultList = entityManager.createQuery("SELECT sms.id, sms.text, sms.time, sms.operator.username, sms.direction FROM SMSMessage sms WHERE sms.user.id = :userId ORDER BY sms.time DESC").setParameter("userId", userId).setFirstResult(start).setMaxResults(limit).getResultList();
-		Object count = entityManager.createQuery("SELECT COUNT(sms.id) FROM SMSMessage sms  WHERE sms.user.id = :userId ORDER BY sms.time DESC").setParameter("userId", userId).getSingleResult();
+		Object count = entityManager.createQuery("SELECT COUNT(sms.id) FROM SMSMessage sms  WHERE sms.user.id = :userId ORDER BY sms.time DESC")
+								.setHint(QueryHints.HINT_CACHEABLE, false).setParameter("userId", userId).getSingleResult();
+		List<?> resultList = entityManager.createQuery("SELECT sms.id, sms.text, sms.time, sms.operator.username, sms.direction FROM SMSMessage sms WHERE sms.user.id = :userId ORDER BY sms.time DESC")
+								.setParameter("userId", userId).setFirstResult(start).setMaxResults(limit)
+								.setHint(QueryHints.HINT_CACHEABLE, false).getResultList();
 		List<Conversation> conversationList = new LinkedList<Conversation>();
 		for (Object object : resultList) {
 			Object[] row = (Object[]) object;

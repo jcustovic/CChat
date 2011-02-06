@@ -22,6 +22,7 @@ import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.form.DynamicForm;
+import com.smartgwt.client.widgets.form.fields.BooleanItem;
 import com.smartgwt.client.widgets.form.fields.FormItem;
 import com.smartgwt.client.widgets.form.fields.HiddenItem;
 import com.smartgwt.client.widgets.form.fields.TextItem;
@@ -243,7 +244,11 @@ public class Nicks extends HLayout {
     	TextItem name = new TextItem("nick.name", DictionaryInstance.dictionary.name());
     	name.setRequired(true);
     	TextItem description = new TextItem("nick.description", DictionaryInstance.dictionary.description());
-		return new FormItem[] { id, name, description };
+    	BooleanItem keyword = new BooleanItem();
+    	keyword.setDefaultValue(false);
+    	keyword.setName("nick.isKeyword");
+    	keyword.setTitle(DictionaryInstance.dictionary.keyword());
+		return new FormItem[] { id, name, description, keyword };
 	}
 	
 	/**
@@ -253,6 +258,7 @@ public class Nicks extends HLayout {
 	private ListGridField[] getGridFields() {
 		ListGridField name = new ListGridField("nick.name", DictionaryInstance.dictionary.name());
 		ListGridField description = new ListGridField("nick.description", DictionaryInstance.dictionary.description());
-		return new ListGridField[] { name, description };
+		ListGridField keyword = new ListGridField("nick.isKeyword", DictionaryInstance.dictionary.keyword());
+		return new ListGridField[] { name, description, keyword };
 	}
 }

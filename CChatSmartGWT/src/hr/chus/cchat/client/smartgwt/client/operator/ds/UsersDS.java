@@ -63,8 +63,6 @@ public class UsersDS extends DataSource {
 		operatorId.setValueXPath("operator/id");
 		DataSourceTextField operatorUsername = new DataSourceTextField("operator.username", DictionaryInstance.dictionary.operator(), 30, false);
 		operatorUsername.setValueXPath("operator/username");
-		DataSourceTextField serviceProviderId = new DataSourceTextField("user.serviceProvider", DictionaryInstance.dictionary.serviceProvider(), 15, false);
-		serviceProviderId.setValueXPath("serviceProvider/id");
 		DataSourceTextField serviceProviderName = new DataSourceTextField("serviceProvider.providerName", DictionaryInstance.dictionary.serviceProvider(), 30, false);
 		serviceProviderName.setValueXPath("serviceProvider/providerName");
 		DataSourceTextField name = new DataSourceTextField("user.name", DictionaryInstance.dictionary.name(), 30, true);
@@ -86,7 +84,7 @@ public class UsersDS extends DataSource {
 		DataSourceTextField notes = new DataSourceTextField("user.notes", DictionaryInstance.dictionary.notes(), 100, true);
 		notes.setValueXPath("notes");
 		
-		setFields(pkField, nickName, operatorId, operatorUsername, serviceProviderId, serviceProviderName, name, surname, address, birthDate, deleted, joined, lastMsg, unreadMsgCount, notes, nickId);
+		setFields(pkField, nickName, operatorId, operatorUsername, serviceProviderName, name, surname, address, birthDate, deleted, joined, lastMsg, unreadMsgCount, notes, nickId);
 
 		setDataFormat(DSDataFormat.JSON);
 		setDataURL(Constants.CONTEXT_PATH + "operator/OperatorUserListJSON");

@@ -21,9 +21,11 @@ import com.opensymphony.xwork2.ActionSupport;
 public class AdminNickFunction extends ActionSupport {
 	
 	private static final long serialVersionUID = 1L;
+	
 	private Log log = LogFactory.getLog(getClass());
 	
 	private NickService nickService;
+	
 	private Nick nick;
 	private String operation;
 	private Map<String, String> errorFields;
@@ -32,7 +34,6 @@ public class AdminNickFunction extends ActionSupport {
 	
 	@Override
 	public String execute() throws Exception {
-		log.debug("AdminNickFunction fired...");
 		if (operation.equals("save/edit")) {
 			nick = nickService.updateNick(nick);
 		} else if (operation.equals("delete")) {
@@ -50,7 +51,12 @@ public class AdminNickFunction extends ActionSupport {
 		errorFields = new LinkedHashMap<String, String>();
 		if (nick == null) {
 			errorFields.put("nick", getText("nick.null"));
-		} else if (operation == null) {
+		} else if (operation == null  || operation.isEmpty()) {
+			log.warn("Operation must not be null.");
+			errorFields.put("operation", getText("operation.empty"));
+		} else if (!(operation.equals("save/edit") || operation.equals("delete"))) {
+			log.warn("Unsupported operation: " + operation);
+			errorFields.put("operation", getText("operation.notSupported"));
 		} else if (operation.equals("save/edit")) {
 			if (nick.getName() == null || nick.getName().length() == 0) {
 				errorFields.put("nick.name", getText("nick.name.empty"));

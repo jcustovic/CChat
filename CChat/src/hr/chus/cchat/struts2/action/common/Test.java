@@ -21,8 +21,8 @@ public class Test extends ActionSupport implements ServletRequestAware {
 	private Log log = LogFactory.getLog(getClass());
 	
 	private HttpServletRequest request;
-	
 	private String test;
+	
 	
 	@Override
 	public String execute() throws Exception {

@@ -76,9 +76,15 @@
 					, smsMessageList.*\.user.*\.serviceProvider
 					, smsMessageList.*\.nick
 					, userList.*\.sentPictures
+					, user.*\.sentPictures
 				</param>
 			</result>
-			<result name="input" type="json" />
+			<result name="input" type="json">
+				<param name="excludeNullProperties">true</param>
+			</result>
+			<result name="error" type="json">
+				<param name="excludeNullProperties">true</param>
+			</result>
 		</action>
 	    
 	    <action name="AdminPictureUploadAction" class="hr.chus.cchat.struts2.action.admin.AdminPictureUpload">
@@ -104,6 +110,9 @@
 				</param>
 			</result>
 			<result name="input" type="json">
+				<param name="excludeNullProperties">true</param>
+			</result>
+			<result name="error" type="json">
 				<param name="excludeNullProperties">true</param>
 			</result>
 		</action>

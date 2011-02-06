@@ -18,8 +18,10 @@ public class AdminOperatorList extends ActionSupport {
 	private static final long serialVersionUID = 1L;
 	
 	private OperatorService operatorService;
+	
 	private List<Operator> operatorList;
 
+	
 	@Override
 	public String execute() {
 		operatorList = operatorService.getAllOperators();
@@ -27,7 +29,6 @@ public class AdminOperatorList extends ActionSupport {
 	}
 	
 
-	
 	// Getters & setters
 	
 	public void setOperatorService(OperatorService operatorService) { this.operatorService = operatorService; }

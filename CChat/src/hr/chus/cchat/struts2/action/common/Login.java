@@ -21,13 +21,16 @@ import com.opensymphony.xwork2.ActionSupport;
 public class Login extends ActionSupport implements SessionAware {
 
 	private static final long serialVersionUID = 1L;
+	
 	private Log log = LogFactory.getLog(getClass());
 	
 	private OperatorService operatorService;
+	
 	private Map<String, Object> session;
 	private String username;
 	private String password;
 
+	
 	@Override
 	public String execute() throws Exception {
 		Operator user = (Operator) session.get(ApplicationConstants.USER_SESSION);

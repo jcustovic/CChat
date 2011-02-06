@@ -25,14 +25,14 @@ public class UserConversation extends ActionSupport implements UserAware {
 	
 	private Log log = LogFactory.getLog(getClass());
 	
-	private Operator operator;
 	private SMSMessageService smsMessageService;
+
+	private Operator operator;
 	private UserService userService;
 	private Integer userId;
 	private int start;
 	private int limit;
 	private boolean setMessagesAsRead;
-	
 	private List<Conversation> conversationList;
 	private Long totalCount;
 	

@@ -39,6 +39,7 @@ public class ServiceProvider implements Serializable {
 	private Integer id;
 	private String sc;
 	private String providerName;
+	private String serviceName;
 	private String description;
 	private Boolean disabled;
 	private String sendServiceBeanName;
@@ -46,17 +47,23 @@ public class ServiceProvider implements Serializable {
 	
 	public ServiceProvider() { }
 	
-	public ServiceProvider(String sc, String providerName, String description, boolean disabled) {
+	public ServiceProvider(String sc, String providerName, String serviceName, String description, boolean disabled) {
 		this.sc = sc;
 		this.providerName = providerName;
+		this.serviceName = serviceName;
 		this.description = description;
 		this.disabled = disabled;
 	}
 	
 	
 	@Override
+	public String toString() {
+		return String.format("ServiceProvider[ID: %s, ProviderName: %s, SC: %s, ServiceName: %s, Disabled: %s]", new Object[] { id, providerName, sc, serviceName, disabled });
+	}
+	
+	@Override
 	public int hashCode() {
-		return id;
+		return id.hashCode();
 	}
 	
 	@Override
@@ -84,6 +91,10 @@ public class ServiceProvider implements Serializable {
 	@Column(name = "provider_name", length = 30, nullable = false)
 	public String getProviderName() { return providerName; }
 	public void setProviderName(String providerName) { this.providerName = providerName; }
+	
+	@Column(name = "service_name", length = 30, nullable = false)
+	public String getServiceName() { return serviceName; }
+	public void setServiceName(String serviceName) { this.serviceName = serviceName; }
 
 	@Column(name = "description", length = 200, nullable = true)
 	public String getDescription() { return description; }

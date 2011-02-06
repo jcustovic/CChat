@@ -54,7 +54,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 	public List<StatisticsPerOperator> getStatisticsPerOperator(Date from, Date to, Operator operator) {
 		List<StatisticsPerOperator> result = new LinkedList<StatisticsPerOperator>();
 		Query query = entityManager.createNativeQuery("SELECT o.username, SUM(sms.direction = 'IN'), SUM(sms.direction = 'OUT')"
-				+ " FROM sms_message sms RIGHT JOIN operators o ON sms.operator_id = o.id"
+				+ " FROM sms_message sms RIGHT JOIN operator o ON sms.operator_id = o.id"
 				+ " WHERE sms.time >= :from AND sms.time <= :to"
 				+ ((operator != null) ? " AND o.id = :operatorId" : "")
 				+ " GROUP BY o.id");

@@ -27,6 +27,7 @@ public class AdminStatisticsList extends ActionSupport {
 	private Log log = LogFactory.getLog(getClass());
 	
 	private StatisticsService statisticsService;
+	
 	private Date fromDate;
 	private Date toDate;
 	private Operator operator;

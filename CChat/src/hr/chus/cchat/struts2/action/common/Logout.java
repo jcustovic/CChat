@@ -26,10 +26,11 @@ public class Logout extends ActionSupport implements SessionAware {
 	
 	private Log log = LogFactory.getLog(getClass());
 	
-	private Map<String, Object> session;
 	private OperatorService operatorService;
 	private UserService userService;
 	private OperatorChooser operatorChooser;
+	
+	private Map<String, Object> session;
 	
 
 	@Override

@@ -21,10 +21,12 @@ public class OperatorOperatorList extends ActionSupport implements UserAware {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private Operator user;
 	private OperatorService operatorService;
+	
+	private Operator user;
 	private List<Operator> operatorList;
 
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public String execute() {

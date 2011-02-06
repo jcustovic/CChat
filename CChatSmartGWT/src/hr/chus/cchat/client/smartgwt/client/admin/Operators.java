@@ -144,7 +144,6 @@ public class Operators extends HLayout {
 						form.clearValue(key);
 					}
 				}
-				form.setValue("operation", "save/edit");
 			}
 		});
 		
@@ -161,6 +160,7 @@ public class Operators extends HLayout {
 
 			@Override
 			public void onClick(ClickEvent event) {
+				form.setValue("operation", "save/edit");
 				if (form.validate()) {
 					Iterator<?> keySetIterator = form.getValues().keySet().iterator();
 					while (keySetIterator.hasNext()) {
@@ -215,11 +215,25 @@ public class Operators extends HLayout {
 			@Override
 			public void onClick(ClickEvent event) {
 				form.setValue("operation", "delete");
-				form.submit();
-				deleteButton.setDisabled(true);
-				saveButton.setDisabled(true);
-				form.setVisible(false);
-				listGrid.invalidateCache();
+				form.submit(new DSCallback() {
+
+					@Override
+					public void execute(DSResponse response, Object jsonData, DSRequest request) {
+						JSONArray value = XMLTools.selectObjects(jsonData, "/status");
+						String status = null;
+						if (value != null && value.size() > 0) {
+							status = ((JSONString) value.get(0)).stringValue();
+						}
+						if (status == null || !status.equals("validation_error")) {
+							listGrid.invalidateCache();
+							form.setVisible(false);
+							deleteButton.setDisabled(true);
+							saveButton.setDisabled(true);
+							listGrid.invalidateCache();
+						}
+					}
+					
+				});
 			}
 		});
 		
@@ -254,6 +268,11 @@ public class Operators extends HLayout {
 		active.setDefaultValue(false);
 		active.setName("operator.isActive");
 		active.setTitle(DictionaryInstance.dictionary.isActive());
+		active.setDisabled(true);
+		BooleanItem external = new BooleanItem();
+		external.setDefaultValue(false);
+		external.setName("operator.isExternal");
+		external.setTitle(DictionaryInstance.dictionary.external());
 		BooleanItem disabled = new BooleanItem();
 		disabled.setDefaultValue(false);
 		disabled.setName("operator.disabled");
@@ -284,7 +303,7 @@ public class Operators extends HLayout {
 		emailValidator.setExpression("^([a-zA-Z0-9_.\\-+])+@(([a-zA-Z0-9\\-])+\\.)+[a-zA-Z0-9]{2,4}$");
 		emailValidator.setValidateOnChange(false);
 		email.setValidators(emailValidator);
-		return new FormItem[] { id, username, name, surname, email, active, disabled, selectRole, password };
+		return new FormItem[] { id, username, name, surname, email, active, external, disabled, selectRole, password };
 	}
 
 	/**
@@ -297,9 +316,10 @@ public class Operators extends HLayout {
 		ListGridField surname = new ListGridField("operator.surname");
 		ListGridField email = new ListGridField("operator.email");
 		ListGridField active = new ListGridField("operator.isActive");
+		ListGridField external = new ListGridField("operator.isExternal");
 		ListGridField disabled = new ListGridField("operator.disabled");
 		ListGridField operatorRoleName = new ListGridField("role.name");
-		return new ListGridField[] { username, name, surname, email, active, disabled, operatorRoleName };
+		return new ListGridField[] { username, name, surname, email, active, external, disabled, operatorRoleName };
 	}
 
 }

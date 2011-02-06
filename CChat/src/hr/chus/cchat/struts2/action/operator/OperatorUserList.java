@@ -28,6 +28,7 @@ public class OperatorUserList extends ActionSupport implements UserAware {
 	private Log log = LogFactory.getLog(getClass());
 	
 	private UserService userService;
+	
 	private Operator user;
 	private Nick nick;
 	private Operator operator;
@@ -36,7 +37,6 @@ public class OperatorUserList extends ActionSupport implements UserAware {
 	private Integer id;
 	private int start;
 	private int limit;
-	
 	private List<User> userList;
 	private Long totalCount;
 

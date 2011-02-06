@@ -22,8 +22,10 @@ public class OperatorNickList extends ActionSupport {
 	
 	private Log log = LogFactory.getLog(getClass());
 	
-	private List<Nick> nickList;
 	private NickService nickService;
+	
+	private List<Nick> nickList;
+
 	
 	@Override
 	public String execute() {

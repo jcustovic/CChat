@@ -21,6 +21,7 @@ public class CheckLoggedIn extends ActionSupport implements SessionAware {
 	private Map<String, Object> session;
 	private boolean loggedIn;
 
+	
 	@Override
 	public String execute() throws Exception {
 		if (session.get(ApplicationConstants.USER_SESSION) == null) {

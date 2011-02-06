@@ -16,9 +16,11 @@ import com.opensymphony.xwork2.ActionSupport;
 public class AdminServiceProviderList  extends ActionSupport {
 
 	private static final long serialVersionUID = 1L;
+
+	private ServiceProviderService serviceProviderService;
 	
 	private List<ServiceProvider> serviceProviderList;
-	private ServiceProviderService serviceProviderService;
+	
 	
 	@Override
 	public String execute() throws Exception {
@@ -28,10 +30,10 @@ public class AdminServiceProviderList  extends ActionSupport {
 
 	
 	// Getters & setters
+
+	public void setServiceProviderService(ServiceProviderService serviceProviderService) { this.serviceProviderService = serviceProviderService; }
 	
 	public List<ServiceProvider> getServiceProviderList() { return serviceProviderList; }
 	public void setServiceProviderList(List<ServiceProvider> serviceProviderList) { this.serviceProviderList = serviceProviderList; }
-
-	public void setServiceProviderService(ServiceProviderService serviceProviderService) { this.serviceProviderService = serviceProviderService; }
 
 }

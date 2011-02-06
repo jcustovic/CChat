@@ -21,18 +21,18 @@ import com.opensymphony.xwork2.ActionSupport;
 public class AdminPictureList extends ActionSupport {
 
 	private static final long serialVersionUID = 1L;
+	
 	private Log log = LogFactory.getLog(getClass());
+
+	private OpenPropertyPlaceholderConfigurer propertyConfigurer;
+	private PictureService pictureService;
 	
 	private List<Picture> pictureList;
-	private PictureService pictureService;
 	private Nick nick;
-	
-	private OpenPropertyPlaceholderConfigurer propertyConfigurer;
 	
 	
 	@Override
 	public String execute() throws Exception {
-		
 		String dataPath = (String) propertyConfigurer.getMergedProperties().get("data.dir");
 		if (dataPath == null) dataPath = "data";
 
@@ -51,14 +51,14 @@ public class AdminPictureList extends ActionSupport {
 	
 	// Getters & setters
 	
+	public void setPropertyConfigurer(OpenPropertyPlaceholderConfigurer propertyConfigurer) { this.propertyConfigurer = propertyConfigurer; }
+	
+	public void setPictureService(PictureService pictureService) { this.pictureService = pictureService; }
+
 	public List<Picture> getPictureList() { return pictureList; }
 	public void setPictureList(List<Picture> pictureList) { this.pictureList = pictureList; }
-
-	public void setPictureService(PictureService pictureService) { this.pictureService = pictureService; }
 
 	public Nick getNick() { return nick; }
 	public void setNick(Nick nick) { this.nick = nick; }
 
-	public void setPropertyConfigurer(OpenPropertyPlaceholderConfigurer propertyConfigurer) { this.propertyConfigurer = propertyConfigurer; }
-		
 }

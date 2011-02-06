@@ -29,6 +29,7 @@ public class OperatorSMSMessageList extends ActionSupport implements UserAware {
 	private Log log = LogFactory.getLog(getClass());
 	
 	private SMSMessageService smsMessageService;
+	
 	private Operator user;
 	private Operator operator;
 	private ServiceProvider serviceProvider;
@@ -41,9 +42,9 @@ public class OperatorSMSMessageList extends ActionSupport implements UserAware {
 	private Date endDate;
 	private int start;
 	private int limit;
-	
 	private List<SMSMessage> smsMessageList;
 	private Long totalCount;
+	
 	
 	@SuppressWarnings("unchecked")
 	@Override

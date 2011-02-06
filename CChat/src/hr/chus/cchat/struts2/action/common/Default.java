@@ -4,7 +4,7 @@ import com.opensymphony.xwork2.ActionSupport;
 
 /**
  * 
- * Web GET or POST action that return nothing (Struts2 SUCCESS is always returned).
+ * Web GET or POST action that returns nothing (Struts2 SUCCESS is always returned).
  * 
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *

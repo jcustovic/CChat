@@ -28,15 +28,17 @@ import com.opensymphony.xwork2.ActionSupport;
 public class AdminPictureUpload extends ActionSupport implements ApplicationContextAware {
 
 	private static final long serialVersionUID = 1L;
+	
 	private Log log = LogFactory.getLog(getClass());
+	
+	private OpenPropertyPlaceholderConfigurer propertyConfigurer;
+	private PictureService pictureService;
+	private ApplicationContext applicationContext;
 	
 	private File picture;
 	private String pictureContentType;
 	private String pictureFileName;
 	private Nick nick;
-	private PictureService pictureService;
-	private ApplicationContext applicationContext;
-	private OpenPropertyPlaceholderConfigurer propertyConfigurer;
 	
 	private Map<String, String> errorFields;
 	private String status;
@@ -111,8 +113,6 @@ public class AdminPictureUpload extends ActionSupport implements ApplicationCont
 	public void setPropertyConfigurer(OpenPropertyPlaceholderConfigurer propertyConfigurer) { this.propertyConfigurer = propertyConfigurer; }
 
 	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		this.applicationContext = applicationContext;
-	}
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException { this.applicationContext = applicationContext; }
 	
 }

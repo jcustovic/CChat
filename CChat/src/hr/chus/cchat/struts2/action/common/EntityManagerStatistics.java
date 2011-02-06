@@ -19,6 +19,7 @@ public class EntityManagerStatistics extends ActionSupport {
 	private static final long serialVersionUID = 1L;
 	
 	private EntityManagerFactory entityManagerFactory;
+	
 	private Statistics statistics;
 	
 	

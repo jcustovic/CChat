@@ -19,10 +19,11 @@ public class ActiveService extends ActionSupport implements UserAware {
 
 	private static final long serialVersionUID = 1L;
 
-	private Operator operator;
 	private OperatorService operatorService;
 	private UserService userService;
 	private OperatorChooser operatorChooser;
+	
+	private Operator operator;
 	private Boolean newStatus;
 	private boolean active;
 
