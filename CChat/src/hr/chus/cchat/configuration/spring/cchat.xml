@@ -12,12 +12,18 @@
 		<property name="operatorService" ref="operatorService" />
 	</bean>
 	
-	<bean id="defaultSendMessageService" class="hr.chus.cchat.gateway.SendMessageServiceCGateway">
+	<bean id="defaultSendMessageService" class="hr.chus.cchat.gateway.CGatewaySendMessageService">
 		<property name="username" value="${gateway.username}" />
 		<property name="password" value="${gateway.password}" />
 		<property name="sendSmsUrl" value="${gateway.sendSmsUrl}" />
 		<property name="sendWapPushUrl" value="${gateway.sendWapPushUrl}" />
 		<property name="testSending" value="${gateway.testSending}" />
+	</bean>
+	
+	<bean id="targetMediaSendMessageService" class="hr.chus.cchat.gateway.TargetMediaSendMessageService" init-method="init">
+		<property name="username" value="${targetMedia.gateway.username}" />
+		<property name="handle" value="${targetMedia.gateway.handle}" />
+		<property name="url" value="${targetMedia.gateway.url}" />
 	</bean>
 	
 </beans>

@@ -23,7 +23,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Jan Čustović (jan_custovic@yahoo.com)
  *
  */
-public class SendMessageServiceCGateway implements SendMessageService {
+public class CGatewaySendMessageService implements SendMessageService {
 	
 	private Log log = LogFactory.getLog(getClass());
 	
@@ -43,9 +43,9 @@ public class SendMessageServiceCGateway implements SendMessageService {
 	 */
 	@Override
 	public String sendSmsMessage(SMSMessage smsMessage) throws HttpException, IOException {
-		if (testSending) return "testSmsResponse";
+		if (testSending) return "testSmsResponseId";
 		PostMethod post = new PostMethod(sendSmsUrl);
-		StringBuffer sb = new StringBuffer();
+		StringBuffer response = new StringBuffer();
 		try {
 			HttpClient client = new HttpClient();
 			client.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler(5, true));
@@ -64,14 +64,15 @@ public class SendMessageServiceCGateway implements SendMessageService {
 				BufferedReader br = new BufferedReader(new InputStreamReader(post.getResponseBodyAsStream()));
 		        String readLine = null;
 		        while ((readLine = br.readLine()) != null) {
-		        	sb.append(readLine);
+		        	response.append(readLine);
 		        }
 			}
 			
 			if (returnCode == HttpStatus.SC_OK) {
-				return sb.toString();
+				// TODO: For now gateway id is not returned.
+				return null;
 			} else {
-				log.warn("StatusCode: " + returnCode + "; Response text: " + sb.toString());
+				log.warn("StatusCode: " + returnCode + "; Response text: " + response.toString());
 				throw new HttpException("Gateway error code " + returnCode);
 			}
 		} finally {
@@ -81,7 +82,7 @@ public class SendMessageServiceCGateway implements SendMessageService {
 	
 	@Override
 	public String sendWapPushMessage(SMSMessage smsMessage) {
-		if (testSending) return "testWapPushResponse";
+		if (testSending) return "testWapPushResponseId";
 		throw new NotImplementedException("Sending wap push is not supported yet");
 	}
 

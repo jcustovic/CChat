@@ -1,9 +1,5 @@
 package hr.chus.cchat.gateway;
 
-import java.io.IOException;
-
-import org.apache.commons.httpclient.HttpException;
-
 import hr.chus.cchat.model.db.jpa.SMSMessage;
 
 /**
@@ -15,7 +11,7 @@ import hr.chus.cchat.model.db.jpa.SMSMessage;
  */
 public interface SendMessageService {
 	
-	public String sendSmsMessage(SMSMessage smsMessage) throws HttpException, IOException;
-	public String sendWapPushMessage(SMSMessage smsMessage) throws HttpException, IOException;
+	public String sendSmsMessage(SMSMessage smsMessage) throws Exception;
+	public String sendWapPushMessage(SMSMessage smsMessage) throws Exception;
 	
 }

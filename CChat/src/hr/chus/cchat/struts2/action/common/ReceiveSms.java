@@ -43,8 +43,9 @@ public class ReceiveSms extends ActionSupport {
 	private String time;
 	private String text;
 	private String sc;
+	private String gatewayId;
 	private String serviceProviderName;
-	private Boolean status;
+	private String status;
 	private String errorMsg;
 	
 	
@@ -62,7 +63,7 @@ public class ReceiveSms extends ActionSupport {
 		if (errorMsg != null) {
 			log.error(errorMsg);
 			addActionError(errorMsg);
-			status = false;
+			status = "failed";
 		}
 	}
 	
@@ -82,7 +83,7 @@ public class ReceiveSms extends ActionSupport {
 		if (serviceProvider == null) {
 			log.error("ServiceProvider not found for provider " + serviceProviderName + " and sc " + sc);
 			errorMsg = "ServiceProvider not found for provider " + serviceProviderName + " and sc " + sc;
-			status = false;
+			status = "failed";
 			return SUCCESS;
 		}
 		
@@ -108,18 +109,15 @@ public class ReceiveSms extends ActionSupport {
 		}
 		
 		SMSMessage message = new SMSMessage(user, user.getOperator(), date, text, sc, serviceProvider, Direction.IN);
+		message.setGatewayId(gatewayId);
 		smsMessageService.addSMSMessage(message);
-		status = true;
+		status = "ok";
 		return SUCCESS;
 	}
 
 
 	// Getters & setters
 	
-	public Boolean getStatus() { return status; }
-
-	public String getErrorMsg() { return errorMsg; }
-
 	public void setServiceProviderService(ServiceProviderService serviceProviderService) { this.serviceProviderService = serviceProviderService; }
 
 	public void setUserService(UserService userService) { this.userService = userService; }
@@ -135,7 +133,13 @@ public class ReceiveSms extends ActionSupport {
 	public void setText(String text) { this.text = text; }
 
 	public void setSc(String sc) { this.sc = sc; }
+	
+	public void setGatewayId(String gatewayId) { this.gatewayId = gatewayId; }
 
 	public void setServiceProviderName(String serviceProviderName) { this.serviceProviderName = serviceProviderName; }
+	
+	public String getStatus() { return status; }
+
+	public String getErrorMsg() { return errorMsg; }
 
 }
