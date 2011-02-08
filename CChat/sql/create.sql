@@ -3,11 +3,23 @@ CREATE TABLE service_provider (
   , sc VARCHAR(20) NOT NULL
   , provider_name VARCHAR(30) NOT NULL
   , service_name VARCHAR(30) NOT NULL
+  , billing_amount FLOAT NULL
   , description VARCHAR(200) NULL
   , disabled BOOL NULL
   , send_service_bean VARCHAR(30) NULL
   , PRIMARY KEY(id)
   , UNIQUE(sc, provider_name)
+) 
+ENGINE=INNODB;
+
+CREATE TABLE service_provider_keyword (
+  id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT
+  , keyword VARCHAR(20) NOT NULL
+  , billing_amount FLOAT NULL
+  , service_provider_id INTEGER UNSIGNED NOT NULL
+  , PRIMARY KEY(id)
+  , FOREIGN KEY(service_provider_id) REFERENCES service_provider(id)
+  , UNIQUE(keyword, service_provider_id)
 ) 
 ENGINE=INNODB;
 
@@ -114,6 +126,7 @@ ENGINE=INNODB;
 
 CREATE TABLE sms_message (
   id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT
+  , gateway_id VARCHAR(36) NULL
   , service_provider_id INTEGER UNSIGNED NOT NULL
   , operator_id INTEGER UNSIGNED NULL
   , nick_id INTEGER UNSIGNED NULL

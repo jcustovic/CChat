@@ -1,6 +1,7 @@
 package hr.chus.cchat.model.db.jpa;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.QueryHint;
 import javax.persistence.Table;
 
@@ -40,9 +42,11 @@ public class ServiceProvider implements Serializable {
 	private String sc;
 	private String providerName;
 	private String serviceName;
+	private Float billingAmount;
 	private String description;
 	private Boolean disabled;
 	private String sendServiceBeanName;
+	private Set<ServiceProviderKeyword> serviceProviderKeywords;
 	
 	
 	public ServiceProvider() { }
@@ -95,6 +99,10 @@ public class ServiceProvider implements Serializable {
 	@Column(name = "service_name", length = 30, nullable = false)
 	public String getServiceName() { return serviceName; }
 	public void setServiceName(String serviceName) { this.serviceName = serviceName; }
+	
+	@Column(name = "billing_amount")
+	public Float getBillingAmount() { return billingAmount; }
+	public void setBillingAmount(Float billingAmount) { this.billingAmount = billingAmount; }
 
 	@Column(name = "description", length = 200, nullable = true)
 	public String getDescription() { return description; }
@@ -107,5 +115,10 @@ public class ServiceProvider implements Serializable {
 	@Column(name = "send_service_bean", length = 30)
 	public String getSendServiceBeanName() { return sendServiceBeanName; }
 	public void setSendServiceBeanName(String sendServiceBeanName) { this.sendServiceBeanName = sendServiceBeanName; }
-			
+
+	@OneToMany(mappedBy = "serviceProvider")
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+	public Set<ServiceProviderKeyword> getServiceProviderKeywords() { return serviceProviderKeywords; }
+	public void setServiceProviderKeywords(Set<ServiceProviderKeyword> serviceProviderKeywords) { this.serviceProviderKeywords = serviceProviderKeywords; }
+	
 }

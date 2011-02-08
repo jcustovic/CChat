@@ -44,6 +44,7 @@ public class SMSMessage implements Serializable {
 	}
 	
 	private Integer id;
+	private String gatewayId;
 	private User user;
 	private Operator operator;
 	private Date time;
@@ -94,6 +95,10 @@ public class SMSMessage implements Serializable {
 	@Column(name = "id")
 	public Integer getId() { return id; }
 	public void setId(Integer id) { this.id = id; }
+	
+	@Column(name = "gateway_id", nullable = true, length = 36)
+	public String getGatewayId() { return gatewayId; }
+	public void setGatewayId(String gatewayId) { this.gatewayId = gatewayId; }
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id", nullable = false)

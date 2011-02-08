@@ -75,7 +75,7 @@ public class SendSms extends ActionSupport implements UserAware, ApplicationCont
 	public String execute() throws Exception {
 		log.info("Sending message to user " + user + " --> type: " + msgType + ", text: " + text);
 		SMSMessage newSmsMessage = new SMSMessage(user, operator, new Date(), text, user.getServiceProvider().getSc(), user.getServiceProvider(), Direction.OUT);
-		String gatewayResponse = null;
+		String gatewayId = null;
 		SendMessageService sendMessageService = defaultSendMessageService;
 		if (user.getServiceProvider().getSendServiceBeanName() != null && !user.getServiceProvider().getSendServiceBeanName().isEmpty()) {
 			try {
@@ -89,10 +89,11 @@ public class SendSms extends ActionSupport implements UserAware, ApplicationCont
 		}
 		try {
 			if (msgType.equals("wapPush")) {
-				gatewayResponse = sendMessageService.sendWapPushMessage(newSmsMessage);
+				gatewayId = sendMessageService.sendWapPushMessage(newSmsMessage);
 			} else {
-				gatewayResponse = sendMessageService.sendSmsMessage(newSmsMessage);
+				gatewayId = sendMessageService.sendSmsMessage(newSmsMessage);
 			}
+			newSmsMessage.setGatewayId(gatewayId);
 		} catch (HttpException e) {
 			log.error(e, e);
 			errorMsg = getText("sendSms.httpException");
@@ -105,7 +106,7 @@ public class SendSms extends ActionSupport implements UserAware, ApplicationCont
 			return SUCCESS;
 		}
 		smsMessage = smsMessageService.updateSMSMessage(newSmsMessage);
-		log.info("Message " + smsMessage + " sent. Gateway response: " + gatewayResponse);
+		log.info("Message " + smsMessage + " sent. Gateway response id: " + gatewayId);
 		if (user.getOperator() == null && !operator.getRole().getName().equals("admin")) {
 			user.setOperator(operator);
 			user = userService.editUser(user);

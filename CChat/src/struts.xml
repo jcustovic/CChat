@@ -107,12 +107,32 @@
 			<result type="json" />
 		</action>
 		
+		<!-- CChat default ReceiveSms -->
 		<action name="ReceiveSms" class="hr.chus.cchat.struts2.action.common.ReceiveSms">
-			<result type="json">
+			<!-- CChat default JSON response -->
+			<!-- result type="json">
 				<param name="excludeNullProperties">true</param>
 			</result>
 			<result name="input" type="json">
 				<param name="excludeNullProperties">true</param>
+			</result -->
+			
+			<!-- Target Media response -->
+			<result type="freemarker">/WEB-INF/ftl/targetMediaReceiveSmsResult.ftl</result>
+			<result name="input" type="freemarker">/WEB-INF/ftl/targetMediaReceiveSmsResult.ftl</result>
+		</action>
+		
+		<!-- Target Media custom ReceiveSms -->
+		<action name="TMReceiveSms" class="hr.chus.cchat.struts2.action.common.TMReceiveSms">
+			<!-- Redirect to ReceiveSms (remember to configure resultType on ReceiveSms action) -->
+			<result type="redirectAction">
+				<param name="actionName">ReceiveSms</param>
+         		<param name="namespace">/</param>
+         		<param name="msisdn">${SendTo}</param>
+         		<param name="text">${Message}</param>
+         		<param name="sc">${ShortCode}</param>
+         		<param name="gatewayId">${MO_MessageId}</param>
+         		<param name="serviceProviderName">${operator}</param>
 			</result>
 		</action>
 		

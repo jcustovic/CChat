@@ -7,4 +7,5 @@ DROP TABLE keyword_conf;
 DROP TABLE nick;
 DROP TABLE operator;
 DROP TABLE operator_role;
+DROP TABLE service_provider_keyword;
 DROP TABLE service_provider;
