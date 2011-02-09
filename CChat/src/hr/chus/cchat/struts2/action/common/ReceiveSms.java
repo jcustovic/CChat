@@ -7,12 +7,14 @@ import hr.chus.cchat.helper.OperatorChooser;
 import hr.chus.cchat.model.db.jpa.Operator;
 import hr.chus.cchat.model.db.jpa.SMSMessage;
 import hr.chus.cchat.model.db.jpa.ServiceProvider;
+import hr.chus.cchat.model.db.jpa.ServiceProviderKeyword;
 import hr.chus.cchat.model.db.jpa.User;
 import hr.chus.cchat.model.db.jpa.SMSMessage.Direction;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -45,6 +47,7 @@ public class ReceiveSms extends ActionSupport {
 	private String sc;
 	private String gatewayId;
 	private String serviceProviderName;
+	private String serviceProviderKeyword;
 	private String status;
 	private String errorMsg;
 	
@@ -81,10 +84,29 @@ public class ReceiveSms extends ActionSupport {
 		
 		ServiceProvider serviceProvider = serviceProviderService.getByProviderNameAndShortCode(serviceProviderName, sc);
 		if (serviceProvider == null) {
-			log.error("ServiceProvider not found for provider " + serviceProviderName + " and sc " + sc);
 			errorMsg = "ServiceProvider not found for provider " + serviceProviderName + " and sc " + sc;
+			log.error(errorMsg);
 			status = "failed";
 			return SUCCESS;
+		}
+		ServiceProviderKeyword providerKeyword = null;
+		if (serviceProviderKeyword != null && !serviceProviderKeyword.isEmpty()) {
+			Set<ServiceProviderKeyword> keywords = serviceProvider.getServiceProviderKeywords();
+			if (keywords == null || keywords.isEmpty()) {
+				errorMsg = "Keywords " + serviceProviderKeyword + " not defiend for " + serviceProvider + ". Message will be ignored.";
+			} else {
+				for (ServiceProviderKeyword keyword : keywords) {
+					if (serviceProviderKeyword.equals(keyword.getKeyword())) {
+						providerKeyword = keyword;
+					}
+				}
+				if (providerKeyword == null) errorMsg = "Keyword " + serviceProviderKeyword + " not registered for " + serviceProvider + ". Message will be ignored.";
+			}
+			if (errorMsg != null) {
+				log.error(errorMsg);
+				status = "failed";
+				return SUCCESS;
+			}
 		}
 		
 		User user = userService.getByMsisdnAndServiceName(msisdn, serviceProvider.getServiceName(), false);
@@ -110,6 +132,7 @@ public class ReceiveSms extends ActionSupport {
 		
 		SMSMessage message = new SMSMessage(user, user.getOperator(), date, text, sc, serviceProvider, Direction.IN);
 		message.setGatewayId(gatewayId);
+		message.setServiceProviderKeyword(providerKeyword);
 		smsMessageService.addSMSMessage(message);
 		status = "ok";
 		return SUCCESS;
@@ -138,6 +161,8 @@ public class ReceiveSms extends ActionSupport {
 
 	public void setServiceProviderName(String serviceProviderName) { this.serviceProviderName = serviceProviderName; }
 	
+	public void setServiceProviderKeyword(String serviceProviderKeyword) { this.serviceProviderKeyword = serviceProviderKeyword; }
+
 	public String getStatus() { return status; }
 
 	public String getErrorMsg() { return errorMsg; }

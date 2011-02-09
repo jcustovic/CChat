@@ -29,6 +29,7 @@ public class ServiceProviderKeyword implements Serializable {
 	private Integer id;
 	private String keyword;
 	private Float billingAmount;
+	private Boolean disabled;
 	private ServiceProvider serviceProvider;
 	
 		
@@ -54,6 +55,10 @@ public class ServiceProviderKeyword implements Serializable {
 	@Column(name = "billing_amount")
 	public Float getBillingAmount() { return billingAmount; }
 	public void setBillingAmount(Float billingAmount) { this.billingAmount = billingAmount; }
+	
+	@Column(name = "disabled", nullable = false)
+	public Boolean getDisabled() { return disabled; }
+	public void setDisabled(Boolean disabled) { this.disabled = disabled; }
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "service_provider_id", nullable = false)

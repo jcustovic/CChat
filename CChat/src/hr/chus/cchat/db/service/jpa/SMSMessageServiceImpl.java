@@ -18,6 +18,7 @@ import hr.chus.cchat.model.db.jpa.Operator;
 import hr.chus.cchat.model.db.jpa.SMSMessage;
 import hr.chus.cchat.model.db.jpa.SMSMessage.Direction;
 import hr.chus.cchat.model.db.jpa.ServiceProvider;
+import hr.chus.cchat.model.db.jpa.User;
 import hr.chus.cchat.model.helper.db.Conversation;
 
 /**
@@ -167,6 +168,17 @@ public class SMSMessageServiceImpl implements SMSMessageService {
 	@Override
 	public void updateSMSMessageOperatorIfNull(Integer operatorId, Integer userId) {
 		entityManager.createQuery("UPDATE SMSMessage sms SET sms.operator.id = :operatorId WHERE sms.user.id = :userId AND sms.operator IS NULL").setParameter("operatorId", operatorId).setParameter("userId", userId).executeUpdate();
+	}
+	
+	@Override
+	public SMSMessage getLastReceivedMessage(User user) {
+		@SuppressWarnings("unchecked")
+		List<SMSMessage> result = entityManager.createNamedQuery("SMSMessage.getByDirectionAndUser").setParameter("direction", Direction.IN).setParameter("user", user).setMaxResults(1).getResultList();
+		if (result.size() == 1) {
+			return result.get(0);
+		} else {
+			return null;
+		}
 	}
 
 	

@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
@@ -116,7 +117,7 @@ public class ServiceProvider implements Serializable {
 	public String getSendServiceBeanName() { return sendServiceBeanName; }
 	public void setSendServiceBeanName(String sendServiceBeanName) { this.sendServiceBeanName = sendServiceBeanName; }
 
-	@OneToMany(mappedBy = "serviceProvider")
+	@OneToMany(mappedBy = "serviceProvider", fetch = FetchType.EAGER)
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	public Set<ServiceProviderKeyword> getServiceProviderKeywords() { return serviceProviderKeywords; }
 	public void setServiceProviderKeywords(Set<ServiceProviderKeyword> serviceProviderKeywords) { this.serviceProviderKeywords = serviceProviderKeywords; }
