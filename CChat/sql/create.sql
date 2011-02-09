@@ -5,7 +5,7 @@ CREATE TABLE service_provider (
   , service_name VARCHAR(30) NOT NULL
   , billing_amount FLOAT NULL
   , description VARCHAR(200) NULL
-  , disabled BOOL NULL
+  , disabled BOOL NOT NULL DEFAULT false
   , send_service_bean VARCHAR(30) NULL
   , PRIMARY KEY(id)
   , UNIQUE(sc, provider_name)
@@ -16,6 +16,7 @@ CREATE TABLE service_provider_keyword (
   id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT
   , keyword VARCHAR(20) NOT NULL
   , billing_amount FLOAT NULL
+  , disabled BOOL NOT NULL DEFAULT false
   , service_provider_id INTEGER UNSIGNED NOT NULL
   , PRIMARY KEY(id)
   , FOREIGN KEY(service_provider_id) REFERENCES service_provider(id)
@@ -128,6 +129,7 @@ CREATE TABLE sms_message (
   id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT
   , gateway_id VARCHAR(36) NULL
   , service_provider_id INTEGER UNSIGNED NOT NULL
+  , service_provider_keyword_id INTEGER UNSIGNED NULL
   , operator_id INTEGER UNSIGNED NULL
   , nick_id INTEGER UNSIGNED NULL
   , user_id INTEGER UNSIGNED NOT NULL
@@ -142,6 +144,9 @@ CREATE TABLE sms_message (
   	  ON DELETE SET NULL
       ON UPDATE NO ACTION
   , FOREIGN KEY(service_provider_id) REFERENCES service_provider(id)
+  	  ON DELETE NO ACTION
+      ON UPDATE NO ACTION
+  , FOREIGN KEY(service_provider_keyword_id) REFERENCES service_provider_keyword(id)
   	  ON DELETE NO ACTION
       ON UPDATE NO ACTION
 ) 

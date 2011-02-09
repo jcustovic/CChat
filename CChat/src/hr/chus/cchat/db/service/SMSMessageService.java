@@ -6,6 +6,7 @@ import hr.chus.cchat.model.db.jpa.Operator;
 import hr.chus.cchat.model.db.jpa.SMSMessage;
 import hr.chus.cchat.model.db.jpa.SMSMessage.Direction;
 import hr.chus.cchat.model.db.jpa.ServiceProvider;
+import hr.chus.cchat.model.db.jpa.User;
 
 /**
  * SMS message services that DAO needs to implement.
@@ -22,5 +23,6 @@ public interface SMSMessageService {
 	public Object[] search(Operator operator, ServiceProvider serviceProvider, Direction direction, Integer userId, String userName, String userSurname, String msisdn, Date startDate, Date endDate, String text, int start, int limit);
 	public Object[] getConversationByUserId(Integer userId, int start, int limit);
 	public void updateSMSMessageOperatorIfNull(Integer operatorId, Integer userId);
+	public SMSMessage getLastReceivedMessage(User user);
 
 }

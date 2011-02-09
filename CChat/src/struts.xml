@@ -133,6 +133,7 @@
          		<param name="sc">${ShortCode}</param>
          		<param name="gatewayId">${MO_MessageId}</param>
          		<param name="serviceProviderName">${operator}</param>
+         		<param name="serviceProviderKeyword">${MO_ShortKey}</param>
 			</result>
 		</action>
 		

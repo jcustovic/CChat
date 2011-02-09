@@ -33,6 +33,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Table(name = "sms_message")
 @NamedQueries({
 	@NamedQuery(name = "SMSMessage.getAll", query = "SELECT sms FROM SMSMessage sms")
+	, @NamedQuery(name = "SMSMessage.getByDirectionAndUser", query = "SELECT sms FROM SMSMessage sms WHERE sms.direction = :direction AND sms.user = :user ORDER BY sms.time DESC")
 })
 @Cache(usage = CacheConcurrencyStrategy.NONE)
 public class SMSMessage implements Serializable {
@@ -51,6 +52,7 @@ public class SMSMessage implements Serializable {
 	private String text;
 	private String sc;
 	private ServiceProvider serviceProvider;
+	private ServiceProviderKeyword serviceProviderKeyword;
 	private Direction direction;
 	private Nick nick;
 	
@@ -127,6 +129,11 @@ public class SMSMessage implements Serializable {
 	@JoinColumn(name = "service_provider_id", nullable = false)
 	public ServiceProvider getServiceProvider() { return serviceProvider; }
 	public void setServiceProvider(ServiceProvider serviceProvider) { this.serviceProvider = serviceProvider; }
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "service_provider_keyword_id", nullable = true)
+	public ServiceProviderKeyword getServiceProviderKeyword() { return serviceProviderKeyword; }
+	public void setServiceProviderKeyword(ServiceProviderKeyword serviceProviderKeyword) { this.serviceProviderKeyword = serviceProviderKeyword; }
 
 	@Column(name = "direction", nullable = false)
 	@Enumerated(EnumType.STRING)
