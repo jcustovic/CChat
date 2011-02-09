@@ -21,6 +21,7 @@
 	</bean>
 	
 	<bean id="targetMediaSendMessageService" class="hr.chus.cchat.gateway.TargetMediaSendMessageService" init-method="init">
+		<property name="smsMessageService" ref="smsMessageService" />
 		<property name="username" value="${targetMedia.gateway.username}" />
 		<property name="handle" value="${targetMedia.gateway.handle}" />
 		<property name="url" value="${targetMedia.gateway.url}" />

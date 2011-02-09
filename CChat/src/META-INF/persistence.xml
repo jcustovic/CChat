@@ -12,6 +12,8 @@
 		<class>hr.chus.cchat.model.db.jpa.SMSMessage</class>
 		<class>hr.chus.cchat.model.db.jpa.Picture</class>
 		<class>hr.chus.cchat.model.db.jpa.ServiceProvider</class>
+		<class>hr.chus.cchat.model.db.jpa.ServiceProviderKeyword</class>
+		<class>hr.chus.cchat.model.db.jpa.KeywordConfiguration</class>
 		
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 	</persistence-unit>

@@ -94,6 +94,11 @@ public class OperatorServiceImpl implements OperatorService {
 		return entityManager.createNamedQuery("Operator.getAllByActiveFlag").setParameter("active", true).getResultList();
 	}
 	
+	@Override
+	public int setOperatorActiveFlag(boolean active) {
+		return entityManager.createNamedQuery("Operator.setOperatorActiveFlag").setParameter("active", active).executeUpdate();
+	}
+	
 	
 	// Getters & setters
 	

@@ -15,7 +15,7 @@ ENGINE=INNODB;
 CREATE TABLE service_provider_keyword (
   id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT
   , keyword VARCHAR(20) NOT NULL
-  , billing_amount FLOAT NULL
+  , billing_amount FLOAT(8, 2) NULL
   , disabled BOOL NOT NULL DEFAULT false
   , service_provider_id INTEGER UNSIGNED NOT NULL
   , PRIMARY KEY(id)

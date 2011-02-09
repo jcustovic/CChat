@@ -72,7 +72,7 @@ public class ReceiveSms extends ActionSupport {
 	
 	@Override
 	public String execute() throws Exception {
-		log.info("Got message from " + msisdn + " (ServiceProvider: " + serviceProviderName + ", SC: " + sc + ") with text --> " + text);
+		log.info(String.format("Got message from %s (ServiceProvider: %s, SC: %s, Keyword: %s) with text --> %s", new Object[] { msisdn, serviceProviderName, sc, serviceProviderKeyword, text }));
 		Date date = new Date();
 		if (time != null && !time.isEmpty()) {
 			try {

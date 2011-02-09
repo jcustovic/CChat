@@ -40,9 +40,10 @@ public class CGatewaySendMessageService implements SendMessageService {
 	 * @return
 	 * @throws HttpException
 	 * @throws IOException
+	 * @throws GatewayResponseError 
 	 */
 	@Override
-	public String sendSmsMessage(SMSMessage smsMessage) throws HttpException, IOException {
+	public String sendSmsMessage(SMSMessage smsMessage) throws HttpException, IOException, GatewayResponseError {
 		if (testSending) return "testSmsResponseId";
 		PostMethod post = new PostMethod(sendSmsUrl);
 		StringBuffer response = new StringBuffer();
@@ -72,8 +73,7 @@ public class CGatewaySendMessageService implements SendMessageService {
 				// TODO: For now gateway id is not returned.
 				return null;
 			} else {
-				log.warn("StatusCode: " + returnCode + "; Response text: " + response.toString());
-				throw new HttpException("Gateway error code " + returnCode);
+				throw new GatewayResponseError(response.toString(), String.valueOf(returnCode));
 			}
 		} finally {
 			post.releaseConnection();

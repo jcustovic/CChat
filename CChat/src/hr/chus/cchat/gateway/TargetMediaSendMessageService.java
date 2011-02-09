@@ -1,6 +1,8 @@
 package hr.chus.cchat.gateway;
 
+import hr.chus.cchat.db.service.SMSMessageService;
 import hr.chus.cchat.model.db.jpa.SMSMessage;
+import hr.chus.cchat.model.db.jpa.ServiceProviderKeyword;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,6 +18,7 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.commons.httpclient.util.EncodingUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -27,6 +30,8 @@ import org.apache.commons.logging.LogFactory;
 public class TargetMediaSendMessageService implements SendMessageService {
 	
 	private Log log = LogFactory.getLog(getClass());
+	
+	private SMSMessageService smsMessageService;
 	
 	private Map<String, String> statusCodeMap;
 	private String username;
@@ -57,16 +62,16 @@ public class TargetMediaSendMessageService implements SendMessageService {
 	}
 
 	@Override
-	public String sendSmsMessage(SMSMessage smsMessage) throws HttpException, IOException {
+	public String sendSmsMessage(SMSMessage smsMessage) throws HttpException, IOException, GatewayResponseError {
+		SMSMessage lastReceivedMessage = smsMessageService.getLastReceivedMessage(smsMessage.getUser());
+		ServiceProviderKeyword keyword = lastReceivedMessage.getServiceProviderKeyword();
 		NameValuePair[] data = new NameValuePair[] {
 				new NameValuePair("username", username)
 				, new NameValuePair("handle", handle)
-				// TODO: Get short key
-				, new NameValuePair("shortkey", null)
+				, new NameValuePair("shortkey", keyword == null ? null : keyword.getKeyword())
 				, new NameValuePair("shortcode", smsMessage.getSc())
 				, new NameValuePair("sendto", smsMessage.getUser().getMsisdn())
-				// TODO: Message ID of the incoming message
-				, new NameValuePair("mo_messageid", null)
+				, new NameValuePair("mo_messageid", lastReceivedMessage.getGatewayId())
 				, new NameValuePair("message", smsMessage.getText())
 				/* Amount to be billed (Numeric). The rate that will be charged to the end-user for receiving the 
 				 * message. The rate is in cents, local currency and must be equal to or lower than the rate you 
@@ -75,7 +80,7 @@ public class TargetMediaSendMessageService implements SendMessageService {
 				 * for 'tariff' will be ignored.
 				 * Note 2: Service- or error messages in the Netherlands may not be charged for more than 25 eurocents.
 				 */
-				, new NameValuePair("tariff", null)
+				, new NameValuePair("tariff", keyword.getBillingAmount() == null ? null : String.valueOf(keyword.getBillingAmount().intValue()))
 				/* WAP push message ('0', '1').
 				 * A WAP push is a bookmark for a mobile phone. Enter '1' for this parameter when a WAP push SMS message 
 				 * has to be sent. In AU, UK and IE the end-user rate must be zero
@@ -89,19 +94,19 @@ public class TargetMediaSendMessageService implements SendMessageService {
 		return sendRequest(data);
 	}
 
-	@Override
-	public String sendWapPushMessage(SMSMessage smsMessage) throws HttpException, IOException {
+	@Override	
+	public String sendWapPushMessage(SMSMessage smsMessage) throws HttpException, IOException, GatewayResponseError {
+		SMSMessage lastReceivedMessage = smsMessageService.getLastReceivedMessage(smsMessage.getUser());
+		ServiceProviderKeyword keyword = lastReceivedMessage.getServiceProviderKeyword();
 		NameValuePair[] data = new NameValuePair[] {
 				new NameValuePair("username", username)
 				, new NameValuePair("handle", handle)
-				// TODO: Get short key
-				, new NameValuePair("shortkey", null)
+				, new NameValuePair("shortkey", keyword == null ? null : keyword.getKeyword())
 				, new NameValuePair("shortcode", smsMessage.getSc())
 				, new NameValuePair("sendto", smsMessage.getUser().getMsisdn())
-				// TODO: Message ID of the incoming message
-				, new NameValuePair("mo_messageid", null)
+				, new NameValuePair("mo_messageid", lastReceivedMessage.getGatewayId())
 				, new NameValuePair("message", "URL")
-				, new NameValuePair("tariff", null)
+				, new NameValuePair("tariff", keyword.getBillingAmount() == null ? null : String.valueOf(keyword.getBillingAmount().intValue()))
 				, new NameValuePair("push", "1")
 				, new NameValuePair("purl", smsMessage.getText())
 				, new NameValuePair("returnid", returnid)
@@ -113,17 +118,22 @@ public class TargetMediaSendMessageService implements SendMessageService {
 	 * 
 	 * @param data
 	 * @return
+	 * @throws IOException 
+	 * @throws HttpException 
 	 * @throws HttpException
 	 * @throws IOException
+	 * @throws GatewayResponseError 
 	 */
-	public String sendRequest(NameValuePair[] data) throws HttpException, IOException {
+	public String sendRequest(NameValuePair[] data) throws HttpException, IOException, GatewayResponseError {
 		PostMethod post = new PostMethod(url);
 		StringBuffer response = new StringBuffer();
 		try {
 			HttpClient client = new HttpClient();
 			client.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler(5, true));
 			post.setRequestBody(data);
-			log.debug("Invoking TargetMedia gateway send URL: " + post.getURI());
+			if (log.isDebugEnabled()) {
+				log.debug("Invoking TargetMedia gateway send URL (POST): " + post.getURI() + " (Params: " +  EncodingUtil.formUrlEncode(data, "UTF-8") + ")");
+			}
 			
 			int returnCode = client.executeMethod(post);
 			BufferedReader br = new BufferedReader(new InputStreamReader(post.getResponseBodyAsStream()));
@@ -137,7 +147,7 @@ public class TargetMediaSendMessageService implements SendMessageService {
 				if (statusCode.equals("45000")) {
 					return token.nextToken();
 				} else {
-					throw new HttpException("TargetMedia responseCode: " + statusCode + "; Meaning: " + statusCodeMap.get(statusCode));
+					throw new GatewayResponseError(statusCodeMap.get(statusCode), statusCode);
 				}
 			} else {
 				log.warn("StatusCode: " + returnCode + "; Response text: " + response.toString());
@@ -150,6 +160,8 @@ public class TargetMediaSendMessageService implements SendMessageService {
 
 	
 	// Getters & setters
+	
+	public void setSmsMessageService(SMSMessageService smsMessageService) { this.smsMessageService = smsMessageService; }
 	
 	public String getUsername() { return username; }
 	public void setUsername(String username) { this.username = username; }
