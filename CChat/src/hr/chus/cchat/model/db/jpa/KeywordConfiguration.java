@@ -18,7 +18,7 @@ import org.hibernate.annotations.FetchMode;
  *
  */
 @Entity
-@Table(name = "keyword")
+@Table(name = "keyword_conf")
 public class KeywordConfiguration {
 	
 	private Integer id;
@@ -26,6 +26,8 @@ public class KeywordConfiguration {
 	private Operator operator;
 	private ServiceProvider serviceProvider;
 	
+	
+	public KeywordConfiguration() { }
 		
 	public KeywordConfiguration(Nick nick, Operator operator, ServiceProvider serviceProvider) {
 		this.nick = nick;

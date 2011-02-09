@@ -21,5 +21,5 @@ public interface OperatorService {
 	public List<Operator> getAllActiveOperators();
 	public boolean checkIfUsernameExists(Operator operator);
 	public Operator getOperatorById(Integer id);
-
+	public int setOperatorActiveFlag(boolean active);
 }

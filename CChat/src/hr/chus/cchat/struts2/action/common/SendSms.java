@@ -11,6 +11,7 @@ import org.springframework.context.ApplicationContextAware;
 
 import hr.chus.cchat.db.service.SMSMessageService;
 import hr.chus.cchat.db.service.UserService;
+import hr.chus.cchat.gateway.GatewayResponseError;
 import hr.chus.cchat.gateway.SendMessageService;
 import hr.chus.cchat.helper.UserAware;
 import hr.chus.cchat.model.db.jpa.Operator;
@@ -87,21 +88,23 @@ public class SendSms extends ActionSupport implements UserAware, ApplicationCont
 				return ERROR;
 			}
 		}
+		log.debug("Sending message: " + newSmsMessage);
 		try {
-			if (msgType.equals("wapPush")) {
-				gatewayId = sendMessageService.sendWapPushMessage(newSmsMessage);
-			} else {
-				gatewayId = sendMessageService.sendSmsMessage(newSmsMessage);
-			}
+			if (msgType.equals("wapPush")) gatewayId = sendMessageService.sendWapPushMessage(newSmsMessage);
+			else gatewayId = sendMessageService.sendSmsMessage(newSmsMessage);
+			log.debug("Send message id from gateway: " + gatewayId);
 			newSmsMessage.setGatewayId(gatewayId);
+		} catch (GatewayResponseError e) {
+			log.error("Gateway ResponseCode: " + e.getCode() + "; ErrorMessage: " + e.getMessage());
+			errorMsg = getText(e.getMessage());
 		} catch (HttpException e) {
 			log.error(e, e);
 			errorMsg = getText("sendSms.httpException");
-			status = false;
-			return SUCCESS;
 		} catch (Exception e) {
 			log.error(e, e);
 			errorMsg = getText("sendSms.exception", new String[] { e.getMessage() });
+		}
+		if (errorMsg != null) {
 			status = false;
 			return SUCCESS;
 		}

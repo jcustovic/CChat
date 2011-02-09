@@ -16,7 +16,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * 
- * @author Jan Čustović
+ * @author Jan Čustović (jan_custovic@yahoo.com)
  *
  */
 @Entity
@@ -32,7 +32,9 @@ public class ServiceProviderKeyword implements Serializable {
 	private Boolean disabled;
 	private ServiceProvider serviceProvider;
 	
-		
+	
+	public ServiceProviderKeyword() { }
+			
 	public ServiceProviderKeyword(ServiceProvider serviceProvider, String keyword, Float billingAmount) {
 		this.serviceProvider = serviceProvider;
 		this.keyword = keyword;

@@ -79,8 +79,7 @@ public class SessionListener implements HttpSessionListener {
 			ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(session.getServletContext());
 			OperatorService operatorService = (OperatorService) ctx.getBean("operatorService");
 			UserService userService = (UserService) ctx.getBean("userService");
-			user.setIsActive(false);
-			operatorService.updateOperator(user);
+			operatorService.setOperatorActiveFlag(false);
 			userService.clearOperatorField(user);
 			log.info(user.getUsername() + " (id=" + user.getId() + ") logged out because session is destroyed.");
 			session.removeAttribute(ApplicationConstants.USER_SESSION);
