@@ -152,9 +152,11 @@ public class SMSMessageServiceImpl implements SMSMessageService {
 	
 	@Override
 	public Object[] getConversationByUserId(Integer userId, int start, int limit) {
-		Object count = entityManager.createQuery("SELECT COUNT(sms.id) FROM SMSMessage sms  WHERE sms.user.id = :userId ORDER BY sms.time DESC")
+		Object count = entityManager.createQuery("SELECT COUNT(sms.id) FROM SMSMessage sms WHERE sms.user.id = :userId ORDER BY sms.time DESC")
 								.setHint(QueryHints.HINT_CACHEABLE, false).setParameter("userId", userId).getSingleResult();
-		List<?> resultList = entityManager.createQuery("SELECT sms.id, sms.text, sms.time, sms.operator.username, sms.direction FROM SMSMessage sms WHERE sms.user.id = :userId ORDER BY sms.time DESC")
+		List<?> resultList = entityManager.createQuery("SELECT sms.id, sms.text, sms.time, operator.username, sms.direction"
+													 + " FROM SMSMessage AS sms LEFT JOIN sms.operator AS operator"
+													 + " WHERE sms.user.id = :userId ORDER BY sms.time DESC")
 								.setParameter("userId", userId).setFirstResult(start).setMaxResults(limit)
 								.setHint(QueryHints.HINT_CACHEABLE, false).getResultList();
 		List<Conversation> conversationList = new LinkedList<Conversation>();

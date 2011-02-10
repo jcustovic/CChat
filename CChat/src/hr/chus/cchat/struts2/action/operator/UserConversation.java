@@ -41,11 +41,11 @@ public class UserConversation extends ActionSupport implements UserAware {
 	@Override
 	public String execute() throws Exception {
 		log.info("Fetching conversation for user with id " + userId + " (start: " + start + " limit: " + limit + ")");
-		Object[] result = smsMessageService.getConversationByUserId(userId, start, limit);
 		if (setMessagesAsRead) {
 			userService.updateAllMessagesRead(userId);
 			smsMessageService.updateSMSMessageOperatorIfNull(operator.getId(), userId);
 		}
+		Object[] result = smsMessageService.getConversationByUserId(userId, start, limit);
 		totalCount = (Long) result[0];
 		conversationList = (List<Conversation>) result[1];
 		log.info("Returning " + totalCount + " messages...");

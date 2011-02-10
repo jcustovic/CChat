@@ -58,7 +58,7 @@ public class SendSms extends ActionSupport implements UserAware, ApplicationCont
 		} else if (user.getServiceProvider().getDisabled()) {
 			errorMsg = getText("sendSms.serviceProvider.disabled", new String[] { user.getServiceProvider().getProviderName(), user.getServiceProvider().getSc() });
 		} else if (user.getOperator() != null && !user.getOperator().equals(operator) && !operator.getRole().getName().equals("admin")) {
-			errorMsg = getText("sendSms.user.belongsToAnotherOperator", new String[] { user.getOperator().getUsername() });
+			errorMsg = getText("sendSms.user.belongsToAnotherOperator", new String[] { user.getOperator().getName() + " " + user.getOperator().getSurname() });
 		} else if (msgType == null || msgType.isEmpty()) {
 			errorMsg = getText("sendSms.msgType.notDefiend");
 		} else if (text == null) {
