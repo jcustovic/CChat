@@ -1,6 +1,7 @@
 package hr.chus.cchat.struts2.action.common;
 
 import hr.chus.cchat.db.service.SMSMessageService;
+import hr.chus.cchat.db.service.ServiceProviderKeywordService;
 import hr.chus.cchat.db.service.ServiceProviderService;
 import hr.chus.cchat.db.service.UserService;
 import hr.chus.cchat.helper.OperatorChooser;
@@ -39,6 +40,7 @@ public class ReceiveSms extends ActionSupport {
 	private ServiceProviderService serviceProviderService;
 	private UserService userService;
 	private SMSMessageService smsMessageService;
+	private ServiceProviderKeywordService serviceProviderKeywordService;
 	private OperatorChooser operatorChooser;
 	
 	private String msisdn;
@@ -92,20 +94,17 @@ public class ReceiveSms extends ActionSupport {
 		ServiceProviderKeyword providerKeyword = null;
 		if (serviceProviderKeyword != null && !serviceProviderKeyword.isEmpty()) {
 			Set<ServiceProviderKeyword> keywords = serviceProvider.getServiceProviderKeywords();
-			if (keywords == null || keywords.isEmpty()) {
-				errorMsg = "Keywords " + serviceProviderKeyword + " not defiend for " + serviceProvider + ". Message will be ignored.";
-			} else {
+			if (keywords != null && !keywords.isEmpty()) {
 				for (ServiceProviderKeyword keyword : keywords) {
 					if (serviceProviderKeyword.equals(keyword.getKeyword())) {
 						providerKeyword = keyword;
 					}
 				}
-				if (providerKeyword == null) errorMsg = "Keyword " + serviceProviderKeyword + " not registered for " + serviceProvider + ". Message will be ignored.";
 			}
-			if (errorMsg != null) {
-				log.error(errorMsg);
-				status = "failed";
-				return SUCCESS;
+			if (providerKeyword == null) {
+				providerKeyword = serviceProviderKeywordService.addOrEditServiceProviderKeyword(new ServiceProviderKeyword(serviceProvider, serviceProviderKeyword, null));
+				serviceProvider.getServiceProviderKeywords().add(providerKeyword);
+				serviceProviderService.updateServiceProvider(serviceProvider);
 			}
 		}
 		
@@ -130,7 +129,7 @@ public class ReceiveSms extends ActionSupport {
 			userService.editUser(user);
 		}
 		
-		SMSMessage message = new SMSMessage(user, user.getOperator(), date, text, sc, serviceProvider, Direction.IN);
+		SMSMessage message = new SMSMessage(user, null, date, text, sc, serviceProvider, Direction.IN);
 		message.setGatewayId(gatewayId);
 		message.setServiceProviderKeyword(providerKeyword);
 		smsMessageService.addSMSMessage(message);
@@ -147,6 +146,8 @@ public class ReceiveSms extends ActionSupport {
 
 	public void setSmsMessageService(SMSMessageService smsMessageService) { this.smsMessageService = smsMessageService; }
 	
+	public void setServiceProviderKeywordService( ServiceProviderKeywordService serviceProviderKeywordService) { this.serviceProviderKeywordService = serviceProviderKeywordService; }
+
 	public void setOperatorChooser(OperatorChooser operatorChooser) { this.operatorChooser = operatorChooser; }
 
 	public void setMsisdn(String msisdn) { this.msisdn = msisdn; }

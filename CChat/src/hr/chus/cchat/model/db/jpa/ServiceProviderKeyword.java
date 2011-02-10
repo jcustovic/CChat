@@ -39,6 +39,7 @@ public class ServiceProviderKeyword implements Serializable {
 		this.serviceProvider = serviceProvider;
 		this.keyword = keyword;
 		this.billingAmount = billingAmount;
+		this.disabled = false;
 	}
 	
 	
