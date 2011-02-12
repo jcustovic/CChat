@@ -34,6 +34,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @NamedQueries({
 	@NamedQuery(name = "SMSMessage.getAll", query = "SELECT sms FROM SMSMessage sms")
 	, @NamedQuery(name = "SMSMessage.getByDirectionAndUser", query = "SELECT sms FROM SMSMessage sms WHERE sms.direction = :direction AND sms.user = :user ORDER BY sms.time DESC")
+	, @NamedQuery(name = "SMSMessage.getByGatewayId", query = "SELECT sms FROM SMSMessage sms WHERE sms.gatewayId = :gatewayId")
 })
 @Cache(usage = CacheConcurrencyStrategy.NONE)
 public class SMSMessage implements Serializable {
@@ -42,6 +43,15 @@ public class SMSMessage implements Serializable {
 	
 	public enum Direction {
 		IN, OUT
+	}
+	
+	// Max 15 chars
+	public enum DeliveryStatus {
+		DELIVERED
+		, RECEIVED
+		, SENT_TO_GATEWAY
+		, SEND_FAILED
+		, DELIVERY_FAILED
 	}
 	
 	private Integer id;
@@ -54,6 +64,8 @@ public class SMSMessage implements Serializable {
 	private ServiceProvider serviceProvider;
 	private ServiceProviderKeyword serviceProviderKeyword;
 	private Direction direction;
+	private DeliveryStatus deliveryStatus;
+	private String deliveryMessage;
 	private Nick nick;
 	
 	
@@ -135,10 +147,19 @@ public class SMSMessage implements Serializable {
 	public ServiceProviderKeyword getServiceProviderKeyword() { return serviceProviderKeyword; }
 	public void setServiceProviderKeyword(ServiceProviderKeyword serviceProviderKeyword) { this.serviceProviderKeyword = serviceProviderKeyword; }
 
-	@Column(name = "direction", nullable = false)
+	@Column(name = "direction", nullable = false, columnDefinition = "ENUM")
 	@Enumerated(EnumType.STRING)
 	public Direction getDirection() { return direction; }
 	public void setDirection(Direction direction) { this.direction = direction; }
+	
+	@Column(name = "delivery_status")
+	@Enumerated(EnumType.STRING)
+	public DeliveryStatus getDeliveryStatus() { return deliveryStatus; }
+	public void setDeliveryStatus(DeliveryStatus deliveryStatus) { this.deliveryStatus = deliveryStatus; }
+
+	@Column(name = "delivery_msg", length = 200)
+	public String getDeliveryMessage() { return deliveryMessage; }
+	public void setDeliveryMessage(String deliveryMessage) { this.deliveryMessage = deliveryMessage; }
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "nick_id", nullable = true)

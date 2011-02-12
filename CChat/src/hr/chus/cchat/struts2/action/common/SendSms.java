@@ -17,6 +17,7 @@ import hr.chus.cchat.helper.UserAware;
 import hr.chus.cchat.model.db.jpa.Operator;
 import hr.chus.cchat.model.db.jpa.SMSMessage;
 import hr.chus.cchat.model.db.jpa.User;
+import hr.chus.cchat.model.db.jpa.SMSMessage.DeliveryStatus;
 import hr.chus.cchat.model.db.jpa.SMSMessage.Direction;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -108,6 +109,7 @@ public class SendSms extends ActionSupport implements UserAware, ApplicationCont
 			status = false;
 			return SUCCESS;
 		}
+		newSmsMessage.setDeliveryStatus(DeliveryStatus.SENT_TO_GATEWAY);
 		smsMessage = smsMessageService.updateSMSMessage(newSmsMessage);
 		log.info("Message " + smsMessage + " sent. Gateway response id: " + gatewayId);
 		if (user.getOperator() == null && !operator.getRole().getName().equals("admin")) {

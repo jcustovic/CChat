@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -179,6 +180,15 @@ public class SMSMessageServiceImpl implements SMSMessageService {
 		if (result.size() == 1) {
 			return result.get(0);
 		} else {
+			return null;
+		}
+	}
+	
+	@Override
+	public SMSMessage getByGatewayId(String gatewayId) {
+		try {
+			return (SMSMessage) entityManager.createNamedQuery("SMSMessage.getByGatewayId").setParameter("gatewayId", gatewayId).getSingleResult();
+		} catch (NoResultException e) {
 			return null;
 		}
 	}
