@@ -63,13 +63,13 @@ public class Prepare extends ActionSupport {
 	}
 	
 	private void developPrepare() {
-		Role admin = new Role("admin", "Tip korisnika za administratore");
+		Role admin = new Role("admin", "Administrator user type");
 		roleService.addRole(admin);
 		
-		Role moderator = new Role("moderator", "Tip korisnika za moderatore");
+		Role moderator = new Role("moderator", "Moderator user type");
 		roleService.addRole(moderator);
 		
-		Role operator = new Role("operator", "Tip korisnika za operatore");
+		Role operator = new Role("operator", "Typical user type who deals with sms messages");
 		roleService.addRole(operator);
 		
 		Operator adminUser = new Operator("admin", StringUtil.encodePassword("admin", "SHA"), admin, false, false, false);
@@ -149,19 +149,23 @@ public class Prepare extends ActionSupport {
 	}
 
 	private void productionPrepare() {		
-		Role admin = new Role("admin", "Tip korisnika za administratore");
+		Role admin = new Role("admin", "Administrator user type");
 		roleService.addRole(admin);
 		
-		Role moderator = new Role("moderator", "Tip korisnika za moderatore");
+		Role moderator = new Role("moderator", "Moderator user type");
 		roleService.addRole(moderator);
 		
-		Role operator = new Role("operator", "Tip korisnika za operatore");
+		Role operator = new Role("operator", "Typical user type who deals with sms messages");
 		roleService.addRole(operator);
 		
 		Operator adminUser = new Operator("admin", StringUtil.encodePassword("admin", "SHA"), admin, false, false, false);
+		adminUser.setName("admin");
+		adminUser.setSurname("admin");
 		operatorService.addOperator(adminUser);
 		
 		Operator user = new Operator("user", StringUtil.encodePassword("user", "SHA"), operator, false, false, false);
+		user.setName("user");
+		user.setSurname("user");
 		operatorService.addOperator(user);
 		
 		Configuration smsMaxLength = new Configuration("smsMaxLength", "160");
