@@ -166,7 +166,7 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
            
         	@Override
         	public void onClick(ClickEvent event) {
-            	SC.say(DictionaryInstance.dictionary.about(), "Author: Jan Čustović, Email: jan_custovic@yahoo.com <br /><br /> Icons thanks to http://pixel-mixer.com");
+            	SC.say(DictionaryInstance.dictionary.about(), Constants.ABOUT_TEXT);
             }
         });
         topBar.addMember(imgButton);
