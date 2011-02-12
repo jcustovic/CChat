@@ -14,6 +14,7 @@ import com.smartgwt.client.util.DateInputFormatter;
  */
 public class Constants {
 	
+	public static final String ABOUT_TEXT = "Author: Jan Čustović<br /> Email: jan.custovic@gmail.com<br /> Email2: jan.custovic@yahoo.com<br /><br /> Icons thanks to http://pixel-mixer.com";
 	public static final String CONTEXT_PATH = GWT.getModuleBaseURL().replace(GWT.getModuleName() + "/", "");
 	
 	public static DateTimeFormat dateTimeFormat = DateTimeFormat.getFormat("dd.MM.yyyy HH:mm:ss");
