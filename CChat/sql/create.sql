@@ -136,7 +136,9 @@ CREATE TABLE sms_message (
   , time DATETIME NOT NULL
   , text VARCHAR(800) NOT NULL
   , sc VARCHAR(20) NOT NULL
-  , direction VARCHAR(6) NOT NULL
+  , direction ENUM('IN', 'OUT') NOT NULL
+  , delivery_status VARCHAR(15) NULL
+  , delivery_msg VARCHAR(200) NULL
   , PRIMARY KEY(id)
   , FOREIGN KEY(user_id) REFERENCES users(id)
   , FOREIGN KEY(operator_id) REFERENCES operator(id)

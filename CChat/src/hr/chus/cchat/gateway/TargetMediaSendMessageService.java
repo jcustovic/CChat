@@ -81,14 +81,6 @@ public class TargetMediaSendMessageService implements SendMessageService {
 				 * Note 2: Service- or error messages in the Netherlands may not be charged for more than 25 eurocents.
 				 */
 				, new NameValuePair("tariff", keyword.getBillingAmount() == null ? null : String.valueOf(keyword.getBillingAmount().intValue()))
-				/* WAP push message ('0', '1').
-				 * A WAP push is a bookmark for a mobile phone. Enter '1' for this parameter when a WAP push SMS message 
-				 * has to be sent. In AU, UK and IE the end-user rate must be zero
-				 */
-				, new NameValuePair("push", "0")
-				/* WAP push URL. Set the URL of the WAP push message here (only applicable when push=1)
-				 */
-				, new NameValuePair("purl", null)
 				, new NameValuePair("returnid", returnid)
 		};
 		return sendRequest(data);
@@ -107,7 +99,13 @@ public class TargetMediaSendMessageService implements SendMessageService {
 				, new NameValuePair("mo_messageid", lastReceivedMessage.getGatewayId())
 				, new NameValuePair("message", "URL")
 				, new NameValuePair("tariff", keyword.getBillingAmount() == null ? null : String.valueOf(keyword.getBillingAmount().intValue()))
+				/* WAP push message ('0', '1').
+				 * A WAP push is a bookmark for a mobile phone. Enter '1' for this parameter when a WAP push SMS message 
+				 * has to be sent. In AU, UK and IE the end-user rate must be zero
+				 */
 				, new NameValuePair("push", "1")
+				/* WAP push URL. Set the URL of the WAP push message here (only applicable when push=1)
+				 */
 				, new NameValuePair("purl", smsMessage.getText())
 				, new NameValuePair("returnid", returnid)
 		};
@@ -118,11 +116,9 @@ public class TargetMediaSendMessageService implements SendMessageService {
 	 * 
 	 * @param data
 	 * @return
-	 * @throws IOException 
-	 * @throws HttpException 
 	 * @throws HttpException
 	 * @throws IOException
-	 * @throws GatewayResponseError 
+	 * @throws GatewayResponseError
 	 */
 	public String sendRequest(NameValuePair[] data) throws HttpException, IOException, GatewayResponseError {
 		PostMethod post = new PostMethod(url);

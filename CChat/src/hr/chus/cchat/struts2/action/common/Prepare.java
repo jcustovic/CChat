@@ -14,6 +14,7 @@ import hr.chus.cchat.model.db.jpa.Nick;
 import hr.chus.cchat.model.db.jpa.Operator;
 import hr.chus.cchat.model.db.jpa.Role;
 import hr.chus.cchat.model.db.jpa.SMSMessage;
+import hr.chus.cchat.model.db.jpa.SMSMessage.DeliveryStatus;
 import hr.chus.cchat.model.db.jpa.SMSMessage.Direction;
 import hr.chus.cchat.model.db.jpa.ServiceProvider;
 import hr.chus.cchat.model.db.jpa.User;
@@ -43,6 +44,7 @@ public class Prepare extends ActionSupport {
 	private String type;
 	private String message;
 	
+	
 	@Override
 	public String execute() {
 		try {
@@ -60,9 +62,6 @@ public class Prepare extends ActionSupport {
 		return SUCCESS;
 	}
 	
-	/**
-	 * 
-	 */
 	private void developPrepare() {
 		Role admin = new Role("admin", "Tip korisnika za administratore");
 		roleService.addRole(admin);
@@ -104,10 +103,12 @@ public class Prepare extends ActionSupport {
 			userUser = userService.editUser(userUser);
 			for (int j = 0; j < 2; j++) {
 				SMSMessage smsMessage = new SMSMessage(userUser, user, new Date(), "Text " + i + j + "IN sfdsdafkj ghkldfhg fdkjhg dkfljhg dkljh", "12346", vipServiceProvider, Direction.IN);
+				smsMessage.setDeliveryStatus(DeliveryStatus.RECEIVED);
 				smsMessageService.addSMSMessage(smsMessage);
 			}
 			for (int j = 0; j < 2; j++) {
 				SMSMessage smsMessage = new SMSMessage(userUser, user, new Date(), "Text " + i + j + "OUT sfdsdafkj ghkldfhg fdkjhg dkfljhg dkljh", "12346", vipServiceProvider, Direction.OUT);
+				smsMessage.setDeliveryStatus(DeliveryStatus.SENT_TO_GATEWAY);
 				smsMessageService.addSMSMessage(smsMessage);
 			}
 		}
@@ -119,12 +120,14 @@ public class Prepare extends ActionSupport {
 			for (int j = 0; j < 2; j++) {
 				SMSMessage smsMessage = new SMSMessage(userUser, user, new Date(), "Text " + i + j + "IN sfdsdafkj ghkldfhg fdkjhg dkfljhg dkljh", "12346", tmobServiceProvider, Direction.IN);
 				smsMessage.setNick(nick);
+				smsMessage.setDeliveryStatus(DeliveryStatus.RECEIVED);
 				smsMessageService.addSMSMessage(smsMessage);
 			}
 			for (int j = 0; j < 2; j++) {
 				SMSMessage smsMessage = new SMSMessage(userUser, user, new Date(), "Text " + i + j + "OUT sfdsdafkj ghkldfhg fdkjhg dkfljhg dkljh", "12346", tmobServiceProvider, Direction.OUT);
-				smsMessageService.addSMSMessage(smsMessage);
 				smsMessage.setNick(nick);
+				smsMessage.setDeliveryStatus(DeliveryStatus.SENT_TO_GATEWAY);
+				smsMessageService.addSMSMessage(smsMessage);
 			}
 		}
 		
@@ -134,18 +137,17 @@ public class Prepare extends ActionSupport {
 			userUser = userService.editUser(userUser);
 			for (int j = 0; j < 3; j++) {
 				SMSMessage smsMessage = new SMSMessage(userUser, user, new Date(), "Text " + i + j + "IN sfdsdafkj ghkldfhg fdkjhg dkfljhg dkljh", "12346", tele2ServiceProvider, Direction.IN);
+				smsMessage.setDeliveryStatus(DeliveryStatus.RECEIVED);
 				smsMessageService.addSMSMessage(smsMessage);
 			}
 			for (int j = 0; j < 1; j++) {
 				SMSMessage smsMessage = new SMSMessage(userUser, user, new Date(), "Text " + i + j + "OUT sfdsdafkj ghkldfhg fdkjhg dkfljhg dkljh", "12346", tele2ServiceProvider, Direction.OUT);
+				smsMessage.setDeliveryStatus(DeliveryStatus.SENT_TO_GATEWAY);
 				smsMessageService.addSMSMessage(smsMessage);
 			}
 		}
 	}
 
-	/**
-	 * 
-	 */
 	private void productionPrepare() {		
 		Role admin = new Role("admin", "Tip korisnika za administratore");
 		roleService.addRole(admin);

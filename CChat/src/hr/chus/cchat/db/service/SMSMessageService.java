@@ -24,5 +24,6 @@ public interface SMSMessageService {
 	public Object[] getConversationByUserId(Integer userId, int start, int limit);
 	public void updateSMSMessageOperatorIfNull(Integer operatorId, Integer userId);
 	public SMSMessage getLastReceivedMessage(User user);
+	public SMSMessage getByGatewayId(String gatewayId);
 
 }

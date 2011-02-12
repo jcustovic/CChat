@@ -7,6 +7,7 @@ import hr.chus.cchat.db.service.UserService;
 import hr.chus.cchat.helper.OperatorChooser;
 import hr.chus.cchat.model.db.jpa.Operator;
 import hr.chus.cchat.model.db.jpa.SMSMessage;
+import hr.chus.cchat.model.db.jpa.SMSMessage.DeliveryStatus;
 import hr.chus.cchat.model.db.jpa.ServiceProvider;
 import hr.chus.cchat.model.db.jpa.ServiceProviderKeyword;
 import hr.chus.cchat.model.db.jpa.User;
@@ -50,6 +51,8 @@ public class ReceiveSms extends ActionSupport {
 	private String gatewayId;
 	private String serviceProviderName;
 	private String serviceProviderKeyword;
+	
+	private Integer messageId;
 	private String status;
 	private String errorMsg;
 	
@@ -130,9 +133,10 @@ public class ReceiveSms extends ActionSupport {
 		}
 		
 		SMSMessage message = new SMSMessage(user, null, date, text, sc, serviceProvider, Direction.IN);
+		message.setDeliveryStatus(DeliveryStatus.RECEIVED);
 		message.setGatewayId(gatewayId);
 		message.setServiceProviderKeyword(providerKeyword);
-		smsMessageService.addSMSMessage(message);
+		messageId = smsMessageService.updateSMSMessage(message).getId();
 		status = "ok";
 		return SUCCESS;
 	}
@@ -163,6 +167,8 @@ public class ReceiveSms extends ActionSupport {
 	public void setServiceProviderName(String serviceProviderName) { this.serviceProviderName = serviceProviderName; }
 	
 	public void setServiceProviderKeyword(String serviceProviderKeyword) { this.serviceProviderKeyword = serviceProviderKeyword; }
+	
+	public Integer getMessageId() { return messageId; }
 
 	public String getStatus() { return status; }
 
