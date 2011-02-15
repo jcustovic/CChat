@@ -99,7 +99,7 @@ public class ReceiveSms extends ActionSupport {
 			Set<ServiceProviderKeyword> keywords = serviceProvider.getServiceProviderKeywords();
 			if (keywords != null && !keywords.isEmpty()) {
 				for (ServiceProviderKeyword keyword : keywords) {
-					if (serviceProviderKeyword.equals(keyword.getKeyword())) {
+					if (serviceProviderKeyword.equalsIgnoreCase(keyword.getKeyword())) {
 						providerKeyword = keyword;
 					}
 				}
