@@ -65,6 +65,7 @@ public class TargetMediaSendMessageService implements SendMessageService {
 	public String sendSmsMessage(SMSMessage smsMessage) throws HttpException, IOException, GatewayResponseError {
 		SMSMessage lastReceivedMessage = smsMessageService.getLastReceivedMessage(smsMessage.getUser());
 		ServiceProviderKeyword keyword = lastReceivedMessage.getServiceProviderKeyword();
+		smsMessage.setServiceProviderKeyword(keyword);
 		NameValuePair[] data = new NameValuePair[] {
 				new NameValuePair("username", username)
 				, new NameValuePair("handle", handle)
@@ -90,6 +91,7 @@ public class TargetMediaSendMessageService implements SendMessageService {
 	public String sendWapPushMessage(SMSMessage smsMessage) throws HttpException, IOException, GatewayResponseError {
 		SMSMessage lastReceivedMessage = smsMessageService.getLastReceivedMessage(smsMessage.getUser());
 		ServiceProviderKeyword keyword = lastReceivedMessage.getServiceProviderKeyword();
+		smsMessage.setServiceProviderKeyword(keyword);
 		NameValuePair[] data = new NameValuePair[] {
 				new NameValuePair("username", username)
 				, new NameValuePair("handle", handle)

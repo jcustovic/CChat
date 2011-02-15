@@ -39,7 +39,7 @@ import com.smartgwt.client.widgets.layout.VLayout;
 
 /**
  * 
- * @author Jan Čustović
+ * @author Jan Čustović (jan.custovic@yahoo.com)
  *
  */
 public class Statistics extends HLayout {
