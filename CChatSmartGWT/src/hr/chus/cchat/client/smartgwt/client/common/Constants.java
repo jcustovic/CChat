@@ -9,7 +9,7 @@ import com.smartgwt.client.util.DateInputFormatter;
 
 /**
  * 
- * @author Jan Čustović
+ * @author Jan Čustović (jan.custovic@yahoo.com)
  *
  */
 public class Constants {

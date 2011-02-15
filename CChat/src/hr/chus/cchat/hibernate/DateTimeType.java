@@ -14,7 +14,7 @@ import org.hibernate.type.TimestampType;
 /**
  * Class implements custom time date time conversion from DB java.sql.Timestamp to java.util.Date 
  * 
- * @author Jan Čustović
+ * @author Jan Čustović (jan_custovic@yahoo.com)
  *
  */
 public class DateTimeType extends TimestampType {
