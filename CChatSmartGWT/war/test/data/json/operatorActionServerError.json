@@ -1,6 +1,0 @@
-{
-	"status": "validation_error",
-	"errors": {
-		"operator.username": "A user with this userName already exists"
-	}
-}

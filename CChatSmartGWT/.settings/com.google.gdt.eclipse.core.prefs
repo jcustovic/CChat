@@ -1,4 +1,6 @@
-#Sun Jul 04 23:36:53 CEST 2010
+#Fri Aug 10 20:45:20 CEST 2012
 eclipse.preferences.version=1
+jarsExcludedFromWebInfLib=
+launchConfigExternalUrlPrefix=http\://localhost\:8080/cchat/OperatorMainGWT.action
 warSrcDir=war
-warSrcDirIsOutput=true
+warSrcDirIsOutput=false
