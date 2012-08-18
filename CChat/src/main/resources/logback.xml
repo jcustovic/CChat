@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{100} [%X{username}] - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${catalina.base}/logs/cchat.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<fileNamePattern>${catalina.base}/logs/cchat.%d{yyyy-MM-dd}.log</fileNamePattern>
+
+			<!-- keep 30 days' worth of history -->
+			<maxHistory>30</maxHistory>
+
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<!-- or whenever the file size reaches 100MB -->
+				<maxFileSize>100MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+
+		</rollingPolicy>
+
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{100} %X{username} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- 
+	<appender name="EMAIL" class="ch.qos.logback.classic.net.SMTPAppender">
+		<smtpHost>smtp.gmail.com</smtpHost>
+		<smtpPort>465</smtpPort>
+		<ssl>true</ssl>
+		<username>YOUR_USERNAME@gmail.com</username>
+		<password>YOUR_GMAIL_PASSWORD</password>
+		
+		<to>EMAIL-DESTINATION</to>
+		<to>ANOTHER_EMAIL_DESTINATION</to>
+		<from>YOUR_USERNAME@gmail.com</from>
+		<subject>TESTING: %logger{20} - %m</subject>
+		
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%date %-5level %logger{35} - %message%n</pattern>
+		</layout>
+	</appender>
+ 	-->
+
+
+	<!-- 
+	<logger name="org.apache.struts2.dispatcher.Dispatcher" level="warn" /> 
+	<logger name="org.apache.struts2.interceptor.FileUploadInterceptor" level="warn" /> 
+	<logger name="org.apache.struts2.json" level="warn" /> 
+	-->
+
+	<logger name="net.sf.ehcache" level="info" />
+	<logger name="org.springframework.web.client" level="debug" />
+	<logger name="org.hibernate.SQL" level="error" />
+	<logger name="org.hibernate.type" level="error" />
+
+
+	<logger name="org.hibernate.stat.Statistics" level="info" />
+	
+	<logger name="hr.chus.cchat" level="debug" />
+
+	<root level="info">
+		<appender-ref ref="STDOUT" />
+	</root>
+
+</configuration>
