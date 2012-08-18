@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+    
+<struts>
+	
+	<package name="admin" namespace="/admin" extends="json-default">
+	
+	    <result-types>
+			<result-type name="tiles" default="true" class="org.apache.struts2.views.tiles.TilesResult"/>
+		</result-types>
+		
+		
+		<interceptors>
+			<interceptor name="authenticateAdminInterceptor" class="hr.chus.cchat.struts2.interceptor.AuthenticateInterceptor">
+				<param name="role">admin</param>
+			</interceptor>
+
+			<interceptor-stack name="adminSecureStack">
+				<interceptor-ref name="authenticateAdminInterceptor" />
+				<interceptor-ref name="defaultStack">
+					<param name="exception.logEnabled">true</param>
+					<param name="exception.logLevel">ERROR</param>
+				</interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		
+		<default-interceptor-ref name="adminSecureStack" />
+				
+		<global-results>
+			<!-- result name="login">
+				 <param name="error">450</param>
+ 				 <param name="errorMessage">You must log in</param>
+			</result -->
+			<result name="login" type="redirectAction">
+                <param name="actionName">Login</param>
+                <param name="namespace">/</param>
+            </result>
+			<result name="Exception">global.Exception</result>
+		</global-results>
+		
+		<global-exception-mappings>
+			<exception-mapping exception="java.lang.Exception" result="Exception"/>
+		</global-exception-mappings>
+		
+		<action name="Logout">
+            <result type="redirectAction">
+                <param name="actionName">Logout</param>
+                <param name="namespace">/</param>
+            </result>
+        </action>
+        
+		<action name="Login">
+			<interceptor-ref name="defaultStack" />
+            <result type="redirectAction">
+                <param name="actionName">Login</param>
+                <param name="namespace">/</param>
+            </result>
+        </action>
+		
+		<!-- Admin area -->
+		
+		<action name="Admin*List" class="hr.chus.cchat.struts2.action.admin.Admin{1}List">
+			<result>admin.{1}List</result>
+		</action>
+		
+		<action name="Admin*Function" class="hr.chus.cchat.struts2.action.admin.Admin{1}Function">
+			<result>admin.{1}Function</result>
+		</action>
+				
+		<action name="Admin*JSON" class="hr.chus.cchat.struts2.action.admin.Admin{1}">
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="excludeProperties">
+					smsMessageList.*\.operator.*\.role
+					, smsMessageList.*\.operator.*\.password
+					, smsMessageList.*\.user.*\.sentPictures
+					, smsMessageList.*\.user.*\.serviceProvider
+					, smsMessageList.*\.nick
+					, userList.*\.sentPictures
+					, user.*\.sentPictures
+				</param>
+			</result>
+			<result name="input" type="json">
+				<param name="excludeNullProperties">true</param>
+			</result>
+			<result name="error" type="json">
+				<param name="excludeNullProperties">true</param>
+			</result>
+		</action>
+	    
+	    <action name="AdminPictureUploadAction" class="hr.chus.cchat.struts2.action.admin.AdminPictureUpload">
+			<interceptor-ref name="fileUpload">
+				<!-- 35Kb limit -->
+				<param name="maximumSize" >35840</param>
+				<param name="allowedTypes">image/png,image/gif,image/jpeg,image/jpg,image/pjpeg</param>
+			</interceptor-ref>
+			<interceptor-ref name="adminSecureStack" />
+			<result>gwt.uploadResult</result>
+			<result name="input">gwt.uploadResult</result>
+	    </action>
+	    
+	    <action name="SendSms" class="hr.chus.cchat.struts2.action.common.SendSms">
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="excludeProperties">
+					smsMessage.*\.operator.*\.role
+					, smsMessage.*\.operator.*\.password
+					, smsMessage.*\.serviceProvider
+					, smsMessage.*\.user
+					, smsMessage.*\.nick
+				</param>
+			</result>
+			<result name="input" type="json">
+				<param name="excludeNullProperties">true</param>
+			</result>
+			<result name="error" type="json">
+				<param name="excludeNullProperties">true</param>
+			</result>
+		</action>
+		
+		<action name="GetConfiguration" class="hr.chus.cchat.struts2.action.common.GetConfiguration">
+			<result type="json" />
+		</action>
+	
+	</package>
+
+</struts>
