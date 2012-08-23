@@ -1,16 +1,9 @@
 package hr.chus.cchat.struts2.action.common;
 
-import java.util.Date;
-
 import hr.chus.cchat.db.service.SMSMessageService;
 import hr.chus.cchat.db.service.ServiceProviderService;
 import hr.chus.cchat.db.service.UserService;
-import hr.chus.cchat.model.db.jpa.SMSMessage;
-import hr.chus.cchat.model.db.jpa.SMSMessage.Direction;
-import hr.chus.cchat.model.db.jpa.ServiceProvider;
-import hr.chus.cchat.model.db.jpa.User;
 
-import javax.print.attribute.standard.DateTimeAtCompleted;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts2.interceptor.ServletRequestAware;
@@ -46,20 +39,20 @@ public class Test extends ActionSupport implements ServletRequestAware {
     public String execute() throws Exception {
         LOG.info(request.getCharacterEncoding());
         LOG.info(test);
-        
-//        final ServiceProvider serviceProvider = new ServiceProvider("00000", "testProvider", "testService", "", false);
-//        serviceProviderService.addServiceProvider(serviceProvider);
-//        
-//        for (int i = 0; i < 1000; i++) {
-//            final User user = new User(String.valueOf(i), serviceProvider);
-//            userService.addUser(user);
-//            
-//            LOG.info("Test user " + i);
-//            for (int j = 0; j < 100; j++) {
-//                final SMSMessage sms = new SMSMessage(user, null, new Date(), "User " + i + " msg " + j, "00000", serviceProvider, Direction.IN);
-//                smsMessageService.addSMSMessage(sms);
-//            }
-//        }
+
+        //        final ServiceProvider serviceProvider = new ServiceProvider("00000", "testProvider", "testService", "", false);
+        //        serviceProviderService.addServiceProvider(serviceProvider);
+        //        
+        //        for (int i = 0; i < 1000; i++) {
+        //            final User user = new User(String.valueOf(i), serviceProvider);
+        //            userService.addUser(user);
+        //            
+        //            LOG.info("Test user " + i);
+        //            for (int j = 0; j < 100; j++) {
+        //                final SMSMessage sms = new SMSMessage(user, null, new Date(), "User " + i + " msg " + j, "00000", serviceProvider, Direction.IN);
+        //                smsMessageService.addSMSMessage(sms);
+        //            }
+        //        }
 
         return SUCCESS;
     }

@@ -29,7 +29,7 @@ public class TMReceiveSms extends ActionSupport {
     public String execute() throws Exception {
         LOG.debug("MO_MessageId: " + MO_MessageId + "; ShortCode: " + ShortCode + "; MO_ShortKey: " + MO_ShortKey + "; Message: " + Message + "; SendTo: "
                 + SendTo + "; operator: " + operator);
-        
+
         return SUCCESS;
     }
 

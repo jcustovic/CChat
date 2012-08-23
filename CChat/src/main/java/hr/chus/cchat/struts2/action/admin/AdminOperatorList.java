@@ -25,7 +25,7 @@ public class AdminOperatorList extends ActionSupport {
     @Override
     public String execute() {
         operatorList = operatorService.getAllOperators();
-        
+
         return SUCCESS;
     }
 

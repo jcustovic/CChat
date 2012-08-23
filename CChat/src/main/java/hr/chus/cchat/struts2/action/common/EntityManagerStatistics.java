@@ -28,7 +28,7 @@ public class EntityManagerStatistics extends ActionSupport {
         final EntityManagerFactory emf = emfi.getNativeEntityManagerFactory();
         final EntityManagerFactoryImpl empImpl = (EntityManagerFactoryImpl) emf;
         statistics = empImpl.getSessionFactory().getStatistics();
-        
+
         return SUCCESS;
     }
 

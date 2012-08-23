@@ -50,11 +50,11 @@ public class AdminPictureFunction extends ActionSupport implements ServletReques
             dataPath = request.getServletContext().getRealPath(dataPath);
             final File dataFolder = new File(dataPath);
             if (!dataFolder.exists()) {
-                LOG.info("Data folder doesn't exist... Creating " + dataFolder.getAbsolutePath());
+                LOG.info("Data folder doesn't exist... Creating {}", dataFolder.getAbsolutePath());
                 dataFolder.mkdir();
             }
             final File theFile = new File(dataFolder, picture.getName());
-            LOG.info("Deleting picture " + theFile.getPath());
+            LOG.info("Deleting picture {}", theFile.getPath());
             if (theFile.exists()) {
                 theFile.delete();
             }
@@ -63,7 +63,7 @@ public class AdminPictureFunction extends ActionSupport implements ServletReques
         } else if ("update".equals(operation)) {
             picture = pictureService.updatePicture(picture);
         }
-        
+
         return SUCCESS;
     }
 

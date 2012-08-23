@@ -51,8 +51,8 @@ public class UserList extends ActionSupport implements UserAware {
 
         operatorUserList = userService.getByOperator(operator);
         Date lastMsgDate = new Date(new Date().getTime() - NEWEST_TIME);
-        newestUserList = userService.getNewest(lastMsgDate);
-        randomUserList = userService.getRandom(10, lastMsgDate);
+        newestUserList = userService.getNewest(lastMsgDate, 500);
+        randomUserList = userService.getRandom(lastMsgDate, 10);
 
         LOG.debug("Operator {} done fetching.", operator.getUsername());
 

@@ -32,11 +32,11 @@ public class AdminUserFunction extends ActionSupport {
 
     @Override
     public String execute() throws Exception {
-        if (operation != null && operation.equals("update")) {
-            LOG.debug("Updating user " + user + " ...");
+        if (operation != null && "update".equals(operation)) {
+            LOG.debug("Updating user {} ...", user);
             user = userService.editUserAdmin(user);
         }
-        
+
         return SUCCESS;
     }
 

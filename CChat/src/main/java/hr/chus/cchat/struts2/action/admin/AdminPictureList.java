@@ -46,7 +46,7 @@ public class AdminPictureList extends ActionSupport {
         for (Picture picture : pictureList) {
             picture.setUrl(dataPath + "/" + picture.getName());
         }
-        LOG.debug("Got " + pictureList.size() + " picture(s).");
+        LOG.debug("Got {} picture(s).", pictureList.size());
 
         return SUCCESS;
     }

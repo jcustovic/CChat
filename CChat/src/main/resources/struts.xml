@@ -45,7 +45,16 @@
 					<param name="exception.logLevel">ERROR</param>
 				</interceptor-ref>
 			</interceptor-stack>
+			
+			<interceptor-stack name="defaultAppStack">
+				<interceptor-ref name="defaultStack">
+					<param name="exception.logEnabled">true</param>
+					<param name="exception.logLevel">ERROR</param>
+				</interceptor-ref>
+			</interceptor-stack>
 		</interceptors>
+		
+		<default-interceptor-ref name="defaultAppStack" />
 		
 		<default-action-ref name="Index" />
 				

@@ -27,7 +27,7 @@ public class GetConfiguration extends ActionSupport {
         if (configuration != null) {
             value = configuration.getValue();
         }
-        
+
         return SUCCESS;
     }
 
