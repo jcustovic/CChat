@@ -296,7 +296,7 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 			        	getUsers();
 			        }
 			        usersRefreshTimer.run();
-			        usersRefreshTimer.scheduleRepeating(1000 * 90); // 90 seconds
+			        usersRefreshTimer.schedule(1000 * 60); // 60 seconds
 				} else {
 					if (usersList != null) usersList.setData(new Tree());
 					if (usersRefreshTimer != null) usersRefreshTimer.cancel();
@@ -548,6 +548,9 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 				
 				usersList.setData(tree);
 				usersList.getData().openAll();
+				
+				// Reschedule after we processed response.
+                usersRefreshTimer.schedule(1000 * 60); // 60 seconds
 			}
 		};
 		dataSource.setDataFormat(DSDataFormat.JSON);
