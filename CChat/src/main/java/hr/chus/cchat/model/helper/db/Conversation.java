@@ -21,13 +21,24 @@ public class Conversation implements Serializable {
     private String    text;
     private String    operatorUsername;
     private Direction direction;
+    private String    msisdn;
 
+    /**
+     * For backward compatibility (after msisdn field add).
+     * 
+     * @author AB
+     */
     public Conversation(Integer messageId, Date time, String text, String operatorUsername, Direction direction) {
+        this(messageId, "- unknown -", time, text, operatorUsername, direction);
+    }
+
+    public Conversation(Integer messageId, String msisdn, Date time, String text, String operatorUsername, Direction direction) {
         this.messageId = messageId;
         this.time = time;
         this.text = text;
         this.operatorUsername = operatorUsername;
         this.direction = direction;
+        this.msisdn = msisdn;
     }
 
     // Getters & setters
@@ -71,6 +82,14 @@ public class Conversation implements Serializable {
 
     public void setDirection(Direction direction) {
         this.direction = direction;
+    }
+
+    public String getMsisdn() {
+        return msisdn;
+    }
+
+    public void setMsisdn(String msisdn) {
+        this.msisdn = msisdn;
     }
 
 }
