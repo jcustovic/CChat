@@ -63,7 +63,7 @@ public class SMSMessageServiceImpl implements SMSMessageService {
                            String msisdn, Date startDate, Date endDate, String text, int start, int limit) {
         final StringBuffer queryWhereBuffer = new StringBuffer();
         boolean first = true;
-        
+
         if (operator != null) {
             String query = "sms.operator = :operator ";
             queryWhereBuffer.append(first ? "WHERE " + query : "AND " + query);
@@ -161,13 +161,14 @@ public class SMSMessageServiceImpl implements SMSMessageService {
                 .setHint(QueryHints.HINT_CACHEABLE, false).setParameter("userId", userId).getSingleResult();
         List<?> resultList = entityManager
                 .createQuery(
-                        "SELECT sms.id, sms.text, sms.time, operator.username, sms.direction" + " FROM SMSMessage AS sms LEFT JOIN sms.operator AS operator"
+                        "SELECT sms.id, sms.text, sms.time, operator.username, sms.direction, _user.msisdn"
+                                + " FROM SMSMessage AS sms LEFT JOIN sms.operator AS operator LEFT JOIN sms.user AS _user"
                                 + " WHERE sms.user.id = :userId ORDER BY sms.time DESC").setParameter("userId", userId).setFirstResult(start)
                 .setMaxResults(limit).setHint(QueryHints.HINT_CACHEABLE, false).getResultList();
         List<Conversation> conversationList = new LinkedList<Conversation>();
         for (Object object : resultList) {
             Object[] row = (Object[]) object;
-            conversationList.add(new Conversation((Integer) row[0], (Date) row[2], (String) row[1], (String) row[3], (Direction) row[4]));
+            conversationList.add(new Conversation((Integer) row[0], (String) row[5], (Date) row[2], (String) row[1], (String) row[3], (Direction) row[4]));
         }
         return new Object[] { count, conversationList };
     }

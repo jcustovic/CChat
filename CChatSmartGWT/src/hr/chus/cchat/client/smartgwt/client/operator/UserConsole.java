@@ -444,6 +444,10 @@ public class UserConsole extends HLayout {
 		text.setAlign(Alignment.CENTER);
     	text.setWidth(380);
     	
+    	ListGridField msisdn = new ListGridField("msisdn");
+        msisdn.setAlign(Alignment.CENTER);
+        msisdn.setWidth(100);
+    	
     	ListGridField operator = new ListGridField("operator");
     	operator.setAlign(Alignment.CENTER);
     	operator.setWidth(100);
@@ -466,7 +470,7 @@ public class UserConsole extends HLayout {
         });
 		time.setWidth(120);
 		
-		return new ListGridField[] { time, operator, text };
+		return new ListGridField[] { time, msisdn, operator, text };
 	}
 
 	public void loadConversation(boolean setMessagesAsRead) {

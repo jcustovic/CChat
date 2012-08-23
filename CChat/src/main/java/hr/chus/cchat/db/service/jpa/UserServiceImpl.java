@@ -1,7 +1,6 @@
 package hr.chus.cchat.db.service.jpa;
 
 import hr.chus.cchat.db.service.UserService;
-import hr.chus.cchat.gateway.CGatewaySendMessageService;
 import hr.chus.cchat.model.db.jpa.Nick;
 import hr.chus.cchat.model.db.jpa.Operator;
 import hr.chus.cchat.model.db.jpa.Picture;
@@ -30,7 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class UserServiceImpl implements UserService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CGatewaySendMessageService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @PersistenceContext
     private EntityManager       entityManager;
