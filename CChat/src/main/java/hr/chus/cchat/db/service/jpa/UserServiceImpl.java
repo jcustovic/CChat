@@ -194,14 +194,14 @@ public class UserServiceImpl implements UserService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<User> getRandom(int count, Date lastMsgDate) {
+    public List<User> getRandom(Date lastMsgDate, int count) {
         return entityManager.createNamedQuery("User.getRandom").setParameter("lastMsgDate", lastMsgDate).setMaxResults(count).getResultList();
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<User> getNewest(Date lastMsgDate) {
-        return entityManager.createNamedQuery("User.getNewest").setParameter("lastMsgDate", lastMsgDate).getResultList();
+    public List<User> getNewest(Date lastMsgDate, int count) {
+        return entityManager.createNamedQuery("User.getNewest").setParameter("lastMsgDate", lastMsgDate).setMaxResults(count).getResultList();
     }
 
     @Override

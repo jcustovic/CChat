@@ -21,7 +21,7 @@ import com.opensymphony.xwork2.ActionSupport;
 @SuppressWarnings("serial")
 public class Login extends ActionSupport implements SessionAware {
 
-    private static final Logger LOG              = LoggerFactory.getLogger(Login.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Login.class);
 
     @Autowired
     private OperatorService     operatorService;
@@ -45,9 +45,11 @@ public class Login extends ActionSupport implements SessionAware {
         if (getUsername() == null || getPassword() == null) {
             return INPUT;
         }
-        
+
         user = operatorService.authenticateUser(getUsername(), getPassword());
-        if (user != null) {
+        if (user == null) {
+            addFieldError("username", getText("login.wrongUsernameOrPassword"));
+        } else {
             if (user.getDisabled()) {
                 addFieldError("username", getText("login.userIsDisabled"));
             } else if (user.getRole().getName().equals(ApplicationConstants.OPERATOR)) {
@@ -63,8 +65,6 @@ public class Login extends ActionSupport implements SessionAware {
                 LOG.info(user.getUsername() + " (id=" + user.getId() + ") logged in as " + ApplicationConstants.ADMIN);
                 return ApplicationConstants.ADMIN;
             }
-        } else {
-            addFieldError("username", getText("login.wrongUsernameOrPassword"));
         }
 
         return INPUT;

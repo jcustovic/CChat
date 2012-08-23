@@ -37,9 +37,9 @@ public interface UserService {
 
     public List<User> getByOperator(Operator operator);
 
-    public List<User> getRandom(int count, Date lastMsgDate);
+    public List<User> getRandom(Date lastMsgDate, int count);
 
-    public List<User> getNewest(Date lastMsgDate);
+    public List<User> getNewest(Date lastMsgDate, int count);
 
     public void clearOperatorField(Operator operator);
 

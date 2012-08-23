@@ -25,7 +25,7 @@ public class AdminRoleList extends ActionSupport {
     @Override
     public String execute() throws Exception {
         roleList = roleService.getAll();
-        
+
         return SUCCESS;
     }
 

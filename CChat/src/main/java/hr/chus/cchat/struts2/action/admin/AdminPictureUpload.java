@@ -56,12 +56,12 @@ public class AdminPictureUpload extends ActionSupport implements ServletRequestA
             dataPath = request.getServletContext().getRealPath(dataPath);
             final File dataFolder = new File(dataPath);
             if (!dataFolder.exists()) {
-                LOG.info("Data folder doesn't exist... Creating " + dataFolder.getAbsolutePath());
+                LOG.info("Data folder doesn't exist... Creating {}", dataFolder.getAbsolutePath());
                 dataFolder.mkdir();
             }
 
             final File theFile = new File(dataFolder, pictureFileName);
-            LOG.info("Saving picture to " + theFile.getPath());
+            LOG.info("Saving picture to {}", theFile.getPath());
             FileUtils.copyFile(picture, theFile);
 
             Picture picture = new Picture(nick, pictureFileName, pictureContentType, this.picture.length());
@@ -70,7 +70,7 @@ public class AdminPictureUpload extends ActionSupport implements ServletRequestA
             LOG.error(e.getMessage(), e);
             return INPUT;
         }
-        
+
         return SUCCESS;
     }
 

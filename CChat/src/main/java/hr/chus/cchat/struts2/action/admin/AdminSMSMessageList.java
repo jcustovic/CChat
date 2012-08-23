@@ -52,8 +52,8 @@ public class AdminSMSMessageList extends ActionSupport {
                 start, limit);
         totalCount = (Long) result[0];
         smsMessageList = (List<SMSMessage>) result[1];
-        LOG.debug("Found " + totalCount + " sms messages.");
-        
+        LOG.debug("Found {} sms messages.", totalCount);
+
         return SUCCESS;
     }
 

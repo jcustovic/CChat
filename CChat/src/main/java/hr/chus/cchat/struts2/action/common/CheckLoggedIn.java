@@ -26,7 +26,7 @@ public class CheckLoggedIn extends ActionSupport implements SessionAware {
         } else {
             loggedIn = true;
         }
-        
+
         return SUCCESS;
     }
 

@@ -34,18 +34,18 @@ public class TMStatusHandler extends ActionSupport {
         try {
             final SMSMessage sms = smsMessageService.getByGatewayId(id);
             if (sms == null) {
-                LOG.warn("Message with gateway id " + id + " not found.");
+                LOG.warn("Message with gateway id {} not found.", id);
             } else if (sms.getDirection() == Direction.OUT) {
                 sms.setDeliveryStatus(DeliveryStatus.DELIVERY_FAILED);
                 sms.setDeliveryMessage(reason + " (SC: " + shortcode + ")");
                 smsMessageService.updateSMSMessage(sms);
             } else {
-                LOG.debug("Message with gateway id " + id + " is incoming msg and status will not be updated.");
+                LOG.debug("Message with gateway id {} is incoming msg and status will not be updated.", id);
             }
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
         }
-        
+
         return SUCCESS;
     }
 

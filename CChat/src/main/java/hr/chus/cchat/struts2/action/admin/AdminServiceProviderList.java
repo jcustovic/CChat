@@ -25,7 +25,7 @@ public class AdminServiceProviderList extends ActionSupport {
     @Override
     public String execute() throws Exception {
         serviceProviderList = serviceProviderService.getAll();
-        
+
         return SUCCESS;
     }
 

@@ -39,7 +39,7 @@ public class AdminStatisticsList extends ActionSupport {
         if (statisticsType == null) {
             return INPUT;
         }
-        
+
         final Calendar todayMax = Calendar.getInstance();
         todayMax.set(Calendar.HOUR_OF_DAY, 23);
         todayMax.set(Calendar.MINUTE, 59);
@@ -63,7 +63,7 @@ public class AdminStatisticsList extends ActionSupport {
         } else if (statisticsType.equals("LiveStatistics")) {
             statisticsPerServiceProviders = statisticsService.getStatisticsPerServiceProvider(todayMin.getTime(), todayMax.getTime());
         } else {
-            LOG.warn("Statistics type " + statisticsType + " in not known!");
+            LOG.warn("Statistics type {} in not known!", statisticsType);
         }
         LOG.debug("Statistics processed, returning result...");
 

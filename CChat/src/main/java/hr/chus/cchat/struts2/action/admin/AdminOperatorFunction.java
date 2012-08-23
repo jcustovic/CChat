@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
+import org.springframework.util.StringUtils;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -54,7 +55,7 @@ public class AdminOperatorFunction extends ActionSupport {
                 errorFields = new LinkedHashMap<String, String>();
                 errorFields.put("operator.username", getText("operator.canNotBeDeleted"));
                 status = "validation_error";
-                
+
                 return INPUT;
             }
             SessionListener.removeSessionWithUser(operator);
@@ -65,11 +66,11 @@ public class AdminOperatorFunction extends ActionSupport {
                 errorFields = new LinkedHashMap<String, String>();
                 errorFields.put("operator.username", getText("operator.deleteNotAllowed.linkedToMessages"));
                 status = "validation_error";
-                
+
                 return INPUT;
             }
         }
-        
+
         return SUCCESS;
     }
 
@@ -78,17 +79,17 @@ public class AdminOperatorFunction extends ActionSupport {
         errorFields = new LinkedHashMap<String, String>();
         if (operator == null) {
             errorFields.put("operator", getText("operator.null"));
-        } else if (operation == null || operation.isEmpty()) {
+        } else if (!StringUtils.hasText(operation)) {
             LOG.warn("Operation must not be null.");
             errorFields.put("operation", getText("operation.empty"));
-        } else if (!(operation.equals("save/edit") || operation.equals("delete"))) {
+        } else if (!("save/edit".equals(operation) || "delete".equals(operation))) {
             LOG.warn("Unsupported operation: " + operation);
             errorFields.put("operation", getText("operation.notSupported"));
-        } else if (operation.equals("save/edit")) {
+        } else if ("save/edit".equals(operation)) {
             if (operator.getDisabled() == null) operator.setDisabled(false);
             if (operator.getIsActive() == null) operator.setIsActive(false);
 
-            if (operator.getUsername() == null || operator.getUsername().isEmpty()) {
+            if (!StringUtils.hasText(operator.getUsername())) {
                 errorFields.put("operator.username", getText("operator.username.empty"));
             } else if (operator.getUsername().length() > 30) {
                 errorFields.put("operator.username", getText("operator.username.toLong", new String[] { "30" }));

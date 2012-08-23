@@ -29,8 +29,8 @@ public class AdminNickList extends ActionSupport {
     @Override
     public String execute() {
         nickList = nickService.getAllNicks();
-        LOG.debug("Got " + nickList.size() + " nicks.");
-        
+        LOG.debug("Got {} nicks.", nickList.size());
+
         return SUCCESS;
     }
 

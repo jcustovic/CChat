@@ -23,7 +23,7 @@ public class GetUserInfoAction extends ActionSupport implements SessionAware {
     @Override
     public String execute() {
         operator = (Operator) session.get(ApplicationConstants.SESSION_USER_KEY);
-        
+
         return SUCCESS;
     }
 

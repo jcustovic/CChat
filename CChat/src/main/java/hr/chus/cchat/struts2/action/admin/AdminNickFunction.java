@@ -9,6 +9,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -41,7 +42,7 @@ public class AdminNickFunction extends ActionSupport {
         } else {
             LOG.warn("Unsupported operation: " + operation);
         }
-        
+
         return SUCCESS;
     }
 
@@ -50,14 +51,14 @@ public class AdminNickFunction extends ActionSupport {
         errorFields = new LinkedHashMap<String, String>();
         if (nick == null) {
             errorFields.put("nick", getText("nick.null"));
-        } else if (operation == null || operation.isEmpty()) {
-            LOG.warn("Operation must not be null.");
+        } else if (!StringUtils.hasText(operation)) {
+            LOG.warn("Operation must not be empty.");
             errorFields.put("operation", getText("operation.empty"));
-        } else if (!(operation.equals("save/edit") || operation.equals("delete"))) {
+        } else if (!("save/edit".equals(operation) || "delete".equals(operation))) {
             LOG.warn("Unsupported operation: " + operation);
             errorFields.put("operation", getText("operation.notSupported"));
-        } else if (operation.equals("save/edit")) {
-            if (nick.getName() == null || nick.getName().length() == 0) {
+        } else if ("save/edit".equals(operation)) {
+            if (!StringUtils.hasText(nick.getName())) {
                 errorFields.put("nick.name", getText("nick.name.empty"));
             } else if (nick.getName().length() > 20) {
                 errorFields.put("nick.name", getText("nick.name.toLong", new String[] { "20" }));

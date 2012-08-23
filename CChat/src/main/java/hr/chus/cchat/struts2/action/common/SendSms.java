@@ -1,15 +1,13 @@
 package hr.chus.cchat.struts2.action.common;
 
-import hr.chus.cchat.db.service.SMSMessageService;
 import hr.chus.cchat.db.service.UserService;
 import hr.chus.cchat.gateway.GatewayResponseError;
-import hr.chus.cchat.gateway.SendMessageService;
 import hr.chus.cchat.helper.UserAware;
 import hr.chus.cchat.model.db.jpa.Operator;
 import hr.chus.cchat.model.db.jpa.SMSMessage;
-import hr.chus.cchat.model.db.jpa.SMSMessage.DeliveryStatus;
 import hr.chus.cchat.model.db.jpa.SMSMessage.Direction;
 import hr.chus.cchat.model.db.jpa.User;
+import hr.chus.cchat.service.MessageService;
 
 import java.util.Date;
 
@@ -18,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
+import org.springframework.util.StringUtils;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -33,13 +31,7 @@ public class SendSms extends ActionSupport implements UserAware {
     private static final Logger LOG = LoggerFactory.getLogger(SendSms.class);
 
     @Autowired
-    private ApplicationContext  applicationContext;
-
-    @Autowired
-    private SMSMessageService   smsMessageService;
-
-    @Autowired
-    private SendMessageService  defaultSendMessageService;
+    private MessageService      messageService;
 
     @Autowired
     private UserService         userService;
@@ -56,20 +48,21 @@ public class SendSms extends ActionSupport implements UserAware {
     public void validate() {
         if (operator == null) {
             errorMsg = getText("sendSms.operator.notRecognized");
-        } else if (!operator.getIsActive() && !operator.getRole().getName().equals("admin")) {
+        } else if (!operator.getIsActive() && !"admin".equals(operator.getRole().getName())) {
             errorMsg = getText("sendSms.operator.mustBeActive");
         } else if (user == null) {
             errorMsg = getText("sendSms.user.notFound");
         } else if (user.getServiceProvider().getDisabled()) {
             errorMsg = getText("sendSms.serviceProvider.disabled", new String[] { user.getServiceProvider().getProviderName(),
                     user.getServiceProvider().getSc() });
-        } else if (user.getOperator() != null && !user.getOperator().equals(operator) && !operator.getRole().getName().equals("admin")) {
+        } else if (user.getOperator() != null && !user.getOperator().equals(operator) && !"admin".equals(operator.getRole().getName())) {
             errorMsg = getText("sendSms.user.belongsToAnotherOperator", new String[] { user.getOperator().getName() + " " + user.getOperator().getSurname() });
-        } else if (msgType == null || msgType.isEmpty()) {
+        } else if (!StringUtils.hasText(msgType)) {
             errorMsg = getText("sendSms.msgType.notDefiend");
         } else if (text == null) {
             errorMsg = getText("sendSms.text.notNull");
         }
+        
         // TODO: Check max msg length from configurationService
         if (errorMsg != null) {
             LOG.error(errorMsg);
@@ -81,55 +74,35 @@ public class SendSms extends ActionSupport implements UserAware {
     @Override
     public String execute() throws Exception {
         LOG.info("Sending message to user " + user + " --> type: " + msgType + ", text: " + text);
-        final SMSMessage newSmsMessage = new SMSMessage(user, operator, new Date(), text, user.getServiceProvider().getSc(), user.getServiceProvider(), Direction.OUT);
-        String gatewayId = null;
-        final SendMessageService sendMessageService;
-        if (user.getServiceProvider().getSendServiceBeanName() != null && !user.getServiceProvider().getSendServiceBeanName().isEmpty()) {
-            try {
-                sendMessageService = (SendMessageService) applicationContext.getBean(user.getServiceProvider().getSendServiceBeanName());
-            } catch (BeansException e) {
-                LOG.error(e.getMessage(), e);
-                errorMsg = e.getMessage();
-                status = false;
-                return ERROR;
-            }
-        } else {
-            sendMessageService = defaultSendMessageService;
-        }
-        
-        LOG.debug("Sending message: " + newSmsMessage);
+        final SMSMessage newSmsMessage = new SMSMessage(user, operator, new Date(), text, user.getServiceProvider().getSc(), user.getServiceProvider(),
+                Direction.OUT);
+
+        status = false;
         try {
-            if ("wapPush".equals(msgType)) {
-                gatewayId = sendMessageService.sendWapPushMessage(newSmsMessage);
-            } else {
-                gatewayId = sendMessageService.sendSmsMessage(newSmsMessage);
+            smsMessage = messageService.sendMessage(newSmsMessage, user, msgType);
+            LOG.info("Message {} sent. Gateway response id: {}", smsMessage, smsMessage.getGatewayId());
+
+            // Assign operator to user if not assigned already
+            if (user.getOperator() == null && !operator.getRole().getName().equals("admin")) {
+                user.setOperator(operator);
+                user = userService.editUser(user);
             }
-            LOG.debug("Send message id from gateway: " + gatewayId);
-            newSmsMessage.setGatewayId(gatewayId);
+            status = true;
         } catch (GatewayResponseError e) {
-            LOG.error("Gateway ResponseCode: " + e.getCode() + "; ErrorMessage: " + e.getMessage());
+            LOG.error("Gateway ResponseCode: {}; ErrorMessage: {}", e.getCode(), e.getMessage());
             errorMsg = getText(e.getMessage());
         } catch (HttpException e) {
             LOG.error(e.getMessage(), e);
             errorMsg = getText("sendSms.httpException");
+        } catch (BeansException e) {
+            LOG.error(e.getMessage(), e);
+            errorMsg = e.getMessage();
+            return ERROR;
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
             errorMsg = getText("sendSms.exception", new String[] { e.getMessage() });
         }
-        if (errorMsg != null) {
-            status = false;
-            return SUCCESS;
-        }
-        newSmsMessage.setDeliveryStatus(DeliveryStatus.SENT_TO_GATEWAY);
-        smsMessage = smsMessageService.updateSMSMessage(newSmsMessage);
-        LOG.info("Message " + smsMessage + " sent. Gateway response id: " + gatewayId);
-        
-        if (user.getOperator() == null && !operator.getRole().getName().equals("admin")) {
-            user.setOperator(operator);
-            user = userService.editUser(user);
-        }
-        status = true;
-        
+
         return SUCCESS;
     }
 

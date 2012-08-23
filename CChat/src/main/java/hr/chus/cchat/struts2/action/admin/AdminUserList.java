@@ -48,8 +48,8 @@ public class AdminUserList extends ActionSupport {
         final Object[] result = userService.searchUsers(nick, operator, serviceProvider, msisdn, id, name, surname, deleted, start, limit);
         totalCount = (Long) result[0];
         userList = (List<User>) result[1];
-        LOG.debug("Found " + totalCount + " users.");
-        
+        LOG.debug("Found {} users.", totalCount);
+
         return SUCCESS;
     }
 

@@ -44,7 +44,7 @@ public class Logout extends ActionSupport implements SessionAware {
             operatorChooser.removeActiveOperator(user);
             userService.clearOperatorField(user);
             operatorService.updateOperator(user);
-            LOG.info(user.getUsername() + " (id=" + user.getId() + ") logged out");
+            LOG.info("{} (id={}) logged out", user.getUsername(), user.getId());
             session.remove(ApplicationConstants.SESSION_USER_KEY);
         }
 

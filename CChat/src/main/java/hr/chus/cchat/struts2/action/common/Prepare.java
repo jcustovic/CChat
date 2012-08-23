@@ -21,6 +21,7 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
+import org.springframework.util.StringUtils;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -64,7 +65,7 @@ public class Prepare extends ActionSupport {
     @Override
     public String execute() {
         try {
-            if (type != null && type.equals("development")) {
+            if (StringUtils.hasText(type) && "development".equals(type)) {
                 developPrepare();
             } else {
                 productionPrepare();
@@ -75,10 +76,11 @@ public class Prepare extends ActionSupport {
         if (message == null) {
             message = getText("prepare.success");
         }
-        
+
         return SUCCESS;
     }
 
+    // FIXME: This should be moved to service layer with @Transaction annotation
     public void developPrepare() {
         Role admin = new Role("admin", "Administrator user type");
         roleService.addRole(admin);
