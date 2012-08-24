@@ -24,9 +24,16 @@ import com.opensymphony.xwork2.ActionSupport;
 @SuppressWarnings("serial")
 public class UserList extends ActionSupport implements UserAware {
 
-    private static final Logger LOG         = LoggerFactory.getLogger(UserList.class);
+    private static final Logger LOG              = LoggerFactory.getLogger(UserList.class);
 
-    private static final long   NEWEST_TIME = 172800000L;                             // 48 hours
+    // 48 hours
+    private static final long   NEWEST_TIME      = 172800000L;
+
+    // Max users to fetch in last 48h
+    private static final int    MAX_NEWEST_USERS = 350;
+
+    // Max random users to fetch
+    private static final int    MAX_RANDOM_USERS = 10;
 
     @Autowired
     private UserService         userService;
@@ -51,8 +58,8 @@ public class UserList extends ActionSupport implements UserAware {
 
         operatorUserList = userService.getByOperator(operator);
         Date lastMsgDate = new Date(new Date().getTime() - NEWEST_TIME);
-        newestUserList = userService.getNewest(lastMsgDate, 500);
-        randomUserList = userService.getRandom(lastMsgDate, 10);
+        newestUserList = userService.getNewest(lastMsgDate, MAX_NEWEST_USERS);
+        randomUserList = userService.getRandom(lastMsgDate, MAX_RANDOM_USERS);
 
         LOG.debug("Operator {} done fetching.", operator.getUsername());
 

@@ -1,5 +1,6 @@
 package hr.chus.cchat.db.service.jpa;
 
+import hr.chus.cchat.db.repository.UserRepository;
 import hr.chus.cchat.db.service.UserService;
 import hr.chus.cchat.model.db.jpa.Nick;
 import hr.chus.cchat.model.db.jpa.Operator;
@@ -7,6 +8,7 @@ import hr.chus.cchat.model.db.jpa.Picture;
 import hr.chus.cchat.model.db.jpa.ServiceProvider;
 import hr.chus.cchat.model.db.jpa.User;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +19,8 @@ import javax.persistence.Query;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +37,9 @@ public class UserServiceImpl implements UserService {
 
     @PersistenceContext
     private EntityManager       entityManager;
+
+    @Autowired
+    private UserRepository      userRepository;
 
     @Override
     public void addUser(User user) {
@@ -209,6 +216,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void clearOperatorField(Operator p_operator, Date p_date) {
+        userRepository.clearOperatorField(p_operator, p_date);
+    }
+
+    @Override
     public void assignUsersWithNewMsgToOperator(Operator operator) {
         entityManager.createNamedQuery("User.assignUsersWithNewMsgToOperator").setParameter("operator", operator).executeUpdate();
     }
@@ -233,6 +245,24 @@ public class UserServiceImpl implements UserService {
         User user = getUserById(userId, false);
         user.getSentPictures().add(picture);
         entityManager.merge(user);
+    }
+
+    @Override
+    public final Long countByOperatorAndUnread(final Operator p_operator) {
+        return userRepository.countByOperatorAndUnread(p_operator);
+    }
+
+    @Override
+    public List<User> findUnassigned(int p_count) {
+        final List<User> results;
+        if (p_count > 0) {
+            final PageRequest pageRequest = new PageRequest(0, p_count);
+            results = userRepository.findUnassigned(pageRequest);
+        } else {
+            results = new ArrayList<User>(0);
+        }
+
+        return results;
     }
 
 }

@@ -1,12 +1,11 @@
 package hr.chus.cchat.struts2.action.operator;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import hr.chus.cchat.db.service.OperatorService;
-import hr.chus.cchat.db.service.UserService;
 import hr.chus.cchat.helper.OperatorChooser;
 import hr.chus.cchat.helper.UserAware;
 import hr.chus.cchat.model.db.jpa.Operator;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -23,9 +22,6 @@ public class ActiveService extends ActionSupport implements UserAware {
     private OperatorService operatorService;
 
     @Autowired
-    private UserService     userService;
-
-    @Autowired
     private OperatorChooser operatorChooser;
 
     private Operator        operator;
@@ -39,13 +35,12 @@ public class ActiveService extends ActionSupport implements UserAware {
             operator = operatorService.updateOperator(operator);
             if (operator.getIsActive()) {
                 operatorChooser.addActiveOperator(operator);
-                userService.assignUsersWithNewMsgToOperator(operator);
             } else {
                 operatorChooser.removeActiveOperator(operator);
             }
         }
         active = operator.getIsActive();
-        
+
         return SUCCESS;
     }
 
