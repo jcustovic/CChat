@@ -16,39 +16,45 @@ import hr.chus.cchat.model.db.jpa.User;
  */
 public interface UserService {
 
-    public void addUser(User user);
+    void addUser(User p_user);
 
-    public User editUser(User user);
+    User editUser(User p_user);
 
-    public User editUserAdmin(User user);
+    User editUserAdmin(User p_user);
 
-    public User editUserOperator(User user);
+    User editUserOperator(User p_user);
 
-    public void deleteUser(User user);
+    void deleteUser(User p_user);
 
-    public User getUserById(Integer id, boolean loadSentPictures);
+    User getUserById(Integer p_id, boolean p_loadSentPictures);
 
-    public User getByMsisdnAndServiceName(String msisdn, String serviceName, boolean loadSentPictures);
+    User getByMsisdnAndServiceName(String p_msisdn, String p_serviceName, boolean p_loadSentPictures);
 
-    public Object[] searchUsers(Nick nick, Operator operator, ServiceProvider serviceProvider, String msisdn, Integer id, String name, String surname,
-                                Boolean deleted, int start, int limit);
+    Object[] searchUsers(Nick p_nick, Operator p_operator, ServiceProvider p_serviceProvider, String p_msisdn, Integer p_id, String p_name, String p_surname,
+                         Boolean p_deleted, int p_start, int p_limit);
 
-    public Long getCount();
+    Long getCount();
 
-    public List<User> getByOperator(Operator operator);
+    List<User> getByOperator(Operator p_operator);
 
-    public List<User> getRandom(Date lastMsgDate, int count);
+    List<User> getRandom(Date p_lastMsgDate, int p_count);
 
-    public List<User> getNewest(Date lastMsgDate, int count);
+    List<User> getNewest(Date p_lastMsgDate, int p_count);
 
-    public void clearOperatorField(Operator operator);
+    void clearOperatorField(Operator p_operator);
 
-    public void assignUsersWithNewMsgToOperator(Operator operator);
+    void clearOperatorField(Operator p_operator, Date p_date);
 
-    public void updateAllMessagesRead(Integer userId);
+    void assignUsersWithNewMsgToOperator(Operator p_operator);
 
-    public List<Picture> getSentPictureList(Integer userId);
+    void updateAllMessagesRead(Integer p_userId);
 
-    public void addPicture(Integer userId, Picture picture);
+    List<Picture> getSentPictureList(Integer p_userId);
+
+    void addPicture(Integer p_userId, Picture p_picture);
+
+    Long countByOperatorAndUnread(Operator p_operator);
+
+    List<User> findUnassigned(int p_count);
 
 }

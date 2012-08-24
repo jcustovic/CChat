@@ -5,8 +5,6 @@ import hr.chus.cchat.db.service.ServiceProviderKeywordService;
 import hr.chus.cchat.db.service.ServiceProviderService;
 import hr.chus.cchat.db.service.UserService;
 import hr.chus.cchat.gateway.SendMessageService;
-import hr.chus.cchat.helper.OperatorChooser;
-import hr.chus.cchat.model.db.jpa.Operator;
 import hr.chus.cchat.model.db.jpa.SMSMessage;
 import hr.chus.cchat.model.db.jpa.SMSMessage.DeliveryStatus;
 import hr.chus.cchat.model.db.jpa.SMSMessage.Direction;
@@ -56,9 +54,6 @@ public class MessageServiceImpl implements MessageService {
     @Autowired
     private SendMessageService            defaultSendMessageService;
 
-    @Autowired
-    private OperatorChooser               operatorChooser;
-
     @Override
     public final Integer receiveSms(final String p_serviceProviderName, final String p_sc, final String p_serviceProviderKeyword, final String p_msisdn,
                                     final String p_text, final Date p_date, final String p_gatewayId) {
@@ -89,20 +84,20 @@ public class MessageServiceImpl implements MessageService {
         if (user == null) {
             user = new User(p_msisdn, serviceProvider);
             user.setUnreadMsgCount(1);
-            user.setOperator(operatorChooser.chooseOperator());
+            assignOperator(user);
+
             user = userService.editUser(user);
             LOG.info("New user ({}) registred to service {}", user, serviceProvider.getServiceName());
         } else {
             user.setUnreadMsgCount(user.getUnreadMsgCount() + 1);
             user.setLastMsg(new Date());
-            Operator operator = user.getOperator();
-            if (operator == null || !operator.getIsActive()) {
-                user.setOperator(operatorChooser.chooseOperator());
-            }
+
             if (!user.getServiceProvider().equals(serviceProvider)) {
                 LOG.info("User (" + user + ") changed service provider from " + user.getServiceProvider() + " to " + serviceProvider);
                 user.setServiceProvider(serviceProvider);
             }
+            assignOperator(user);
+
             userService.editUser(user);
         }
 
@@ -136,6 +131,14 @@ public class MessageServiceImpl implements MessageService {
         p_smsMessage.setDeliveryStatus(DeliveryStatus.SENT_TO_GATEWAY);
 
         return smsMessageService.updateSMSMessage(p_smsMessage);
+    }
+
+    private void assignOperator(final User p_user) {
+        // NOTE: UnreadMsgAssignerScheduler will do this for us.
+        //        final Operator operator = p_user.getOperator();
+        //        if (operator == null || !operator.getIsActive()) {
+        //            p_user.setOperator(operatorChooser.chooseOperator());
+        //        }
     }
 
 }
