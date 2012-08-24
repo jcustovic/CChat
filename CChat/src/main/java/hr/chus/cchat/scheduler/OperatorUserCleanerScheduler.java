@@ -25,7 +25,7 @@ public class OperatorUserCleanerScheduler {
     private static final Logger LOG               = LoggerFactory.getLogger(OperatorUserCleanerScheduler.class);
 
     // 10 minutes
-    private static final long   SCHEDULE_INTERVAL = 60000;
+    private static final long   SCHEDULE_INTERVAL = 600000;
 
     // 8 hours
     private static final long   HOURS_8           = 28800000;
