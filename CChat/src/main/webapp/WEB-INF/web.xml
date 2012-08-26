@@ -28,7 +28,6 @@
 	<filter>
 		<filter-name>openSessionInView</filter-name>
 		<filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
-		<async-supported>true</async-supported>
 		<init-param>
 			<param-name>entityManagerFactoryBeanName</param-name>
 			<param-value>entityManagerFactory</param-value>
@@ -38,13 +37,11 @@
 	<filter>
 		<filter-name>struts2</filter-name>
 		<filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
-		<async-supported>true</async-supported>
 	</filter>
 
 	<filter>
 		<filter-name>encodingFilter</filter-name>
 		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
-		<async-supported>true</async-supported>
 		<init-param>
 			<param-name>encoding</param-name>
 			<param-value>UTF-8</param-value>
