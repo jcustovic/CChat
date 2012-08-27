@@ -29,5 +29,4 @@ public interface OperatorService {
 
     public Operator getOperatorById(Integer id);
 
-    public int setOperatorActiveFlag(boolean active);
 }

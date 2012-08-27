@@ -17,7 +17,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
- * This class keeps track of Tomcat sessions (created or destroyed). We are interested in the part when
+ * This class keeps track of server sessions (created or destroyed). We are interested in the part when
  * session gets destroyed so we can logout user and deactivate him if he forgets to logout or is
  * inactive for session timeout period.
  * 
@@ -25,58 +25,67 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  */
 public class SessionListener implements HttpSessionListener {
 
-    private static final Logger                LOG        = LoggerFactory.getLogger(SessionListener.class);
+    private static final Logger                       LOG        = LoggerFactory.getLogger(SessionListener.class);
 
-    public static HashMap<String, HttpSession> sessionMap = new HashMap<String, HttpSession>();
+    private static final HashMap<String, HttpSession> sessionMap = new HashMap<String, HttpSession>();
 
     /**
-     * @param userToRemove
+     * @param p_userToRemove
      */
-    public static void removeSessionWithUser(Operator userToRemove) {
-        for (String sessionId : sessionMap.keySet()) {
-            HttpSession session = sessionMap.get(sessionId);
-            Operator user = (Operator) session.getAttribute(ApplicationConstants.SESSION_USER_KEY);
-            if (user != null && user.getId().equals(userToRemove.getId())) {
-                session.invalidate();
-                return;
+    public static void removeSessionWithUser(final Operator p_userToRemove) {
+        for (final String sessionId : sessionMap.keySet()) {
+            final HttpSession session = sessionMap.get(sessionId);
+            final Operator user = (Operator) session.getAttribute(ApplicationConstants.SESSION_USER_KEY);
+            if (user != null && user.getId().equals(p_userToRemove.getId())) {
+                LOG.info("{} (id={}, sessionId={}) logged out", new Object[] { user.getUsername(), user.getId(), session.getId() });
+                session.removeAttribute(ApplicationConstants.SESSION_USER_KEY);
             }
         }
     }
 
     /**
-     * @param userToUpdate
+     * @param p_userToUpdate
      */
-    public static void updateSessionWithUser(Operator userToUpdate) {
-        for (String sessionId : sessionMap.keySet()) {
-            HttpSession session = sessionMap.get(sessionId);
-            Operator user = (Operator) session.getAttribute(ApplicationConstants.SESSION_USER_KEY);
-            if (user != null && user.getId().equals(userToUpdate.getId())) {
-                session.setAttribute(ApplicationConstants.SESSION_USER_KEY, userToUpdate);
-                return;
+    public static void updateSessionWithUser(final Operator p_userToUpdate) {
+        for (final String sessionId : sessionMap.keySet()) {
+            final HttpSession session = sessionMap.get(sessionId);
+            final Operator user = (Operator) session.getAttribute(ApplicationConstants.SESSION_USER_KEY);
+            if (user != null && user.getId().equals(p_userToUpdate.getId())) {
+                session.setAttribute(ApplicationConstants.SESSION_USER_KEY, p_userToUpdate);
             }
         }
     }
 
     @Override
-    public void sessionCreated(HttpSessionEvent sessionEvent) {
-        HttpSession session = sessionEvent.getSession();
+    public final void sessionCreated(final HttpSessionEvent p_sessionEvent) {
+        final HttpSession session = p_sessionEvent.getSession();
         LOG.debug("Creating session with id " + session.getId());
         sessionMap.put(session.getId(), session);
     }
 
     @Override
-    public void sessionDestroyed(HttpSessionEvent sessionEvent) {
-        HttpSession session = sessionEvent.getSession();
+    public final void sessionDestroyed(final HttpSessionEvent p_sessionEvent) {
+        final HttpSession session = p_sessionEvent.getSession();
         LOG.debug("Destroying session with id " + session.getId());
         sessionMap.remove(session.getId());
-        Operator user = (Operator) session.getAttribute(ApplicationConstants.SESSION_USER_KEY);
-        if (user != null) {
-            ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(session.getServletContext());
-            OperatorService operatorService = (OperatorService) ctx.getBean("operatorService");
-            UserService userService = (UserService) ctx.getBean("userService");
-            operatorService.setOperatorActiveFlag(false);
-            userService.clearOperatorField(user);
-            LOG.info(user.getUsername() + " (id=" + user.getId() + ") logged out because session is destroyed.");
+
+        final Operator loggedOp = (Operator) session.getAttribute(ApplicationConstants.SESSION_USER_KEY);
+        if (loggedOp != null) {
+            final ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(session.getServletContext());
+            final OperatorService operatorService = (OperatorService) ctx.getBean("operatorService");
+
+            // Deactivate operator
+            final Operator operator = operatorService.getOperatorById(loggedOp.getId());
+            operator.setIsActive(false);
+            operatorService.updateOperator(operator);
+
+            // Clear operator field from users that are assigned to operator
+            final UserService userService = (UserService) ctx.getBean("userService");
+            userService.clearOperatorField(operator);
+
+            LOG.info("{} (id={}, sessionId={}) logged out because session is destroyed",
+                    new Object[] { operator.getUsername(), operator.getId(), session.getId() });
+
             session.removeAttribute(ApplicationConstants.SESSION_USER_KEY);
         }
     }

@@ -45,7 +45,7 @@ public class SendSms extends ActionSupport implements UserAware {
     private SMSMessage          smsMessage;
 
     @Override
-    public void validate() {
+    public final void validate() {
         if (operator == null) {
             errorMsg = getText("sendSms.operator.notRecognized");
         } else if (!operator.getIsActive() && !"admin".equals(operator.getRole().getName())) {
@@ -62,17 +62,17 @@ public class SendSms extends ActionSupport implements UserAware {
         } else if (text == null) {
             errorMsg = getText("sendSms.text.notNull");
         }
-        
+
         // TODO: Check max msg length from configurationService
         if (errorMsg != null) {
-            LOG.error(errorMsg);
+            LOG.info(errorMsg);
             addActionError(errorMsg);
             status = false;
         }
     }
 
     @Override
-    public String execute() throws Exception {
+    public final String execute() throws Exception {
         LOG.info("Sending message to user " + user + " --> type: " + msgType + ", text: " + text);
         final SMSMessage newSmsMessage = new SMSMessage(user, operator, new Date(), text, user.getServiceProvider().getSc(), user.getServiceProvider(),
                 Direction.OUT);
@@ -109,31 +109,31 @@ public class SendSms extends ActionSupport implements UserAware {
     // Getters & setters
 
     @Override
-    public void setAuthenticatedUser(Operator operator) {
-        this.operator = operator;
+    public final void setAuthenticatedUser(final Operator p_operator) {
+        this.operator = p_operator;
     }
 
-    public Boolean getStatus() {
+    public final Boolean getStatus() {
         return status;
     }
 
-    public String getErrorMsg() {
+    public final String getErrorMsg() {
         return errorMsg;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public final void setUser(final User p_user) {
+        this.user = p_user;
     }
 
-    public void setMsgType(String msgType) {
-        this.msgType = msgType;
+    public final void setMsgType(final String p_msgType) {
+        this.msgType = p_msgType;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public final void setText(final String p_text) {
+        this.text = p_text;
     }
 
-    public SMSMessage getSmsMessage() {
+    public final SMSMessage getSmsMessage() {
         return smsMessage;
     }
 

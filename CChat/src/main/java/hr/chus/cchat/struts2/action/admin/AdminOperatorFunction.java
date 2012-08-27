@@ -1,6 +1,7 @@
 package hr.chus.cchat.struts2.action.admin;
 
 import hr.chus.cchat.db.service.OperatorService;
+import hr.chus.cchat.db.service.UserService;
 import hr.chus.cchat.listener.SessionListener;
 import hr.chus.cchat.model.db.jpa.Operator;
 
@@ -31,6 +32,9 @@ public class AdminOperatorFunction extends ActionSupport {
     private OperatorService              operatorService;
 
     @Autowired
+    private UserService                  userService;
+
+    @Autowired
     private transient ShaPasswordEncoder shaPasswordEncoder;
 
     private Operator                     operator;
@@ -42,16 +46,18 @@ public class AdminOperatorFunction extends ActionSupport {
     public String execute() throws Exception {
         if ("save/edit".equals(operation)) {
             if (operator.getId() != null) {
+                // Update user
                 if (operator.getDisabled()) {
                     operator.setIsActive(false);
                     SessionListener.removeSessionWithUser(operator);
+                    userService.clearOperatorField(operator);
                 } else {
                     SessionListener.updateSessionWithUser(operator);
                 }
             }
             operator = operatorService.updateOperator(operator);
         } else if ("delete".equals(operation)) {
-            if (operator.getId() == 1) {
+            if ("admin".equals(operator.getUsername())) {
                 errorFields = new LinkedHashMap<String, String>();
                 errorFields.put("operator.username", getText("operator.canNotBeDeleted"));
                 status = "validation_error";
