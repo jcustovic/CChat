@@ -8,6 +8,9 @@ import hr.chus.cchat.model.db.jpa.Operator;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.SessionAware;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +24,7 @@ import com.opensymphony.xwork2.ActionSupport;
  * @author Jan Čustović (jan.custovic@gmail.com)
  */
 @SuppressWarnings("serial")
-public class Logout extends ActionSupport implements SessionAware {
+public class Logout extends ActionSupport implements SessionAware, ServletRequestAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(Logout.class);
 
@@ -35,16 +38,17 @@ public class Logout extends ActionSupport implements SessionAware {
     private OperatorChooser     operatorChooser;
 
     private Map<String, Object> session;
+    private HttpServletRequest  request;
 
     @Override
-    public String execute() throws Exception {
+    public final String execute() throws Exception {
         final Operator user = (Operator) session.get(ApplicationConstants.SESSION_USER_KEY);
         if (user != null) {
             user.setIsActive(false);
             operatorChooser.removeActiveOperator(user);
             userService.clearOperatorField(user);
             operatorService.updateOperator(user);
-            LOG.info("{} (id={}) logged out", user.getUsername(), user.getId());
+            LOG.info("{} (id={}, sessionId={}) logged out", new Object[] { user.getUsername(), user.getId(), request.getSession(true).getId() });
             session.remove(ApplicationConstants.SESSION_USER_KEY);
         }
 
@@ -54,8 +58,13 @@ public class Logout extends ActionSupport implements SessionAware {
     // Getters & setters
 
     @Override
-    public void setSession(Map<String, Object> session) {
-        this.session = session;
+    public final void setSession(final Map<String, Object> p_session) {
+        this.session = p_session;
+    }
+
+    @Override
+    public final void setServletRequest(final HttpServletRequest p_request) {
+        this.request = p_request;
     }
 
 }

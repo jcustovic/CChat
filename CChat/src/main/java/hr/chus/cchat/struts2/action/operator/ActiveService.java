@@ -5,6 +5,8 @@ import hr.chus.cchat.helper.OperatorChooser;
 import hr.chus.cchat.helper.UserAware;
 import hr.chus.cchat.model.db.jpa.Operator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -18,15 +20,17 @@ import com.opensymphony.xwork2.ActionSupport;
 @SuppressWarnings("serial")
 public class ActiveService extends ActionSupport implements UserAware {
 
-    @Autowired
-    private OperatorService operatorService;
+    private static final Logger LOG = LoggerFactory.getLogger(ActiveService.class);
 
     @Autowired
-    private OperatorChooser operatorChooser;
+    private OperatorService     operatorService;
 
-    private Operator        operator;
-    private Boolean         newStatus;
-    private boolean         active;
+    @Autowired
+    private OperatorChooser     operatorChooser;
+
+    private Operator            operator;
+    private Boolean             newStatus;
+    private boolean             active;
 
     @Override
     public String execute() throws Exception {
@@ -34,8 +38,10 @@ public class ActiveService extends ActionSupport implements UserAware {
             operator.setIsActive(newStatus);
             operator = operatorService.updateOperator(operator);
             if (operator.getIsActive()) {
+                LOG.debug("Operator activated");
                 operatorChooser.addActiveOperator(operator);
             } else {
+                LOG.debug("Operator deactivated");
                 operatorChooser.removeActiveOperator(operator);
             }
         }
@@ -47,15 +53,15 @@ public class ActiveService extends ActionSupport implements UserAware {
     // Getters & setters
 
     @Override
-    public void setAuthenticatedUser(Operator user) {
-        this.operator = user;
+    public final void setAuthenticatedUser(final Operator p_user) {
+        this.operator = p_user;
     }
 
-    public void setNewStatus(Boolean newStatus) {
-        this.newStatus = newStatus;
+    public final void setNewStatus(final Boolean p_newStatus) {
+        this.newStatus = p_newStatus;
     }
 
-    public boolean isActive() {
+    public final boolean isActive() {
         return active;
     }
 

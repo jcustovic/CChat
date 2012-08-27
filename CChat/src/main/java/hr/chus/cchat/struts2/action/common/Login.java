@@ -2,10 +2,14 @@ package hr.chus.cchat.struts2.action.common;
 
 import hr.chus.cchat.ApplicationConstants;
 import hr.chus.cchat.db.service.OperatorService;
+import hr.chus.cchat.listener.SessionListener;
 import hr.chus.cchat.model.db.jpa.Operator;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.SessionAware;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +23,7 @@ import com.opensymphony.xwork2.ActionSupport;
  * @author Jan Čustović (jan.custovic@gmail.com)
  */
 @SuppressWarnings("serial")
-public class Login extends ActionSupport implements SessionAware {
+public class Login extends ActionSupport implements SessionAware, ServletRequestAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(Login.class);
 
@@ -27,11 +31,13 @@ public class Login extends ActionSupport implements SessionAware {
     private OperatorService     operatorService;
 
     private Map<String, Object> session;
+    private HttpServletRequest  request;
+
     private String              username;
     private String              password;
 
     @Override
-    public String execute() throws Exception {
+    public final String execute() throws Exception {
         Operator user = (Operator) session.get(ApplicationConstants.SESSION_USER_KEY);
         if (user != null) {
             if (user.getRole().getName().equals(ApplicationConstants.OPERATOR)) {
@@ -46,32 +52,40 @@ public class Login extends ActionSupport implements SessionAware {
             return INPUT;
         }
 
+        // If user is not found in session try to log in
         user = operatorService.authenticateUser(getUsername(), getPassword());
         if (user == null) {
             addFieldError("username", getText("login.wrongUsernameOrPassword"));
+        } else if (user.getDisabled()) {
+            addFieldError("username", getText("login.userIsDisabled"));
         } else {
-            if (user.getDisabled()) {
-                addFieldError("username", getText("login.userIsDisabled"));
-            } else if (user.getRole().getName().equals(ApplicationConstants.OPERATOR)) {
-                session.put(ApplicationConstants.SESSION_USER_KEY, user);
-                LOG.info(user.getUsername() + " (id=" + user.getId() + ") logged in as " + ApplicationConstants.OPERATOR);
-                return ApplicationConstants.OPERATOR;
+            final String roleName;
+            
+            if (user.getRole().getName().equals(ApplicationConstants.OPERATOR)) {
+                roleName = ApplicationConstants.OPERATOR;
+                SessionListener.removeSessionWithUser(user);
             } else if (user.getRole().getName().equals(ApplicationConstants.MODERATOR)) {
-                session.put(ApplicationConstants.SESSION_USER_KEY, user);
-                LOG.info(user.getUsername() + " (id=" + user.getId() + ") logged in as " + ApplicationConstants.MODERATOR);
-                return ApplicationConstants.MODERATOR;
+                roleName = ApplicationConstants.MODERATOR;
+                SessionListener.removeSessionWithUser(user);
             } else if (user.getRole().getName().equals(ApplicationConstants.ADMIN)) {
-                session.put(ApplicationConstants.SESSION_USER_KEY, user);
-                LOG.info(user.getUsername() + " (id=" + user.getId() + ") logged in as " + ApplicationConstants.ADMIN);
-                return ApplicationConstants.ADMIN;
+                roleName = ApplicationConstants.ADMIN;
+            } else {
+                LOG.error("Unknown role {}", user.getRole().getName());
+                return INPUT;
             }
+            
+            session.put(ApplicationConstants.SESSION_USER_KEY, user);
+            LOG.info("{} (id={}, sessionId={}) logged in as {}", new Object[] { user.getUsername(), user.getId(), request.getSession(true).getId(),
+                    roleName });
+            
+            return roleName;
         }
 
         return INPUT;
     }
 
     @Override
-    public void validate() {
+    public final void validate() {
         if (getUsername() != null && getPassword() != null) {
             if (getUsername().length() == 0) {
                 addFieldError("username", getText("login.usernameRequired"));
@@ -85,24 +99,29 @@ public class Login extends ActionSupport implements SessionAware {
     // Getters & setters
 
     @Override
-    public void setSession(Map<String, Object> session) {
-        this.session = session;
+    public final void setSession(final Map<String, Object> p_session) {
+        this.session = p_session;
     }
 
-    public String getUsername() {
+    @Override
+    public final void setServletRequest(final HttpServletRequest p_request) {
+        this.request = p_request;
+    }
+
+    public final String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public final void setUsername(final String p_username) {
+        this.username = p_username;
     }
 
-    public String getPassword() {
+    public final String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public final void setPassword(final String p_password) {
+        this.password = p_password;
     }
 
 }

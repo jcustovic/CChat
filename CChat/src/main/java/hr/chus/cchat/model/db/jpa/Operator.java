@@ -32,8 +32,7 @@ import org.hibernate.ejb.QueryHints;
         @NamedQuery(name = "Operator.getByUsername", query = "SELECT o FROM Operator o WHERE o.username = :username", hints = { @QueryHint(
                 name = QueryHints.HINT_CACHEABLE, value = "true") }),
         @NamedQuery(name = "Operator.getAllByActiveFlag", query = "SELECT o FROM Operator o WHERE o.isActive = :active", hints = { @QueryHint(
-                name = QueryHints.HINT_CACHEABLE, value = "true") }),
-        @NamedQuery(name = "Operator.setOperatorActiveFlag", query = "UPDATE Operator o SET o.isActive = :active") })
+                name = QueryHints.HINT_CACHEABLE, value = "true") }) })
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Operator extends AbstractBaseEntity {
 
