@@ -14,6 +14,7 @@ import org.apache.struts2.interceptor.SessionAware;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -29,6 +30,9 @@ public class Login extends ActionSupport implements SessionAware, ServletRequest
 
     @Autowired
     private OperatorService     operatorService;
+
+    @Value("${app.version}")
+    private String              appVersion;
 
     private Map<String, Object> session;
     private HttpServletRequest  request;
@@ -60,7 +64,7 @@ public class Login extends ActionSupport implements SessionAware, ServletRequest
             addFieldError("username", getText("login.userIsDisabled"));
         } else {
             final String roleName;
-            
+
             if (user.getRole().getName().equals(ApplicationConstants.OPERATOR)) {
                 roleName = ApplicationConstants.OPERATOR;
                 SessionListener.removeSessionWithUser(user);
@@ -73,11 +77,10 @@ public class Login extends ActionSupport implements SessionAware, ServletRequest
                 LOG.error("Unknown role {}", user.getRole().getName());
                 return INPUT;
             }
-            
+
             session.put(ApplicationConstants.SESSION_USER_KEY, user);
-            LOG.info("{} (id={}, sessionId={}) logged in as {}", new Object[] { user.getUsername(), user.getId(), request.getSession(true).getId(),
-                    roleName });
-            
+            LOG.info("{} (id={}, sessionId={}) logged in as {}", new Object[] { user.getUsername(), user.getId(), request.getSession(true).getId(), roleName });
+
             return roleName;
         }
 
@@ -122,6 +125,10 @@ public class Login extends ActionSupport implements SessionAware, ServletRequest
 
     public final void setPassword(final String p_password) {
         this.password = p_password;
+    }
+
+    public final String getAppVersion() {
+        return appVersion;
     }
 
 }
