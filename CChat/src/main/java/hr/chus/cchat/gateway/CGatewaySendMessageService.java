@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
  * 
  * @author Jan Čustović (jan.custovic@gmail.com)
  */
-@Service
+@Service("defaultSendMessageService")
 public class CGatewaySendMessageService implements SendMessageService {
 
     private static final Logger LOG = LoggerFactory.getLogger(CGatewaySendMessageService.class);

@@ -21,9 +21,11 @@ import javax.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 /**
  * Default implementation of {@link ReceiveSmsService}
@@ -51,6 +53,7 @@ public class MessageServiceImpl implements MessageService {
     @Autowired
     private ServiceProviderKeywordService serviceProviderKeywordService;
 
+    @Qualifier("defaultSendMessageService")
     @Autowired
     private SendMessageService            defaultSendMessageService;
 
@@ -113,7 +116,7 @@ public class MessageServiceImpl implements MessageService {
     public final SMSMessage sendMessage(final SMSMessage p_smsMessage, final User p_user, final String p_msgType) throws Exception {
         String gatewayId = null;
         final SendMessageService sendMessageService;
-        if (p_user.getServiceProvider().getSendServiceBeanName() != null && !p_user.getServiceProvider().getSendServiceBeanName().isEmpty()) {
+        if (StringUtils.hasText(p_user.getServiceProvider().getSendServiceBeanName())) {
             sendMessageService = (SendMessageService) applicationContext.getBean(p_user.getServiceProvider().getSendServiceBeanName());
         } else {
             sendMessageService = defaultSendMessageService;
