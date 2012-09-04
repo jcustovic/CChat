@@ -6,7 +6,7 @@ package hr.chus.cchat.gateway;
 @SuppressWarnings("serial")
 public class GatewayResponseError extends Exception {
 
-    private String            code;
+    private String code;
 
     public GatewayResponseError(String message, String code) {
         super(message);

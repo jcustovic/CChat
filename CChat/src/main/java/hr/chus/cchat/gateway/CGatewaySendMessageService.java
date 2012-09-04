@@ -34,16 +34,16 @@ public class CGatewaySendMessageService implements SendMessageService {
 
     @Value("${gateway.username}")
     private String              username;
-    
+
     @Value("${gateway.password}")
     private String              password;
-    
+
     @Value("${gateway.sendSmsUrl}")
     private String              sendSmsUrl;
-    
+
     @Value("${gateway.sendWapPushUrl}")
     private String              sendWapPushUrl;
-    
+
     @Value("${gateway.testSending}")
     private boolean             testSending;
 

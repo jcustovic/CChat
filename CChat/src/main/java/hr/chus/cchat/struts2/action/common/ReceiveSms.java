@@ -4,6 +4,7 @@ import hr.chus.cchat.service.MessageService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 
 import javax.persistence.EntityNotFoundException;
@@ -39,7 +40,7 @@ public class ReceiveSms extends ActionSupport {
     private String                  serviceProviderName;
     private String                  serviceProviderKeyword;
 
-    private Integer                 messageId;
+    private Integer[]               messageIds;
     private String                  status;
     private String                  errorMsg;
 
@@ -54,7 +55,7 @@ public class ReceiveSms extends ActionSupport {
         } else if (text == null) {
             errorMsg = "Text must not be null";
         }
-        
+
         if (errorMsg != null) {
             LOG.error(errorMsg);
             addActionError(errorMsg);
@@ -76,9 +77,9 @@ public class ReceiveSms extends ActionSupport {
         }
 
         try {
-            messageId = messageService.receiveSms(serviceProviderName, sc, serviceProviderKeyword, msisdn, text, date, gatewayId);
+            messageIds = messageService.receiveSms(serviceProviderName, sc, serviceProviderKeyword, msisdn, text, date, gatewayId);
             status = "ok";
-            LOG.info("Message saved with id {}", messageId);
+            LOG.info("Message(s) saved with ids {}", Arrays.toString(messageIds));
         } catch (EntityNotFoundException e) {
             LOG.error(errorMsg);
             status = "failed";
@@ -117,8 +118,8 @@ public class ReceiveSms extends ActionSupport {
         this.serviceProviderKeyword = serviceProviderKeyword;
     }
 
-    public Integer getMessageId() {
-        return messageId;
+    public Integer[] getMessageIds() {
+        return messageIds;
     }
 
     public String getStatus() {

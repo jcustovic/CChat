@@ -41,16 +41,16 @@ public class TargetMediaSendMessageService implements SendMessageService {
     private SMSMessageService   smsMessageService;
 
     private Map<String, String> statusCodeMap;
-    
+
     @Value("${targetMedia.gateway.username}")
     private String              username;
-    
+
     @Value("${targetMedia.gateway.handle}")
     private String              handle;
-    
+
     @Value("${targetMedia.gateway.url}")
     private String              url;
-    
+
     private String              returnid = "yes";
 
     @PostConstruct

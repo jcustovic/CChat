@@ -20,7 +20,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     
     @Query("SELECT u FROM User u WHERE u.operator IS NULL AND u.unreadMsgCount > 0")
     List<User> findUnassigned(Pageable p_pageable);
-    
+
     @Modifying
     @Query("UPDATE User u SET u.operator = null WHERE u.operator = ?1 AND u.lastMsg < ?2 AND u.unreadMsgCount = 0")
     void clearOperatorField(Operator p_operator, Date p_date);
