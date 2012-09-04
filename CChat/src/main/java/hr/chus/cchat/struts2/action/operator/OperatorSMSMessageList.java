@@ -52,12 +52,12 @@ public class OperatorSMSMessageList extends ActionSupport implements UserAware {
             operator = user;
         }
         LOG.debug("Searching for sms messages from ..." + start + " for " + limit);
-        final Object[] result = smsMessageService.search(operator, serviceProvider, direction, userId, userName, userSurname, null, startDate, endDate, text, start,
-                limit);
+        final Object[] result = smsMessageService.search(operator, serviceProvider, direction, userId, userName, userSurname, null, startDate, endDate, text,
+                start, limit);
         totalCount = (Long) result[0];
         smsMessageList = (List<SMSMessage>) result[1];
         LOG.debug("Found " + totalCount + " sms messages.");
-        
+
         return SUCCESS;
     }
 

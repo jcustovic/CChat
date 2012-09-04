@@ -10,10 +10,10 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class StatisticsPerServiceProvider implements Serializable {
 
-    private String            providerName;
-    private String            shortCode;
-    private Integer           receivedCount;
-    private Integer           sentCount;
+    private String  providerName;
+    private String  shortCode;
+    private Integer receivedCount;
+    private Integer sentCount;
 
     public StatisticsPerServiceProvider(String providerName, String shortCode, Integer receivedCount, Integer sendCount) {
         this.providerName = providerName;

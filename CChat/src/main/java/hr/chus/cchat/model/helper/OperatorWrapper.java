@@ -10,14 +10,14 @@ import hr.chus.cchat.model.db.jpa.Operator;
 public class OperatorWrapper {
 
     private Operator operator;
-    private Long      unreadUserCount;
+    private Long     unreadUserCount;
 
     public OperatorWrapper(final Operator p_operator, final Long p_unreadUserCount) {
         super();
         this.operator = p_operator;
         this.unreadUserCount = p_unreadUserCount;
     }
-    
+
     // Getters & setters
 
     public final Operator getOperator() {

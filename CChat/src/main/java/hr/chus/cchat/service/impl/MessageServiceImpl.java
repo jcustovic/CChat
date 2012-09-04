@@ -36,7 +36,9 @@ import org.springframework.util.StringUtils;
 @Transactional
 public class MessageServiceImpl implements MessageService {
 
-    private static final Logger           LOG = LoggerFactory.getLogger(MessageServiceImpl.class);
+    private static final Logger           LOG                  = LoggerFactory.getLogger(MessageServiceImpl.class);
+
+    private static final int              MAX_RECEIVE_SMS_SIZE = 160;
 
     @Autowired
     private ApplicationContext            applicationContext;
@@ -58,7 +60,7 @@ public class MessageServiceImpl implements MessageService {
     private SendMessageService            defaultSendMessageService;
 
     @Override
-    public final Integer receiveSms(final String p_serviceProviderName, final String p_sc, final String p_serviceProviderKeyword, final String p_msisdn,
+    public final Integer[] receiveSms(final String p_serviceProviderName, final String p_sc, final String p_serviceProviderKeyword, final String p_msisdn,
                                     final String p_text, final Date p_date, final String p_gatewayId) {
         final ServiceProvider serviceProvider = serviceProviderService.getByProviderNameAndShortCode(p_serviceProviderName, p_sc);
         if (serviceProvider == null) {
@@ -83,6 +85,13 @@ public class MessageServiceImpl implements MessageService {
             }
         }
 
+        final String smsText;
+        if (p_text == null) {
+            smsText = "";
+        } else {
+            smsText = p_text;
+        }
+
         User user = userService.getByMsisdnAndServiceName(p_msisdn, serviceProvider.getServiceName(), false);
         if (user == null) {
             user = new User(p_msisdn, serviceProvider);
@@ -92,7 +101,7 @@ public class MessageServiceImpl implements MessageService {
             user = userService.editUser(user);
             LOG.info("New user ({}) registred to service {}", user, serviceProvider.getServiceName());
         } else {
-            user.setUnreadMsgCount(user.getUnreadMsgCount() + 1);
+            user.setUnreadMsgCount(user.getUnreadMsgCount() + (smsText.length() / 160 + 1));
             user.setLastMsg(new Date());
 
             if (!user.getServiceProvider().equals(serviceProvider)) {
@@ -104,12 +113,24 @@ public class MessageServiceImpl implements MessageService {
             userService.editUser(user);
         }
 
-        final SMSMessage message = new SMSMessage(user, null, p_date, p_text, p_sc, serviceProvider, Direction.IN);
-        message.setDeliveryStatus(DeliveryStatus.RECEIVED);
-        message.setGatewayId(p_gatewayId);
-        message.setServiceProviderKeyword(providerKeyword);
+        // We will split message if its length is more than 160.
+        final int smsCount = (int) Math.ceil(smsText.length() * 1f / MAX_RECEIVE_SMS_SIZE );
+        if (smsCount > 1) {
+            LOG.debug("Received sms with length {} (max {}). Will split message ({} parts)...", new Object[] {smsText.length(), MAX_RECEIVE_SMS_SIZE, smsCount});
+        }
+        
+        final Integer[] msgIds = new Integer[smsCount];
+        for (int i = 0; i < smsCount; i++) {
+            final int currentIndex = MAX_RECEIVE_SMS_SIZE * i;
+            final String textToSave = smsText.substring(currentIndex, currentIndex + Math.min(MAX_RECEIVE_SMS_SIZE, smsText.length() - currentIndex));
+            final SMSMessage message = new SMSMessage(user, null, p_date, textToSave, p_sc, serviceProvider, Direction.IN);
+            message.setDeliveryStatus(DeliveryStatus.RECEIVED);
+            message.setGatewayId(p_gatewayId);
+            message.setServiceProviderKeyword(providerKeyword);
+            msgIds[i] = smsMessageService.updateSMSMessage(message).getId();
+        }
 
-        return smsMessageService.updateSMSMessage(message).getId();
+        return msgIds;
     }
 
     @Override

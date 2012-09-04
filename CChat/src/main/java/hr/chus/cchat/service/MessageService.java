@@ -12,8 +12,8 @@ import java.util.Date;
  */
 public interface MessageService {
 
-    Integer receiveSms(String p_serviceProviderName, String p_sc, String p_serviceProviderKeyword, String p_msisdn, String p_text, Date p_date,
-                       String p_gatewayId);
+    Integer[] receiveSms(String p_serviceProviderName, String p_sc, String p_serviceProviderKeyword, String p_msisdn, String p_text, Date p_date,
+                         String p_gatewayId);
 
     SMSMessage sendMessage(SMSMessage p_smsMessage, User p_user, String p_msgType) throws Exception;
 
