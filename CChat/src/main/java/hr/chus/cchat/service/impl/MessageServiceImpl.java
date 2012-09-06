@@ -24,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 /**
@@ -33,10 +32,11 @@ import org.springframework.util.StringUtils;
  * @author Jan Čustović (jan.custovic@gmail.com)
  */
 @Service
-@Transactional
 public class MessageServiceImpl implements MessageService {
 
     private static final Logger           LOG                  = LoggerFactory.getLogger(MessageServiceImpl.class);
+
+    private static final Object           LOCK                 = new Object();
 
     private static final int              MAX_RECEIVE_SMS_SIZE = 160;
 
@@ -61,11 +61,12 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public final Integer[] receiveSms(final String p_serviceProviderName, final String p_sc, final String p_serviceProviderKeyword, final String p_msisdn,
-                                    final String p_text, final Date p_date, final String p_gatewayId) {
+                                      final String p_text, final Date p_date, final String p_gatewayId) {
         final ServiceProvider serviceProvider = serviceProviderService.getByProviderNameAndShortCode(p_serviceProviderName, p_sc);
         if (serviceProvider == null) {
             throw new EntityNotFoundException("ServiceProvider not found for provider " + p_serviceProviderName + " and sc " + p_sc);
         }
+        LOG.debug("Found service provider --> {}", serviceProvider);
 
         ServiceProviderKeyword providerKeyword = null;
         if (p_serviceProviderKeyword != null && !p_serviceProviderKeyword.isEmpty()) {
@@ -92,33 +93,39 @@ public class MessageServiceImpl implements MessageService {
             smsText = p_text;
         }
 
-        User user = userService.getByMsisdnAndServiceName(p_msisdn, serviceProvider.getServiceName(), false);
-        if (user == null) {
-            user = new User(p_msisdn, serviceProvider);
-            user.setUnreadMsgCount(1);
-            assignOperator(user);
+        User user;
+        synchronized (LOCK) {
+            // Find or create user. Must be thread safe.
+            user = userService.getByMsisdnAndServiceName(p_msisdn, serviceProvider.getServiceName(), false);
 
-            user = userService.editUser(user);
-            LOG.info("New user ({}) registred to service {}", user, serviceProvider.getServiceName());
-        } else {
-            user.setUnreadMsgCount(user.getUnreadMsgCount() + (smsText.length() / 160 + 1));
-            user.setLastMsg(new Date());
+            if (user == null) {
+                user = new User(p_msisdn, serviceProvider);
+                user.setUnreadMsgCount(1);
+                assignOperator(user);
 
-            if (!user.getServiceProvider().equals(serviceProvider)) {
-                LOG.info("User (" + user + ") changed service provider from " + user.getServiceProvider() + " to " + serviceProvider);
-                user.setServiceProvider(serviceProvider);
+                user = userService.editUser(user);
+                LOG.info("New user ({}) registred to service {}", user, serviceProvider.getServiceName());
+            } else {
+                user.setUnreadMsgCount(user.getUnreadMsgCount() + (smsText.length() / 160 + 1));
+                user.setLastMsg(new Date());
+
+                if (!user.getServiceProvider().equals(serviceProvider)) {
+                    LOG.info("User (" + user + ") changed service provider from " + user.getServiceProvider() + " to " + serviceProvider);
+                    user.setServiceProvider(serviceProvider);
+                }
+                assignOperator(user);
+
+                userService.editUser(user);
             }
-            assignOperator(user);
-
-            userService.editUser(user);
         }
 
         // We will split message if its length is more than 160.
-        final int smsCount = (int) Math.ceil(smsText.length() * 1f / MAX_RECEIVE_SMS_SIZE );
+        final int smsCount = (int) Math.ceil(smsText.length() * 1f / MAX_RECEIVE_SMS_SIZE);
         if (smsCount > 1) {
-            LOG.debug("Received sms with length {} (max {}). Will split message ({} parts)...", new Object[] {smsText.length(), MAX_RECEIVE_SMS_SIZE, smsCount});
+            LOG.debug("Received sms with length {} (max {}). Will split message ({} parts)...",
+                    new Object[] { smsText.length(), MAX_RECEIVE_SMS_SIZE, smsCount });
         }
-        
+
         final Integer[] msgIds = new Integer[smsCount];
         for (int i = 0; i < smsCount; i++) {
             final int currentIndex = MAX_RECEIVE_SMS_SIZE * i;
