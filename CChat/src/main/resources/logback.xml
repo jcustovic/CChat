@@ -4,7 +4,7 @@
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
 		<encoder>
-			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{100} [%X{username}] - %msg%n</pattern>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{100}:%L [%X{username}] - %msg%n</pattern>
 		</encoder>
 	</appender>
 
@@ -25,7 +25,7 @@
 		</rollingPolicy>
 
 		<encoder>
-			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{100} %X{username} - %msg%n</pattern>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{100}:%L %X{username} - %msg%n</pattern>
 		</encoder>
 	</appender>
 
@@ -43,7 +43,7 @@
 		<subject>TESTING: %logger{20} - %m</subject>
 		
 		<layout class="ch.qos.logback.classic.PatternLayout">
-			<pattern>%date %-5level %logger{35} - %message%n</pattern>
+			<pattern>%date %-5level %logger{35}:%L - %message%n</pattern>
 		</layout>
 	</appender>
  	-->

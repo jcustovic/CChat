@@ -57,7 +57,7 @@ public class ReceiveSms extends ActionSupport {
         }
 
         if (errorMsg != null) {
-            LOG.error(errorMsg);
+            LOG.debug("Validation failed with error --> {}", errorMsg);
             addActionError(errorMsg);
             status = "failed";
         }
@@ -65,8 +65,8 @@ public class ReceiveSms extends ActionSupport {
 
     @Override
     public String execute() throws Exception {
-        LOG.info(String.format("Got message from %s (ServiceProvider: %s, SC: %s, Keyword: %s) with text --> %s", new Object[] { msisdn, serviceProviderName,
-                sc, serviceProviderKeyword, text }));
+        LOG.info("Got message from {} (ServiceProvider: {}, SC: {}, Keyword: {}) with text --> {}", new Object[] { msisdn, serviceProviderName, sc,
+                serviceProviderKeyword, text });
         Date date = new Date();
         if (StringUtils.hasText(time)) {
             try {
@@ -81,7 +81,7 @@ public class ReceiveSms extends ActionSupport {
             status = "ok";
             LOG.info("Message(s) saved with ids {}", Arrays.toString(messageIds));
         } catch (EntityNotFoundException e) {
-            LOG.error(errorMsg);
+            LOG.error(e.getMessage());
             status = "failed";
         }
 
