@@ -12,6 +12,11 @@
 </div>
 </div>
 
+<!-- We share 'sc' folder -->
+<script>
+var isomorphicDir = "${path}/sc/";
+</script>
+
 <script type="text/javascript">document.getElementById('loadingMsg').innerHTML = '<center> <s:property value="%{getText('global.loadingStyleAndImages')}"/> <br /> <s:property value="%{getText('global.pleaseWait')}"/> </center>';</script>
-<script type="text/javascript" language="javascript" src="${path}/operator/operator.nocache.js"></script>
+<script type="text/javascript" src="${path}/operator/operator.nocache.js"></script>
 <script type="text/javascript">document.getElementById('loadingWrapper').innerHTML = '';</script>
