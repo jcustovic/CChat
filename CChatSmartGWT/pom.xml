@@ -1,0 +1,112 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>hr.chus</groupId>
+	<artifactId>CChatSmartGWT</artifactId>
+	<version>1.0.3</version>
+	
+	<developers>
+		<developer>
+			<id>jcustovic</id>
+			<name>Jan Čustović</name>
+			<email>jan.custovic@gmail.com</email>
+			<roles>
+				<role>Developer</role>
+				<role>Architect</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+	</developers>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.6</java.version>
+
+		<version.com.google.gwt>2.4.0</version.com.google.gwt>
+		<version.com.google.gwt.visualization>1.0.2</version.com.google.gwt.visualization>
+		<version.com.smartgwt>3.0</version.com.smartgwt>
+	</properties>
+	
+	<dependencies>	
+		<!-- GWT -->
+		<!-- <dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-servlet</artifactId>
+			<version>${version.com.google.gwt}</version>
+			<scope>compile</scope>
+    	</dependency> -->
+    	
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+			<version>${version.com.google.gwt}</version>
+			<scope>provided</scope>
+    	</dependency>
+    	
+    	<dependency>
+			<groupId>com.google.gwt.google-apis</groupId>
+			<artifactId>gwt-visualization</artifactId>
+			<version>${version.com.google.gwt.visualization}</version>
+			<scope>provided</scope>
+    	</dependency>
+    	
+    	<dependency>
+			<groupId>com.smartgwt</groupId>
+			<artifactId>smartgwt</artifactId>
+			<version>${version.com.smartgwt}</version>
+			<scope>provided</scope>
+    	</dependency>
+    	
+    	<dependency>
+			<groupId>com.smartgwt</groupId>
+			<artifactId>smartgwt-skins</artifactId>
+			<version>${version.com.smartgwt}</version>
+			<scope>provided</scope>
+    	</dependency>
+    </dependencies>
+    
+    <build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-clean-plugin</artifactId>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<source>1.6</source>
+						<target>1.6</target>
+						<encoding>UTF-8</encoding>  
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+	
+	<repositories>
+		<repository>
+			<id>central</id>
+			<name>Maven Repository Switchboard</name>
+			<layout>default</layout>
+			<url>http://repo1.maven.org/maven2</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+
+		<repository>
+			<id>mvnsearch</id>
+			<url>http://www.mvnsearch.org/maven2/</url>
+		</repository>
+		
+		<repository>
+			<id>smartclient</id>
+			<url>http://www.smartclient.com/maven2/</url>
+		</repository>
+	</repositories>
+	
+</project>
