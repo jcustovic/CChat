@@ -73,7 +73,7 @@ public class User extends AbstractBaseEntity {
 
     @Temporal(TemporalType.DATE)
     @Column(name = "birth_date", nullable = true)
-    private Date            birthDate;
+    private Date            birthdate;
 
     @Column(name = "notes", nullable = true, columnDefinition = "TEXT")
     private String          notes;
@@ -195,12 +195,12 @@ public class User extends AbstractBaseEntity {
     }
 
     @JSON(format = "yyyy-MM-dd'T'HH:mm:ssZ")
-    public Date getBirthDate() {
-        return birthDate;
+    public Date getBirthdate() {
+        return birthdate;
     }
 
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
+    public void setBirthdate(Date birthdate) {
+        this.birthdate = birthdate;
     }
 
     public String getNotes() {

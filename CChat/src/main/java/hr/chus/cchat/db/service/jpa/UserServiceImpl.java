@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
         if (user.getId() != null) {
             User us = getUserById(user.getId(), false);
             us.setAddress(user.getAddress());
-            us.setBirthDate(user.getBirthDate());
+            us.setBirthdate(user.getBirthdate());
             us.setDeleted(user.getDeleted());
             us.setName(user.getName());
             us.setNick(user.getNick());
@@ -75,14 +75,14 @@ public class UserServiceImpl implements UserService {
         if (user.getId() != null) {
             User us = getUserById(user.getId(), false);
             us.setAddress(user.getAddress());
-            us.setBirthDate(user.getBirthDate());
+            us.setBirthdate(user.getBirthdate());
             us.setName(user.getName());
             us.setNick(user.getNick());
             us.setNotes(user.getNotes());
             us.setSurname(user.getSurname());
-            us.setUnreadMsgCount(user.getUnreadMsgCount());
             return editUser(us);
         }
+        
         return editUser(user);
     }
 
