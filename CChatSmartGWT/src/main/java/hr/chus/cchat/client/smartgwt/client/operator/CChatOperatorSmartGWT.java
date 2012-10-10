@@ -601,6 +601,7 @@ public class CChatOperatorSmartGWT extends VLayout implements EntryPoint {
 										
 										ExplorerTreeNode selectedTreeNode = (ExplorerTreeNode) usersList.getData().findById(userConsole.getUserId());
 										if (selectedTreeNode != null) {
+										    selectedTreeNode.setAttribute(UNREAD_ATTRIBUTE, false);
 										    updateLeafIcon(selectedTreeNode, Constants.CONTEXT_PATH + "images/operators.png");    
 										}
 									} else if (userConsole.getUnreadMsgCount() == -1) {
