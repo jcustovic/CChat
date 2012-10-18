@@ -365,5 +365,8 @@ public interface Dictionary extends Constants {
 
 	@DefaultStringValue("External")
 	String external();
+	
+	@DefaultStringValue("Bot")
+    String bot();
 
 }
