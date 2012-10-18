@@ -30,16 +30,8 @@
 		<property name="showSql" value="false" />
 	</bean>
 	
-	<!-- Add depends-on="flyway" on entityManagerFactory bean -->
-	<bean id="flyway" class="com.googlecode.flyway.core.Flyway" init-method="migrate">
-		<property name="dataSource" ref="dataSource" />
-		<property name="locations" value="db/scripts" />
-		<property name="validationMode" value="${flyway.validationMode}" />
-		<property name="validationErrorMode" value="${flyway.validationErrorMode}" />
-	</bean>
-	
-	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" depends-on="flyway">
-		<property name="dataSource" ref="dataSource" />
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
 		<property name="jpaVendorAdapter" ref="jpaVendorAdapter" />
 		
 		<property name="persistenceUnitName" value="cchatContent" />

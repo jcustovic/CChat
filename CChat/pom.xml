@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>hr.chus</groupId>
 	<artifactId>CChat</artifactId>
-	<version>1.0.3</version>
+	<version>1.0.4</version>
 	<packaging>war</packaging>
 
 	<developers>
@@ -24,10 +24,10 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.6</java.version>
 
-		<version.org.springframework>3.1.1.RELEASE</version.org.springframework>
+		<version.org.springframework>3.1.2.RELEASE</version.org.springframework>
 		<version.org.springframework.data.jpa>1.1.0.RELEASE</version.org.springframework.data.jpa>
-		<version.org.springframework.security>3.1.1.RELEASE</version.org.springframework.security>
-		<version.org.apache.struts>2.3.4</version.org.apache.struts>
+		<version.org.springframework.security>3.1.2.RELEASE</version.org.springframework.security>
+		<version.org.apache.struts>2.3.4.1</version.org.apache.struts>
 		<version.org.apache.tiles>2.2.2</version.org.apache.tiles>
 		<version.commons-lang3>3.1</version.commons-lang3>
 		<version.commons-io>2.2</version.commons-io>
@@ -40,20 +40,21 @@
 		<version.javax.activation>1.1.1</version.javax.activation>
 		<version.javax.servlet.jsp>2.2.1</version.javax.servlet.jsp>
 		<version.javax.servlet>3.0.1</version.javax.servlet>
-		<version.org.slf4j>1.6.4</version.org.slf4j>
+		<version.org.slf4j>1.6.6</version.org.slf4j>
 		<version.org.freemarker>2.3.19</version.org.freemarker>
 		<version.ognl>3.0.5</version.ognl>
 		<version.aopalliance>1.0</version.aopalliance>
-		<version.org.hibernate>4.1.4.Final</version.org.hibernate>
+		<version.org.hibernate>4.1.7.Final</version.org.hibernate>
 		<version.jstl>1.2</version.jstl>
-		<version.net.sf.ehcache>2.5.2</version.net.sf.ehcache>
+		<version.net.sf.ehcache>2.5.4</version.net.sf.ehcache>
 		<version.c3p0>0.9.1.2</version.c3p0>
-		<version.mysql>5.1.20</version.mysql>
+		<version.mysql>5.1.21</version.mysql>
 		<version.taglibs.standard>1.1.2</version.taglibs.standard>
 		<version.ch.qos.logback>1.0.3</version.ch.qos.logback>
-		<version.com.googlecode.flyway>1.6.1</version.com.googlecode.flyway>
+		<version.com.googlecode.flyway>1.7</version.com.googlecode.flyway>
 		<version.org.apache.httpcomponents>4.2.1</version.org.apache.httpcomponents>
-		<version.org.apache.tomcat>7.0.27</version.org.apache.tomcat>
+		<version.org.apache.tomcat>7.0.30</version.org.apache.tomcat>
+		<version.programd>4.6-FIXED</version.programd>
 
 		<!-- Test -->
 		<version.junit>4.10</version.junit>
@@ -61,7 +62,7 @@
 		<version.org.easytesting.fest-assert>1.4</version.org.easytesting.fest-assert>
 		<version.org.easymock>3.1</version.org.easymock>
 		<version.powermock-api-easymock>1.4.12</version.powermock-api-easymock>
-		<version.com.h2database>1.3.166</version.com.h2database>
+		<version.com.h2database>1.3.168</version.com.h2database>
 
 		<!-- Plugins -->
 	</properties>
@@ -467,9 +468,12 @@
 			<scope>compile</scope>
 		</dependency>
 
-		<!-- <dependency> <groupId>com.googlecode.flyway</groupId> <artifactId>flyway-core</artifactId> 
-			<version>${version.com.googlecode.flyway}</version> <scope>compile</scope> 
-			</dependency> -->
+		<dependency>
+			<groupId>com.googlecode.flyway</groupId>
+			<artifactId>flyway-core</artifactId>
+			<version>${version.com.googlecode.flyway}</version>
+			<scope>compile</scope>
+		</dependency>
 
 		<!-- Freemarker -->
 		<dependency>
@@ -588,12 +592,32 @@
 			<version>${version.org.apache.tomcat}</version>
 			<scope>provided</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.aitools</groupId>
+			<artifactId>programd</artifactId>
+			<version>${version.programd}</version>
+		</dependency>
 
 		<!-- Testing -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>${version.junit}</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${version.org.springframework}</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>${version.com.h2database}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -679,12 +703,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>${version.org.springframework}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.struts</groupId>
 			<artifactId>struts2-junit-plugin</artifactId>
 			<version>${version.org.apache.struts}</version>
@@ -700,12 +718,6 @@
 			<groupId>org.powermock</groupId>
 			<artifactId>powermock-api-easymock</artifactId>
 			<version>${version.powermock-api-easymock}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>${version.com.h2database}</version>
 			<scope>test</scope>
 		</dependency>
 		-->
@@ -797,6 +809,13 @@
 			<id>springsource-milestones</id>
 			<name>SpringSource Milestones Proxy</name>
 			<url>https://oss.sonatype.org/content/repositories/springsource-milestones</url>
+		</repository>
+		
+		<!-- Non-maven (local) repo -->
+		<repository>
+			<id>non-maven-repo</id>
+			<name>CChat local repository</name>
+			<url>file://${basedir}/non-maven-libs</url>
 		</repository>
 	</repositories>
 

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:repository="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+      http://www.springframework.org/schema/context
+      http://www.springframework.org/schema/context/spring-context-3.1.xsd
+      http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+      
+	<repository:repositories base-package="hr.chus.programd.multiplexor.repository" repository-impl-postfix="Impl" />
+    
+    <bean id="programDSettings" class="org.aitools.programd.util.Settings">
+    	<property name="aimlSchemaNamespaceUri" value="${programd.aiml-schema.namespace-uri}" />
+    	<property name="schemaLocationAIML" value="${programd.schema-location.AIML}" />
+    	<property name="schemaLocationPlugins" value="${programd.schema-location.plugins}" />
+    	<property name="schemaLocationTestCases" value="${programd.schema-location.test-cases}" />
+    	<property name="startupFilePath" value="${programd.startup-file-path}" />
+    	<property name="confLocationPlugins" value="${programd.conf-location.plugins}" />
+    	<property name="mergePolicy" value="${programd.merge.policy}" />
+    	<property name="mergeAppendSeparatorString" value="${programd.merge.append.separator-string}" />
+    	<property name="mergeNoteEach" value="${programd.merge.note-each}" />
+    	<property name="predicateEmptyDefault" value="${programd.predicate-empty-default}" />
+    	<property name="responseTimeout" value="${programd.response-timeout}" />
+    	<property name="categoryLoadNotifyInterval" value="${programd.category-load-notify-interval}" />
+    	<property name="loadNotifyEachFile" value="${programd.load.notify-each-file}" />
+    	<property name="infiniteLoopInput" value="${programd.infinite-loop-input}" />
+    	<property name="clientNamePredicate" value="${programd.client-name-predicate}" />
+    	<property name="botNamePredicate" value="${programd.bot-name-predicate}" />
+    	<property name="onUncaughtExceptionsPrintStackTrace" value="${programd.on-uncaught-exceptions.print-stack-trace}" />
+    	<property name="osAccessAllowed" value="${programd.os-access-allowed}" />
+    	<property name="javascriptAllowed" value="${programd.javascript-allowed}" />
+    	<property name="gossipPath" value="${programd.gossip.path}" />
+    	<property name="connectString" value="${programd.connect-string}" />
+    	<property name="inactivityString" value="${programd.inactivity-string}" />
+    	<property name="nodemapperImplementation" value="${programd.nodemapper-implementation}" />
+    	<property name="predicateCacheMax" value="${programd.predicate-cache.max}" />
+    	<property name="consoleUseShell" value="${programd.console.use-shell}" />
+    	<property name="exitImmediatelyOnStartup" value="${programd.exit-immediately-on-startup}" />
+    	<property name="systemInterpreterDirectory" value="${programd.system-interpreter.directory}" />
+    	<property name="systemInterpreterPrefix" value="${programd.system-interpreter.prefix}" />
+    	<property name="javascriptInterpreterClassname" value="${programd.javascript-interpreter.classname}" />
+    	<property name="useWatcher" value="${programd.use-watcher}" />
+    	<property name="watcherTimer" value="${programd.watcher.timer}" />
+    	<property name="heartEnabled" value="${programd.heart.enabled}" />
+    	<property name="heartPulserate" value="${programd.heart.pulserate}" />
+    	<!--
+    	<property name="multiplexorImplementation" value="${programd.multiplexor-implementation}" />
+    	<property name="multiplexorFfmDir" value="${programd.multiplexor.ffm-dir}" /> 
+    	<property name="databaseUrl" value="${programd.database.url}" />
+    	<property name="databaseDriver" value="${programd.database.driver}" />
+    	<property name="databaseConnections" value="${programd.database.connections}" />
+    	<property name="databaseUser" value="${programd.database.user}" />
+    	<property name="databasePassword" value="${programd.database.password}" />
+    	-->
+    </bean>
+    
+    <!-- TODO: Not so good, because of circular dependency. ProgramD has bad design. This should be fixed. -->
+    <bean id="programDCore" class="org.aitools.programd.Core" init-method="initPredicateMaster" destroy-method="shutdown">
+    	<constructor-arg ref="programDSettings" />
+    	<property name="multiplexor" ref="jpaMultiplexor" />
+    </bean>
+    
+	<bean id="jpaMultiplexor" class="hr.chus.programd.multiplexor.JPAMultiplexor">
+    	<constructor-arg ref="programDCore" />
+    </bean>
+	
+</beans>
