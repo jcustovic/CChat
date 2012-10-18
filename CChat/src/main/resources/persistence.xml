@@ -15,6 +15,9 @@
 		<class>hr.chus.cchat.model.db.jpa.ServiceProviderKeyword</class>
 		<class>hr.chus.cchat.model.db.jpa.KeywordConfiguration</class>
 		
+		<class>hr.chus.programd.multiplexor.jpa.Predicate</class>
+		<class>hr.chus.programd.multiplexor.jpa.PredicateUser</class>
+		
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 	</persistence-unit>
 	
