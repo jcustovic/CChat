@@ -32,7 +32,7 @@ public class AliceBotTest {
 
         // Assert.assertEquals(getResponse("Did I cause THIS hazzard", user), "Don't blame yourself.");
         Assert.assertEquals("Eliza is so cool. Eliza for President!", getResponse("I LIKE ELIZA", user));
-        Assert.assertEquals("My name is TestBot .", getResponse("what is your name?", user));
+        Assert.assertEquals("My name is TestBot.", getResponse("what is your name?", user));
         Assert.assertEquals("Hi there!", getResponse("hello!", user));
         Assert.assertEquals("Hi there!", getResponse("hello !", user));
         Assert.assertEquals("Hi there!", getResponse("  hello    !", user));
