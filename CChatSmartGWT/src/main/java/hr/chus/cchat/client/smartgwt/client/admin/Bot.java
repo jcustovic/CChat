@@ -63,6 +63,8 @@ public class Bot extends HLayout {
         messageDataGrid.setWidth(500);
         messageDataGrid.setHeight(200);
         messageDataGrid.setCanEdit(false);
+        messageDataGrid.setWrapCells(true);  
+        messageDataGrid.setFixedRecordHeights(false);
 
         final ListGridField msgField = new ListGridField("text", "Conversation");
         messageDataGrid.setFields(msgField);
