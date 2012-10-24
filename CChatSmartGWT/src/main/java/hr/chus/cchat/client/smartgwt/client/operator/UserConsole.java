@@ -81,6 +81,7 @@ public class UserConsole extends HLayout {
 	private double unreadMsgCount;
 	private boolean displayUserForm;
 	private SideNavigationMenu usersList;
+	private String myUserListNodeID;
 	
     private ListGrid conversationListGrid;
 	private int offset = 0;
@@ -103,13 +104,15 @@ public class UserConsole extends HLayout {
 		private String nameToDisplay;
 		private boolean displayUserForm;
 		private SideNavigationMenu usersList;
+		private String myUserListNodeID;
 
-        public Factory(String userId, String userType, String nameToDisplay, boolean displayUserForm, SideNavigationMenu usersList) {
-			this.id = userId;
-			this.userType = userType;
-			this.nameToDisplay = nameToDisplay;
-			this.displayUserForm = displayUserForm;
-			this.usersList = usersList;
+        public Factory(final String p_userId, final String p_userType, final String p_nameToDisplay, final boolean p_displayUserForm, final SideNavigationMenu p_usersList, final String p_myUserListNodeID) {
+			id = p_userId;
+			userType = p_userType;
+			nameToDisplay = p_nameToDisplay;
+			displayUserForm = p_displayUserForm;
+			usersList = p_usersList;
+			myUserListNodeID = p_myUserListNodeID;
 		}
 
 		public Canvas create() {
@@ -119,6 +122,7 @@ public class UserConsole extends HLayout {
 			panel.setNameToDisplay(nameToDisplay);
 			panel.setDisplayUserForm(displayUserForm);
 			panel.setUsersList(usersList);
+			panel.setMyUserListNodeID(myUserListNodeID);
 			panel.setUnreadMsgCount(-1);
             panel.setMargin(5);
             panel.setWidth100();
@@ -346,9 +350,16 @@ public class UserConsole extends HLayout {
 						}
 						
                         // Open next user that has unread messages
-                        final TreeNode[] nodes = usersList.getData().getAllNodes();
+						final TreeNode parentNode = usersList.getData().findById(myUserListNodeID);
+						final TreeNode[] nodes;
+						if (parentNode == null) {
+						    nodes = usersList.getData().getAllNodes();    
+						} else {
+						    nodes = usersList.getData().getAllNodes(parentNode);
+						}
                         int recordNum = 0;
-                        for (TreeNode treeNode : nodes) {
+                        for (int i = nodes.length - 1; i > 0; i--) {
+                            final TreeNode treeNode = nodes[i];
                             final Boolean unread = treeNode.getAttributeAsBoolean(CChatOperatorSmartGWT.UNREAD_ATTRIBUTE);
                             if (unread != null && unread) {
                                 // Hack: Manually created LeafClickEvent
@@ -362,7 +373,6 @@ public class UserConsole extends HLayout {
                             }
                             recordNum++;
                         }
-                        // sendMsgForm.focusInItem(smsTextArea.getName());
 					};
 				});
 			}
@@ -642,5 +652,7 @@ public class UserConsole extends HLayout {
 	public double getUnreadMsgCount() { return unreadMsgCount; }
 	
     public final void setUsersList(SideNavigationMenu usersList) { this.usersList = usersList; }
+
+    public final void setMyUserListNodeID(final String p_myUserListNodeID) { myUserListNodeID = p_myUserListNodeID; }
 				
 }
