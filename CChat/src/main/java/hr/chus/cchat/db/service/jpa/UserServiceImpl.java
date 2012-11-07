@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -256,7 +257,7 @@ public class UserServiceImpl implements UserService {
     public List<User> findUnassigned(int p_count) {
         final List<User> results;
         if (p_count > 0) {
-            final PageRequest pageRequest = new PageRequest(0, p_count);
+            final PageRequest pageRequest = new PageRequest(0, p_count, Direction.ASC, "lastMsg");
             results = userRepository.findUnassigned(pageRequest);
         } else {
             results = new ArrayList<User>(0);
