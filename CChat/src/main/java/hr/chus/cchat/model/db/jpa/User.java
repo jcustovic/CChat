@@ -99,39 +99,39 @@ public class User extends AbstractBaseEntity {
 
     public User() {}
 
-    public User(String msisdn, ServiceProvider serviceProvider) {
-        Date date = new Date();
-        this.msisdn = msisdn;
-        this.serviceProvider = serviceProvider;
+    public User(final String p_msisdn, final ServiceProvider p_serviceProvider) {
+        final Date date = new Date();
+        this.msisdn = p_msisdn;
+        this.serviceProvider = p_serviceProvider;
         this.joined = date;
         this.lastMsg = date;
         this.deleted = false;
         this.unreadMsgCount = 0;
     }
 
-    public User(Nick nick, Operator operator, String msisdn, ServiceProvider serviceProvider, String name, String surname, Date joined) {
-        this.nick = nick;
-        this.operator = operator;
-        this.msisdn = msisdn;
-        this.serviceProvider = serviceProvider;
-        this.name = name;
-        this.surname = surname;
-        this.joined = joined;
+    public User(final Nick p_nick, final Operator p_operator, final String p_msisdn, final ServiceProvider p_serviceProvider, final String p_name, final String p_surname, final Date p_joined) {
+        this.nick = p_nick;
+        this.operator = p_operator;
+        this.msisdn = p_msisdn;
+        this.serviceProvider = p_serviceProvider;
+        this.name = p_name;
+        this.surname = p_surname;
+        this.joined = p_joined;
         this.deleted = false;
         this.unreadMsgCount = 0;
     }
 
     @Override
-    public String toString() {
+    public final String toString() {
         return String.format("User[ID: %s, Msisdn: %s, Name: %s, Surname: %s, Deleted: %s]", new Object[] { getId(), msisdn, name, surname, deleted });
     }
 
     @Override
-    public boolean equals(final Object object) {
-        if (object == null) return false;
-        if (this == object) return true;
-        if (!(object instanceof User)) return false;
-        final User user = (User) object;
+    public final boolean equals(final Object p_object) {
+        if (p_object == null) return false;
+        if (this == p_object) return true;
+        if (!(p_object instanceof User)) return false;
+        final User user = (User) p_object;
 
         return user.getId().equals(getId());
     }
