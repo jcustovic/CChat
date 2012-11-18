@@ -48,11 +48,11 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 public class User extends AbstractBaseEntity {
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "nick_id", nullable = true)
+    @JoinColumn(name = "nick_id")
     private Nick            nick;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "operator_id", nullable = true)
+    @JoinColumn(name = "operator_id")
     private Operator        operator;
 
     @Column(name = "msisdn", length = 20, nullable = false, updatable = false)
@@ -62,20 +62,24 @@ public class User extends AbstractBaseEntity {
     @JoinColumn(name = "service_provider_id", nullable = false)
     private ServiceProvider serviceProvider;
 
-    @Column(name = "name", length = 20, nullable = true)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "bot_id")
+    private Robot           bot;
+
+    @Column(name = "name", length = 20)
     private String          name;
 
-    @Column(name = "surname", length = 30, nullable = true)
+    @Column(name = "surname", length = 30)
     private String          surname;
 
-    @Column(name = "address", length = 100, nullable = true)
+    @Column(name = "address", length = 100)
     private String          address;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "birth_date", nullable = true)
+    @Column(name = "birth_date")
     private Date            birthdate;
 
-    @Column(name = "notes", nullable = true, columnDefinition = "TEXT")
+    @Column(name = "notes", columnDefinition = "TEXT")
     private String          notes;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -101,24 +105,25 @@ public class User extends AbstractBaseEntity {
 
     public User(final String p_msisdn, final ServiceProvider p_serviceProvider) {
         final Date date = new Date();
-        this.msisdn = p_msisdn;
-        this.serviceProvider = p_serviceProvider;
-        this.joined = date;
-        this.lastMsg = date;
-        this.deleted = false;
-        this.unreadMsgCount = 0;
+        msisdn = p_msisdn;
+        serviceProvider = p_serviceProvider;
+        joined = date;
+        lastMsg = date;
+        deleted = false;
+        unreadMsgCount = 0;
     }
 
-    public User(final Nick p_nick, final Operator p_operator, final String p_msisdn, final ServiceProvider p_serviceProvider, final String p_name, final String p_surname, final Date p_joined) {
-        this.nick = p_nick;
-        this.operator = p_operator;
-        this.msisdn = p_msisdn;
-        this.serviceProvider = p_serviceProvider;
-        this.name = p_name;
-        this.surname = p_surname;
-        this.joined = p_joined;
-        this.deleted = false;
-        this.unreadMsgCount = 0;
+    public User(final Nick p_nick, final Operator p_operator, final String p_msisdn, final ServiceProvider p_serviceProvider, final String p_name,
+            final String p_surname, final Date p_joined) {
+        nick = p_nick;
+        operator = p_operator;
+        msisdn = p_msisdn;
+        serviceProvider = p_serviceProvider;
+        name = p_name;
+        surname = p_surname;
+        joined = p_joined;
+        deleted = false;
+        unreadMsgCount = 0;
     }
 
     @Override
@@ -138,119 +143,127 @@ public class User extends AbstractBaseEntity {
 
     // Getters && setters
 
-    public Nick getNick() {
+    public final Nick getNick() {
         return nick;
     }
 
-    public void setNick(Nick nick) {
-        this.nick = nick;
+    public final void setNick(final Nick p_nick) {
+        nick = p_nick;
     }
 
-    public Operator getOperator() {
+    public final Operator getOperator() {
         return operator;
     }
 
-    public void setOperator(Operator operator) {
-        this.operator = operator;
+    public final void setOperator(final Operator p_operator) {
+        operator = p_operator;
     }
 
-    public String getMsisdn() {
+    public final String getMsisdn() {
         return msisdn;
     }
 
-    public void setMsisdn(String msisdn) {
-        this.msisdn = msisdn;
+    public final void setMsisdn(final String p_msisdn) {
+        msisdn = p_msisdn;
     }
 
-    public ServiceProvider getServiceProvider() {
+    public final ServiceProvider getServiceProvider() {
         return serviceProvider;
     }
 
-    public void setServiceProvider(ServiceProvider serviceProvider) {
-        this.serviceProvider = serviceProvider;
+    public final void setServiceProvider(final ServiceProvider p_serviceProvider) {
+        serviceProvider = p_serviceProvider;
     }
 
-    public String getName() {
+    public final Robot getBot() {
+        return bot;
+    }
+
+    public final void setBot(final Robot p_bot) {
+        bot = p_bot;
+    }
+
+    public final String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public final void setName(final String p_name) {
+        name = p_name;
     }
 
-    public String getSurname() {
+    public final String getSurname() {
         return surname;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public final void setSurname(final String p_surname) {
+        surname = p_surname;
     }
 
-    public String getAddress() {
+    public final String getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public final void setAddress(final String p_address) {
+        address = p_address;
     }
 
     @JSON(format = "yyyy-MM-dd'T'HH:mm:ssZ")
-    public Date getBirthdate() {
+    public final Date getBirthdate() {
         return birthdate;
     }
 
-    public void setBirthdate(Date birthdate) {
-        this.birthdate = birthdate;
+    public final void setBirthdate(final Date p_birthdate) {
+        birthdate = p_birthdate;
     }
 
-    public String getNotes() {
+    public final String getNotes() {
         return notes;
     }
 
-    public void setNotes(String notes) {
-        this.notes = notes;
+    public final void setNotes(final String p_notes) {
+        notes = p_notes;
     }
 
     @JSON(format = "yyyy-MM-dd'T'HH:mm:ssZ")
-    public Date getJoined() {
+    public final Date getJoined() {
         return joined;
     }
 
-    public void setJoined(Date joined) {
-        this.joined = joined;
+    public final void setJoined(final Date p_joined) {
+        joined = p_joined;
     }
 
     @JSON(format = "yyyy-MM-dd'T'HH:mm:ssZ")
-    public Date getLastMsg() {
+    public final Date getLastMsg() {
         return lastMsg;
     }
 
-    public void setLastMsg(Date lastMsg) {
-        this.lastMsg = lastMsg;
+    public final void setLastMsg(final Date p_lastMsg) {
+        lastMsg = p_lastMsg;
     }
 
-    public Integer getUnreadMsgCount() {
+    public final Integer getUnreadMsgCount() {
         return unreadMsgCount;
     }
 
-    public void setUnreadMsgCount(Integer unreadMsgCount) {
-        this.unreadMsgCount = unreadMsgCount;
+    public final void setUnreadMsgCount(final Integer p_unreadMsgCount) {
+        unreadMsgCount = p_unreadMsgCount;
     }
 
-    public Boolean getDeleted() {
+    public final Boolean getDeleted() {
         return deleted;
     }
 
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
+    public final void setDeleted(final Boolean p_deleted) {
+        deleted = p_deleted;
     }
 
-    public Set<Picture> getSentPictures() {
+    public final Set<Picture> getSentPictures() {
         return sentPictures;
     }
 
-    public void setSentPictures(Set<Picture> sentPictures) {
-        this.sentPictures = sentPictures;
+    public final void setSentPictures(final Set<Picture> p_sentPictures) {
+        sentPictures = p_sentPictures;
     }
 
 }

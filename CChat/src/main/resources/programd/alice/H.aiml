@@ -3837,9 +3837,8 @@
 		<pattern>HI *</pattern>
 		<template>
 			Hi there
-			<get name="name" />
-			.
-			<sr />
+			<get name="name" />.
+			<!-- <sr /> -->
 		</template>
 	</category>
 	<category>
@@ -3857,8 +3856,7 @@
 		<pattern>HI ALICE</pattern>
 		<template>
 			Hi there
-			<get name="name" />
-			!
+			<get name="name" />!
 		</template>
 	</category>
 	<category>

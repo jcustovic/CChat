@@ -60,7 +60,7 @@ public class Bot extends HLayout {
         final Canvas canvas = new Canvas();
 
         final ListGrid messageDataGrid = new ListGrid();
-        messageDataGrid.setWidth(500);
+        messageDataGrid.setWidth(800);
         messageDataGrid.setHeight(200);
         messageDataGrid.setCanEdit(false);
         messageDataGrid.setWrapCells(true);  
@@ -89,9 +89,9 @@ public class Bot extends HLayout {
         dataSource.setDataURL(Constants.CONTEXT_PATH + "admin/TalkToBot");
 
         final DataSourceTextField botIdField = new DataSourceTextField("botId", "Bot", 40, true);
-        final DataSourceTextField userNameField = new DataSourceTextField("message", "Message", 100, true);
+        final DataSourceTextField questionField = new DataSourceTextField("message", "Message", 1000, true);
 
-        dataSource.setFields(botIdField, userNameField);
+        dataSource.setFields(botIdField, questionField);
 
         sendMsgForm.setDataSource(dataSource);
         sendMsgForm.setAddDropValues(false);
@@ -106,7 +106,7 @@ public class Bot extends HLayout {
 
         final TextItem botIdItem = new TextItem();
         botIdItem.setName("botId");
-        botIdItem.setValue("AliceBot");
+        botIdItem.setValue("SimpleBot");
         botIdItem.setTitle("Bot");
         botIdItem.setTitleAlign(Alignment.LEFT);
         botIdItem.setDisabled(true);
@@ -116,7 +116,7 @@ public class Bot extends HLayout {
         messageItem.setTitle("Say");
         messageItem.setTitleAlign(Alignment.LEFT);
         messageItem.setName("message");
-        messageItem.setLength(100);
+        messageItem.setLength(1000);
         messageItem.setColSpan(2);
         messageItem.setWidth("*");
         messageItem.setHeight("*");
@@ -130,7 +130,6 @@ public class Bot extends HLayout {
             public void onClick(com.smartgwt.client.widgets.events.ClickEvent event) {
                 if (sendMsgForm.validate()) {
                     messageDataGrid.getRecordList().addAt(new MessageRecord("You: " + messageItem.getValueAsString()), 0);
-//                    messageDataGrid.addData(new MessageRecord("You: " + messageItem.getValueAsString()));
                     sendMsgForm.submit();
                     messageItem.clearValue();
                 }

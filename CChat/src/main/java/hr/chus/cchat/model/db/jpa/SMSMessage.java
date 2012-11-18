@@ -87,26 +87,30 @@ public class SMSMessage extends AbstractBaseEntity {
     @JoinColumn(name = "nick_id", nullable = true)
     private Nick                   nick;
 
+    @Column(name = "bot_response", columnDefinition = "BIT")
+    private Boolean                botResponse = Boolean.FALSE;
+
     public SMSMessage() {}
 
-    public SMSMessage(User user, Operator operator, Date time, String text, String sc, ServiceProvider serviceProvider, Direction direction) {
-        this.user = user;
-        this.operator = operator;
-        this.time = time;
-        this.text = text;
-        this.sc = sc;
-        this.serviceProvider = serviceProvider;
-        this.direction = direction;
+    public SMSMessage(final User p_user, final Operator p_operator, final Date p_time, final String p_text, final String p_sc,
+            final ServiceProvider p_serviceProvider, final Direction p_direction) {
+        user = p_user;
+        operator = p_operator;
+        time = p_time;
+        text = p_text;
+        sc = p_sc;
+        serviceProvider = p_serviceProvider;
+        direction = p_direction;
     }
 
     @Override
-    public String toString() {
+    public final String toString() {
         return String.format("SMSMessage[ID: %s, Msisdn: %s, Operator: %s, Text: %s, SC: %s, ServiceName: %s]", new Object[] { getId(), user.getMsisdn(),
                 operator.getName(), text, sc, serviceProvider.getServiceName() });
     }
 
     @Override
-    public boolean equals(final Object object) {
+    public final boolean equals(final Object object) {
         if (object == null) return false;
         if (this == object) return true;
         if (!(object instanceof SMSMessage)) return false;
@@ -117,101 +121,109 @@ public class SMSMessage extends AbstractBaseEntity {
 
     // Getters & Setters
 
-    public String getGatewayId() {
+    public final String getGatewayId() {
         return gatewayId;
     }
 
-    public void setGatewayId(String gatewayId) {
-        this.gatewayId = gatewayId;
+    public final void setGatewayId(final String p_gatewayId) {
+        gatewayId = p_gatewayId;
     }
 
-    public User getUser() {
+    public final User getUser() {
         return user;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public final void setUser(final User p_user) {
+        user = p_user;
     }
 
-    public Operator getOperator() {
+    public final Operator getOperator() {
         return operator;
     }
 
-    public void setOperator(Operator operator) {
-        this.operator = operator;
+    public final void setOperator(final Operator p_operator) {
+        operator = p_operator;
     }
 
     @JSON(format = "yyyy-MM-dd'T'HH:mm:ssZ")
-    public Date getTime() {
+    public final Date getTime() {
         return time;
     }
 
-    public void setTime(Date time) {
-        this.time = time;
+    public final void setTime(final Date p_time) {
+        time = p_time;
     }
 
-    public String getText() {
+    public final String getText() {
         return text;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public final void setText(final String p_text) {
+        text = p_text;
     }
 
-    public String getSc() {
+    public final String getSc() {
         return sc;
     }
 
-    public void setSc(String sc) {
-        this.sc = sc;
+    public final void setSc(String p_sc) {
+        sc = p_sc;
     }
 
-    public ServiceProvider getServiceProvider() {
+    public final ServiceProvider getServiceProvider() {
         return serviceProvider;
     }
 
-    public void setServiceProvider(ServiceProvider serviceProvider) {
-        this.serviceProvider = serviceProvider;
+    public final void setServiceProvider(final ServiceProvider p_serviceProvider) {
+        serviceProvider = p_serviceProvider;
     }
 
-    public ServiceProviderKeyword getServiceProviderKeyword() {
+    public final ServiceProviderKeyword getServiceProviderKeyword() {
         return serviceProviderKeyword;
     }
 
-    public void setServiceProviderKeyword(ServiceProviderKeyword serviceProviderKeyword) {
-        this.serviceProviderKeyword = serviceProviderKeyword;
+    public final void setServiceProviderKeyword(final ServiceProviderKeyword p_serviceProviderKeyword) {
+        serviceProviderKeyword = p_serviceProviderKeyword;
     }
 
-    public Direction getDirection() {
+    public final Direction getDirection() {
         return direction;
     }
 
-    public void setDirection(Direction direction) {
-        this.direction = direction;
+    public final void setDirection(final Direction p_direction) {
+        direction = p_direction;
     }
 
-    public DeliveryStatus getDeliveryStatus() {
+    public final DeliveryStatus getDeliveryStatus() {
         return deliveryStatus;
     }
 
-    public void setDeliveryStatus(DeliveryStatus deliveryStatus) {
-        this.deliveryStatus = deliveryStatus;
+    public final void setDeliveryStatus(final DeliveryStatus p_deliveryStatus) {
+        deliveryStatus = p_deliveryStatus;
     }
 
-    public String getDeliveryMessage() {
+    public final String getDeliveryMessage() {
         return deliveryMessage;
     }
 
-    public void setDeliveryMessage(String deliveryMessage) {
-        this.deliveryMessage = deliveryMessage;
+    public final void setDeliveryMessage(final String p_deliveryMessage) {
+        deliveryMessage = p_deliveryMessage;
     }
 
-    public Nick getNick() {
+    public final Nick getNick() {
         return nick;
     }
 
-    public void setNick(Nick nick) {
-        this.nick = nick;
+    public final void setNick(final Nick p_nick) {
+        nick = p_nick;
+    }
+
+    public final Boolean getBotResponse() {
+        return botResponse;
+    }
+
+    public final void setBotResponse(final Boolean p_botResponse) {
+        botResponse = p_botResponse;
     }
 
 }

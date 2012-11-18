@@ -1,4 +1,4 @@
-package hr.chus.cchat.struts2.action.admin;
+package hr.chus.cchat.struts2.action.common;
 
 import hr.chus.cchat.db.service.NickService;
 import hr.chus.cchat.model.db.jpa.Nick;
@@ -17,17 +17,17 @@ import com.opensymphony.xwork2.ActionSupport;
  * @author Jan Čustović (jan.custovic@gmail.com)
  */
 @SuppressWarnings("serial")
-public class AdminNickList extends ActionSupport {
+public class NickList extends ActionSupport {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AdminNickList.class);
+    private static final Logger   LOG = LoggerFactory.getLogger(NickList.class);
 
     @Autowired
-    private NickService         nickService;
+    private transient NickService nickService;
 
-    private List<Nick>          nickList;
+    private List<Nick>            nickList;
 
     @Override
-    public String execute() {
+    public final String execute() {
         nickList = nickService.getAllNicks();
         LOG.debug("Got {} nicks.", nickList.size());
 
@@ -36,12 +36,8 @@ public class AdminNickList extends ActionSupport {
 
     // Getters & setters
 
-    public List<Nick> getNickList() {
+    public final List<Nick> getNickList() {
         return nickList;
-    }
-
-    public void setNickList(List<Nick> nickList) {
-        this.nickList = nickList;
     }
 
 }

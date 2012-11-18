@@ -3,370 +3,374 @@ package hr.chus.cchat.client.smartgwt.client.i18n;
 import com.google.gwt.i18n.client.Constants;
 
 /**
- * 
  * @author Jan Čustović (jan.custovic@gmail.com)
- * 
  */
 public interface Dictionary extends Constants {
 
-	@DefaultStringValue("Username")
-	String username();
+    @DefaultStringValue("Username")
+    String username();
 
-	@DefaultStringValue("Password")
-	String password();
+    @DefaultStringValue("Password")
+    String password();
 
-	@DefaultStringValue("Role")
-	String role();
+    @DefaultStringValue("Role")
+    String role();
 
-	@DefaultStringValue("Name")
-	String name();
+    @DefaultStringValue("Name")
+    String name();
 
-	@DefaultStringValue("Surname")
-	String surname();
+    @DefaultStringValue("Surname")
+    String surname();
 
-	@DefaultStringValue("Email")
-	String email();
+    @DefaultStringValue("Email")
+    String email();
 
-	@DefaultStringValue("Active")
-	String isActive();
+    @DefaultStringValue("Active")
+    String isActive();
 
-	@DefaultStringValue("Disabled")
-	String isDisabled();
+    @DefaultStringValue("Disabled")
+    String isDisabled();
 
-	@DefaultStringValue("Disable")
-	String disable();
+    @DefaultStringValue("Disable")
+    String disable();
 
-	@DefaultStringValue("Operators")
-	String operators();
+    @DefaultStringValue("Operators")
+    String operators();
 
-	@DefaultStringValue("Nicks")
-	String nicks();
+    @DefaultStringValue("Nicks")
+    String nicks();
 
-	@DefaultStringValue("Pictures")
-	String pictures();
+    @DefaultStringValue("Pictures")
+    String pictures();
 
-	@DefaultStringValue("Loading...")
-	String loading();
+    @DefaultStringValue("Loading...")
+    String loading();
 
-	@DefaultStringValue("Menu")
-	String menu();
+    @DefaultStringValue("Menu")
+    String menu();
 
-	@DefaultStringValue("Settings")
-	String settings();
+    @DefaultStringValue("Settings")
+    String settings();
 
-	@DefaultStringValue("Main")
-	String main();
+    @DefaultStringValue("Main")
+    String main();
 
-	@DefaultStringValue("Operators list")
-	String operatorsList();
+    @DefaultStringValue("Operators list")
+    String operatorsList();
 
-	@DefaultStringValue("Update")
-	String update();
+    @DefaultStringValue("Update")
+    String update();
 
-	@DefaultStringValue("Saving data...")
-	String savingData();
+    @DefaultStringValue("Saving data...")
+    String savingData();
 
-	@DefaultStringValue("Delete")
-	String delete();
+    @DefaultStringValue("Delete")
+    String delete();
 
-	@DefaultStringValue("Add new operator")
-	String addNewOperator();
+    @DefaultStringValue("Add new operator")
+    String addNewOperator();
 
-	@DefaultStringValue("Add new")
-	String addNew();
+    @DefaultStringValue("Add new")
+    String addNew();
 
-	@DefaultStringValue("Edit operator")
-	String editOperator();
+    @DefaultStringValue("Edit operator")
+    String editOperator();
 
-	@DefaultStringValue("Description")
-	String description();
+    @DefaultStringValue("Description")
+    String description();
 
-	@DefaultStringValue("Nick list")
-	String nickList();
+    @DefaultStringValue("Nick list")
+    String nickList();
 
-	@DefaultStringValue("If you delete this nick, picture assigned to this nick will be unassigned! Are u sure you want this?")
-	String nickDeleteWarning();
+    @DefaultStringValue("If you delete this nick, picture assigned to this nick will be unassigned! Are u sure you want this?")
+    String nickDeleteWarning();
 
-	@DefaultStringValue("Confirm")
-	String confirm();
+    @DefaultStringValue("Confirm")
+    String confirm();
 
-	@DefaultStringValue("Show pictures")
-	String showPictures();
+    @DefaultStringValue("Show pictures")
+    String showPictures();
 
-	@DefaultStringValue("Add new nick")
-	String addNewNick();
+    @DefaultStringValue("Add new nick")
+    String addNewNick();
 
-	@DefaultStringValue("Save")
-	String save();
+    @DefaultStringValue("Save")
+    String save();
 
-	@DefaultStringValue("Edit nick")
-	String editNick();
+    @DefaultStringValue("Edit nick")
+    String editNick();
 
-	@DefaultStringValue("Type")
-	String type();
+    @DefaultStringValue("Type")
+    String type();
 
-	@DefaultStringValue("Size (bytes)")
-	String sizeBytes();
+    @DefaultStringValue("Size (bytes)")
+    String sizeBytes();
 
-	@DefaultStringValue("Assigned nick")
-	String assignedNick();
+    @DefaultStringValue("Assigned nick")
+    String assignedNick();
 
-	@DefaultStringValue("Picture list")
-	String pictureList();
+    @DefaultStringValue("Picture list")
+    String pictureList();
 
-	@DefaultStringValue("Picture name")
-	String imageName();
+    @DefaultStringValue("Picture name")
+    String imageName();
 
-	@DefaultStringValue("Edit picture")
-	String editPicture();
+    @DefaultStringValue("Edit picture")
+    String editPicture();
 
-	@DefaultStringValue("Nick")
-	String nick();
+    @DefaultStringValue("Nick")
+    String nick();
 
-	@DefaultStringValue("No images match the specified filter")
-	String noImageFound();
+    @DefaultStringValue("No images match the specified filter")
+    String noImageFound();
 
-	@DefaultStringValue("Find")
-	String find();
+    @DefaultStringValue("Find")
+    String find();
 
-	@DefaultStringValue("Picture uploader")
-	String pictureUploader();
+    @DefaultStringValue("Picture uploader")
+    String pictureUploader();
 
-	@DefaultStringValue("Image")
-	String picture();
+    @DefaultStringValue("Image")
+    String picture();
 
-	@DefaultStringValue("Upload")
-	String upload();
+    @DefaultStringValue("Upload")
+    String upload();
 
-	@DefaultStringValue("Uploading...")
-	String uploading();
+    @DefaultStringValue("Uploading...")
+    String uploading();
 
-	@DefaultStringValue("Are you sure?")
-	String regularConfirm();
+    @DefaultStringValue("Are you sure?")
+    String regularConfirm();
 
-	@DefaultStringValue("Close")
-	String close();
+    @DefaultStringValue("Close")
+    String close();
 
-	@DefaultStringValue("Upload done!")
-	String uploadDone();
+    @DefaultStringValue("Upload done!")
+    String uploadDone();
 
-	@DefaultStringValue("Upload failed!")
-	String uploadFailed();
+    @DefaultStringValue("Upload failed!")
+    String uploadFailed();
 
-	@DefaultStringValue("Don't assign nick...")
-	String noNick();
+    @DefaultStringValue("Don't assign nick...")
+    String noNick();
 
-	@DefaultStringValue("Yes")
-	String yes();
+    @DefaultStringValue("Yes")
+    String yes();
 
-	@DefaultStringValue("No")
-	String no();
+    @DefaultStringValue("No")
+    String no();
 
-	@DefaultStringValue("Users")
-	String users();
+    @DefaultStringValue("Users")
+    String users();
 
-	@DefaultStringValue("Empty set")
-	String emptySet();
+    @DefaultStringValue("Empty set")
+    String emptySet();
 
-	@DefaultStringValue("Field is required")
-	String fieldIsRequired();
+    @DefaultStringValue("Field is required")
+    String fieldIsRequired();
 
-	@DefaultStringValue("Invalid email address")
-	String invalidEmail();
+    @DefaultStringValue("Invalid email address")
+    String invalidEmail();
 
-	@DefaultStringValue("Errors happend")
-	String errors();
+    @DefaultStringValue("Errors happend")
+    String errors();
 
-	@DefaultStringValue("Not set")
-	String notSet();
+    @DefaultStringValue("Not set")
+    String notSet();
 
-	@DefaultStringValue("Search")
-	String search();
+    @DefaultStringValue("Search")
+    String search();
 
-	@DefaultStringValue("Operator")
-	String operator();
+    @DefaultStringValue("Operator")
+    String operator();
 
-	@DefaultStringValue("Service provider")
-	String serviceProvider();
+    @DefaultStringValue("Service provider")
+    String serviceProvider();
 
-	@DefaultStringValue("Phone no.")
-	String msisdn();
+    @DefaultStringValue("Phone no.")
+    String msisdn();
 
-	@DefaultStringValue("Address")
-	String address();
+    @DefaultStringValue("Address")
+    String address();
 
-	@DefaultStringValue("Birth date")
-	String birthdate();
+    @DefaultStringValue("Birth date")
+    String birthdate();
 
-	@DefaultStringValue("Join date")
-	String joinedDate();
+    @DefaultStringValue("Join date")
+    String joinedDate();
 
-	@DefaultStringValue("Notes")
-	String notes();
+    @DefaultStringValue("Notes")
+    String notes();
 
-	@DefaultStringValue("Short code")
-	String shortCode();
+    @DefaultStringValue("Short code")
+    String shortCode();
 
-	@DefaultStringValue("Invalid date")
-	String invalidDate();
+    @DefaultStringValue("Invalid date")
+    String invalidDate();
 
-	@DefaultStringValue("Fetch size")
-	String fetchSize();
+    @DefaultStringValue("Fetch size")
+    String fetchSize();
 
-	@DefaultStringValue("Send message")
-	String sendMessage();
+    @DefaultStringValue("Send message")
+    String sendMessage();
 
-	@DefaultStringValue("Next")
-	String next();
+    @DefaultStringValue("Send bot message")
+    String sendBotMessage();
 
-	@DefaultStringValue("Previous")
-	String previous();
+    @DefaultStringValue("Next")
+    String next();
 
-	@DefaultStringValue("Contacting server...")
-	String contactingServer();
+    @DefaultStringValue("Previous")
+    String previous();
 
-	@DefaultStringValue("Finding Records that match your criteria...")
-	String findingRecordThatMatchCriteria();
+    @DefaultStringValue("Contacting server...")
+    String contactingServer();
 
-	@DefaultStringValue("Deleting Record(s)...")
-	String deletingRecord();
+    @DefaultStringValue("Finding Records that match your criteria...")
+    String findingRecordThatMatchCriteria();
 
-	@DefaultStringValue("Text")
-	String text();
+    @DefaultStringValue("Deleting Record(s)...")
+    String deletingRecord();
 
-	@DefaultStringValue("Characters allowed")
-	String charactersAllowed();
+    @DefaultStringValue("Text")
+    String text();
 
-	@DefaultStringValue("Direction")
-	String direction();
+    @DefaultStringValue("Characters allowed")
+    String charactersAllowed();
 
-	@DefaultStringValue("Received time")
-	String receivedTime();
+    @DefaultStringValue("Direction")
+    String direction();
 
-	@DefaultStringValue("Messages")
-	String messages();
+    @DefaultStringValue("Received time")
+    String receivedTime();
 
-	@DefaultStringValue("Sent")
-	String sent();
+    @DefaultStringValue("Messages")
+    String messages();
 
-	@DefaultStringValue("Received")
-	String received();
+    @DefaultStringValue("Sent")
+    String sent();
 
-	@DefaultStringValue("Received time from")
-	String receivedTimeStart();
+    @DefaultStringValue("Received")
+    String received();
 
-	@DefaultStringValue("Received time to")
-	String receivedTimeEnd();
+    @DefaultStringValue("Received time from")
+    String receivedTimeStart();
 
-	@DefaultStringValue("Statistics")
-	String statistics();
+    @DefaultStringValue("Received time to")
+    String receivedTimeEnd();
 
-	@DefaultStringValue("About")
-	String about();
+    @DefaultStringValue("Statistics")
+    String statistics();
 
-	@DefaultStringValue("Chat application")
-	String chatApp();
+    @DefaultStringValue("About")
+    String about();
 
-	@DefaultStringValue("Statistics per service provider")
-	String statisticsPerSP();
+    @DefaultStringValue("Chat application")
+    String chatApp();
 
-	@DefaultStringValue("Statistics per operator")
-	String statisticsPerOperator();
+    @DefaultStringValue("Statistics per service provider")
+    String statisticsPerSP();
 
-	@DefaultStringValue("Live statistics")
-	String liveStatistics();
+    @DefaultStringValue("Statistics per operator")
+    String statisticsPerOperator();
 
-	@DefaultStringValue("From date")
-	String fromDate();
+    @DefaultStringValue("Live statistics")
+    String liveStatistics();
 
-	@DefaultStringValue("To date")
-	String toDate();
+    @DefaultStringValue("From date")
+    String fromDate();
 
-	@DefaultStringValue("Statistics type")
-	String statisticsType();
+    @DefaultStringValue("To date")
+    String toDate();
 
-	@DefaultStringValue("Graphics loading...")
-	String graphicsLoading();
+    @DefaultStringValue("Statistics type")
+    String statisticsType();
 
-	@DefaultStringValue("Graphics loaded")
-	String graphicsLoaded();
+    @DefaultStringValue("Graphics loading...")
+    String graphicsLoading();
 
-	@DefaultStringValue("Sum")
-	String sum();
+    @DefaultStringValue("Graphics loaded")
+    String graphicsLoaded();
 
-	@DefaultStringValue("Home")
-	String home();
+    @DefaultStringValue("Sum")
+    String sum();
 
-	@DefaultStringValue("Header")
-	String header();
+    @DefaultStringValue("Home")
+    String home();
 
-	@DefaultStringValue("Footer")
-	String footer();
+    @DefaultStringValue("Header")
+    String header();
 
-	@DefaultStringValue("Today")
-	String today();
+    @DefaultStringValue("Footer")
+    String footer();
 
-	@DefaultStringValue("Please select a file")
-	String pleaseSelectAFile();
+    @DefaultStringValue("Today")
+    String today();
 
-	@DefaultStringValue("Deleted")
-	String deleted();
+    @DefaultStringValue("Please select a file")
+    String pleaseSelectAFile();
 
-	@DefaultStringValue("No items to show")
-	String noItemsToShow();
+    @DefaultStringValue("Deleted")
+    String deleted();
 
-	@DefaultStringValue("Active")
-	String active();
+    @DefaultStringValue("No items to show")
+    String noItemsToShow();
 
-	@DefaultStringValue("Not active")
-	String notActive();
+    @DefaultStringValue("Active")
+    String active();
 
-	@DefaultStringValue("You are not active. Would you like to activate yourself?")
-	String wouldYouLikeToActivateYourself();
+    @DefaultStringValue("Not active")
+    String notActive();
 
-	@DefaultStringValue("Total sms messages found in database")
-	String totalSmsMessagesInDB();
+    @DefaultStringValue("You are not active. Would you like to activate yourself?")
+    String wouldYouLikeToActivateYourself();
 
-	@DefaultStringValue("Total user found in database")
-	String totalUsersInDB();
+    @DefaultStringValue("Total sms messages found in database")
+    String totalSmsMessagesInDB();
 
-	@DefaultStringValue("User id")
-	String userId();
+    @DefaultStringValue("Total user found in database")
+    String totalUsersInDB();
 
-	@DefaultStringValue("My users")
-	String myUsers();
+    @DefaultStringValue("User id")
+    String userId();
 
-	@DefaultStringValue("Last 48h users")
-	String last48HourUsers();
+    @DefaultStringValue("My users")
+    String myUsers();
 
-	@DefaultStringValue("Random users")
-	String randomUsers();
+    @DefaultStringValue("Last 48h users")
+    String last48HourUsers();
 
-	@DefaultStringValue("Last message date")
-	String lastMsgDate();
+    @DefaultStringValue("Random users")
+    String randomUsers();
 
-	@DefaultStringValue("Unread message count")
-	String unreadMsgCount();
+    @DefaultStringValue("Last message date")
+    String lastMsgDate();
 
-	@DefaultStringValue("time")
-	String time();
+    @DefaultStringValue("Unread message count")
+    String unreadMsgCount();
 
-	@DefaultStringValue("Edit user")
-	String editUser();
+    @DefaultStringValue("time")
+    String time();
 
-	@DefaultStringValue("Message sent successfully")
-	String messageSentSuccessfully();
-	
-	@DefaultStringValue("Sending message failed")
-	String sendingMessageFailed();
+    @DefaultStringValue("Edit user")
+    String editUser();
 
-	@DefaultStringValue("Keyword")
-	String keyword();
+    @DefaultStringValue("Message sent successfully")
+    String messageSentSuccessfully();
 
-	@DefaultStringValue("External")
-	String external();
-	
-	@DefaultStringValue("Bot")
+    @DefaultStringValue("Sending message failed")
+    String sendingMessageFailed();
+
+    @DefaultStringValue("Keyword")
+    String keyword();
+
+    @DefaultStringValue("External")
+    String external();
+
+    @DefaultStringValue("Bot")
     String bot();
+
+    @DefaultStringValue("Bot not yet selected")
+    String noBotSelected();
 
 }

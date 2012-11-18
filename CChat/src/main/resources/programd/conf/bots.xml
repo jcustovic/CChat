@@ -3,7 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://aitools.org/programd/4.6/bot-configuration http://aitools.org/programd/4.6/bot-configuration.xsd">
 	
-	<bot id="AliceBot" enabled="true">
+	<!-- <bot id="AliceBot" enabled="true">
 		<properties href="properties.xml" />
 		<predicates href="predicates.xml" />
 		<substitutions href="substitutions.xml" />
@@ -11,6 +11,16 @@
 		<listeners href="listeners.xml" />
 		
 		<learn>../alice/*.aiml</learn>
+	</bot> -->
+	
+	<bot id="SimpleBot" enabled="true">
+		<properties href="properties.xml" />
+		<predicates href="predicates.xml" />
+		<substitutions href="substitutions.xml" />
+		<sentence-splitters href="sentence-splitters.xml" />
+		<listeners href="listeners.xml" />
+		
+		<learn>../simpleBot/*.aiml</learn>
 	</bot>
 	
 </bots>

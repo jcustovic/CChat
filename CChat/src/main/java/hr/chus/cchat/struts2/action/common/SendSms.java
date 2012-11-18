@@ -43,6 +43,7 @@ public class SendSms extends ActionSupport implements UserAware {
     private Boolean             status;
     private String              errorMsg;
     private SMSMessage          smsMessage;
+    private Boolean             botResponse;
 
     @Override
     public final void validate() {
@@ -79,7 +80,7 @@ public class SendSms extends ActionSupport implements UserAware {
 
         status = false;
         try {
-            smsMessage = messageService.sendMessage(newSmsMessage, user, msgType);
+            smsMessage = messageService.sendMessage(newSmsMessage, botResponse, user, msgType);
             LOG.info("Message {} sent. Gateway response id: {}", smsMessage, smsMessage.getGatewayId());
 
             // Assign operator to user if not assigned already
@@ -110,7 +111,7 @@ public class SendSms extends ActionSupport implements UserAware {
 
     @Override
     public final void setAuthenticatedUser(final Operator p_operator) {
-        this.operator = p_operator;
+        operator = p_operator;
     }
 
     public final Boolean getStatus() {
@@ -122,19 +123,23 @@ public class SendSms extends ActionSupport implements UserAware {
     }
 
     public final void setUser(final User p_user) {
-        this.user = p_user;
+        user = p_user;
     }
 
     public final void setMsgType(final String p_msgType) {
-        this.msgType = p_msgType;
+        msgType = p_msgType;
     }
 
     public final void setText(final String p_text) {
-        this.text = p_text;
+        text = p_text;
     }
 
     public final SMSMessage getSmsMessage() {
         return smsMessage;
+    }
+
+    public final void setBotResponse(final Boolean p_botResponse) {
+        botResponse = p_botResponse;
     }
 
 }

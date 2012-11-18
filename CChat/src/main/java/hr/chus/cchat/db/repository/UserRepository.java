@@ -12,12 +12,15 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * @author Jan Čustović (jan.custovic@gmail.com)
+ */
 @Transactional(readOnly = true)
 public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query("SELECT COUNT(u) FROM User u WHERE u.operator = ?1 AND u.unreadMsgCount > 0")
     Long countByOperatorAndUnread(Operator p_operator);
-    
+
     @Query("SELECT u FROM User u WHERE u.operator IS NULL AND u.unreadMsgCount > 0")
     List<User> findUnassigned(Pageable p_pageable);
 
