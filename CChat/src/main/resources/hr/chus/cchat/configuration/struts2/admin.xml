@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE struts PUBLIC
-    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
-    "http://struts.apache.org/dtds/struts-2.0.dtd">
-    
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
 <struts>
 	
 	<package name="admin" namespace="/admin" extends="json-default">
@@ -60,6 +59,41 @@
         </action>
 		
 		<!-- Admin area -->
+		
+		<action name="Common*JSON" class="hr.chus.cchat.struts2.action.common.{1}">
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="excludeProperties">
+				    user.sentPictures
+				    , user.msisdn
+				    , user.serviceProvider
+					, userList.*\.msisdn
+					, smsMessageList.*\.msisdn
+					, smsMessageList.*\.operator.*\.role
+					, smsMessageList.*\.operator.*\.password
+					, smsMessageList.*\.user.*\.sentPictures
+					, smsMessageList.*\.user.*\.serviceProvider
+					, smsMessageList.*\.nick
+					, userList.*\.sentPictures
+				</param>
+			</result>
+			<result name="input" type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="excludeProperties">
+				    user.sentPictures
+				    , user.msisdn
+				    , user.serviceProvider
+				</param>
+			</result>
+			<result name="error" type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="excludeProperties">
+				    user.sentPictures
+				    , user.msisdn
+				    , user.serviceProvider
+				</param>
+			</result>
+		</action>
 		
 		<action name="Admin*List" class="hr.chus.cchat.struts2.action.admin.Admin{1}List">
 			<result>admin.{1}List</result>

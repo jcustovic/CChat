@@ -54,37 +54,41 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User editUserAdmin(User user) {
-        if (user.getId() != null) {
-            User us = getUserById(user.getId(), false);
-            us.setAddress(user.getAddress());
-            us.setBirthdate(user.getBirthdate());
-            us.setDeleted(user.getDeleted());
-            us.setName(user.getName());
-            us.setNick(user.getNick());
-            us.setNotes(user.getNotes());
-            us.setOperator(user.getOperator());
-            us.setSurname(user.getSurname());
-            us.setUnreadMsgCount(user.getUnreadMsgCount());
-            return editUser(us);
+    public User editUserAdmin(final User p_user) {
+        if (p_user.getId() != null) {
+            final User user = getUserById(p_user.getId(), false);
+            user.setAddress(p_user.getAddress());
+            user.setBirthdate(p_user.getBirthdate());
+            user.setDeleted(p_user.getDeleted());
+            user.setName(p_user.getName());
+            user.setNick(p_user.getNick());
+            user.setBot(p_user.getBot());
+            user.setNotes(p_user.getNotes());
+            user.setOperator(p_user.getOperator());
+            user.setSurname(p_user.getSurname());
+            user.setUnreadMsgCount(p_user.getUnreadMsgCount());
+            
+            return editUser(user);
         }
-        return editUser(user);
+        
+        return editUser(p_user);
     }
 
     @Override
-    public User editUserOperator(User user) {
-        if (user.getId() != null) {
-            User us = getUserById(user.getId(), false);
-            us.setAddress(user.getAddress());
-            us.setBirthdate(user.getBirthdate());
-            us.setName(user.getName());
-            us.setNick(user.getNick());
-            us.setNotes(user.getNotes());
-            us.setSurname(user.getSurname());
-            return editUser(us);
+    public User editUserOperator(final User p_user) {
+        if (p_user.getId() != null) {
+            final User user = getUserById(p_user.getId(), false);
+            user.setAddress(p_user.getAddress());
+            user.setBirthdate(p_user.getBirthdate());
+            user.setName(p_user.getName());
+            user.setNick(p_user.getNick());
+            user.setBot(p_user.getBot());
+            user.setNotes(p_user.getNotes());
+            user.setSurname(p_user.getSurname());
+            return editUser(user);
         }
         
-        return editUser(user);
+        return editUser(p_user);
     }
 
     @Override

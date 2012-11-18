@@ -140,6 +140,7 @@
 		<substitute find="\bwont\b" replace="will not" />
 		<substitute find="\bwon t\b" replace="will not" />
 		<substitute find="\blet's\b" replace="let us" />
+		<substitute find="\blets\b" replace="let us" />
 		<substitute find="\bthey're\b" replace="they are" />
 		<substitute find="\bthey re\b" replace="they are" />
 		<substitute find="\bwasn't\b" replace="was not" />
@@ -196,7 +197,58 @@
 		<substitute find="\byou r\b" replace="you are" />
 		<substitute find="\bu\b" replace="you" />
 		<substitute find="\bur\b" replace="your" />
-		sentence protection
+		<substitute find="\bnyt\b" replace="night" />
+		
+		<substitute find="\btx\b" replace="text" />
+		<substitute find="\bknw\b" replace="know" />
+		<substitute find="\bpls\b" replace="please" />
+		<substitute find="\bme2\b" replace="me too" />
+		<substitute find="\bme 2\b" replace="me too" />
+		<substitute find="\b2 me\b" replace="to me" />
+		<substitute find="\b2me\b" replace="to me" />
+		<substitute find="\bu2\b" replace="you too" />
+		<substitute find="\bu 2\b" replace="you too" />
+		<substitute find="\bcam\b" replace="come" />
+		<substitute find="\bdnt\b" replace="do not" />
+		<!-- <substitute find="\beva\b" replace="ever" /> -->
+		<substitute find="\bfrm\b" replace="from" />
+		<substitute find="\bbein\b" replace="being" />
+		<substitute find="\bu r\b" replace="you are" />
+		<substitute find="\bmis\b" replace="miss" />
+		<substitute find="\bluv\b" replace="love" />
+		<substitute find="\b4 me\b" replace="for me" />
+		<substitute find="\b4me\b" replace="for me" />
+		<substitute find="\bcaming\b" replace="coming" />
+		<substitute find="\bdat\b" replace="that" />
+		<substitute find="\bgud\b" replace="good" />
+		<substitute find="\bremember 2\b" replace="remember to" />
+		<substitute find="\bnieght\b" replace="night" />
+		<substitute find="\bhw\b" replace="how" />
+		<substitute find="\bgudmorning\b" replace="good morning" />
+		<substitute find="\bfrnd\b" replace="friend" />
+		<substitute find="\bi ve\b" replace="i have" />
+		<substitute find="\b2 day\b" replace="today" />
+		<substitute find="\b2day\b" replace="today" />
+		<substitute find="\bno\b" replace="number" />
+		<substitute find="\byr\b" replace="your" />
+		<substitute find="\byo\b" replace="your" />
+		<substitute find="\btks\b" replace="thank" />
+		<substitute find="\btanx\b" replace="thank" />
+		<substitute find="\bbcoz\b" replace="because" />
+		<substitute find="\bhala\b" replace="call me" />
+		<substitute find="\bchristain\b" replace="christian" />
+		<substitute find="\bd u\b" replace="do you" />
+		<substitute find="\bhav\b" replace="have" />
+		<substitute find="\bicecream\b" replace="ice cream" />
+		<substitute find="\bkis\b" replace="kiss" />
+		<substitute find="\babt\b" replace="about" />
+		<substitute find="\bjst\b" replace="just" />
+		<substitute find="\br\b" replace="are" />
+		<substitute find="\bdng\b" replace="doing" />
+		<substitute find="\bma\b" replace="my" />
+		<substitute find="\bwhr\b" replace="where" />
+		
+		<!-- sentence protection -->
 		<substitute find="\{" replace=" beginscript " />
 		<substitute find="\}" replace=" endscript " />
 		<substitute find="\\" replace=" " />

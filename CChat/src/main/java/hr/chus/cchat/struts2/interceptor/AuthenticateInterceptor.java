@@ -20,7 +20,7 @@ import com.opensymphony.xwork2.interceptor.Interceptor;
 @SuppressWarnings("serial")
 public class AuthenticateInterceptor implements Interceptor {
 
-    private String role;
+    private String[] roles;
 
     @Override
     public void destroy() {}
@@ -29,10 +29,10 @@ public class AuthenticateInterceptor implements Interceptor {
     public void init() {}
 
     @Override
-    public String intercept(ActionInvocation actionInvocation) throws Exception {
-        Map<?, ?> session = actionInvocation.getInvocationContext().getSession();
-        Operator user = (Operator) session.get(ApplicationConstants.SESSION_USER_KEY);
-        if (user != null && user.getRole().getName().equals(getRole())) {
+    public final String intercept(ActionInvocation actionInvocation) throws Exception {
+        final Map<?, ?> session = actionInvocation.getInvocationContext().getSession();
+        final Operator user = (Operator) session.get(ApplicationConstants.SESSION_USER_KEY);
+        if (user != null && containsRole(user.getRole().getName())) {
             Action action = (Action) actionInvocation.getAction();
             if (action instanceof UserAware) {
                 ((UserAware) action).setAuthenticatedUser(user);
@@ -43,14 +43,20 @@ public class AuthenticateInterceptor implements Interceptor {
         }
     }
 
-    // Getters & setters
+    private boolean containsRole(final String p_roleName) {
+        for (final String role : roles) {
+            if (p_roleName.equalsIgnoreCase(role)) {
+                return true;
+            }
+        }
 
-    public String getRole() {
-        return role;
+        return false;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    // Getters & setters
+
+    public final void setRole(final String p_role) {
+        roles = p_role.split(",");
     }
 
 }

@@ -32,6 +32,10 @@ public abstract class AbstractBaseEntity implements Serializable {
         if (p_object == null) {
             return false;
         }
+        if (!(p_object instanceof AbstractBaseEntity)) {
+            return false;
+        }
+
         final AbstractBaseEntity be = (AbstractBaseEntity) p_object;
 
         return be.getId() != null && be.getId().equals(getId());

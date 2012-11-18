@@ -1155,8 +1155,7 @@
 				<li>Hey </li>
 				<li>Hi </li>
 			</random>
-			<set name="name" />
-			.
+			<set name="name" />.
 		</template>
 	</category>
 	<category>

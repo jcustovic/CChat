@@ -4,6 +4,7 @@ import hr.chus.cchat.db.service.SMSMessageService;
 import hr.chus.cchat.db.service.ServiceProviderKeywordService;
 import hr.chus.cchat.db.service.ServiceProviderService;
 import hr.chus.cchat.db.service.UserService;
+import hr.chus.cchat.gateway.GatewayResponseError;
 import hr.chus.cchat.gateway.SendMessageService;
 import hr.chus.cchat.model.db.jpa.SMSMessage;
 import hr.chus.cchat.model.db.jpa.SMSMessage.DeliveryStatus;
@@ -13,11 +14,13 @@ import hr.chus.cchat.model.db.jpa.ServiceProviderKeyword;
 import hr.chus.cchat.model.db.jpa.User;
 import hr.chus.cchat.service.MessageService;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.apache.http.HttpException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -141,7 +144,8 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public final SMSMessage sendMessage(final SMSMessage p_smsMessage, final User p_user, final String p_msgType) throws Exception {
+    public final SMSMessage sendMessage(final SMSMessage p_smsMessage, final Boolean p_botResponse, final User p_user, final String p_msgType)
+            throws HttpException, IOException, GatewayResponseError {
         String gatewayId = null;
         final SendMessageService sendMessageService;
         if (StringUtils.hasText(p_user.getServiceProvider().getSendServiceBeanName())) {
@@ -160,16 +164,17 @@ public class MessageServiceImpl implements MessageService {
         LOG.debug("Sending done. Message gateway id: {}", gatewayId);
         p_smsMessage.setGatewayId(gatewayId);
         p_smsMessage.setDeliveryStatus(DeliveryStatus.SENT_TO_GATEWAY);
+        p_smsMessage.setBotResponse(Boolean.TRUE.equals(p_botResponse));
 
         return smsMessageService.updateSMSMessage(p_smsMessage);
     }
 
     private void assignOperator(final User p_user) {
         // NOTE: UnreadMsgAssignerScheduler will do this for us.
-        //        final Operator operator = p_user.getOperator();
-        //        if (operator == null || !operator.getIsActive()) {
-        //            p_user.setOperator(operatorChooser.chooseOperator());
-        //        }
+        // final Operator operator = p_user.getOperator();
+        // if (operator == null || !operator.getIsActive()) {
+        //     p_user.setOperator(operatorChooser.chooseOperator());
+        // }
     }
 
 }

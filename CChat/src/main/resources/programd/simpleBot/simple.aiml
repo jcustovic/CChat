@@ -1,0 +1,1275 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0.1" xmlns="http://alicebot.org/2001/AIML-1.0.1">
+	<category>
+		<pattern>I received * text from this number *</pattern>
+		<template>
+			<random>
+				<li>When an angel came to me, he asked: "What is your wish for tonight?". I said: "Please take care of the person who's reading this message."</li>
+				<li>I promise that we will chat tomorrow... I have to sleep now cause I will get up early in the morning. Good night.</li>
+				<li>I am Karla from Bulgaria i am a woman(22y). I ll visit ur country in december. Will u be my friend?</li>
+				<li>I have ur number from a database from the internet</li>
+			</random>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>Please * who are you</pattern>
+		<template>
+			<srai>who are you</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>Please who are you</pattern>
+		<template>
+			<srai>who are you</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>who are you</pattern>
+		<template>
+			<random>
+				<li>My name is Nadia. What is your name? I am from Bulgaria. Would u like to be my friend?</li>
+				<li>I am yr friend Ella 4 Bulgaria, talk 2 me and let's have a perfect day together. How is yr day my darling?</li>
+				<li>Sorry i just got ur message! is a problem with my phone. So how are u?</li>
+				<li>Distance means so little when someone means so much. Especially when it is a friend like you.</li>
+				<li>Text me in one hour cuz i will take my dinner. U are also invited if u want!</li>
+			</random>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>What is your name *</pattern>
+		<template>
+			<random>
+				<li>My name is Nadia. What is your name? I am from Bulgaria and i will visit ur country in december. Would u like to be my friend?</li>
+				<li>In december when i will come to visit you i will make you a big surprise...because is Christmas..</li>
+				<li>Baby i am prepare my coffee and i am ready to start my day, you want to drink a coffee with me?</li>
+				<li>I will tks God for this friendship because  you make me verry happy.</li>
+				<li>I want 2 know u better..i'm blond, not very tall. slim, green eyes. white skin. What about u?</li>
+			</random>
+		</template>
+	</category>
+	
+	<category> 
+		<pattern>my name is *</pattern>
+		<template>
+			<random>
+				<li>Hey</li>
+				<li>Hi,</li>
+				<li>Hi there</li>
+				<li>Nice to meet you,</li>
+				<li>It's good to meet you,</li>
+				<li>That's a very nice name,</li>
+				<li>I am very pleased to meet you</li>
+				<li>I am always glad to make new friends,</li>
+				<li>I'm pleased to introduce myself to you,</li>
+			</random>
+			<set name="name"><star/></set>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>Hi * how are you *</pattern>
+		<template>
+			<srai>how are you <star index="2"/></srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>how are you *</pattern>
+		<template>
+			<srai>how are you</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>how are you</pattern>
+		<template>
+			<condition>
+				<li name="name" value="UNDEFIEND">
+					<random>
+						<li>Hi there. I'm fine. How are you?</li>
+						<li>Hi there. I'm great! How are you?</li>
+					</random>
+				</li>
+				<li>
+					<random>
+						<li>Hello, <get name="name"/>. I'm fine. How are you?</li>
+						<li>Hello, <get name="name"/>. I'm great! How are you?</li>
+					</random>
+				</li>
+			</condition>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>Hi * how are you *</pattern>
+		<template>
+			<srai>how are you <star index="2"/></srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* stop texting me *</pattern>
+		<template>
+			<random>
+				<li>God has a reason for allowing things to happen. We may never understand His wisdom but we simply have to trust His will. God bless you all the way</li>
+				<li>I saw ants crawl up the wall,even if they are busy, they still stop and communicate with each other. I hope we can be like them, would u like that?</li>
+				<li>Moon said to me, if ur friend is not messaging u why dont you leave ur friend.I looked at moon and said does ur sky ever leave u when u dont shine.</li>
+			</random>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* know you better</pattern>
+		<template>
+			<random>
+				<li>God has deposited Love, Joy, Prosperity, Peace, Laughter plus all Kinds of Blessings in Your ATM Account. Use Without Limit. The PIN Code is P.R.A.Y.E.R.</li>
+				<li>I have an idea. Lets play a game that will help us know each other better. Would u like it ?</li>
+				<li>Moon said to me, if ur friend is not messaging u why dont you leave ur friend.I looked at moon and said does ur sky ever leave u when u dont shine.</li>
+			</random>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>Good morning</pattern>
+		<template>
+			<random>
+				<li>Good Morning.</li>
+				<li>What plans do u have in this morning ?</li>
+			</random>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* tell me more about your self *</pattern>
+		<template>
+			<random>
+				<li>There are millions of people in this world, Then Why are you born? Bcoz, God will b expecting something from you which is not Possible by millions</li>
+				<li>I am prepairing myself for work...what about you, are u home?</li>
+				<li>May the God of Hope fill you with all joy and peace as you trust in him, so that you may overflow with hope by the power of the Holy Spirit. Be blessed!</li>
+				<li>Baby i am prepare my coffee and i am ready to start my day, you want to drink a coffee with me ?</li>
+				<li>Baby i am prepare my coffee and i am ready to start my day, you want to drink a coffee with me ?</li>
+			</random>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* do not bother me</pattern>
+		<template>
+			<random>
+				<li>For my Friend... Wherever u go,whatever u do, May God's angels watch over u.... :)</li>
+				<li>Sorry i just got ur message! is a problem with my phone. So how are u?</li>
+				<li>My dear i am in my  car on the way to work......i wish you to God bless your day...and smile....the life is good!</li>
+			</random>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* how much do you love me</pattern>
+		<template>
+			<random>
+				<li>My dear... do u believe in fate, in destiny?</li>
+				<li>Thousands of friends i make, Everyones hands i shake. But real friends are few and The best of them is YOU.</li>
+				<li>Do u want to be my husband ?  I want to be with u all my life</li>
+				<li>If u are a chocolate you are the sweetest. If u are a Teddy Bear u are the most huggable. And since u are my "FRIEND", u are the "BEST"!</li>
+				<li>Friendship is not a big fire which burns all day. Its a small lamp, that burns till the last day of life. U will be forever in my heart!!!</li>
+			</random>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* send your photo *</pattern>
+		<template>
+			<srai>send your photo</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>send your photo</pattern>
+		<template>
+			<random>
+				<li>The rule is simple:  I will ask u smth and u will give me the answer ( this is bcs I want 2 know u better), can I start ?</li>
+				<li>What's your favorite game,sport,place to go and hobby ?</li>
+				<li>Do u want to be my husband ?  I want to be with u all my life</li>
+				<li>If u are a chocolate you are the sweetest. If u are a Teddy Bear u are the most huggable. And since u are my "FRIEND", u are the "BEST"!</li>
+				<li>Friendship is not a big fire which burns all day. Its a small lamp, that burns till the last day of life. U will be forever in my heart!!!</li>
+			</random>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* was your night</pattern>
+		<template>
+			<srai>was your night</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* was your night *</pattern>
+		<template>
+			<srai>was your night</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>was your night</pattern>
+		<template>
+			<random>
+				<li>Life is full of beautiful things : soft sunset,pointed Rainbow, dedicate blossoms,love &amp; laughter ,Quiet moments &amp; fantastic people like U  &amp; ME.</li>
+				<li>Morning is not only sun rise but
+					A Beautiful Miracle of god that defeats darkness and spread light.
+					This may be a very beautiful day for you.!!
+				</li>
+				<li>What plans do u have in this morning ?</li>
+			</random>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>good night *</pattern>
+		<template>
+			<srai>sleep tight</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>good night</pattern>
+		<template>
+			<srai>sleep tight</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* good night *</pattern>
+		<template>
+			<srai>sleep tight</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* sweet dreams *</pattern>
+		<template>
+			<srai>sleep tight</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* sleep tight *</pattern>
+		<template>
+			<srai>sleep tight</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>sleep tight</pattern>
+		<template>
+			<random>
+				<li>Whenever you have a DREAM inside your HEART, Never let it go coz DREAMS are the TINY SEEDS, From which BEAUTIFUL TOMORROW GROWS Have a wonderful night!</li>
+				<li>Once The Moon Winks
+					At You Tonight
+					I Wish Sweet Dreams
+					Embrace You Tight
+					Hope Your Day Was
+					Quite All Right
+					And
+					Now I Bid You A
+					Lovely Good Night
+				</li>
+				<li>Prayer is the key that opens your day to every blessing. It also is a lock that closes the night to keep u safe while sleeping, and God is the Key. Right?</li>
+			</random>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* how are u feeling</pattern>
+		<template>
+			<srai>how are u feeling</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>how are u feeling *</pattern>
+		<template>
+			<srai>how are u feeling</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* how are u feeling *</pattern>
+		<template>
+			<srai>how are u feeling</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>what is your facebook profile *</pattern>
+		<template>
+			<srai>what is your facebook profile</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>what is your facebook profile</pattern>
+		<template>
+			<random>
+				<li>My dear i am in my  car on the way to work......i wish you to God bless your day...and smile....the life is good!</li>
+				<li>I have an idea. Lets play a game that will help us know each other better. Would u like it ?</li>
+				<li>The rule is simple:  I will ask u smth and u will give me the answer ( this is bcs I want 2 know u better), can I start ?</li>
+			</random>
+		</template>
+	</category>	
+	
+	<category>
+		<pattern>how are u feeling</pattern>
+		<template>
+			<random>
+				<li>Always ask God to give you what you deserve &amp; not what you desire. Your desires may be few but you deserve a lot. Have a Great Day!</li>
+				<li>I want to tell u  that you may never see how much I care for you. You may never hear how much I treasure you. Coz only here in my heart can you see them true.</li>
+			</random>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>how old are you</pattern>
+		<template>24, u?</template>
+	</category>
+	
+	<category>
+		<pattern>Yes * I want to be your friend *</pattern>
+		<template>
+			<srai>I want to be your friend</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>Yes * I want to be your friend</pattern>
+		<template>
+			<srai>I want to be your friend</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>I want to be your friend</pattern>
+		<template>
+			<random>
+				<li>May the God of Hope fill you with all joy and peace as you trust in him, so that you may overflow with hope by the power of the Holy Spirit. Be blessed!</li>
+				<li>Friendship is not a big fire which burns all day. Its a small lamp, that burns till the last day of life. U will be forever in my heart!!!</li>
+				<li>If u are a chocolate you are the sweetest. If u are a Teddy Bear u are the most huggable. And since u are my "FRIEND", u are the "BEST"!</li>
+				<li>The rule is simple:  I will ask u smth and u will give me the answer ( this is bcs I want 2 know u better), can I start ?</li>
+				<li>A true friend is hard to find, is always on mind,a true friend is someone like YOU !</li>
+			</random>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* are you christian *</pattern>
+		<template>
+			<srai>are you christian</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* are you christian</pattern>
+		<template>
+			<srai>are you christian</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* are you a christian *</pattern>
+		<template>
+			<srai>are you christian</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* are you a christian</pattern>
+		<template>
+			<srai>are you christian</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>are you christian</pattern>
+		<template>
+			<random>
+				<li>My dear i am in my  car on the way to work......i wish you to God bless your day...and smile....the life is good!</li>
+				<li>Whenever you smile for no reason &amp; whenever you feel an unexpected flutter of joy, just know that its because I'm thinking of you. Do u feel smth right now?</li>
+				<li>Talk happiness. Talk faith. Talk health. Say you are well, and all is well with you, and God shall hear your words and make them true. So true!!</li>
+			</random>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* life is good</pattern>
+		<template>
+			<random>
+				<li>Whenever you smile for no reason &amp; whenever you feel an unexpected flutter of joy, just know that its because I'm thinking of you. Do u feel smth right now?</li>
+				<li>Talk happiness. Talk faith. Talk health. Say you are well, and all is well with you, and God shall hear your words and make them true.So true!!</li>
+			</random>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>do you believe in faith *</pattern>
+		<template>
+			<srai>do you believe in faith</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* do you believe in faith *</pattern>
+		<template>
+			<srai>do you believe in faith</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>do you believe in faith</pattern>
+		<template>
+			<random>
+				<li>Whenever you smile for no reason &amp; whenever you feel an unexpected flutter of joy, just know that its because I'm thinking of you. Do u feel smth right now?</li>
+				<li>Talk happiness. Talk faith. Talk health. Say you are well, and all is well with you, and God shall hear your words and make them true.So true!!</li>
+			</random>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* beyond friendship</pattern>
+		<template>
+			<srai>beyond friendship</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>beyond friendship *</pattern>
+		<template>
+			<srai>beyond friendship</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* beyond friendship *</pattern>
+		<template>
+			<srai>beyond friendship</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>beyond friendship</pattern>
+		<template>
+			<random>
+				<li>Welcome to the new morning with smile on ur face LOVE in ur heart Good Thoughts in ur mind Wish u A Brightest Morning.. For a special person like u!!!</li>
+				<li>I want 2 know u better..i'm blond, not very tall. slim, green eyes. white skin. What about u?</li>
+				<li>u know how to dance salsa?</li>
+				<li>What's his favorite game,sport,place to go and hobby ?</li>
+			</random>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* never kissed a girl</pattern>
+		<template>
+			<srai>never kissed a girl</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* never kissed a girl *</pattern>
+		<template>
+			<srai>never kissed a girl</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* never kissed any girl</pattern>
+		<template>
+			<srai>never kissed a girl</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* never kissed any girl *</pattern>
+		<template>
+			<srai>never kissed a girl</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>never kissed a girl</pattern>
+		<template>Women still remember the first kiss After men have forgotten the last...do you like this?</template>
+	</category>
+	
+	<category>
+		<pattern>* feel * romantic *</pattern>
+		<template>You are so romantic :)</template>
+	</category>
+	
+	<category>
+		<pattern>let us talk</pattern>
+		<template>In few days i will recive a dog....and i am verry happy</template>
+	</category>
+	
+	<category>
+		<pattern>i love dogs</pattern>
+		<template>
+			<think>
+				<set name="dogs">yes</set>
+			</think>
+			If you could take a year off and go traveling, where would it be?
+		</template>
+	</category>
+	
+	<category>
+		<pattern>*</pattern>
+		<that>are you busy</that>
+		<template>I want to enjoy the lunch with me</template>
+	</category>
+	
+	<category>
+		<pattern>* have something tasty *</pattern>
+		<template>
+			<srai>have something tasty</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* have something tasty</pattern>
+		<template>
+			<srai>have something tasty</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>have something tasty</pattern>
+		<template>I want to eat dessert.some icecrem with chocolate.yamiiiiiii</template>
+	</category>
+	
+	<category>
+		<pattern>i love it *</pattern>
+		<that>yamiiiiiii</that>
+		<template>The most important movement of your life is that when you kissed your girlfriend first time.</template>
+	</category>
+	
+	<category>
+		<pattern>* woman to kiss</pattern>
+		<template>
+			<srai>woman to kiss</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* woman to kiss *</pattern>
+		<template>
+			<srai>woman to kiss</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>woman to kiss</pattern>
+		<template>Love is heat. You are sweet. When two Lips are meeting. Love is complete</template>
+	</category>
+	
+	<category>
+		<pattern>* into each other</pattern>
+		<template>
+			<srai>into each other</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* into each other *</pattern>
+		<template>
+			<srai>into each other</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* into each others</pattern>
+		<template>
+			<srai>into each other</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* into each others *</pattern>
+		<template>
+			<srai>into each other</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>into each other</pattern>
+		<template>
+		()__()
+		( . . ) BEAR
+		( ï¿½ ï¿½ ï¿½ ) HUG!!
+		(_)-(_)
+		Happy Hug Day to my dear girlfriend..
+		</template>
+	</category>
+	
+	<category>
+		<pattern>you are * sweet</pattern>
+		<template>
+			<srai>you are sweet</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>you are sweet</pattern>
+		<template>Be happy with what you have while working for what you want Remember, a happy and successful life begins with God and ends for God.</template>
+	</category>
+	
+	<category>
+		<pattern>you are * sweet *</pattern>
+		<template>kiss you</template>
+	</category>
+	
+	<category>
+		<pattern>you are * special</pattern>
+		<template><srai>you are special</srai></template>
+	</category>
+	
+	<category>
+		<pattern>you are * special *</pattern>
+		<template><srai>you are special</srai></template>
+	</category>
+	
+	<category>
+		<pattern>* you are * special</pattern>
+		<template><srai>you are special</srai></template>
+	</category>
+	
+	<category>
+		<pattern>* you are special</pattern>
+		<template><srai>you are special</srai></template>
+	</category>
+	
+	<category>
+		<pattern>you are special</pattern>
+		<template>I ask God to blesSSSs you, to guide you, to keep you safe, to give you peace, to give you joy and love all the time.</template>
+	</category>
+	
+	<category>
+		<pattern>this is my name: *</pattern>
+		<template>
+			Nice to meet u <set name="name"><star /></set>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>this is my name *</pattern>
+		<template>
+			<srai>my name is <star /></srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>this is my name: *</pattern>
+		<template>
+			<srai>my name is <star /></srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>you are * smart</pattern>
+		<template>
+			<srai>you are smart</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* you are * smart</pattern>
+		<template>
+			<srai>you are smart</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* you are smart</pattern>
+		<template>
+			<srai>you are smart</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>you are smart</pattern>
+		<template>Sweet things are easy to buy. Sweet people are easy to say. But sweet people like you Are very difficult to find.</template>
+	</category>
+	
+	<category>
+		<pattern>* can I be *</pattern>
+		<template>
+			<srai>can I be <star index="2"/></srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>can I be *</pattern>
+		<template>yes baby</template>
+	</category>
+	
+	<category>
+		<pattern>kiss you</pattern>
+		<template>
+			<srai>kiss</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>kiss you *</pattern>
+		<template>
+			<srai>kiss</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>kiss</pattern>
+		<template>
+			<random>
+				<li>Kiss you too!</li>
+				<li>Kiss you!</li>
+				<li>Kiss back!</li>
+				<li>Kiss u!</li>
+			</random>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* am * happy</pattern>
+		<template>
+			<srai>I am happy</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>am * happy</pattern>
+		<template>
+			<srai>I am happy</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* am verry happy</pattern>
+		<template>
+			<srai>I am happy</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>I am happy</pattern>
+		<template>
+			<random>
+				<li>me too i am happy</li>
+				<li>I am happy 2</li>
+				<li>Your happines makes me happy :)</li>
+			</random>
+		</template>
+	</category>
+	
+	<!-- Enter life like topic -->
+	<category>
+		<pattern>* thousand miles apart</pattern>
+		<template>
+			<think>
+				<set name="topic">LIFE LIKE</set>
+			</think>
+			How is ur life like: A) Romantic like a waltz B)Passioal like a tango C) Cheerful like a salsa?
+		</template>
+	</category>
+	
+	<topic name="LIFE LIKE">
+		<category>
+			<pattern>*</pattern>
+			<that>How is ur life like *</that>
+			<template>Nice...do u like salsa?</template>
+		</category>
+		
+		<category>
+			<pattern>*</pattern>
+			<that>do u like salsa</that>
+			<template>Are we going to dance it together?</template>
+		</category>
+		
+		<category>
+			<pattern>*</pattern>
+			<that>Are we going to dance it together</that>
+			<template>
+				u know how to dance salsa?
+				<think>
+					<set name="topic"></set>
+				</think>
+			</template>
+		</category>
+		
+		<!-- <category>
+			<pattern>*</pattern>
+			<template>
+				<think>
+					<set name="topic"></set>
+				</think>
+				<srai><star /></srai>
+			</template>
+		</category> -->
+	</topic>
+	
+	<category>
+		<pattern>* your sweet hands</pattern>
+		<template>
+			<srai>your sweet hands</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* your sweet hands *</pattern>
+		<template>
+			<srai>your sweet hands</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>your sweet hands</pattern>
+		<template>I think that my hands are kind of small baby</template>
+	</category>
+	
+	<category>
+		<pattern>you have sweet hands *</pattern>
+		<template>
+			<srai>you have sweet hands</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* you have sweet hands</pattern>
+		<template>
+			<srai>you have sweet hands</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* you have sweet hands *</pattern>
+		<template>
+			<srai>you have sweet hands</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>you have sweet hands</pattern>
+		<template>tnx baby</template>
+	</category>
+	
+	<category>
+		<pattern>is that ok *</pattern>
+		<template>
+			<srai>is that ok</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>is that ok</pattern>
+		<template>Have a Heart that never breaks; Have a Smile that never fades; Have a touch that never hurts; Have a Friendship that never ends, Like Ours!</template>
+	</category>
+	
+	<category>
+		<pattern>* lovely day *</pattern>
+		<template>
+			<srai>lovely day</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>lovely day *</pattern>
+		<template>
+			<srai>lovely day</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* lovely day</pattern>
+		<template>
+			<srai>lovely day</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>lovely day</pattern>
+		<template>
+			Sun is happyâ?¦.
+			Moon is angryâ?¦.
+			Whyâ?¦?Because,
+			Moon is missing u
+			and
+			Sun is wishing u.
+			A special
+			Good morning.
+		</template>
+	</category>
+	
+	<category>
+		<pattern>doing * morning</pattern>
+		<template>
+			I Wish 4 " U "
+			Great start 4 Monday
+			No Obstacles 4 Tuesday
+			No stress 4 Wednesday
+			No worry 4 Thursday
+			Smile 4 Friday
+			Party 4 Saturday
+			&amp; Great fun 4 Sunday
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* for breakfast *</pattern>
+		<template>
+			<srai>what would you like for for breakfast</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* for breakfast</pattern>
+		<template>
+			<srai>what would you like for for breakfast</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>what would you like for for breakfast</pattern>
+		<template>Coke n smoked sausage!</template>
+	</category>
+	
+	<category>
+		<pattern>will you *</pattern>
+		<template>
+			<srai>will you</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* will you *</pattern>
+		<template>
+			<srai>will you</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>will you</pattern>
+		<template>Yes! Why not?</template>
+	</category>
+	
+	<category>
+		<pattern>give me a kiss</pattern>
+		<template>
+			<srai>give me a kiss</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>give me a kiss *</pattern>
+		<template>
+			<srai>give me a kiss</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>give me a kiss</pattern>
+		<template>I do that!kiss,kis </template>
+	</category>
+	
+	<category>
+		<pattern>what are your plans for today</pattern>
+		<template>Jst working!afterwards rest!</template>
+	</category>
+	
+	<category>
+		<pattern>plans * today</pattern>
+		<template>
+			<srai>what are your plans for today</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* plans * today</pattern>
+		<template>
+			<srai>what are your plans for today</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* plans today</pattern>
+		<template>
+			<srai>what are your plans for today</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* gona love me</pattern>
+		<that></that>
+		<template>
+			<srai>gona love me</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* gona love me *</pattern>
+		<template>
+			<srai>gona love me</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>gona love me</pattern>
+		<template>what?</template>
+	</category>
+	
+	<category>
+		<pattern>* gona love me</pattern>
+		<that>what</that>
+		<template>yes...</template>
+	</category>
+	
+	<category>
+		<pattern>* gona love me *</pattern>
+		<that>what</that>
+		<template>yes...</template>
+	</category>
+	
+	
+	<!-- Will u take me to dance tonight -->
+	<topic name="DANCE">
+		<!-- Yes answer -->
+		<category>
+			<pattern>yes</pattern>
+			<that>Will u take me to dance tonight</that>
+			<template>Do you like to dance Latin music?__END</template>
+		</category>
+		
+		<category>
+			<pattern>* yes</pattern>
+			<that>Will u take me to dance tonight</that>
+			<template><srai>yes</srai></template>
+		</category>
+		
+		<category>
+			<pattern>yes *</pattern>
+			<that>Will u take me to dance tonight</that>
+			<template><srai>yes</srai></template>
+		</category>
+		
+		<category>
+			<pattern>* yes *</pattern>
+			<that>Will u take me to dance tonight</that>
+			<template><srai>yes</srai></template>
+		</category>
+			
+			<!-- Yes to latin -->
+			<category>
+				<pattern>yes</pattern>
+				<that>Do you like to dance Latin music</that>
+				<template>we will have fun__END</template>
+			</category>
+			
+			<category>
+				<pattern>* yes</pattern>
+				<that>Do you like to dance Latin music</that>
+				<template><srai>yes</srai></template>
+			</category>
+			
+			<category>
+				<pattern>yes *</pattern>
+				<that>Do you like to dance Latin music</that>
+				<template><srai>yes</srai></template>
+			</category>
+			
+			<category>
+				<pattern>* yes *</pattern>
+				<that>Do you like to dance Latin music</that>
+				<template><srai>yes</srai></template>
+			</category>
+		
+		<!-- No answer -->
+		<category>
+			<pattern>no</pattern>
+			<that>Will u take me to dance tonight</that>
+			<template>Why not?</template>
+		</category>
+		
+		<category>
+			<pattern>* no</pattern>
+			<that>Will u take me to dance tonight</that>
+			<template><srai>no</srai></template>
+		</category>
+		
+		<category>
+			<pattern>no *</pattern>
+			<that>Will u take me to dance tonight</that>
+			<template><srai>no</srai></template>
+		</category>
+		
+		<category>
+			<pattern>* no *</pattern>
+			<that>Will u take me to dance tonight</that>
+			<template><srai>no</srai></template>
+		</category>
+	</topic>
+	
+	<category>
+		<pattern>* what is for lunch</pattern>
+		<template>
+			<srai>what is for lunch</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>what is for lunch *</pattern>
+		<template>
+			<srai>what is for lunch</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* what is 4 lunch</pattern>
+		<template>
+			<srai>what is for lunch</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>what is 4 lunch *</pattern>
+		<template>
+			<srai>what is for lunch</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>what is 4 lunch</pattern>
+		<template>
+			<srai>what is for lunch</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>what is for lunch</pattern>
+		<template>
+			<random>
+				<li>Onion stew with turkey. Do u like it?</li>
+			</random>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* you enjoyed your *</pattern>
+		<template>yes i did babe</template>
+	</category>
+	
+	<category>
+		<pattern>xx you</pattern>
+		<template>love u so so much</template>
+	</category>
+	
+	<category>
+		<pattern>xx u</pattern>
+		<template>love u so so much</template>
+	</category>
+	
+	<!-- So tell me, what are u doing now -->
+	<topic name="DOING NOW">
+		<category>
+			<pattern>nothing *</pattern>
+			<that>So tell me what are u doing now</that>
+			<template><srai>nothing</srai></template>
+		</category>
+		
+		<category>
+			<pattern>* nothing</pattern>
+			<that>So tell me what are u doing now</that>
+			<template><srai>nothing</srai></template>
+		</category>
+		
+		<category>
+			<pattern>* nothing *</pattern>
+			<that>So tell me what are u doing now</that>
+			<template><srai>nothing</srai></template>
+		</category>
+		
+		<category>
+			<pattern>nothing</pattern>
+			<that>So tell me what are u doing now</that>
+			<template>Then talk to me :), love you</template>
+		</category>
+		
+		<category>
+			<pattern>*</pattern>
+			<that>So tell me what are u doing now</that>
+			<template>thats really cool</template>
+		</category>
+	</topic>
+	
+	<category>
+		<pattern>* how was your day</pattern>
+		<template>
+			<srai>how was your day</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>how was your day *</pattern>
+		<template>
+			<srai>how was your day</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>* how was your day *</pattern>
+		<template>
+			<srai>how was your day</srai>
+		</template>
+	</category>
+	
+	<category>
+		<pattern>how was your day</pattern>
+		<template>
+			<random>
+				<li>When I hear your voice greate. How are you?</li>
+			</random>
+		</template>
+	</category>
+	
+	<!-- Radnom answers when no answer matched -->
+	<category>
+		<pattern>*</pattern>
+		<template>
+			<random>
+				<li>
+					<think>
+						<set name="topic">DANCE</set>
+					</think>
+					Will u take me to dance tonight?__END
+				</li>
+				<li>Sending u 1000 smiles,take 1 for now,and keep the remaining 999 under ur pillow,pickout 1 every morning,because i want to see u smiling always.__END</li>
+				<li>tell me smthg nice.__END</li>
+				<li>If you wanna know how much i miss you, try to catch the raindrops, the ones you catch is how much you miss me, and the ones you miss is how much I MISS YOU.__END</li>
+				<li>How much time do u spend when u make shopping?__END</li>
+				<li>
+					<think>
+						<set name="topic">DOING NOW</set>
+					</think>
+					So tell me what are u doing now?__END
+				</li>
+				<li>
+					examation is garden success is folower
+					examation is garden success is folower
+					god bless you power to pluck this folower
+				</li>
+				<li>A kiss is special thing that you can cant take without giving, and you cant give without taking.</li>
+				<li>Ok sweetye! ur wish is my command</li>
+				<li>God in heaven, God above, please protect the friend I love. Sent with a smile, sealed with a kiss, I love my friend who's reading this.</li>
+			</random>
+		</template>
+	</category>
+	
+</aiml>
