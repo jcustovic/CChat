@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.aitools.programd.Core;
 import org.aitools.programd.bot.Bot;
+import org.aitools.programd.util.DeveloperError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,11 +57,15 @@ public class RobotServiceImpl implements RobotService {
     public final String responde(final String p_text, Integer p_userId) {
         final User user = userRepository.findOne(p_userId);
         if (user.getBot() != null && user.getBot().getOnline()) {
-            final Bot bot = core.getBot(user.getBot().getName());
-            if (bot == null) {
-                LOG.warn("Bot with name {} not registered!", user.getBot().getName());
-            } else {
-                return core.getResponse(p_text, user.getId().toString(), bot.getID());
+            try {
+                final Bot bot = core.getBot(user.getBot().getName());
+                if (bot == null) {
+                    LOG.warn("Bot with name {} not registered!", user.getBot().getName());
+                } else {
+                    return core.getResponse(p_text, user.getId().toString(), bot.getID());
+                }
+            } catch (final DeveloperError p_e) {
+                LOG.warn("Faild to find bot with id {}", user.getBot().getName());
             }
         }
 

@@ -64,9 +64,8 @@
 				<li>That's a very nice name,</li>
 				<li>I am very pleased to meet you</li>
 				<li>I am always glad to make new friends,</li>
-				<li>I'm pleased to introduce myself to you,</li>
-			</random>
-			<set name="name"><star/></set>
+				<li>I'm pleased to introduce myself to you</li>
+			</random><set name="name"><star/></set>
 		</template>
 	</category>
 	
@@ -101,13 +100,6 @@
 					</random>
 				</li>
 			</condition>
-		</template>
-	</category>
-	
-	<category>
-		<pattern>Hi * how are you *</pattern>
-		<template>
-			<srai>how are you <star index="2"/></srai>
 		</template>
 	</category>
 	
@@ -604,11 +596,11 @@
 	<category>
 		<pattern>into each other</pattern>
 		<template>
-		()__()
-		( . . ) BEAR
-		( ï¿½ ï¿½ ï¿½ ) HUG!!
-		(_)-(_)
-		Happy Hug Day to my dear girlfriend..
+()__()
+( . . ) BEAR
+( i?1 i?1 i?1 ) HUG!!
+(_)-(_)
+Happy Hug Day to my dear girlfriend..
 		</template>
 	</category>
 	
@@ -652,13 +644,6 @@
 	<category>
 		<pattern>you are special</pattern>
 		<template>I ask God to blesSSSs you, to guide you, to keep you safe, to give you peace, to give you joy and love all the time.</template>
-	</category>
-	
-	<category>
-		<pattern>this is my name: *</pattern>
-		<template>
-			Nice to meet u <set name="name"><star /></set>
-		</template>
 	</category>
 	
 	<category>
@@ -898,28 +883,28 @@
 	<category>
 		<pattern>lovely day</pattern>
 		<template>
-			Sun is happyâ?¦.
-			Moon is angryâ?¦.
-			Whyâ?¦?Because,
-			Moon is missing u
-			and
-			Sun is wishing u.
-			A special
-			Good morning.
+Sun is happyâ?¦.
+Moon is angryâ?¦.
+Whyâ?¦?Because,
+Moon is missing u
+and
+Sun is wishing u.
+A special
+Good morning.
 		</template>
 	</category>
 	
 	<category>
 		<pattern>doing * morning</pattern>
 		<template>
-			I Wish 4 " U "
-			Great start 4 Monday
-			No Obstacles 4 Tuesday
-			No stress 4 Wednesday
-			No worry 4 Thursday
-			Smile 4 Friday
-			Party 4 Saturday
-			&amp; Great fun 4 Sunday
+I Wish 4 " U "
+Great start 4 Monday
+No Obstacles 4 Tuesday
+No stress 4 Wednesday
+No worry 4 Thursday
+Smile 4 Friday
+Party 4 Saturday
+&amp; Great fun 4 Sunday
 		</template>
 	</category>
 	
@@ -962,7 +947,7 @@
 	</category>
 	
 	<category>
-		<pattern>give me a kiss</pattern>
+		<pattern>* give me a kiss</pattern>
 		<template>
 			<srai>give me a kiss</srai>
 		</template>
