@@ -598,6 +598,7 @@ public class UserConsole extends HLayout {
         value = XMLTools.selectObjects(p_jsonData, "user/bot/name");
         if (value == null || value.size() == 0) {
             botResponseMsgArea.setValue(DictionaryInstance.dictionary.noBotSelected());
+            sendBotMsgButton.disable();
         }
 
         sendMsgForm.focusInItem(smsTextArea.getName());
