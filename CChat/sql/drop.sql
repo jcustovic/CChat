@@ -12,3 +12,4 @@ DROP TABLE IF EXISTS service_provider_keyword;
 DROP TABLE IF EXISTS service_provider;
 DROP TABLE IF EXISTS programd_predicate;
 DROP TABLE IF EXISTS programd_user;
+DROP TABLE IF EXISTS bot;

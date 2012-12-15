@@ -9,7 +9,9 @@ CREATE TABLE service_provider (
   , send_service_bean VARCHAR(30) NULL
   , PRIMARY KEY(id)
   , UNIQUE(sc, provider_name)
-);
+)
+ENGINE=InnoDB
+CHARSET=UTF8;
 
 CREATE TABLE service_provider_keyword (
   id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT
@@ -20,7 +22,9 @@ CREATE TABLE service_provider_keyword (
   , PRIMARY KEY(id)
   , FOREIGN KEY(service_provider_id) REFERENCES service_provider(id)
   , UNIQUE(keyword, service_provider_id)
-);
+)
+ENGINE=InnoDB
+CHARSET=UTF8;
 
 
 CREATE TABLE operator_role (
@@ -29,7 +33,9 @@ CREATE TABLE operator_role (
   , description VARCHAR(100) NULL
   , PRIMARY KEY(id)
   , UNIQUE(name)
-);
+)
+ENGINE=InnoDB
+CHARSET=UTF8;
 
 
 CREATE TABLE operator (
@@ -45,7 +51,9 @@ CREATE TABLE operator (
   , disabled BOOL NOT NULL DEFAULT false
   , PRIMARY KEY(id)
   , FOREIGN KEY(operator_role_id) REFERENCES operator_role(id)
-);
+)
+ENGINE=InnoDB
+CHARSET=UTF8;
 
 
 CREATE TABLE nick (
@@ -55,7 +63,9 @@ CREATE TABLE nick (
   , is_keyword BOOL NOT NULL DEFAULT false
   , PRIMARY KEY(id)
   , UNIQUE(name)
-);
+)
+ENGINE=InnoDB
+CHARSET=UTF8;
 
 
 CREATE TABLE keyword_conf (
@@ -68,14 +78,18 @@ CREATE TABLE keyword_conf (
   , FOREIGN KEY(service_provider_id) REFERENCES service_provider(id)
   , FOREIGN KEY(nick_id) REFERENCES nick(id)
   , UNIQUE(operator_id, service_provider_id, nick_id)
-);
+)
+ENGINE=InnoDB
+CHARSET=UTF8;
 
 
 CREATE TABLE configuration (
   name VARCHAR(50) NOT NULL
   , value VARCHAR(100) NOT NULL
   , PRIMARY KEY(name)
-);
+)
+ENGINE=InnoDB
+CHARSET=UTF8;
 
 
 CREATE TABLE picture (
@@ -88,7 +102,9 @@ CREATE TABLE picture (
   , FOREIGN KEY(nick_id) REFERENCES nick(id)
       ON DELETE SET NULL
       ON UPDATE NO ACTION
-);
+)
+ENGINE=InnoDB
+CHARSET=UTF8;
 
 
 CREATE TABLE users (
@@ -113,7 +129,9 @@ CREATE TABLE users (
       ON UPDATE NO ACTION
   , FOREIGN KEY(service_provider_id) REFERENCES service_provider(id)
   , UNIQUE(msisdn, service_provider_id)
-);
+)
+ENGINE=InnoDB
+CHARSET=UTF8;
 
 
 CREATE TABLE sms_message (
@@ -142,7 +160,9 @@ CREATE TABLE sms_message (
   , FOREIGN KEY(service_provider_keyword_id) REFERENCES service_provider_keyword(id)
   	  ON DELETE NO ACTION
       ON UPDATE NO ACTION
-);
+)
+ENGINE=InnoDB
+CHARSET=UTF8;
 
 
 CREATE TABLE users_picture (
@@ -151,4 +171,6 @@ CREATE TABLE users_picture (
   , PRIMARY KEY(picture_id, user_id)
   , FOREIGN KEY(picture_id) REFERENCES picture(id)
   , FOREIGN KEY(user_id) REFERENCES users(id)
-);
+)
+ENGINE=InnoDB
+CHARSET=UTF8;

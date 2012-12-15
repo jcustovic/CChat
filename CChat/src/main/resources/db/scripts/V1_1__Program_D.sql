@@ -6,7 +6,9 @@ CREATE TABLE programd_user (
 	, PRIMARY KEY(id)
 	, INDEX programd_user_user_id (user_id)
 	, UNIQUE (user_id, bot_id)
-);
+)
+ENGINE=InnoDB
+CHARSET=UTF8;
 
 
 CREATE TABLE programd_predicate (
@@ -17,4 +19,6 @@ CREATE TABLE programd_predicate (
 	, `value` LONGTEXT
 	, PRIMARY KEY(id)
 	, INDEX programd_predicate_user_id (user_id)
-);
+)
+ENGINE=InnoDB
+CHARSET=UTF8;
