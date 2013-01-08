@@ -57,10 +57,12 @@
     </bean>
     
     <!-- TODO: Not so good, because of circular dependency. ProgramD has bad design. This should be fixed. -->
-    <bean id="programDCore" class="org.aitools.programd.Core" init-method="initPredicateMaster" destroy-method="shutdown">
+    <bean id="programDCore" class="org.aitools.programd.Core" init-method="initPredicateMaster">
     	<constructor-arg ref="programDSettings" />
     	<property name="multiplexor" ref="jpaMultiplexor" />
     </bean>
+    
+    <bean id="coreShutdownWrapper" class="hr.chus.cchat.programd.CoreWrapper" destroy-method="shutdown" depends-on="transactionManager" />
     
 	<bean id="jpaMultiplexor" class="hr.chus.programd.multiplexor.JPAMultiplexor">
     	<constructor-arg ref="programDCore" />

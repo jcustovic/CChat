@@ -12,7 +12,7 @@
 		<substitute find="\s+\.+" replace="." />
 		<substitute find="\s+\?+" replace="?" />
 		<substitute find="\s+\?+!+" replace="?!" />
-		<substitute find="\s+!+\?+" replace="?!" /> -->
+		<substitute find="\s+!+\?+" replace="?!" />
 		
 		<substitute find="=reply" replace="" />
 		<substitute find="name=reset" replace="" />
@@ -229,7 +229,7 @@
 		<substitute find="\bi ve\b" replace="i have" />
 		<substitute find="\b2 day\b" replace="today" />
 		<substitute find="\b2day\b" replace="today" />
-		<substitute find="\bno\b" replace="number" />
+		<substitute find="\bno\.\b" replace="number" />
 		<substitute find="\byr\b" replace="your" />
 		<substitute find="\byo\b" replace="your" />
 		<substitute find="\btks\b" replace="thank" />
