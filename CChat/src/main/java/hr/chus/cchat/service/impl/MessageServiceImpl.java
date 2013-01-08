@@ -6,6 +6,7 @@ import hr.chus.cchat.db.service.ServiceProviderService;
 import hr.chus.cchat.db.service.UserService;
 import hr.chus.cchat.gateway.GatewayResponseError;
 import hr.chus.cchat.gateway.SendMessageService;
+import hr.chus.cchat.model.db.jpa.Robot;
 import hr.chus.cchat.model.db.jpa.SMSMessage;
 import hr.chus.cchat.model.db.jpa.SMSMessage.DeliveryStatus;
 import hr.chus.cchat.model.db.jpa.SMSMessage.Direction;
@@ -13,6 +14,7 @@ import hr.chus.cchat.model.db.jpa.ServiceProvider;
 import hr.chus.cchat.model.db.jpa.ServiceProviderKeyword;
 import hr.chus.cchat.model.db.jpa.User;
 import hr.chus.cchat.service.MessageService;
+import hr.chus.cchat.service.RobotService;
 
 import java.io.IOException;
 import java.util.Date;
@@ -57,6 +59,9 @@ public class MessageServiceImpl implements MessageService {
 
     @Autowired
     private ServiceProviderKeywordService serviceProviderKeywordService;
+
+    @Autowired
+    private RobotService                  robotService;
 
     @Qualifier("defaultSendMessageService")
     @Autowired
@@ -105,6 +110,14 @@ public class MessageServiceImpl implements MessageService {
                 user = new User(p_msisdn, serviceProvider);
                 user.setUnreadMsgCount(1);
                 assignOperator(user);
+                // Default bot should have ID 1
+                final Robot bot = robotService.findOne(1);
+                if (bot != null) {
+                    LOG.debug("Assigning default bot {} to new user {}", bot.getName(), user.getMsisdn());
+                    user.setBot(bot);
+                } else {
+                    LOG.debug("No default bot with ID 1 in database");
+                }
 
                 user = userService.editUser(user);
                 LOG.info("New user ({}) registred to service {}", user, serviceProvider.getServiceName());
