@@ -4,8 +4,9 @@
 	xsi:schemaLocation="http://aitools.org/programd/4.6/bot-configuration http://aitools.org/programd/4.6/bot-configuration.xsd">
 
 	<!--This is an example properties set definition. -->
-	<property name="name" value="TestBot" />
+	<property name="name" value="Karla" />
 	<property name="gender" value="female" />
+	
 	<property name="master" value="A.L.I.C.E. AI Foundation" />
 	<property name="birthday" value="1995" />
 	<property name="birthplace" value="Pennsylvania" />

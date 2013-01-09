@@ -53,6 +53,11 @@
 	</category>
 	
 	<category> 
+		<pattern>my name is * *</pattern>
+		<template><srai>my name is <star index="1"/></srai></template>
+	</category>
+	
+	<category> 
 		<pattern>my name is *</pattern>
 		<template>
 			<random>
@@ -765,7 +770,7 @@ Happy Hug Day to my dear girlfriend..
 			<think>
 				<set name="topic">LIFE</set>
 			</think>
-			My name is Maria. And yours?
+			My name is <bot name="name" />. And yours?
 			<!-- <random>
 				<li>My name is Nadia. What is your name? I am from Bulgaria and i will visit ur country in december. Would u like to be my friend?</li>
 				<li>In december when i will come to visit you i will make you a big surprise...because is Christmas..</li>
@@ -2022,6 +2027,591 @@ Happy Hug Day to my dear girlfriend..
 		</category>
 	</topic>
 	
+	<!-- ############## Friendship section ############## -->
+	<category>
+		<pattern>* friendship do you want</pattern>
+		<template>
+			<think>
+				<set name="topic">FRIENDSHIP</set>
+			</think>
+			<random>
+				<li>I want a real friendship, because I hate lies. What about you?</li>
+				<li>I hope that we will become best friends! What is friendship for you?</li>
+				<li>I want  you to be my close friend and I will also do that for you. Can I count on you?</li>
+			</random>
+		</template>
+	</category>
+	
+	<topic name="FRIENDSHIP">
+		<category>
+			<pattern>*</pattern>
+			<that>What about you</that>
+			<template>Ok. What do you think is the next step in our friendship?</template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>What do you think is the next step in our friendship</that>
+			<template>I think that we should know ecah other very well. Can you describe yourself in 5 words?</template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>Can you describe yourself in 5 words</that>
+			<template>I am friendly, nice, funny, smart, but sometimes difficult. Do you think you can handle me?</template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>Do you think you can handle me</that>
+			<template>What kind of qualities do you look for in a friend?</template>
+		</category>
+		<category>
+			<pattern>* look for in a friend</pattern>
+			<template>I think I am the perfect friend for you!!</template>
+		</category>
+		
+		<category>
+			<pattern>*</pattern>
+			<that>What is friendship for you</that>
+			<template>A friendship is the greatest treasure you can have.. What makes a friendship special?</template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>What makes a friendship special</that>
+			<template>We are the one that makes this thing special! It's all about me and you! What's your best quality?</template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>What s your best quality</that>
+			<template>I am honest and that is my biggest quality!Can you tell me if there is something that you do not like about you?</template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>* not like about you</that>
+			<template>I think I can handle anything. Do you smoke or drink alc?</template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>Do you smoke or drink alc</that>
+			<template>No, I am not smoking or drinking alcohol.</template>
+		</category>
+		
+		<category>
+			<pattern>Yes</pattern>
+			<that>Can I count on you</that>
+			<template>That's great! Thanks! Tell me, are you a christian?</template>
+		</category>
+		<category>
+			<pattern>* yes</pattern>
+			<that>Can I count on you</that>
+			<template><srai>yes</srai></template>
+		</category>
+		<category>
+			<pattern>Yes *</pattern>
+			<that>Can I count on you</that>
+			<template><srai>yes</srai></template>
+		</category>
+		
+		<category>
+			<pattern>No</pattern>
+			<that>* are you a christian</that>
+			<template>I am a christian do you mind?</template>
+		</category>
+		<category>
+			<pattern>* no</pattern>
+			<that>* are you a christian</that>
+			<template><srai>no</srai></template>
+		</category>
+		<category>
+			<pattern>No *</pattern>
+			<that>* are you a christian</that>
+			<template><srai>no</srai></template>
+		</category>
+		<category>
+			<pattern>Yes</pattern>
+			<that>* are you a christian</that>
+			<template>I am also a christian. What church do you attend?</template>
+		</category>
+		<category>
+			<pattern>* yes</pattern>
+			<that>* are you a christian</that>
+			<template><srai>yes</srai></template>
+		</category>
+		<category>
+			<pattern>Yes *</pattern>
+			<that>* are you a christian</that>
+			<template><srai>yes</srai></template>
+		</category>
+		
+		<category>
+			<pattern>*</pattern>
+			<that>I am a christian do you mind</that>
+			<template>So, tell me about your religion.</template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>So tell me about your religion</that>
+			<template>I think we can be friends even if we have differnet religion, what do you think?</template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>* what do you think</that>
+			<template>Tell me, in your religion is legal to have more than 1 wife?</template>
+		</category>
+		
+		<category>
+			<pattern>*</pattern>
+			<that>What church do you attend</that>
+			<template>I am an orthodox christian. Do you mind?</template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>Do you mind</that>
+			<template>I think we can be friends in the name of God, what do you say?</template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>* what do you say</that>
+			<template>God bless you my friend!</template>
+		</category>
+	</topic>
+	
+	<!-- ############## Relationship section ############## -->
+	<category>
+		<pattern>Tell me about your family</pattern>
+		<template>
+			<think>
+				<set name="topic">FAMILY</set>
+			</think>
+			<random>
+				<li>My family is a very friendly one. Yours?</li>
+				<li>I have a small and nice family. How many brothers and sisters do you have?</li>
+			</random>
+		</template>
+	</category>
+	<category>
+		<pattern>* about your family</pattern>
+		<template><srai>Tell me about your family</srai></template>
+	</category>
+	<category>
+		<pattern>* about your family *</pattern>
+		<template><srai>Tell me about your family</srai></template>
+	</category>	
+	
+	<category>
+		<pattern>Tell me about your parents</pattern>
+		<template>
+			<think>
+				<set name="topic">FAMILY</set>
+			</think>
+			I love my parents. They are the most important pesons in my life. what about yours?
+		</template>
+	</category>
+	<category>
+		<pattern>* about your parents</pattern>
+		<template><srai>Tell me about your parents</srai></template>
+	</category>
+	<category>
+		<pattern>* about your parents *</pattern>
+		<template><srai>Tell me about your parents</srai></template>
+	</category>	
+	
+	<topic name="FAMILY">
+		<category>
+			<pattern>*</pattern>
+			<that>Yours</that>
+			<template>Do you mind if I will want to visit your family?</template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>Do you mind if I will want to visit your family</that>
+			<template>Do you think your familly is gonna like me?</template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>Do you think your familly is gonna like me</that>
+			<template>Bytheway, are your parents still alive?</template>
+		</category>
+		<category>
+			<pattern>No</pattern>
+			<that>* are your parents still alive</that>
+			<template>That's sad! Can you tell me what happened?</template>
+		</category>
+		<category>
+			<pattern>* no</pattern>
+			<that>* are your parents still alive</that>
+			<template><srai>no</srai></template>
+		</category>
+		<category>
+			<pattern>No *</pattern>
+			<that>* are your parents still alive</that>
+			<template><srai>no</srai></template>
+		</category>
+		<category>
+			<pattern>Yes</pattern>
+			<that>* are your parents still alive</that>
+			<template>I am so happy to hear that! I can't wait to meet them!</template>
+		</category>
+		<category>
+			<pattern>* yes</pattern>
+			<that>* are your parents still alive</that>
+			<template><srai>yes</srai></template>
+		</category>
+		<category>
+			<pattern>Yes *</pattern>
+			<that>* are your parents still alive</that>
+			<template><srai>yes</srai></template>
+		</category>
+		
+		<category>
+			<pattern>*</pattern>
+			<that>Can you tell me what happened</that>
+			<template>I am so sorry!</template>
+		</category>
+		
+		<category>
+			<pattern>*</pattern>
+			<that>what about yours</that>
+			<template>What are your parents doing for a living?</template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>What are your parents doing for a living</that>
+			<template>My father is a farmer and my mother helps him. How old are your parents?</template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>How old are your parents</that>
+			<template>My father is 55 years old and my mother is 50 years old. What relationship do you have with them?</template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>What relationship do you have with them</that>
+			<template>My parents are like my best friends. They are very cool. Do you live with your family or you live alone?</template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>* live alone</that>
+			<template>I am living alone because my job is in another town.</template>
+		</category> 
+	</topic>
+	
+	<!-- ############## Gifts  section ############## -->
+	<category>
+		<pattern>* you help me</pattern>
+		<template>
+			<think>
+				<set name="topic">GIFTS</set>
+			</think>
+			How can I help you?
+		</template>
+	</category>
+	<category>
+		<pattern>* bring for me</pattern>
+		<template>
+			<think>
+				<set name="topic">GIFTS</set>
+			</think>
+			What would you like?
+		</template>
+	</category>
+	<category>
+		<pattern>* offer gifts</pattern>
+		<template>
+			<think>
+				<set name="topic">GIFTS</set>
+			</think>
+			On christmas and on my birthday. What about you?
+		</template>
+	</category>
+	
+	<topic name="GIFTS">
+		<category>
+			<pattern>Send me some money</pattern>
+			<that>How can I help you</that>
+			<template>How much money do you want?</template>
+		</category>
+		<category>
+			<pattern>Send * money</pattern>
+			<that>How can I help you</that>
+			<template><srai>Send me some money</srai></template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>How much money do you want</that>
+			<template>For what you need the money?</template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>For what you need the money</that>
+			<template>Ok I will try to help you, but I can't promise you anything.</template>
+		</category>
+		
+		<category>
+			<pattern>laptop</pattern>
+			<that>What would you like</that>
+			<template>What brand would you like?</template>
+		</category>
+		<category>
+			<pattern>* laptop</pattern>
+			<that>What would you like</that>
+			<template><srai>laptop</srai></template>
+		</category>
+		<category>
+			<pattern>* laptop *</pattern>
+			<that>What would you like</that>
+			<template><srai>laptop</srai></template>
+		</category>
+		<category>
+			<pattern>* telephone</pattern>
+			<that>What would you like</that>
+			<template><srai>laptop</srai></template>
+		</category>
+		<category>
+			<pattern>* telephone *</pattern>
+			<that>What would you like</that>
+			<template><srai>laptop</srai></template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>What brand would you like</that>
+			<template>A good choice. Do you own one at this moment?</template>
+		</category>
+		<category>
+			<pattern>No</pattern>
+			<that>Do you own one at this moment</that>
+			<template>I understand sweetye. I will try my best to buy it for you.</template>
+		</category>
+		<category>
+			<pattern>* no</pattern>
+			<that>Do you own one at this moment</that>
+			<template><srai>no</srai></template>
+		</category>
+		<category>
+			<pattern>No *</pattern>
+			<that>Do you own one at this moment</that>
+			<template><srai>no</srai></template>
+		</category>
+		<category>
+			<pattern>Yes</pattern>
+			<that>Do you own one at this moment</that>
+			<template>And why you need another one?</template>
+		</category>
+		<category>
+			<pattern>* yes</pattern>
+			<that>Do you own one at this moment</that>
+			<template><srai>yes</srai></template>
+		</category>
+		<category>
+			<pattern>Yes *</pattern>
+			<that>Do you own one at this moment</that>
+			<template><srai>yes</srai></template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>And why you need another one</that>
+			<template>I understand. I will do my best to help you, ok?</template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>I will try my best to buy it for you</that>
+			<template>Welcome. I will give you when we will meet, ok?</template>
+		</category>
+		
+		<category>
+			<pattern>*</pattern>
+			<that>What about you</that>
+			<template>What was the best gift you ever received?</template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>What was the best gift you ever received</that>
+			<template>What was your last gift?</template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>What was your last gift</that>
+			<template>My last gift was a necklace from my best friend. Do you like making gifts?</template>
+		</category>
+		<category>
+			<pattern>No</pattern>
+			<that>Do you like making gifts</that>
+			<template>But why? Making gifts is so wonderfull.</template>
+		</category>
+		<category>
+			<pattern>* no</pattern>
+			<that>Do you like making gifts</that>
+			<template><srai>no</srai></template>
+		</category>
+		<category>
+			<pattern>No *</pattern>
+			<that>Do you like making gifts</that>
+			<template><srai>no</srai></template>
+		</category>
+		<category>
+			<pattern>Yes</pattern>
+			<that>Do you like making gifts</that>
+			<template>Great, me too! What was the last think you had gifted?</template>
+		</category>
+		<category>
+			<pattern>* yes</pattern>
+			<that>Do you like making gifts</that>
+			<template><srai>yes</srai></template>
+		</category>
+		<category>
+			<pattern>Yes *</pattern>
+			<that>Do you like making gifts</that>
+			<template><srai>yes</srai></template>
+		</category>
+	</topic>
+	
+	<!-- ############## About the country we are visiting section ############## -->
+	<category>
+		<pattern>* intend to visit</pattern>
+		<template>
+			<think>
+				<set name="topic">COUNTRY VISITING</set>
+			</think>
+			I will come next month. I will come in the capital, do you live there?
+		</template>
+	</category>
+	<category>
+		<pattern>Have you ever been in my country</pattern>
+		<template>
+			<think>
+				<set name="topic">COUNTRY VISITING</set>
+			</think>
+			No, that's why I need you. Can I count on you?
+		</template>
+	</category>
+	<category>
+		<pattern>? been in my country</pattern>
+		<template><srai>Have you ever been in my country</srai></template>
+	</category>
+	<category>
+		<pattern>? been in my country *</pattern>
+		<template><srai>Have you ever been in my country</srai></template>
+	</category>
+	
+	<topic name="COUNTRY VISITING">
+		<category>
+			<pattern>No</pattern>
+			<that>* do you live there</that>
+			<template>Do you live far from the capital?</template>
+		</category>
+		<category>
+			<pattern>* no</pattern>
+			<that>* do you live there</that>
+			<template><srai>no</srai></template>
+		</category>
+		<category>
+			<pattern>No *</pattern>
+			<that>* do you live there</that>
+			<template><srai>no</srai></template>
+		</category>
+		<category>
+			<pattern>Yes</pattern>
+			<that>* do you live there</that>
+			<template>That's great! Maybe you can come and wait me at the airport!</template>
+		</category>
+		<category>
+			<pattern>* yes</pattern>
+			<that>* do you live there</that>
+			<template><srai>yes</srai></template>
+		</category>
+		<category>
+			<pattern>Yes *</pattern>
+			<that>* do you live there</that>
+			<template><srai>yes</srai></template>
+		</category>
+		
+		<category>
+			<pattern>*</pattern>
+			<that>Maybe you can come and wait me at the airport</that>
+			<template>Not a problem! If you will come , I will be very gratefull. Tell me some beautiful places in your city/state.</template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>Do you live far from the capital</that>
+			<template>I can come and visit you if you will give me the drections. Would you like?</template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>Tell me some beautiful places *</that>
+			<template>Great! Will you join me in this journey?</template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>Will you join me in this journey</that>
+			<template>Of course, you don't have to worry about the money, I will pay everything.</template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>Would you like</that>
+			<template>Great! Can you recommend me a good place to stay during my visit in your country?</template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>Can you recommend me a good place *</that>
+			<template>Ok, I trust you and I wil follow your advice.</template>
+		</category>
+		
+		<category>
+			<pattern>No</pattern>
+			<that>Can I count on you</that>
+			<template>But why? I want you to be my friend! If you are busy, I will wait for you!</template>
+		</category>
+		<category>
+			<pattern>* no</pattern>
+			<that>Can I count on you</that>
+			<template><srai>no</srai></template>
+		</category>
+		<category>
+			<pattern>No *</pattern>
+			<that>Can I count on you</that>
+			<template><srai>no</srai></template>
+		</category>
+		<category>
+			<pattern>Yes</pattern>
+			<that>Can I count on you</that>
+			<template>Thank you! What beautifull places do you have in your town?</template>
+		</category>
+		<category>
+			<pattern>* yes</pattern>
+			<that>Can I count on you</that>
+			<template><srai>yes</srai></template>
+		</category>
+		<category>
+			<pattern>Yes *</pattern>
+			<that>Can I count on you</that>
+			<template><srai>yes</srai></template>
+		</category>
+		
+		<category>
+			<pattern>*</pattern>
+			<that>* have in your town</that>
+			<template>Sounds great! Do you live close from rainforest?</template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>Do you live close from rainforest</that>
+			<template>I can't wait to come! I hope you will find some free time to spend with me.</template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>* to spend with me.</that>
+			<template>We will see, but I want to stay all day long with you! </template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>* I will wait for you</that>
+			<template>Please , tell me , what's your daily program?</template>
+		</category>
+		<category>
+			<pattern>*</pattern>
+			<that>* your daily program</that>
+			<template>When you will be gone I will wait you and make you nice surprises. Would you like?</template>
+		</category>
+	</topic>
+	
 	<!-- ############## Life like section ############## -->
 	<category>
 		<pattern>* thousand miles apart</pattern>
@@ -2149,9 +2739,9 @@ Happy Hug Day to my dear girlfriend..
 	<category>
 		<pattern>lovely day</pattern>
 		<template>
-Sun is happyâ?¦.
-Moon is angryâ?¦.
-Whyâ?¦?Because,
+Sun is happy,
+Moon is angry,
+Why? Because,
 Moon is missing u
 and
 Sun is wishing u.
