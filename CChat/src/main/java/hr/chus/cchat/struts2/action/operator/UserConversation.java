@@ -63,6 +63,10 @@ public class UserConversation extends ActionSupport implements UserAware {
                 botMsg = robotService.responde(msg.getText(), userId);
             }
         }
+        if (botMsg == null) {
+            // Try to get any kind of response
+            botMsg = robotService.responde(" ", userId);
+        }
 
         LOG.info("Returning messages... Total count: {}", totalCount);
 
