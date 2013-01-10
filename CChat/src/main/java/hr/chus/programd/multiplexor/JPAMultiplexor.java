@@ -18,9 +18,13 @@ import org.aitools.programd.multiplexor.DuplicateUserIDError;
 import org.aitools.programd.multiplexor.Multiplexor;
 import org.aitools.programd.multiplexor.NoSuchPredicateException;
 import org.aitools.programd.util.DeveloperError;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class JPAMultiplexor extends Multiplexor {
+
+    private static final Logger               LOG      = LoggerFactory.getLogger(JPAMultiplexor.class);
 
     private static final String               ENC_UTF8 = "UTF-8";
 
@@ -56,7 +60,7 @@ public class JPAMultiplexor extends Multiplexor {
             predicate.setBotId(p_botid);
             predicate.setUserId(p_userid);
             predicate.setName(p_name);
-            predicate.setValue(p_value);
+            predicate.setValue(encodedValue);
 
             predicateRepository.save(predicate);
         } else if (predicates.size() > 0) {
@@ -78,8 +82,14 @@ public class JPAMultiplexor extends Multiplexor {
         if (predicates.isEmpty()) {
             throw new NoSuchPredicateException(p_name);
         } else {
+            final String predicate = predicates.get(0).getValue();
             try {
-                return URLDecoder.decode(predicates.get(0).getValue(), ENC_UTF8);
+                return URLDecoder.decode(predicate, ENC_UTF8);
+            } catch (IllegalArgumentException e) {
+                LOG.warn("Error decoding value " + predicate + ". Will delete predicate", e);
+                predicateRepository.delete(predicates.get(0));
+                
+                throw new NoSuchPredicateException(p_name);
             } catch (UnsupportedEncodingException e) {
                 throw new DeveloperError("This platform does not support UTF-8!", e);
             }
