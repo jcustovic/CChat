@@ -159,5 +159,16 @@
 			<result name="input" type="freemarker">/WEB-INF/ftl/targetMediaReceiveSmsResult.ftl</result>
 		</action>
 		
+		<!-- Virgopass MO&SR actions -->
+		<action name="VirgoMO" class="hr.chus.cchat.struts2.action.virgopass.VirgoReceiveSms">
+			<result type="plainText">/WEB-INF/html/virgopass_ok.html</result>
+			<result name="input" type="plainText">/WEB-INF/html/virgopass_ok.html</result>
+		</action>
+		
+		<action name="VirgoSR" class="hr.chus.cchat.struts2.action.virgopass.VirgoReceiveNotification">
+			<result type="plainText">/WEB-INF/html/virgopass_ok.html</result>
+			<result name="input" type="plainText">/WEB-INF/html/virgopass_ok.html</result>
+		</action>
+		
 	</package>
 </struts>

@@ -3,6 +3,7 @@ package hr.chus.cchat.db.service.jpa;
 import hr.chus.cchat.db.service.SMSMessageService;
 import hr.chus.cchat.model.db.jpa.Operator;
 import hr.chus.cchat.model.db.jpa.SMSMessage;
+import hr.chus.cchat.model.db.jpa.SMSMessage.DeliveryStatus;
 import hr.chus.cchat.model.db.jpa.SMSMessage.Direction;
 import hr.chus.cchat.model.db.jpa.ServiceProvider;
 import hr.chus.cchat.model.db.jpa.User;
@@ -192,11 +193,25 @@ public class SMSMessageServiceImpl implements SMSMessageService {
     }
 
     @Override
-    public SMSMessage getByGatewayId(String gatewayId) {
+    public SMSMessage getByGatewayId(final String p_gatewayId) {
         try {
-            return (SMSMessage) entityManager.createNamedQuery("SMSMessage.getByGatewayId").setParameter("gatewayId", gatewayId).getSingleResult();
+            return (SMSMessage) entityManager.createNamedQuery("SMSMessage.getByGatewayId").setParameter("gatewayId", p_gatewayId).getSingleResult();
         } catch (NoResultException e) {
             return null;
+        }
+    }
+
+    @Override
+    public void updateStatus(final String p_gatewayId, final DeliveryStatus p_status, final String p_message) {
+        final SMSMessage sms = getByGatewayId(p_gatewayId);
+        if (sms == null) {
+            LOG.warn("Message with gateway id {} not found.", p_gatewayId);
+        } else if (sms.getDirection() == Direction.OUT) {
+            sms.setDeliveryStatus(p_status);
+            sms.setDeliveryMessage(p_message);
+            entityManager.merge(sms);
+        } else {
+            LOG.warn("Message with gateway id {} is incoming msg and status will not be updated.", p_gatewayId);
         }
     }
 

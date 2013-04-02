@@ -29,10 +29,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 /**
  * @author Jan Čustović (jan.custovic@gmail.com)
  */
+@Service("targetMediaSendMessageService")
 public class TargetMediaSendMessageService implements SendMessageService {
 
     private static final Logger LOG      = LoggerFactory.getLogger(TargetMediaSendMessageService.class);
