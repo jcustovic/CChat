@@ -72,6 +72,12 @@ public class SMSMessage extends AbstractBaseEntity {
     @JoinColumn(name = "service_provider_keyword_id", nullable = true)
     private ServiceProviderKeyword serviceProviderKeyword;
 
+    @Column(name = "end_user_price")
+    private Float                  endUserPrice;
+
+    @Column(name = "end_user_price_currency")
+    private String                 endUserPriceCurrency;
+
     @Column(name = "direction", nullable = false, columnDefinition = "ENUM")
     @Enumerated(EnumType.STRING)
     private Direction              direction;
@@ -184,6 +190,22 @@ public class SMSMessage extends AbstractBaseEntity {
 
     public final void setServiceProviderKeyword(final ServiceProviderKeyword p_serviceProviderKeyword) {
         serviceProviderKeyword = p_serviceProviderKeyword;
+    }
+
+    public final Float getEndUserPrice() {
+        return endUserPrice;
+    }
+
+    public final void setEndUserPrice(final Float p_endUserPrice) {
+        endUserPrice = p_endUserPrice;
+    }
+
+    public final String getEndUserPriceCurrency() {
+        return endUserPriceCurrency;
+    }
+
+    public final void setEndUserPriceCurrency(final String p_endUserPriceCurrency) {
+        endUserPriceCurrency = p_endUserPriceCurrency;
     }
 
     public final Direction getDirection() {

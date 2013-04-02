@@ -62,6 +62,9 @@ public class User extends AbstractBaseEntity {
     @JoinColumn(name = "service_provider_id", nullable = false)
     private ServiceProvider serviceProvider;
 
+    @Column(name = "mcc_mnc", length = 6)
+    private String          mccMnc;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "bot_id")
     private Robot           bot;
@@ -101,9 +104,12 @@ public class User extends AbstractBaseEntity {
             name = "picture_id", referencedColumnName = "id") })
     private Set<Picture>    sentPictures;
 
-    public User() {}
+    public User() {
+        super();
+    }
 
     public User(final String p_msisdn, final ServiceProvider p_serviceProvider) {
+        super();
         final Date date = new Date();
         msisdn = p_msisdn;
         serviceProvider = p_serviceProvider;
@@ -115,6 +121,7 @@ public class User extends AbstractBaseEntity {
 
     public User(final Nick p_nick, final Operator p_operator, final String p_msisdn, final ServiceProvider p_serviceProvider, final String p_name,
             final String p_surname, final Date p_joined) {
+        super();
         nick = p_nick;
         operator = p_operator;
         msisdn = p_msisdn;
@@ -173,6 +180,14 @@ public class User extends AbstractBaseEntity {
 
     public final void setServiceProvider(final ServiceProvider p_serviceProvider) {
         serviceProvider = p_serviceProvider;
+    }
+
+    public final String getMccMnc() {
+        return mccMnc;
+    }
+
+    public final void setMccMnc(final String p_mccMnc) {
+        mccMnc = p_mccMnc;
     }
 
     public final Robot getBot() {

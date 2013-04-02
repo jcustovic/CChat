@@ -70,6 +70,13 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public final Integer[] receiveSms(final String p_serviceProviderName, final String p_sc, final String p_serviceProviderKeyword, final String p_msisdn,
                                       final String p_text, final Date p_date, final String p_gatewayId) {
+        return receiveSms(p_serviceProviderName, p_sc, p_serviceProviderKeyword, p_msisdn, null, p_text, p_date, p_gatewayId, null, null);
+    }
+
+    @Override
+    public Integer[] receiveSms(final String p_serviceProviderName, final String p_sc, final String p_serviceProviderKeyword, final String p_msisdn,
+                                final String p_mccMnc, final String p_text, final Date p_date, final String p_gatewayId, final Float p_price,
+                                final String p_currency) {
         final ServiceProvider serviceProvider = serviceProviderService.getByProviderNameAndShortCode(p_serviceProviderName, p_sc);
         if (serviceProvider == null) {
             throw new EntityNotFoundException("ServiceProvider not found for provider " + p_serviceProviderName + " and sc " + p_sc);
@@ -77,7 +84,7 @@ public class MessageServiceImpl implements MessageService {
         LOG.debug("Found service provider --> {}", serviceProvider);
 
         ServiceProviderKeyword providerKeyword = null;
-        if (p_serviceProviderKeyword != null && !p_serviceProviderKeyword.isEmpty()) {
+        if (StringUtils.hasText(p_serviceProviderKeyword)) {
             Set<ServiceProviderKeyword> keywords = serviceProvider.getServiceProviderKeywords();
             if (keywords != null && !keywords.isEmpty()) {
                 for (ServiceProviderKeyword keyword : keywords) {
@@ -101,42 +108,13 @@ public class MessageServiceImpl implements MessageService {
             smsText = p_text;
         }
 
+        final int smsCount = (int) Math.ceil(smsText.length() * 1f / MAX_RECEIVE_SMS_SIZE);
         User user;
         synchronized (LOCK) {
-            // Find or create user. Must be thread safe.
-            user = userService.getByMsisdnAndServiceName(p_msisdn, serviceProvider.getServiceName(), false);
-
-            if (user == null) {
-                user = new User(p_msisdn, serviceProvider);
-                user.setUnreadMsgCount(1);
-                assignOperator(user);
-                // Default bot should have ID 1
-                final Robot bot = robotService.findOne(1);
-                if (bot != null) {
-                    LOG.debug("Assigning default bot {} to new user {}", bot.getName(), user.getMsisdn());
-                    user.setBot(bot);
-                } else {
-                    LOG.debug("No default bot with ID 1 in database");
-                }
-
-                user = userService.editUser(user);
-                LOG.info("New user ({}) registred to service {}", user, serviceProvider.getServiceName());
-            } else {
-                user.setUnreadMsgCount(user.getUnreadMsgCount() + (smsText.length() / 160 + 1));
-                user.setLastMsg(new Date());
-
-                if (!user.getServiceProvider().equals(serviceProvider)) {
-                    LOG.info("User (" + user + ") changed service provider from " + user.getServiceProvider() + " to " + serviceProvider);
-                    user.setServiceProvider(serviceProvider);
-                }
-                assignOperator(user);
-
-                userService.editUser(user);
-            }
+            user = getOrCreateUser(p_msisdn, serviceProvider, p_mccMnc, smsCount);
         }
 
-        // We will split message if its length is more than 160.
-        final int smsCount = (int) Math.ceil(smsText.length() * 1f / MAX_RECEIVE_SMS_SIZE);
+        // We will split message if its length is more than 160 chars.
         if (smsCount > 1) {
             LOG.debug("Received sms with length {} (max {}). Will split message ({} parts)...",
                     new Object[] { smsText.length(), MAX_RECEIVE_SMS_SIZE, smsCount });
@@ -150,10 +128,49 @@ public class MessageServiceImpl implements MessageService {
             message.setDeliveryStatus(DeliveryStatus.RECEIVED);
             message.setGatewayId(p_gatewayId);
             message.setServiceProviderKeyword(providerKeyword);
+            message.setEndUserPrice(p_price);
+            message.setEndUserPriceCurrency(p_currency);
+
             msgIds[i] = smsMessageService.updateSMSMessage(message).getId();
         }
 
         return msgIds;
+    }
+
+    private User getOrCreateUser(final String p_msisdn, final ServiceProvider p_serviceProvider, final String p_mccMnc, final int p_smsCount) {
+        // Find or create user. Must be thread safe.
+        User user = userService.getByMsisdnAndServiceName(p_msisdn, p_serviceProvider.getServiceName(), false);
+
+        if (user == null) {
+            user = new User(p_msisdn, p_serviceProvider);
+            user.setMccMnc(p_mccMnc);
+            user.setUnreadMsgCount(1);
+            assignOperator(user);
+            // Default bot should have ID 1
+            final Robot bot = robotService.findOne(1);
+            if (bot != null) {
+                LOG.debug("Assigning default bot {} to new user {}", bot.getName(), user.getMsisdn());
+                user.setBot(bot);
+            } else {
+                LOG.debug("No default bot with ID 1 in database");
+            }
+
+            user = userService.editUser(user);
+            LOG.info("New user ({}) registred to service {}", user, p_serviceProvider.getServiceName());
+        } else {
+            user.setUnreadMsgCount(user.getUnreadMsgCount() + p_smsCount);
+            user.setLastMsg(new Date());
+
+            if (!user.getServiceProvider().equals(p_serviceProvider)) {
+                LOG.info("User (" + user + ") changed service provider from " + user.getServiceProvider() + " to " + p_serviceProvider);
+                user.setServiceProvider(p_serviceProvider);
+            }
+            assignOperator(user);
+
+            userService.editUser(user);
+        }
+
+        return user;
     }
 
     @Override
