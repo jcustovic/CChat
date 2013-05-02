@@ -2,6 +2,7 @@ package hr.chus.cchat.db.service;
 
 import java.util.List;
 
+import hr.chus.cchat.model.db.jpa.LanguageProvider;
 import hr.chus.cchat.model.db.jpa.ServiceProvider;
 
 /**
@@ -22,5 +23,7 @@ public interface ServiceProviderService {
     public List<ServiceProvider> getAll();
 
     public ServiceProvider getByProviderNameAndShortCode(String providerName, String sc);
+
+    public ServiceProvider findByProviderNameAndShortCodeAndProviderLanguage(String p_serviceProviderName, String p_sc, LanguageProvider bestMatchedLangProvider);
 
 }

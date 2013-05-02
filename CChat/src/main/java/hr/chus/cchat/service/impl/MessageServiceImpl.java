@@ -6,6 +6,8 @@ import hr.chus.cchat.db.service.ServiceProviderService;
 import hr.chus.cchat.db.service.UserService;
 import hr.chus.cchat.gateway.GatewayResponseError;
 import hr.chus.cchat.gateway.SendMessageService;
+import hr.chus.cchat.model.db.jpa.Language;
+import hr.chus.cchat.model.db.jpa.LanguageProvider;
 import hr.chus.cchat.model.db.jpa.Robot;
 import hr.chus.cchat.model.db.jpa.SMSMessage;
 import hr.chus.cchat.model.db.jpa.SMSMessage.DeliveryStatus;
@@ -13,11 +15,13 @@ import hr.chus.cchat.model.db.jpa.SMSMessage.Direction;
 import hr.chus.cchat.model.db.jpa.ServiceProvider;
 import hr.chus.cchat.model.db.jpa.ServiceProviderKeyword;
 import hr.chus.cchat.model.db.jpa.User;
+import hr.chus.cchat.service.LanguageProviderService;
 import hr.chus.cchat.service.MessageService;
 import hr.chus.cchat.service.RobotService;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.EntityNotFoundException;
@@ -67,6 +71,9 @@ public class MessageServiceImpl implements MessageService {
     @Autowired
     private SendMessageService            defaultSendMessageService;
 
+    @Autowired
+    private LanguageProviderService       languageProviderService;
+
     @Override
     public final Integer[] receiveSms(final String p_serviceProviderName, final String p_sc, final String p_serviceProviderKeyword, final String p_msisdn,
                                       final String p_text, final Date p_date, final String p_gatewayId) {
@@ -77,7 +84,20 @@ public class MessageServiceImpl implements MessageService {
     public Integer[] receiveSms(final String p_serviceProviderName, final String p_sc, final String p_serviceProviderKeyword, final String p_msisdn,
                                 final String p_mccMnc, final String p_text, final Date p_date, final String p_gatewayId, final Float p_price,
                                 final String p_currency) {
-        final ServiceProvider serviceProvider = serviceProviderService.getByProviderNameAndShortCode(p_serviceProviderName, p_sc);
+        final String msisdn = p_msisdn.trim();
+        // 1. Check to see if our msisdn matches any language
+        final List<LanguageProvider> matchedLanguageProviders = languageProviderService.findBestMatchByPrefix(msisdn);
+        final ServiceProvider serviceProvider;
+        if (matchedLanguageProviders.isEmpty()) {
+            // 2a. Use old logic and try to find provider
+            LOG.debug("MSISDN {} didn't match any language provider", msisdn);
+            serviceProvider = serviceProviderService.getByProviderNameAndShortCode(p_serviceProviderName, p_sc);
+        } else {
+            // 2b. We have a language match, find or create provider for that language
+            LOG.debug("MSISDN {} matched {} language providers", msisdn, matchedLanguageProviders.size());
+            serviceProvider = getProviderByMatchedLanguageProviders(p_serviceProviderName, p_sc, msisdn, matchedLanguageProviders);
+        }
+
         if (serviceProvider == null) {
             throw new EntityNotFoundException("ServiceProvider not found for provider " + p_serviceProviderName + " and sc " + p_sc);
         }
@@ -111,7 +131,7 @@ public class MessageServiceImpl implements MessageService {
         final int smsCount = (int) Math.ceil(smsText.length() * 1f / MAX_RECEIVE_SMS_SIZE);
         User user;
         synchronized (LOCK) {
-            user = getOrCreateUser(p_msisdn, serviceProvider, p_mccMnc, smsCount);
+            user = getOrCreateUser(msisdn, serviceProvider, p_mccMnc, smsCount);
         }
 
         // We will split message if its length is more than 160 chars.
@@ -137,6 +157,31 @@ public class MessageServiceImpl implements MessageService {
         return msgIds;
     }
 
+    private ServiceProvider getProviderByMatchedLanguageProviders(final String p_serviceProviderName, final String p_sc, final String p_msisdn,
+                                                                  final List<LanguageProvider> p_matchedLanguageProviders) {
+        final LanguageProvider bestMatchedLangProvider = p_matchedLanguageProviders.get(0);
+        final Language language = bestMatchedLangProvider.getLanguage();
+        LOG.debug("Best matched language for msisdn {} is {} (prefix: {}, sendBean: {})", new Object[] { p_msisdn, language.getShortCode(),
+                bestMatchedLangProvider.getPrefix(), bestMatchedLangProvider.getSendServiceBeanName() });
+
+        final String serviceProviderName = p_serviceProviderName + "_" + bestMatchedLangProvider.getId();
+        ServiceProvider serviceProvider = serviceProviderService.findByProviderNameAndShortCodeAndProviderLanguage(serviceProviderName, p_sc,
+                bestMatchedLangProvider);
+        if (serviceProvider == null) {
+            LOG.debug("Service provider not found for provider name {}, sc {} and language {}. Will automatically create...", new Object[] {
+                    serviceProviderName, p_sc, language.getShortCode() });
+            // TODO: Is this the correct way to provide serviceName?
+            serviceProvider = new ServiceProvider(p_sc, serviceProviderName, "LANG_PROVIDER_" + bestMatchedLangProvider.getId(), "Language provider "
+                    + language.getShortCode(), false);
+            serviceProvider.setAutoCreated(true);
+            serviceProvider.setLanguageProvider(bestMatchedLangProvider);
+
+            serviceProviderService.addServiceProvider(serviceProvider);
+        }
+
+        return serviceProvider;
+    }
+
     private User getOrCreateUser(final String p_msisdn, final ServiceProvider p_serviceProvider, final String p_mccMnc, final int p_smsCount) {
         // Find or create user. Must be thread safe.
         User user = userService.getByMsisdnAndServiceName(p_msisdn, p_serviceProvider.getServiceName(), false);
@@ -145,7 +190,6 @@ public class MessageServiceImpl implements MessageService {
             user = new User(p_msisdn, p_serviceProvider);
             user.setMccMnc(p_mccMnc);
             user.setUnreadMsgCount(1);
-            assignOperator(user);
             // Default bot should have ID 1
             final Robot bot = robotService.findOne(1);
             if (bot != null) {
@@ -165,7 +209,6 @@ public class MessageServiceImpl implements MessageService {
                 LOG.info("User (" + user + ") changed service provider from " + user.getServiceProvider() + " to " + p_serviceProvider);
                 user.setServiceProvider(p_serviceProvider);
             }
-            assignOperator(user);
 
             userService.editUser(user);
         }
@@ -176,9 +219,12 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public final SMSMessage sendMessage(final SMSMessage p_smsMessage, final Boolean p_botResponse, final User p_user, final String p_msgType)
             throws HttpException, IOException, GatewayResponseError {
+        final ServiceProvider serviceProvider = p_user.getServiceProvider();
         String gatewayId = null;
         final SendMessageService sendMessageService;
-        if (StringUtils.hasText(p_user.getServiceProvider().getSendServiceBeanName())) {
+        if (serviceProvider.getLanguageProvider() != null && serviceProvider.getLanguageProvider().getSendServiceBeanName() != null) {
+            sendMessageService = (SendMessageService) applicationContext.getBean(serviceProvider.getLanguageProvider().getSendServiceBeanName());
+        } else if (StringUtils.hasText(serviceProvider.getSendServiceBeanName())) {
             sendMessageService = (SendMessageService) applicationContext.getBean(p_user.getServiceProvider().getSendServiceBeanName());
         } else {
             sendMessageService = defaultSendMessageService;
@@ -197,14 +243,6 @@ public class MessageServiceImpl implements MessageService {
         p_smsMessage.setBotResponse(Boolean.TRUE.equals(p_botResponse));
 
         return smsMessageService.updateSMSMessage(p_smsMessage);
-    }
-
-    private void assignOperator(final User p_user) {
-        // NOTE: UnreadMsgAssignerScheduler will do this for us.
-        // final Operator operator = p_user.getOperator();
-        // if (operator == null || !operator.getIsActive()) {
-        //     p_user.setOperator(operatorChooser.chooseOperator());
-        // }
     }
 
 }
