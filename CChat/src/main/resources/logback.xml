@@ -55,14 +55,14 @@
 	<logger name="org.apache.struts2.json" level="warn" /> 
 	-->
 
-	<logger name="net.sf.ehcache" level="info" />
 	<logger name="org.springframework.web.client" level="debug" />
+	
+	<logger name="net.sf.ehcache" level="info" />
+	
 	<logger name="org.hibernate.SQL" level="error" />
 	<logger name="org.hibernate.type" level="error" />
+	<logger name="org.hibernate.stat" level="debug" />
 
-
-	<logger name="org.hibernate.stat.Statistics" level="info" />
-	
 	<logger name="hr.chus.cchat" level="debug" />
 
 	<root level="info">

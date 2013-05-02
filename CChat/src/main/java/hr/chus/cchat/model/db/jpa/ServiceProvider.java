@@ -5,6 +5,8 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -58,20 +60,35 @@ public class ServiceProvider extends AbstractBaseEntity {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<ServiceProviderKeyword> serviceProviderKeywords;
 
-    public ServiceProvider() {}
+    @Column(name = "auto_created", columnDefinition = "BIT")
+    private Boolean                     autoCreated = Boolean.FALSE;
 
-    public ServiceProvider(String sc, String providerName, String serviceName, String description, boolean disabled) {
-        this.sc = sc;
-        this.providerName = providerName;
-        this.serviceName = serviceName;
-        this.description = description;
-        this.disabled = disabled;
+    @ManyToOne
+    @JoinColumn(name = "language_provider_id")
+    private LanguageProvider            languageProvider;
+
+    public ServiceProvider() {
+        // Default
+    }
+
+    public ServiceProvider(final String p_sc, final String p_providerName, final String p_serviceName, final String p_description, final boolean p_disabled) {
+        sc = p_sc;
+        providerName = p_providerName;
+        serviceName = p_serviceName;
+        description = p_description;
+        disabled = p_disabled;
     }
 
     @Override
     public String toString() {
-        return String.format("ServiceProvider[ID: %s, ProviderName: %s, SC: %s, ServiceName: %s, Disabled: %s]", new Object[] { getId(), providerName, sc,
-                serviceName, disabled });
+        String lang = "";
+        Integer langProvId = null;
+        if (languageProvider != null) {
+            lang = languageProvider.getLanguage().getShortCode();
+            langProvId = languageProvider.getId();
+        }
+        return String.format("ServiceProvider[ID: %s, ProviderName: %s, SC: %s, ServiceName: %s, Disabled: %s, LanguageProviderId: %s, Lang: %s]",
+                new Object[] { getId(), providerName, sc, serviceName, disabled, langProvId, lang });
     }
 
     @Override
@@ -86,68 +103,84 @@ public class ServiceProvider extends AbstractBaseEntity {
 
     // Getters & setters
 
-    public String getSc() {
+    public final String getSc() {
         return sc;
     }
 
-    public void setSc(String sc) {
-        this.sc = sc;
+    public final void setSc(String p_sc) {
+        sc = p_sc;
     }
 
-    public String getProviderName() {
+    public final String getProviderName() {
         return providerName;
     }
 
-    public void setProviderName(String providerName) {
-        this.providerName = providerName;
+    public final void setProviderName(final String p_providerName) {
+        providerName = p_providerName;
     }
 
-    public String getServiceName() {
+    public final String getServiceName() {
         return serviceName;
     }
 
-    public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
+    public final void setServiceName(final String p_serviceName) {
+        serviceName = p_serviceName;
     }
 
-    public Float getBillingAmount() {
+    public final Float getBillingAmount() {
         return billingAmount;
     }
 
-    public void setBillingAmount(Float billingAmount) {
-        this.billingAmount = billingAmount;
+    public final void setBillingAmount(final Float p_billingAmount) {
+        billingAmount = p_billingAmount;
     }
 
-    public String getDescription() {
+    public final String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public final void setDescription(final String p_description) {
+        description = p_description;
     }
 
-    public Boolean getDisabled() {
+    public final Boolean getDisabled() {
         return disabled;
     }
 
-    public void setDisabled(Boolean disabled) {
-        this.disabled = disabled;
+    public final void setDisabled(final Boolean p_disabled) {
+        disabled = p_disabled;
     }
 
-    public String getSendServiceBeanName() {
+    public final String getSendServiceBeanName() {
         return sendServiceBeanName;
     }
 
-    public void setSendServiceBeanName(String sendServiceBeanName) {
-        this.sendServiceBeanName = sendServiceBeanName;
+    public final void setSendServiceBeanName(final String p_sendServiceBeanName) {
+        sendServiceBeanName = p_sendServiceBeanName;
     }
 
-    public Set<ServiceProviderKeyword> getServiceProviderKeywords() {
+    public final Set<ServiceProviderKeyword> getServiceProviderKeywords() {
         return serviceProviderKeywords;
     }
 
-    public void setServiceProviderKeywords(Set<ServiceProviderKeyword> serviceProviderKeywords) {
-        this.serviceProviderKeywords = serviceProviderKeywords;
+    public final void setServiceProviderKeywords(Set<ServiceProviderKeyword> p_serviceProviderKeywords) {
+        serviceProviderKeywords = p_serviceProviderKeywords;
+    }
+
+    public final Boolean getAutoCreated() {
+        return autoCreated;
+    }
+
+    public final void setAutoCreated(final Boolean p_autoCreated) {
+        autoCreated = p_autoCreated;
+    }
+
+    public final LanguageProvider getLanguageProvider() {
+        return languageProvider;
+    }
+
+    public final void setLanguageProvider(final LanguageProvider p_languageProvder) {
+        languageProvider = p_languageProvder;
     }
 
 }

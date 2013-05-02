@@ -1,9 +1,13 @@
 package hr.chus.cchat.model.db.jpa;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -37,33 +41,38 @@ import org.hibernate.ejb.QueryHints;
 public class Operator extends AbstractBaseEntity {
 
     @Column(name = "username", length = 30, nullable = false, unique = true)
-    private String  username;
+    private String        username;
 
     @Column(name = "pass", length = 50, nullable = false)
-    private String  password;
+    private String        password;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "operator_role_id", nullable = false)
     @Fetch(FetchMode.JOIN)
-    private Role    role;
+    private Role          role;
 
     @Column(name = "name", length = 20, nullable = true)
-    private String  name;
+    private String        name;
 
     @Column(name = "surname", length = 30, nullable = true)
-    private String  surname;
+    private String        surname;
 
     @Column(name = "email", length = 50, nullable = true)
-    private String  email;
+    private String        email;
 
     @Column(name = "is_active", columnDefinition = "BIT")
-    private Boolean isActive;
+    private Boolean       isActive;
 
     @Column(name = "is_external", columnDefinition = "BIT")
-    private Boolean isExternal;
+    private Boolean       isExternal;
 
     @Column(name = "disabled", columnDefinition = "BIT")
-    private Boolean disabled;
+    private Boolean       disabled;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "operator_language", joinColumns = { @JoinColumn(name = "operator_id", referencedColumnName = "id") },
+            inverseJoinColumns = { @JoinColumn(name = "language_id", referencedColumnName = "id") })
+    private Set<Language> languages;
 
     public Operator() {}
 
@@ -98,72 +107,80 @@ public class Operator extends AbstractBaseEntity {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsername(final String p_username) {
+        username = p_username;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPassword(final String p_password) {
+        password = p_password;
     }
 
     public Role getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setRole(final Role p_role) {
+        role = p_role;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(final String p_name) {
+        name = p_name;
     }
 
     public String getSurname() {
         return surname;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setSurname(final String p_surname) {
+        surname = p_surname;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setEmail(final String p_email) {
+        email = p_email;
     }
 
     public Boolean getIsActive() {
         return isActive;
     }
 
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
+    public void setIsActive(final Boolean p_isActive) {
+        isActive = p_isActive;
     }
 
     public Boolean getIsExternal() {
         return isExternal;
     }
 
-    public void setIsExternal(Boolean isExternal) {
-        this.isExternal = isExternal;
+    public void setIsExternal(final Boolean p_isExternal) {
+        isExternal = p_isExternal;
     }
 
     public Boolean getDisabled() {
         return disabled;
     }
 
-    public void setDisabled(Boolean disabled) {
-        this.disabled = disabled;
+    public void setDisabled(final Boolean p_disabled) {
+        disabled = p_disabled;
+    }
+
+    public final Set<Language> getLanguages() {
+        return languages;
+    }
+
+    public final void setLanguages(final Set<Language> p_languages) {
+        languages = p_languages;
     }
 
 }

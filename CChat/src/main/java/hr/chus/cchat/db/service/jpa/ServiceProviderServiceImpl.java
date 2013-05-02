@@ -6,10 +6,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import hr.chus.cchat.db.repository.ServiceProviderRepository;
 import hr.chus.cchat.db.service.ServiceProviderService;
+import hr.chus.cchat.model.db.jpa.LanguageProvider;
 import hr.chus.cchat.model.db.jpa.ServiceProvider;
 
 /**
@@ -21,8 +24,11 @@ import hr.chus.cchat.model.db.jpa.ServiceProvider;
 @Transactional
 public class ServiceProviderServiceImpl implements ServiceProviderService {
 
+    @Autowired
+    private ServiceProviderRepository serviceProviderRepository;
+
     @PersistenceContext
-    private EntityManager entityManager;
+    private EntityManager             entityManager;
 
     @Override
     public void addServiceProvider(ServiceProvider serviceProvider) {
@@ -59,6 +65,11 @@ public class ServiceProviderServiceImpl implements ServiceProviderService {
         } catch (NoResultException e) {
             return null;
         }
+    }
+
+    @Override
+    public ServiceProvider findByProviderNameAndShortCodeAndProviderLanguage(String p_serviceProviderName, String p_sc, LanguageProvider p_langProvider) {
+        return serviceProviderRepository.findByProviderNameAndScAndLanguageProvider(p_serviceProviderName, p_sc, p_langProvider);
     }
 
 }

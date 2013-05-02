@@ -2,10 +2,12 @@ package hr.chus.cchat.scheduler;
 
 import hr.chus.cchat.db.service.OperatorService;
 import hr.chus.cchat.db.service.UserService;
+import hr.chus.cchat.model.db.jpa.LanguageProvider;
 import hr.chus.cchat.model.db.jpa.Operator;
 import hr.chus.cchat.model.db.jpa.User;
 import hr.chus.cchat.model.helper.OperatorWrapper;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -72,9 +74,18 @@ public class UnreadMsgAssignerScheduler {
                     break;
                 }
                 for (final User user : unassignedUserList) {
-                    final Operator bestMatchOperator = findUserByLoadLowest(operators);
+                    final LanguageProvider languageProvider = user.getServiceProvider().getLanguageProvider();
+                    final Operator bestMatchOperator;
+                    String language = "no_language";
+                    if (languageProvider == null) {
+                        bestMatchOperator = findUserByLoadLowest(operators);                        
+                    } else {
+                        language = languageProvider.getLanguage().getShortCode();
+                        bestMatchOperator = findUserByLoadLowestAndLanguage(operators, languageProvider);
+                    }
+                    
                     if (bestMatchOperator == null) {
-                        LOG.info("No available/free operators to assign users.");
+                        LOG.info("No available/free operators to assign users (language: {}).", language);
                         hasOperators = false;
                         break;
                     } else {
@@ -87,6 +98,28 @@ public class UnreadMsgAssignerScheduler {
         }
 
         LOG.debug("UnreadMsgAssignerScheduler done executing");
+    }
+
+    /**
+     * Method that first filters operator by language and then by lowest load.
+     * 
+     * @param p_operators
+     * @param languageProvider
+     * @return
+     */
+    private Operator findUserByLoadLowestAndLanguage(final List<OperatorWrapper> p_operators, final LanguageProvider languageProvider) {
+        final List<OperatorWrapper> operators = new LinkedList<OperatorWrapper>(p_operators);
+        
+        // Remove operators that do not support language
+        final Iterator<OperatorWrapper> iterator = operators.iterator();
+        while (iterator.hasNext()) {
+            final OperatorWrapper operator = iterator.next();
+            if (!operator.getOperator().getLanguages().contains(languageProvider.getLanguage())) {
+                iterator.remove();
+            }
+        }
+        
+        return findUserByLoadLowest(operators);
     }
 
     /**
