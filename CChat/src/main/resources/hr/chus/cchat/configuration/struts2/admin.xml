@@ -10,7 +10,6 @@
 			<result-type name="tiles" default="true" class="org.apache.struts2.views.tiles.TilesResult"/>
 		</result-types>
 		
-		
 		<interceptors>
 			<interceptor name="authenticateAdminInterceptor" class="hr.chus.cchat.struts2.interceptor.AuthenticateInterceptor">
 				<param name="role">admin</param>
@@ -160,6 +159,56 @@
 		
 		<action name="TalkToBot" class="hr.chus.cchat.struts2.action.admin.TalkToBot">
 			<result type="json" />
+		</action>
+		
+		<action name="language/findAll" class="hr.chus.cchat.struts2.action.admin.AdminLanguageAction" method="findAll">
+			<result type="json" />
+			<result name="input" type="json" />
+		</action>
+		
+		<action name="language/save" class="hr.chus.cchat.struts2.action.admin.AdminLanguageAction" method="save">
+			<result type="json" />
+			<result name="input" type="json" />
+		</action>
+		
+		<action name="language/delete" class="hr.chus.cchat.struts2.action.admin.AdminLanguageAction" method="delete">
+			<result type="json" />
+			<result name="input" type="json" />
+		</action>
+		
+		<action name="serviceProvider/findAll" class="hr.chus.cchat.struts2.action.admin.AdminServiceProviderAction" method="findAll">
+			<result type="json" />
+			<result name="input" type="json" />
+		</action>
+		
+		<action name="serviceProvider/findAllSendBeans" class="hr.chus.cchat.struts2.action.admin.AdminServiceProviderAction" method="findAllSendBeans">
+			<result type="json" />
+			<result name="input" type="json" />
+		</action>
+		
+		<action name="serviceProvider/save" class="hr.chus.cchat.struts2.action.admin.AdminServiceProviderAction" method="save">
+			<result type="json" />
+			<result name="input" type="json" />
+		</action>
+		
+		<action name="serviceProvider/delete" class="hr.chus.cchat.struts2.action.admin.AdminServiceProviderAction" method="delete">
+			<result type="json" />
+			<result name="input" type="json" />
+		</action>
+		
+		<action name="languageProvider/findAll" class="hr.chus.cchat.struts2.action.admin.AdminLanguageProviderAction" method="findAll">
+			<result type="json" />
+			<result name="input" type="json" />
+		</action>
+		
+		<action name="languageProvider/save" class="hr.chus.cchat.struts2.action.admin.AdminLanguageProviderAction" method="save">
+			<result type="json" />
+			<result name="input" type="json" />
+		</action>
+		
+		<action name="languageProvider/delete" class="hr.chus.cchat.struts2.action.admin.AdminLanguageProviderAction" method="delete">
+			<result type="json" />
+			<result name="input" type="json" />
 		</action>
 	
 	</package>

@@ -273,6 +273,7 @@ public class UserConsole extends HLayout {
         sendMsgForm = new DynamicForm();
         sendMsgForm.setAutoFocus(true);
         sendMsgForm.setIsGroup(true);
+        sendMsgForm.setPadding(5);
         sendMsgForm.setGroupTitle(DictionaryInstance.dictionary.sendMessage());
         sendMsgForm.setDataSource(sendSmsDS);
         sendMsgForm.setWidth(350);
@@ -380,6 +381,7 @@ public class UserConsole extends HLayout {
 
         final DynamicForm sendBotMsgForm = new DynamicForm();
         sendBotMsgForm.setAutoFocus(true);
+        sendBotMsgForm.setPadding(5);
         sendBotMsgForm.setIsGroup(true);
         sendBotMsgForm.setGroupTitle(DictionaryInstance.dictionary.sendBotMessage());
         sendBotMsgForm.setDataSource(sendSmsDS);
@@ -511,6 +513,7 @@ public class UserConsole extends HLayout {
         userFormLabel.setContents(DictionaryInstance.dictionary.editUser());
 
         userForm = new DynamicForm();
+        userForm.setPadding(5);
         userForm.setIsGroup(true);
         userForm.setGroupTitle(DictionaryInstance.dictionary.update());
         userForm.setNumCols(4);

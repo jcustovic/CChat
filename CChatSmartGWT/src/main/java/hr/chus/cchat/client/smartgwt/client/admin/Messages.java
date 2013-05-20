@@ -125,6 +125,7 @@ public class Messages extends HLayout {
 		final DynamicForm searchForm = new DynamicForm();
 		searchForm.setHeight(120);
 		searchForm.setIsGroup(true);
+		searchForm.setPadding(5);
 		
         searchForm.setGroupTitle(DictionaryInstance.dictionary.search());
         searchForm.setNumCols(6);

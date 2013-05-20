@@ -11,22 +11,24 @@ import java.util.List;
  */
 public interface OperatorService {
 
-    public void addOperator(Operator operator);
+    void addOperator(Operator p_operator);
 
-    public void removeOperator(Operator operator);
+    void removeOperator(Operator p_operator);
 
-    public Operator updateOperator(Operator operator);
+    Operator updateOperator(Operator p_operator);
 
-    public Operator authenticateUser(String username, String password);
+    Operator authenticateUser(String p_username, String p_password);
 
-    public Operator getOperatorByUsername(String username);
+    Operator getOperatorByUsername(String p_username);
 
-    public List<Operator> getAllOperators();
+    List<Operator> getAllOperators();
 
-    public List<Operator> getAllActiveOperators();
+    List<Operator> getAllActiveOperators();
 
-    public boolean checkIfUsernameExists(Operator operator);
+    boolean checkIfUsernameExists(Operator p_operator);
 
-    public Operator getOperatorById(Integer id);
+    Operator getOperatorById(Integer p_id);
+
+    Operator save(Operator p_operator, List<Integer> p_languages);
 
 }

@@ -6,6 +6,7 @@ import hr.chus.cchat.listener.SessionListener;
 import hr.chus.cchat.model.db.jpa.Operator;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -38,6 +39,7 @@ public class AdminOperatorFunction extends ActionSupport {
     private transient ShaPasswordEncoder shaPasswordEncoder;
 
     private Operator                     operator;
+    private List<Integer>                languages;
     private String                       operation;
     private Map<String, String>          errorFields;
     private String                       status;
@@ -55,7 +57,7 @@ public class AdminOperatorFunction extends ActionSupport {
                     SessionListener.updateSessionWithUser(operator);
                 }
             }
-            operator = operatorService.updateOperator(operator);
+            operator = operatorService.save(operator, languages);
         } else if ("delete".equals(operation)) {
             if ("admin".equals(operator.getUsername())) {
                 errorFields = new LinkedHashMap<String, String>();
@@ -156,28 +158,32 @@ public class AdminOperatorFunction extends ActionSupport {
         return operator;
     }
 
-    public void setOperator(Operator operator) {
-        this.operator = operator;
+    public void setOperator(final Operator p_operator) {
+        operator = p_operator;
     }
 
-    public void setOperation(String operation) {
-        this.operation = operation;
+    public final void setLanguages(final List<Integer> p_languages) {
+        languages = p_languages;
+    }
+
+    public void setOperation(final String p_operation) {
+        operation = p_operation;
     }
 
     public Map<String, String> getErrorFields() {
         return errorFields;
     }
 
-    public void setErrorFields(Map<String, String> errorFields) {
-        this.errorFields = errorFields;
+    public void setErrorFields(final Map<String, String> p_errorFields) {
+        errorFields = p_errorFields;
     }
 
     public String getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStatus(final String p_status) {
+        status = p_status;
     }
 
 }

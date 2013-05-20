@@ -86,6 +86,7 @@ public class Statistics extends HLayout {
 		statisticsForm.setNumCols(2);
 		statisticsForm.setAutoFocus(false);
 		statisticsForm.setUseAllDataSourceFields(false);
+		statisticsForm.setPadding(5);
 
 		statisticsForm.setFields(getStatisticsFormFields());
 		

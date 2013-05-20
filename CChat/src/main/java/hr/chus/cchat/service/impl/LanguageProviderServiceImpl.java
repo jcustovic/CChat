@@ -32,4 +32,19 @@ public class LanguageProviderServiceImpl implements LanguageProviderService {
         return languageProviderRepository.findBestMatchByPrefix(msisdn);
     }
 
+    @Override
+    public final List<LanguageProvider> findAll() {
+        return languageProviderRepository.findAll();
+    }
+
+    @Override
+    public final LanguageProvider save(final LanguageProvider p_languageProvider) {
+        return languageProviderRepository.save(p_languageProvider);
+    }
+
+    @Override
+    public final void delete(final Integer p_id) {
+        languageProviderRepository.delete(p_id);
+    }
+
 }

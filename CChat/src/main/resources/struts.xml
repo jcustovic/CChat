@@ -11,6 +11,9 @@
 	<constant name="struts.multipart.maxSize" value="10485760"/>
 	<constant name="struts.i18n.encoding" value="UTF-8"/>
 	
+	<constant name="struts.enable.SlashesInActionNames" value="true" />
+	<constant name="struts.mapper.alwaysSelectFullNamespace" value="false" />
+	
 	<include file="hr/chus/cchat/configuration/struts2/common.xml"/>
 	<include file="hr/chus/cchat/configuration/struts2/admin.xml"/>
 	<include file="hr/chus/cchat/configuration/struts2/operator.xml"/>

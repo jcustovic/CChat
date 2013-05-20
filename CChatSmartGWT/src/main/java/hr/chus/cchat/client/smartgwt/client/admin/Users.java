@@ -122,6 +122,7 @@ public class Users extends HLayout {
         form.setIsGroup(true);
         form.setGroupTitle(DictionaryInstance.dictionary.update());
         form.setNumCols(4);
+        form.setPadding(5);
 
         DataSource ds = new DataSource(Constants.CONTEXT_PATH + "admin/AdminUserFunctionJSON") {
 
@@ -198,6 +199,7 @@ public class Users extends HLayout {
                             DataSource ds = new DataSource(Constants.CONTEXT_PATH + "admin/SendSms");
                             ds.setDataFormat(DSDataFormat.JSON);
                             final DynamicForm sendMsgForm = new DynamicForm();
+                            sendMsgForm.setPadding(5);
                             sendMsgForm.setAutoFocus(true);
                             sendMsgForm.setDataSource(ds);
                             sendMsgForm.setWidth(220);
@@ -321,6 +323,7 @@ public class Users extends HLayout {
         listGrid.setFields(getGridFields());
 
         final DynamicForm searchForm = new DynamicForm();
+        searchForm.setPadding(5);
         // searchForm.setWidth("60%");
         searchForm.setIsGroup(true);
 

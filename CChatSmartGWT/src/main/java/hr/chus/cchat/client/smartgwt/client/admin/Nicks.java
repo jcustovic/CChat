@@ -82,6 +82,7 @@ public class Nicks extends HLayout {
 		final DynamicForm form = new DynamicForm();
 		form.setVisible(false);
 		form.setWidth("30%");
+		form.setPadding(5);
 		form.setIsGroup(true);
 		form.setGroupTitle(DictionaryInstance.dictionary.addNew());
 		

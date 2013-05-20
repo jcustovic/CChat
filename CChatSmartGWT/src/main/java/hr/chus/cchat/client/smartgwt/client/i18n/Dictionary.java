@@ -372,5 +372,41 @@ public interface Dictionary extends Constants {
 
     @DefaultStringValue("Bot not yet selected")
     String noBotSelected();
+    
+    @DefaultStringValue("Languages")
+    String languages();
+    
+    @DefaultStringValue("MSISDN routing")
+    String msisdnRouting();
+
+    @DefaultStringValue("Short code")
+    String langShortCode();
+
+    @DefaultStringValue("Provider name")
+    String providerName();
+
+    @DefaultStringValue("Service name")
+    String serviceName();
+
+    @DefaultStringValue("Billing amount")
+    String billingAmount();
+
+    @DefaultStringValue("Send service bean name")
+    String sendServiceBeanName();
+
+    @DefaultStringValue("Auto created")
+    String autoCreated();
+
+    @DefaultStringValue("Language prefix")
+    String languageProviderPrefix();
+
+    @DefaultStringValue("MSISDN prefix")
+    String msisdnPrefix();
+
+    @DefaultStringValue("Prefix")
+    String prefix();
+
+    @DefaultStringValue("Language")
+    String language();
 
 }
