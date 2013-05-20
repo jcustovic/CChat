@@ -12,18 +12,22 @@ import hr.chus.cchat.model.db.jpa.ServiceProvider;
  */
 public interface ServiceProviderService {
 
-    public void addServiceProvider(ServiceProvider serviceProvider);
+    void addServiceProvider(ServiceProvider p_serviceProvider);
 
-    public void deleteServiceProvider(ServiceProvider serviceProvider);
+    void deleteServiceProvider(ServiceProvider p_serviceProvider);
 
-    public ServiceProvider updateServiceProvider(ServiceProvider serviceProvider);
+    ServiceProvider updateServiceProvider(ServiceProvider p_serviceProvider);
 
-    public ServiceProvider getById(Integer id);
+    ServiceProvider getById(Integer p_id);
 
-    public List<ServiceProvider> getAll();
+    List<ServiceProvider> findAll();
 
-    public ServiceProvider getByProviderNameAndShortCode(String providerName, String sc);
+    ServiceProvider getByProviderNameAndShortCode(String p_providerName, String p_sc);
 
-    public ServiceProvider findByProviderNameAndShortCodeAndProviderLanguage(String p_serviceProviderName, String p_sc, LanguageProvider bestMatchedLangProvider);
+    ServiceProvider findByProviderNameAndShortCodeAndProviderLanguage(String p_serviceProviderName, String p_sc, LanguageProvider p_bestMatchedLangProvider);
+
+    List<String> findAllSenderBeanNames();
+
+    void delete(Integer p_id);
 
 }

@@ -29,6 +29,9 @@ public class CChatAdminData {
 	                    new ExplorerTreeNode(DictionaryInstance.dictionary.messages(), "messages-category", "root", Constants.CONTEXT_PATH + "images/message_g.jpg", new Messages.Factory(), true, idSuffix),
 	                    new ExplorerTreeNode(DictionaryInstance.dictionary.statistics(), "statistics-category", "root", Constants.CONTEXT_PATH + "images/statistics.png", new Statistics.Factory(), true, idSuffix),
 	                    new ExplorerTreeNode(DictionaryInstance.dictionary.settings(), "settings-category", "root", Constants.CONTEXT_PATH + "images/settings.png", new Settings.Factory(), true, idSuffix),
+	                    new ExplorerTreeNode(DictionaryInstance.dictionary.languages(), "language-category", "root", Constants.CONTEXT_PATH + "images/globe-icon.png", new LanguageLayout.Factory(), true, idSuffix),
+	                    new ExplorerTreeNode(DictionaryInstance.dictionary.msisdnPrefix(), "msisdn-prefix-category", "root", Constants.CONTEXT_PATH + "images/down-icon.png", new MsisdnPrefixLayout.Factory(), true, idSuffix),
+	                    new ExplorerTreeNode(DictionaryInstance.dictionary.msisdnRouting(), "msisdn-routing-category", "root", Constants.CONTEXT_PATH + "images/bubble-icon.png", new MsisdnRoutingLayout.Factory(), true, idSuffix),
 	                    new ExplorerTreeNode(DictionaryInstance.dictionary.bot(), "bot-category", "root", Constants.CONTEXT_PATH + "images/female_bot.png", new Bot.Factory(), true, idSuffix)
 			};
 		}

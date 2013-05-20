@@ -89,6 +89,7 @@ public class Pictures extends HLayout {
 		final DynamicForm form = new DynamicForm();
 		form.setDisabled(true);
 		form.setWidth("550px");
+		form.setPadding(5);
 		form.setIsGroup(true);
 		form.setGroupTitle(DictionaryInstance.dictionary.update());
 		form.setNumCols(4);

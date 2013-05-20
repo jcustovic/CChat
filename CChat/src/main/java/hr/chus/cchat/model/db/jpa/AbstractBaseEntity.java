@@ -47,8 +47,8 @@ public abstract class AbstractBaseEntity implements Serializable {
         return id;
     }
 
-    public final void setId(Integer id) {
-        this.id = id;
+    public final void setId(final Integer p_id) {
+        id = p_id;
     }
 
 }

@@ -9,6 +9,12 @@ import java.util.List;
  */
 public interface LanguageProviderService {
     
-    List<LanguageProvider> findBestMatchByPrefix(String p_p_msisdn);
+    List<LanguageProvider> findBestMatchByPrefix(String p_msisdn);
+
+    List<LanguageProvider> findAll();
+
+    LanguageProvider save(LanguageProvider p_languageProvider);
+
+    void delete(Integer p_id);
 
 }

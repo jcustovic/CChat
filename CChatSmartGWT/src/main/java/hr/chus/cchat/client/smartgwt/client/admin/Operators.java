@@ -1,12 +1,13 @@
 package hr.chus.cchat.client.smartgwt.client.admin;
 
-import java.util.Iterator;
-
+import hr.chus.cchat.client.smartgwt.client.admin.ds.LanguageDS;
 import hr.chus.cchat.client.smartgwt.client.admin.ds.OperatorsDS;
 import hr.chus.cchat.client.smartgwt.client.admin.ds.RolesDS;
 import hr.chus.cchat.client.smartgwt.client.common.Constants;
 import hr.chus.cchat.client.smartgwt.client.common.PanelFactory;
 import hr.chus.cchat.client.smartgwt.client.i18n.DictionaryInstance;
+
+import java.util.Iterator;
 
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONString;
@@ -17,6 +18,7 @@ import com.smartgwt.client.data.DataSource;
 import com.smartgwt.client.data.XMLTools;
 import com.smartgwt.client.rpc.RPCResponse;
 import com.smartgwt.client.types.DSDataFormat;
+import com.smartgwt.client.types.MultipleAppearance;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.Label;
@@ -85,8 +87,9 @@ public class Operators extends HLayout {
 
 		final DynamicForm form = new DynamicForm();
 		form.setVisible(false);
-		form.setWidth("80%");
+		form.setWidth(500);
 		form.setIsGroup(true);
+        form.setPadding(5);
 		form.setGroupTitle(DictionaryInstance.dictionary.addNew());
 		form.setNumCols(4);
 		
@@ -293,7 +296,17 @@ public class Operators extends HLayout {
 		emailValidator.setValidateOnChange(false);
 		email.setValidators(emailValidator);
 		
-		return new FormItem[] { id, username, name, surname, email, active, external, disabled, selectRole, password };
+		final SelectItem languagePickList = new SelectItem("languages");  
+        languagePickList.setTitle(DictionaryInstance.dictionary.languages());  
+        languagePickList.setMultiple(true);
+        languagePickList.setMultipleAppearance(MultipleAppearance.PICKLIST);
+        languagePickList.setPickListWidth(250);
+        languagePickList.setOptionDataSource(LanguageDS.getInstance());
+        languagePickList.setDisplayField("shortCode");
+        languagePickList.setValueField("id");
+        languagePickList.setFilterLocally(true);
+        
+		return new FormItem[] { id, username, name, surname, email, active, external, disabled, selectRole, password, languagePickList };
 	}
 
 	private ListGridField[] getGridFields() {
@@ -306,7 +319,13 @@ public class Operators extends HLayout {
 		ListGridField disabled = new ListGridField("operator.disabled");
 		ListGridField operatorRoleName = new ListGridField("role.name");
 		
-		return new ListGridField[] { username, name, surname, email, active, external, disabled, operatorRoleName };
+		ListGridField languagesField = new ListGridField("languages");
+        languagesField.setMultiple(true);
+        languagesField.setOptionDataSource(LanguageDS.getInstance());
+        languagesField.setValueField("id");
+        languagesField.setDisplayField("shortCode");
+
+        return new ListGridField[] { username, name, surname, email, active, external, disabled, operatorRoleName, languagesField };
 	}
 
 }

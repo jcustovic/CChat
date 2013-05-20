@@ -1,5 +1,6 @@
 package hr.chus.cchat.model.db.jpa;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -72,7 +73,7 @@ public class Operator extends AbstractBaseEntity {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "operator_language", joinColumns = { @JoinColumn(name = "operator_id", referencedColumnName = "id") },
             inverseJoinColumns = { @JoinColumn(name = "language_id", referencedColumnName = "id") })
-    private Set<Language> languages;
+    private Set<Language> languages = new HashSet<Language>();
 
     public Operator() {}
 
