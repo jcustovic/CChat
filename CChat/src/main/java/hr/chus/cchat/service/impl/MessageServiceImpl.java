@@ -43,11 +43,12 @@ import org.springframework.util.StringUtils;
 @Service
 public class MessageServiceImpl implements MessageService {
 
-    private static final Logger           LOG                  = LoggerFactory.getLogger(MessageServiceImpl.class);
+    private static final Logger           LOG                    = LoggerFactory.getLogger(MessageServiceImpl.class);
 
-    private static final Object           LOCK                 = new Object();
+    private static final Object           LOCK                   = new Object();
 
-    private static final int              MAX_RECEIVE_SMS_SIZE = 160;
+    public static final int               SMS_UNICODE_MAX_LENGTH = 70;
+    public static final int               SMS_ASCII_MAX_LENGTH   = 160;
 
     @Autowired
     private ApplicationContext            applicationContext;
@@ -85,20 +86,24 @@ public class MessageServiceImpl implements MessageService {
                                 final String p_mccMnc, final String p_text, final Date p_date, final String p_gatewayId, final Float p_price,
                                 final String p_currency) {
         final String msisdn = p_msisdn.trim();
-        // 1. Check to see if our msisdn matches any language
-        final List<LanguageProvider> matchedLanguageProviders = languageProviderService.findBestMatchByPrefix(msisdn);
-        final ServiceProvider serviceProvider;
-        if (matchedLanguageProviders.isEmpty()) {
-            // 2a. Use old logic and try to find provider
-            LOG.debug("MSISDN {} didn't match any language provider", msisdn);
-            serviceProvider = serviceProviderService.getByProviderNameAndShortCode(p_serviceProviderName, p_sc);
-        } else {
-            // 2b. We have a language match, find or create provider for that language
-            LOG.debug("MSISDN {} matched {} language providers", msisdn, matchedLanguageProviders.size());
-            serviceProvider = getProviderByMatchedLanguageProviders(p_serviceProviderName, p_sc, msisdn, matchedLanguageProviders);
+        ServiceProvider serviceProvider;
+
+        // 1. Use old logic and try to find provider
+        LOG.debug("Searching for service provider with name {} and sc {}.", p_serviceProviderName, p_sc);
+        serviceProvider = serviceProviderService.getByProviderNameAndShortCode(p_serviceProviderName, p_sc);
+
+        // 2. Check to see if our msisdn matches any language
+        if (serviceProvider == null) {
+            LOG.debug("Service provider not found. Trying to match langauge...");
+            final List<LanguageProvider> matchedLanguageProviders = languageProviderService.findBestMatchByPrefix(msisdn);
+            if (!matchedLanguageProviders.isEmpty()) {
+                LOG.debug("MSISDN {} matched {} language providers", msisdn, matchedLanguageProviders.size());
+                serviceProvider = getProviderByMatchedLanguageProviders(p_serviceProviderName, p_sc, msisdn, matchedLanguageProviders);
+            }
         }
 
         if (serviceProvider == null) {
+            // TODO: Implement custom exception ProviderNotFound
             throw new EntityNotFoundException("ServiceProvider not found for provider " + p_serviceProviderName + " and sc " + p_sc);
         }
         LOG.debug("Found service provider --> {}", serviceProvider);
@@ -128,7 +133,8 @@ public class MessageServiceImpl implements MessageService {
             smsText = p_text;
         }
 
-        final int smsCount = (int) Math.ceil(smsText.length() * 1f / MAX_RECEIVE_SMS_SIZE);
+        // TODO: Maybe respect ASCII or UNITCODE length
+        final int smsCount = (int) Math.ceil(smsText.length() * 1f / SMS_ASCII_MAX_LENGTH);
         User user;
         synchronized (LOCK) {
             user = getOrCreateUser(msisdn, serviceProvider, p_mccMnc, smsCount);
@@ -137,13 +143,13 @@ public class MessageServiceImpl implements MessageService {
         // We will split message if its length is more than 160 chars.
         if (smsCount > 1) {
             LOG.debug("Received sms with length {} (max {}). Will split message ({} parts)...",
-                    new Object[] { smsText.length(), MAX_RECEIVE_SMS_SIZE, smsCount });
+                    new Object[] { smsText.length(), SMS_ASCII_MAX_LENGTH, smsCount });
         }
 
         final Integer[] msgIds = new Integer[smsCount];
         for (int i = 0; i < smsCount; i++) {
-            final int currentIndex = MAX_RECEIVE_SMS_SIZE * i;
-            final String textToSave = smsText.substring(currentIndex, currentIndex + Math.min(MAX_RECEIVE_SMS_SIZE, smsText.length() - currentIndex));
+            final int currentIndex = SMS_ASCII_MAX_LENGTH * i;
+            final String textToSave = smsText.substring(currentIndex, currentIndex + Math.min(SMS_ASCII_MAX_LENGTH, smsText.length() - currentIndex));
             final SMSMessage message = new SMSMessage(user, null, p_date, textToSave, p_sc, serviceProvider, Direction.IN);
             message.setDeliveryStatus(DeliveryStatus.RECEIVED);
             message.setGatewayId(p_gatewayId);

@@ -8,7 +8,9 @@ import hr.chus.cchat.model.db.jpa.SMSMessage;
 import hr.chus.cchat.model.db.jpa.SMSMessage.Direction;
 import hr.chus.cchat.model.db.jpa.User;
 import hr.chus.cchat.service.MessageService;
+import hr.chus.cchat.service.impl.MessageServiceImpl;
 
+import java.util.Arrays;
 import java.util.Date;
 
 import org.apache.http.HttpException;
@@ -64,7 +66,17 @@ public class SendSms extends ActionSupport implements UserAware {
             errorMsg = getText("sendSms.text.notNull");
         }
 
-        // TODO: Check max msg length from configurationService
+        if (text != null) {
+            if (org.apache.commons.lang3.StringUtils.isAsciiPrintable(text)) {
+                if (text.length() > MessageServiceImpl.SMS_ASCII_MAX_LENGTH) {
+                    errorMsg = getText("sendSms.text.tooLong", Arrays.asList(MessageServiceImpl.SMS_ASCII_MAX_LENGTH));
+                }
+            } else {
+                if (text.length() > MessageServiceImpl.SMS_UNICODE_MAX_LENGTH) {
+                    errorMsg = getText("sendSms.text.tooLong", Arrays.asList(MessageServiceImpl.SMS_UNICODE_MAX_LENGTH));
+                }
+            }
+        }
         if (errorMsg != null) {
             LOG.info(errorMsg);
             addActionError(errorMsg);
