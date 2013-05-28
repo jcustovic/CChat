@@ -74,7 +74,9 @@ import com.smartgwt.client.widgets.tree.events.LeafClickEvent;
  */
 public class UserConsole extends HLayout {
 
-    private static final String DESCRIPTION = "UserConsole";
+    private static final int    SMS_UNICODE_MAX_LENGTH = 70;
+
+    private static final String DESCRIPTION            = "UserConsole";
 
     private String              userId;
     private String              userType;
@@ -85,8 +87,8 @@ public class UserConsole extends HLayout {
     private String              myUserListNodeID;
 
     private ListGrid            conversationListGrid;
-    private int                 offset      = 0;
-    private int                 fetchSize   = 50;
+    private int                 offset                 = 0;
+    private int                 fetchSize              = 50;
     private IButton             nextButton;
     private IButton             previousButton;
     private IButton             sendBotMsgButton;
@@ -98,6 +100,8 @@ public class UserConsole extends HLayout {
     private TextAreaItem        botResponseMsgArea;
     private VLayout             userFormLayout;
     private String              nickName;
+
+    private int                 maxMsgLength;
 
     public static class Factory implements PanelFactory {
 
@@ -284,11 +288,13 @@ public class UserConsole extends HLayout {
         userItem.setValue(userId);
         final HiddenItem msgType = new HiddenItem("msgType");
         msgType.setValue("sms");
+        
+        maxMsgLength = CChatOperatorSmartGWT.maxMsgLength;
 
         final IntegerItem characterCount = new IntegerItem();
         characterCount.setName("msgLength");
         characterCount.setTitle(DictionaryInstance.dictionary.charactersAllowed());
-        characterCount.setValue(CChatOperatorSmartGWT.maxMsgLength);
+        characterCount.setValue(maxMsgLength);
         characterCount.setDisabled(true);
         characterCount.setWidth(50);
 
@@ -297,16 +303,30 @@ public class UserConsole extends HLayout {
         smsTextArea = new TextAreaItem("text", DictionaryInstance.dictionary.text());
         smsTextArea.setWidth(280);
         smsTextArea.setSelectOnFocus(false);
-        smsTextArea.setLength(CChatOperatorSmartGWT.maxMsgLength);
+        smsTextArea.setLength(maxMsgLength);
         smsTextArea.addKeyUpHandler(new KeyUpHandler() {
 
             @Override
             public void onKeyUp(KeyUpEvent event) {
                 int textLength = 0;
                 if (smsTextArea.getValue() != null) {
-                    textLength = smsTextArea.getValue().toString().length();
+                    final String text = smsTextArea.getValue().toString();
+                    textLength = text.length();
+                    
+                    if (text.isEmpty()) {
+                        maxMsgLength = CChatOperatorSmartGWT.maxMsgLength;
+                        smsTextArea.setLength(maxMsgLength);
+                        characterCount.setValue(maxMsgLength);
+                    } else {
+                        final char lastChar = text.substring(textLength - 1).toCharArray()[0];
+                        if (lastChar > 255) {
+                            maxMsgLength = SMS_UNICODE_MAX_LENGTH;
+                            smsTextArea.setLength(maxMsgLength);
+                            characterCount.setValue(maxMsgLength);
+                        }    
+                    }
                 }
-                characterCount.setValue(CChatOperatorSmartGWT.maxMsgLength - textLength);
+                characterCount.setValue(maxMsgLength - textLength);
                 if (event.getKeyName().equals(KeyNames.ENTER)) sendMsgButton.fireEvent(new ClickEvent(null));
             }
         });

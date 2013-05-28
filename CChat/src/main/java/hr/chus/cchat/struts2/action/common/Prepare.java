@@ -16,6 +16,7 @@ import hr.chus.cchat.model.db.jpa.SMSMessage.DeliveryStatus;
 import hr.chus.cchat.model.db.jpa.SMSMessage.Direction;
 import hr.chus.cchat.model.db.jpa.ServiceProvider;
 import hr.chus.cchat.model.db.jpa.User;
+import hr.chus.cchat.service.impl.MessageServiceImpl;
 
 import java.util.Date;
 
@@ -101,7 +102,7 @@ public class Prepare extends ActionSupport {
         user.setSurname("user");
         operatorService.addOperator(user);
 
-        Configuration smsMaxLength = new Configuration("smsMaxLength", "160");
+        Configuration smsMaxLength = new Configuration("smsMaxLength", String.valueOf(MessageServiceImpl.SMS_ASCII_MAX_LENGTH));
         configurationService.addConfiguration(smsMaxLength);
 
         ServiceProvider vipServiceProvider = new ServiceProvider("66111", "VIP", "testService", "VIP mreža", false);
@@ -195,7 +196,7 @@ public class Prepare extends ActionSupport {
         user.setSurname("user");
         operatorService.addOperator(user);
 
-        Configuration smsMaxLength = new Configuration("smsMaxLength", "160");
+        Configuration smsMaxLength = new Configuration("smsMaxLength", String.valueOf(MessageServiceImpl.SMS_ASCII_MAX_LENGTH));
         configurationService.addConfiguration(smsMaxLength);
     }
 
