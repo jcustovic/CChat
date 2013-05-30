@@ -1,13 +1,12 @@
 package hr.chus.cchat.struts2.action.common;
 
+import hr.chus.cchat.exception.LanguageNotFound;
 import hr.chus.cchat.service.MessageService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
-
-import javax.persistence.EntityNotFoundException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,7 +79,7 @@ public class ReceiveSms extends ActionSupport {
             messageIds = messageService.receiveSms(serviceProviderName, sc, serviceProviderKeyword, msisdn, text, date, gatewayId);
             status = "ok";
             LOG.info("Message(s) saved with ids {}", Arrays.toString(messageIds));
-        } catch (EntityNotFoundException e) {
+        } catch (final LanguageNotFound e) {
             LOG.error(e.getMessage());
             status = "failed";
         }

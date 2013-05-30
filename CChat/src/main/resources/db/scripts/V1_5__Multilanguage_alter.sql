@@ -1,0 +1,2 @@
+ALTER TABLE `users` 
+	ADD COLUMN `language_provider_id` INTEGER UNSIGNED DEFAULT NULL;
