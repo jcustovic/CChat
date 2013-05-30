@@ -9,7 +9,9 @@ import java.util.List;
  */
 public interface LanguageProviderService {
     
-    List<LanguageProvider> findBestMatchByPrefix(String p_msisdn);
+    LanguageProvider findBestMatchByPrefix(String p_msisdn);
+    
+    List<LanguageProvider> findMatchByPrefix(String p_msisdn);
 
     List<LanguageProvider> findAll();
 

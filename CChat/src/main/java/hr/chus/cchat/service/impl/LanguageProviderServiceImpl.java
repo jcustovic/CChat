@@ -7,6 +7,7 @@ import hr.chus.cchat.service.LanguageProviderService;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,13 +24,27 @@ public class LanguageProviderServiceImpl implements LanguageProviderService {
     private LanguageProviderRepository languageProviderRepository;
 
     @Override
-    public final List<LanguageProvider> findBestMatchByPrefix(final String p_msisdn) {
+    public final List<LanguageProvider> findMatchByPrefix(final String p_msisdn) {
+        return languageProviderRepository.findBestMatchByPrefix(normalizeMsisdn(p_msisdn));
+    }
+
+    @Override
+    public final LanguageProvider findBestMatchByPrefix(final String p_msisdn) {
+        final List<LanguageProvider> languageProviders = languageProviderRepository.findBestMatchByPrefix(normalizeMsisdn(p_msisdn), new PageRequest(0, 1));
+        if (languageProviders.isEmpty()) {
+            return null;
+        } else {
+            return languageProviders.get(0);
+        }
+    }
+
+    private String normalizeMsisdn(final String p_msisdn) {
         String msisdn = p_msisdn;
         if (p_msisdn.startsWith("+")) {
             msisdn = p_msisdn.substring(1);
         }
 
-        return languageProviderRepository.findBestMatchByPrefix(msisdn);
+        return msisdn;
     }
 
     @Override

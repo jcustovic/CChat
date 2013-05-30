@@ -1,10 +1,9 @@
 package hr.chus.cchat.struts2.action.virgopass;
 
+import hr.chus.cchat.exception.LanguageNotFound;
 import hr.chus.cchat.service.MessageService;
 
 import java.util.Date;
-
-import javax.persistence.EntityNotFoundException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,7 +65,7 @@ public class VirgoReceiveSms extends ActionSupport {
         try {
             messageService.receiveSms(String.valueOf(operator_id), shortcode, keyword, phone_number, String.valueOf(mcc_mnc), message, new Date(),
                 String.valueOf(mo_id), end_user_price, end_user_price_currency);
-        } catch (EntityNotFoundException e) {
+        } catch (final LanguageNotFound e) {
             LOG.error(e.getMessage());
         }
 

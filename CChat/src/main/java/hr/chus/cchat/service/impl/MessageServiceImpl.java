@@ -4,6 +4,7 @@ import hr.chus.cchat.db.service.SMSMessageService;
 import hr.chus.cchat.db.service.ServiceProviderKeywordService;
 import hr.chus.cchat.db.service.ServiceProviderService;
 import hr.chus.cchat.db.service.UserService;
+import hr.chus.cchat.exception.LanguageNotFound;
 import hr.chus.cchat.gateway.GatewayResponseError;
 import hr.chus.cchat.gateway.SendMessageService;
 import hr.chus.cchat.model.db.jpa.Language;
@@ -21,10 +22,7 @@ import hr.chus.cchat.service.RobotService;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
-
-import javax.persistence.EntityNotFoundException;
 
 import org.apache.http.HttpException;
 import org.slf4j.Logger;
@@ -88,25 +86,24 @@ public class MessageServiceImpl implements MessageService {
         final String msisdn = p_msisdn.trim();
         ServiceProvider serviceProvider;
 
-        // 1. Use old logic and try to find provider
+        // 1. Try to find service provider
         LOG.debug("Searching for service provider with name {} and sc {}.", p_serviceProviderName, p_sc);
         serviceProvider = serviceProviderService.getByProviderNameAndShortCode(p_serviceProviderName, p_sc);
-
-        // 2. Check to see if our msisdn matches any language
-        if (serviceProvider == null) {
-            LOG.debug("Service provider not found. Trying to match langauge...");
-            final List<LanguageProvider> matchedLanguageProviders = languageProviderService.findBestMatchByPrefix(msisdn);
-            if (!matchedLanguageProviders.isEmpty()) {
-                LOG.debug("MSISDN {} matched {} language providers", msisdn, matchedLanguageProviders.size());
-                serviceProvider = getProviderByMatchedLanguageProviders(p_serviceProviderName, p_sc, msisdn, matchedLanguageProviders);
-            }
+        
+        // 2. Match language
+        final LanguageProvider matchedLanguageProvider = languageProviderService.findBestMatchByPrefix(msisdn);
+        if (matchedLanguageProvider == null) {
+            throw new LanguageNotFound("Language not found for msisdn " + msisdn + " --> provider " + p_serviceProviderName + " and sc " + p_sc);
         }
+        LOG.debug("MSISDN {} matched {} language provider", msisdn, matchedLanguageProvider.getLanguage().getName());
 
+        // 3. If service provider not found create new service provider with specific language
         if (serviceProvider == null) {
-            // TODO: Implement custom exception ProviderNotFound
-            throw new EntityNotFoundException("ServiceProvider not found for provider " + p_serviceProviderName + " and sc " + p_sc);
+            LOG.debug("Service provider not found. Auto creating new service provider.");
+            serviceProvider = getProviderByMatchedLanguageProvider(p_serviceProviderName, p_sc, msisdn, matchedLanguageProvider);
         }
-        LOG.debug("Found service provider --> {}", serviceProvider);
+        
+        LOG.debug("Using service provider --> {}", serviceProvider);
 
         ServiceProviderKeyword providerKeyword = null;
         if (StringUtils.hasText(p_serviceProviderKeyword)) {
@@ -137,7 +134,7 @@ public class MessageServiceImpl implements MessageService {
         final int smsCount = (int) Math.ceil(smsText.length() * 1f / SMS_ASCII_MAX_LENGTH);
         User user;
         synchronized (LOCK) {
-            user = getOrCreateUser(msisdn, serviceProvider, p_mccMnc, smsCount);
+            user = getOrCreateUser(msisdn, serviceProvider, matchedLanguageProvider, p_mccMnc, smsCount);
         }
 
         // We will split message if its length is more than 160 chars.
@@ -163,24 +160,23 @@ public class MessageServiceImpl implements MessageService {
         return msgIds;
     }
 
-    private ServiceProvider getProviderByMatchedLanguageProviders(final String p_serviceProviderName, final String p_sc, final String p_msisdn,
-                                                                  final List<LanguageProvider> p_matchedLanguageProviders) {
-        final LanguageProvider bestMatchedLangProvider = p_matchedLanguageProviders.get(0);
-        final Language language = bestMatchedLangProvider.getLanguage();
+    private ServiceProvider getProviderByMatchedLanguageProvider(final String p_serviceProviderName, final String p_sc, final String p_msisdn,
+                                                                  final LanguageProvider p_matchedLanguageProvider) {
+        final Language language = p_matchedLanguageProvider.getLanguage();
         LOG.debug("Best matched language for msisdn {} is {} (prefix: {}, sendBean: {})", new Object[] { p_msisdn, language.getShortCode(),
-                bestMatchedLangProvider.getPrefix(), bestMatchedLangProvider.getSendServiceBeanName() });
+                p_matchedLanguageProvider.getPrefix(), p_matchedLanguageProvider.getSendServiceBeanName() });
 
-        final String serviceProviderName = p_serviceProviderName + "_" + bestMatchedLangProvider.getId();
+        final String serviceProviderName = p_serviceProviderName + "_" + p_matchedLanguageProvider.getId();
         ServiceProvider serviceProvider = serviceProviderService.findByProviderNameAndShortCodeAndProviderLanguage(serviceProviderName, p_sc,
-                bestMatchedLangProvider);
+                p_matchedLanguageProvider);
         if (serviceProvider == null) {
             LOG.debug("Service provider not found for provider name {}, sc {} and language {}. Will automatically create...", new Object[] {
                     serviceProviderName, p_sc, language.getShortCode() });
             // TODO: Is this the correct way to provide serviceName?
-            serviceProvider = new ServiceProvider(p_sc, serviceProviderName, "LANG_PROVIDER_" + bestMatchedLangProvider.getId(), "Language provider "
+            serviceProvider = new ServiceProvider(p_sc, serviceProviderName, "LANG_PROVIDER_" + p_matchedLanguageProvider.getId(), "Language provider "
                     + language.getShortCode(), false);
             serviceProvider.setAutoCreated(true);
-            serviceProvider.setLanguageProvider(bestMatchedLangProvider);
+            serviceProvider.setLanguageProvider(p_matchedLanguageProvider);
 
             serviceProviderService.addServiceProvider(serviceProvider);
         }
@@ -188,12 +184,13 @@ public class MessageServiceImpl implements MessageService {
         return serviceProvider;
     }
 
-    private User getOrCreateUser(final String p_msisdn, final ServiceProvider p_serviceProvider, final String p_mccMnc, final int p_smsCount) {
+    private User getOrCreateUser(final String p_msisdn, final ServiceProvider p_serviceProvider, final LanguageProvider p_languageProvider, final String p_mccMnc, final int p_smsCount) {
         // Find or create user. Must be thread safe.
         User user = userService.getByMsisdnAndServiceName(p_msisdn, p_serviceProvider.getServiceName(), false);
 
         if (user == null) {
             user = new User(p_msisdn, p_serviceProvider);
+            user.setLanguageProvider(p_languageProvider);
             user.setMccMnc(p_mccMnc);
             user.setUnreadMsgCount(1);
             // Default bot should have ID 1
@@ -210,12 +207,14 @@ public class MessageServiceImpl implements MessageService {
         } else {
             user.setUnreadMsgCount(user.getUnreadMsgCount() + p_smsCount);
             user.setLastMsg(new Date());
+            // We set language provider if it changes
+            user.setLanguageProvider(p_languageProvider);
 
             if (!user.getServiceProvider().equals(p_serviceProvider)) {
                 LOG.info("User (" + user + ") changed service provider from " + user.getServiceProvider() + " to " + p_serviceProvider);
                 user.setServiceProvider(p_serviceProvider);
             }
-
+            
             userService.editUser(user);
         }
 

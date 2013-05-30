@@ -74,16 +74,22 @@ public class UnreadMsgAssignerScheduler {
                     break;
                 }
                 for (final User user : unassignedUserList) {
-                    final LanguageProvider languageProvider = user.getServiceProvider().getLanguageProvider();
+                    // Check language on user
+                    LanguageProvider languageProvider = user.getLanguageProvider();
+                    if (languageProvider == null) {
+                        // If not found on user maybe its on language provider
+                        languageProvider = user.getServiceProvider().getLanguageProvider();
+                    }
+                    
                     final Operator bestMatchOperator;
                     String language = "no_language";
                     if (languageProvider == null) {
-                        bestMatchOperator = findUserByLoadLowest(operators);                        
+                        bestMatchOperator = findUserByLoadLowest(operators);
                     } else {
                         language = languageProvider.getLanguage().getShortCode();
                         bestMatchOperator = findUserByLoadLowestAndLanguage(operators, languageProvider);
                     }
-                    
+
                     if (bestMatchOperator == null) {
                         LOG.info("No available/free operators to assign users (language: {}).", language);
                         hasOperators = false;
@@ -109,7 +115,7 @@ public class UnreadMsgAssignerScheduler {
      */
     private Operator findUserByLoadLowestAndLanguage(final List<OperatorWrapper> p_operators, final LanguageProvider languageProvider) {
         final List<OperatorWrapper> operators = new LinkedList<OperatorWrapper>(p_operators);
-        
+
         // Remove operators that do not support language
         final Iterator<OperatorWrapper> iterator = operators.iterator();
         while (iterator.hasNext()) {
@@ -118,7 +124,7 @@ public class UnreadMsgAssignerScheduler {
                 iterator.remove();
             }
         }
-        
+
         return findUserByLoadLowest(operators);
     }
 

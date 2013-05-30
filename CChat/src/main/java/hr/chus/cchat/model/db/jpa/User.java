@@ -49,60 +49,64 @@ public class User extends AbstractBaseEntity {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "nick_id")
-    private Nick            nick;
+    private Nick             nick;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "operator_id")
-    private Operator        operator;
+    private Operator         operator;
 
     @Column(name = "msisdn", length = 20, nullable = false, updatable = false)
-    private String          msisdn;
+    private String           msisdn;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "service_provider_id", nullable = false)
-    private ServiceProvider serviceProvider;
+    private ServiceProvider  serviceProvider;
 
     @Column(name = "mcc_mnc", length = 6)
-    private String          mccMnc;
+    private String           mccMnc;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "bot_id")
-    private Robot           bot;
+    private Robot            bot;
 
     @Column(name = "name", length = 20)
-    private String          name;
+    private String           name;
 
     @Column(name = "surname", length = 30)
-    private String          surname;
+    private String           surname;
 
     @Column(name = "address", length = 100)
-    private String          address;
+    private String           address;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "birth_date")
-    private Date            birthdate;
+    private Date             birthdate;
 
     @Column(name = "notes", columnDefinition = "TEXT")
-    private String          notes;
+    private String           notes;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "joined_date", nullable = false, updatable = false)
-    private Date            joined;
+    private Date             joined;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "last_message", nullable = false)
-    private Date            lastMsg;
+    private Date             lastMsg;
 
     @Column(name = "unread_message_count", nullable = false)
-    private Integer         unreadMsgCount;
+    private Integer          unreadMsgCount;
 
     @Column(name = "deleted", columnDefinition = "BIT")
-    private Boolean         deleted;
+    private Boolean          deleted;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "users_picture", joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(
             name = "picture_id", referencedColumnName = "id") })
-    private Set<Picture>    sentPictures;
+    private Set<Picture>     sentPictures;
+
+    @ManyToOne
+    @JoinColumn(name = "language_provider_id")
+    private LanguageProvider languageProvider;
 
     public User() {
         super();
@@ -279,6 +283,14 @@ public class User extends AbstractBaseEntity {
 
     public final void setSentPictures(final Set<Picture> p_sentPictures) {
         sentPictures = p_sentPictures;
+    }
+
+    public final LanguageProvider getLanguageProvider() {
+        return languageProvider;
+    }
+
+    public final void setLanguageProvider(final LanguageProvider p_languageProvider) {
+        languageProvider = p_languageProvider;
     }
 
 }
