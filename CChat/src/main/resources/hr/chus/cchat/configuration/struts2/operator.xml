@@ -129,22 +129,22 @@
 		<action name="UserListJSON" class="hr.chus.cchat.struts2.action.operator.UserList">
 			<result type="json">
 				<param name="excludeNullProperties">true</param>
-				<param name="excludeProperties">
-					randomUserList.*\.serviceProvider
-					, randomUserList.*\.nick
-					, randomUserList.*\.operator
-					, randomUserList.*\.msisdn
-					, randomUserList.*\.sentPictures
-					, newestUserList.*\.serviceProvider
-					, newestUserList.*\.nick
-					, newestUserList.*\.operator
-					, newestUserList.*\.msisdn
-					, newestUserList.*\.sentPictures
-					, operatorUserList.*\.serviceProvider
-					, operatorUserList.*\.nick
-					, operatorUserList.*\.operator
-					, operatorUserList.*\.msisdn
-					, operatorUserList.*\.sentPictures
+				<param name="includeProperties">
+					^randomUserList\[\d+\]\.deleted
+					, ^randomUserList\[\d+\]\.id
+					, ^randomUserList\[\d+\]\.joined
+					, ^randomUserList\[\d+\]\.lastMsg
+					, ^randomUserList\[\d+\]\.unreadMsgCount
+					, ^newestUserList\[\d+\]\.id
+					, ^newestUserList\[\d+\]\.deleted
+					, ^newestUserList\[\d+\]\.joined
+					, ^newestUserList\[\d+\]\.lastMsg
+					, ^newestUserList\[\d+\]\.unreadMsgCount
+					, ^operatorUserList\[\d+\]\.deleted
+					, ^operatorUserList\[\d+\]\.id
+					, ^operatorUserList\[\d+\]\.joined
+					, ^operatorUserList\[\d+\]\.lastMsg
+					, ^operatorUserList\[\d+\]\.unreadMsgCount
 				</param>
 			</result>
 			<result name="error" type="json">
