@@ -2,6 +2,7 @@ package hr.chus.cchat.db.service.jpa;
 
 import hr.chus.cchat.db.repository.UserRepository;
 import hr.chus.cchat.db.service.UserService;
+import hr.chus.cchat.model.db.jpa.Language;
 import hr.chus.cchat.model.db.jpa.Nick;
 import hr.chus.cchat.model.db.jpa.Operator;
 import hr.chus.cchat.model.db.jpa.Picture;
@@ -11,6 +12,7 @@ import hr.chus.cchat.model.db.jpa.User;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -263,6 +265,19 @@ public class UserServiceImpl implements UserService {
         if (p_count > 0) {
             final PageRequest pageRequest = new PageRequest(0, p_count, Direction.ASC, "lastMsg");
             results = userRepository.findUnassigned(pageRequest);
+        } else {
+            results = new ArrayList<User>(0);
+        }
+
+        return results;
+    }
+
+    @Override
+    public List<User> findUnassigned(int p_count, final Set<Language> p_excludeLanguages) {
+        final List<User> results;
+        if (p_count > 0) {
+            final PageRequest pageRequest = new PageRequest(0, p_count, Direction.ASC, "lastMsg");
+            results = userRepository.findUnassigned(p_excludeLanguages, pageRequest);
         } else {
             results = new ArrayList<User>(0);
         }

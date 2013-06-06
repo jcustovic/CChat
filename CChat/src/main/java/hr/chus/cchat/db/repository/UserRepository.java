@@ -2,7 +2,9 @@ package hr.chus.cchat.db.repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
+import hr.chus.cchat.model.db.jpa.Language;
 import hr.chus.cchat.model.db.jpa.Operator;
 import hr.chus.cchat.model.db.jpa.User;
 
@@ -23,6 +25,9 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query("SELECT u FROM User u WHERE u.operator IS NULL AND u.unreadMsgCount > 0")
     List<User> findUnassigned(Pageable p_pageable);
+    
+    @Query("SELECT u FROM User u WHERE u.languageProvider.language NOT IN ?1 AND u.operator IS NULL AND u.unreadMsgCount > 0")
+    List<User> findUnassigned(Set<Language> p_excludeLanguages, Pageable p_pageable);
 
     @Modifying
     @Query("UPDATE User u SET u.operator = null WHERE u.operator = ?1 AND u.lastMsg < ?2 AND u.unreadMsgCount = 0")
