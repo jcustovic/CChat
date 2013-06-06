@@ -32,7 +32,7 @@ public abstract class AbstractBaseEntity implements Serializable {
         if (p_object == null) {
             return false;
         }
-        if (!(p_object instanceof AbstractBaseEntity)) {
+        if (!(p_object.getClass() == this.getClass())) {
             return false;
         }
 
