@@ -2,7 +2,9 @@ package hr.chus.cchat.db.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
+import hr.chus.cchat.model.db.jpa.Language;
 import hr.chus.cchat.model.db.jpa.Nick;
 import hr.chus.cchat.model.db.jpa.Operator;
 import hr.chus.cchat.model.db.jpa.Picture;
@@ -56,5 +58,7 @@ public interface UserService {
     Long countByOperatorAndUnread(Operator p_operator);
 
     List<User> findUnassigned(int p_count);
+
+    List<User> findUnassigned(int p_batchSize, Set<Language> p_excludeLanguages);
 
 }

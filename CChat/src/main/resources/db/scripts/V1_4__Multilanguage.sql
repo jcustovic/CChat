@@ -42,7 +42,7 @@ CHARSET=UTF8;
 ALTER TABLE `service_provider` 
 	ADD COLUMN `language_provider_id` INTEGER UNSIGNED DEFAULT NULL
 	, ADD COLUMN `auto_created` BOOL NULL
-	, ADD CONSTRAINT `fk_service_provider_language_provider_id` FOREIGN KEY(`language_provider_id`) REFERENCES `language_provider`(`id`);;
+	, ADD CONSTRAINT `fk_service_provider_language_provider_id` FOREIGN KEY(`language_provider_id`) REFERENCES `language_provider`(`id`);
 
 UPDATE `service_provider` SET `auto_created` = 0;
 ALTER TABLE `service_provider` MODIFY `auto_created` BOOL NOT NULL;

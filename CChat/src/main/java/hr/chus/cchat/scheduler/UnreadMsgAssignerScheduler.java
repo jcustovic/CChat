@@ -2,14 +2,17 @@ package hr.chus.cchat.scheduler;
 
 import hr.chus.cchat.db.service.OperatorService;
 import hr.chus.cchat.db.service.UserService;
+import hr.chus.cchat.model.db.jpa.Language;
 import hr.chus.cchat.model.db.jpa.LanguageProvider;
 import hr.chus.cchat.model.db.jpa.Operator;
 import hr.chus.cchat.model.db.jpa.User;
 import hr.chus.cchat.model.helper.OperatorWrapper;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,10 +67,16 @@ public class UnreadMsgAssignerScheduler {
         if (operators.isEmpty()) {
             LOG.debug("No active/available operators found to assign users to.");
         } else {
+            final Set<Language> excludeLanguages = new HashSet<Language>();
             boolean hasOperators = true;
             // Try to assign as much users to operators as possible
             while (hasOperators) {
-                final List<User> unassignedUserList = userService.findUnassigned(BATCH_SIZE);
+                final List<User> unassignedUserList;
+                if (excludeLanguages.isEmpty()) {
+                    unassignedUserList = userService.findUnassigned(BATCH_SIZE);
+                } else {
+                    unassignedUserList = userService.findUnassigned(BATCH_SIZE, excludeLanguages);
+                }
                 LOG.debug("Processing batch of {} unread users...", unassignedUserList.size());
 
                 if (unassignedUserList.isEmpty()) {
@@ -80,26 +89,36 @@ public class UnreadMsgAssignerScheduler {
                         // If not found on user maybe its on language provider
                         languageProvider = user.getServiceProvider().getLanguageProvider();
                     }
-                    
+
                     final Operator bestMatchOperator;
-                    String language = "no_language";
                     if (languageProvider == null) {
                         bestMatchOperator = findUserByLoadLowest(operators);
+
+                        // No operator find or all are busy. Abort assigning.
+                        if (bestMatchOperator == null) {
+                            LOG.info("No available/free operators to assign users to.");
+                            hasOperators = false;
+                            break;
+                        }
                     } else {
-                        language = languageProvider.getLanguage().getShortCode();
-                        bestMatchOperator = findUserByLoadLowestAndLanguage(operators, languageProvider);
+                        if (excludeLanguages.contains(languageProvider.getLanguage())) {
+                            bestMatchOperator = null;
+                        } else {
+                            bestMatchOperator = findUserByLoadLowestAndLanguage(operators, languageProvider.getLanguage());
+
+                            // We need to exclude this language for further search in this run because no operators are available.
+                            if (bestMatchOperator == null) {
+                                LOG.info("No available/free operators to assign users for language: {}.", languageProvider.getLanguage().getShortCode());
+                                excludeLanguages.add(languageProvider.getLanguage());
+                            }
+                        }
                     }
 
-                    if (bestMatchOperator == null) {
-                        LOG.info("No available/free operators to assign users (language: {}).", language);
-                        hasOperators = false;
-                        break;
-                    } else {
+                    if (bestMatchOperator != null) {
                         user.setOperator(bestMatchOperator);
                         userService.editUser(user);
                     }
                 }
-
             }
         }
 
@@ -110,17 +129,17 @@ public class UnreadMsgAssignerScheduler {
      * Method that first filters operator by language and then by lowest load.
      * 
      * @param p_operators
-     * @param languageProvider
+     * @param p_language
      * @return
      */
-    private Operator findUserByLoadLowestAndLanguage(final List<OperatorWrapper> p_operators, final LanguageProvider languageProvider) {
+    private Operator findUserByLoadLowestAndLanguage(final List<OperatorWrapper> p_operators, final Language p_language) {
         final List<OperatorWrapper> operators = new LinkedList<OperatorWrapper>(p_operators);
 
         // Remove operators that do not support language
         final Iterator<OperatorWrapper> iterator = operators.iterator();
         while (iterator.hasNext()) {
             final OperatorWrapper operator = iterator.next();
-            if (!operator.getOperator().getLanguages().contains(languageProvider.getLanguage())) {
+            if (!operator.getOperator().getLanguages().contains(p_language)) {
                 iterator.remove();
             }
         }
