@@ -43,7 +43,8 @@ public class MessageServiceImpl implements MessageService {
 
     private static final Logger           LOG                    = LoggerFactory.getLogger(MessageServiceImpl.class);
 
-    private static final Object           LOCK                   = new Object();
+    private static final Object           USER_LOCK                   = new Object();
+    private static final Object           SP_LOCK                   = new Object();
 
     public static final int               SMS_UNICODE_MAX_LENGTH = 70;
     public static final int               SMS_ASCII_MAX_LENGTH   = 160;
@@ -133,7 +134,7 @@ public class MessageServiceImpl implements MessageService {
         // TODO: Maybe respect ASCII or UNITCODE length
         final int smsCount = (int) Math.ceil(smsText.length() * 1f / SMS_ASCII_MAX_LENGTH);
         User user;
-        synchronized (LOCK) {
+        synchronized (USER_LOCK) {
             user = getOrCreateUser(msisdn, serviceProvider, matchedLanguageProvider, p_mccMnc, smsCount);
         }
 
@@ -167,21 +168,23 @@ public class MessageServiceImpl implements MessageService {
                 p_matchedLanguageProvider.getPrefix(), p_matchedLanguageProvider.getSendServiceBeanName() });
 
         final String serviceProviderName = p_serviceProviderName + "_" + p_matchedLanguageProvider.getId();
-        ServiceProvider serviceProvider = serviceProviderService.findByProviderNameAndShortCodeAndProviderLanguage(serviceProviderName, p_sc,
-                p_matchedLanguageProvider);
-        if (serviceProvider == null) {
-            LOG.debug("Service provider not found for provider name {}, sc {} and language {}. Will automatically create...", new Object[] {
-                    serviceProviderName, p_sc, language.getShortCode() });
-            // TODO: Is this the correct way to provide serviceName?
-            serviceProvider = new ServiceProvider(p_sc, serviceProviderName, "LANG_PROVIDER_" + p_matchedLanguageProvider.getId(), "Language provider "
-                    + language.getShortCode(), false);
-            serviceProvider.setAutoCreated(true);
-            serviceProvider.setLanguageProvider(p_matchedLanguageProvider);
-
-            serviceProviderService.addServiceProvider(serviceProvider);
+        synchronized (SP_LOCK) {
+            ServiceProvider serviceProvider = serviceProviderService.findByProviderNameAndShortCodeAndProviderLanguage(serviceProviderName, p_sc,
+                    p_matchedLanguageProvider);
+            if (serviceProvider == null) {
+                LOG.debug("Service provider not found for provider name {}, sc {} and language {}. Will automatically create...", new Object[] {
+                        serviceProviderName, p_sc, language.getShortCode() });
+                // TODO: Is this the correct way to provide serviceName?
+                serviceProvider = new ServiceProvider(p_sc, serviceProviderName, "LANG_PROVIDER_" + p_matchedLanguageProvider.getId(), "Language provider "
+                        + language.getShortCode(), false);
+                serviceProvider.setAutoCreated(true);
+                serviceProvider.setLanguageProvider(p_matchedLanguageProvider);
+    
+                serviceProviderService.addServiceProvider(serviceProvider);
+            }
+            
+            return serviceProvider;
         }
-
-        return serviceProvider;
     }
 
     private User getOrCreateUser(final String p_msisdn, final ServiceProvider p_serviceProvider, final LanguageProvider p_languageProvider, final String p_mccMnc, final int p_smsCount) {
