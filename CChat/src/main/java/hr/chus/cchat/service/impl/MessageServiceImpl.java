@@ -43,8 +43,8 @@ public class MessageServiceImpl implements MessageService {
 
     private static final Logger           LOG                    = LoggerFactory.getLogger(MessageServiceImpl.class);
 
-    private static final Object           USER_LOCK                   = new Object();
-    private static final Object           SP_LOCK                   = new Object();
+    private static final Object           USER_LOCK              = new Object();
+    private static final Object           SP_LOCK                = new Object();
 
     public static final int               SMS_UNICODE_MAX_LENGTH = 70;
     public static final int               SMS_ASCII_MAX_LENGTH   = 160;
@@ -90,7 +90,7 @@ public class MessageServiceImpl implements MessageService {
         // 1. Try to find service provider
         LOG.debug("Searching for service provider with name {} and sc {}.", p_serviceProviderName, p_sc);
         serviceProvider = serviceProviderService.getByProviderNameAndShortCode(p_serviceProviderName, p_sc);
-        
+
         // 2. Match language
         final LanguageProvider matchedLanguageProvider = languageProviderService.findBestMatchByPrefix(msisdn);
         if (matchedLanguageProvider == null) {
@@ -103,7 +103,7 @@ public class MessageServiceImpl implements MessageService {
             LOG.debug("Service provider not found. Auto creating new service provider.");
             serviceProvider = getProviderByMatchedLanguageProvider(p_serviceProviderName, p_sc, msisdn, matchedLanguageProvider);
         }
-        
+
         LOG.debug("Using service provider --> {}", serviceProvider);
 
         ServiceProviderKeyword providerKeyword = null;
@@ -131,8 +131,13 @@ public class MessageServiceImpl implements MessageService {
             smsText = p_text;
         }
 
-        // TODO: Maybe respect ASCII or UNITCODE length
-        final int smsCount = (int) Math.ceil(smsText.length() * 1f / SMS_ASCII_MAX_LENGTH);
+        final int smsCount;
+        if (smsText.isEmpty()) {
+            smsCount = 1;
+        } else {
+            // TODO: Maybe respect ASCII or UNITCODE length
+            smsCount = (int) Math.ceil(smsText.length() * 1f / SMS_ASCII_MAX_LENGTH);
+        }
         User user;
         synchronized (USER_LOCK) {
             user = getOrCreateUser(msisdn, serviceProvider, matchedLanguageProvider, p_mccMnc, smsCount);
@@ -162,7 +167,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     private ServiceProvider getProviderByMatchedLanguageProvider(final String p_serviceProviderName, final String p_sc, final String p_msisdn,
-                                                                  final LanguageProvider p_matchedLanguageProvider) {
+                                                                 final LanguageProvider p_matchedLanguageProvider) {
         final Language language = p_matchedLanguageProvider.getLanguage();
         LOG.debug("Best matched language for msisdn {} is {} (prefix: {}, sendBean: {})", new Object[] { p_msisdn, language.getShortCode(),
                 p_matchedLanguageProvider.getPrefix(), p_matchedLanguageProvider.getSendServiceBeanName() });
@@ -179,15 +184,16 @@ public class MessageServiceImpl implements MessageService {
                         + language.getShortCode(), false);
                 serviceProvider.setAutoCreated(true);
                 serviceProvider.setLanguageProvider(p_matchedLanguageProvider);
-    
+
                 serviceProviderService.addServiceProvider(serviceProvider);
             }
-            
+
             return serviceProvider;
         }
     }
 
-    private User getOrCreateUser(final String p_msisdn, final ServiceProvider p_serviceProvider, final LanguageProvider p_languageProvider, final String p_mccMnc, final int p_smsCount) {
+    private User getOrCreateUser(final String p_msisdn, final ServiceProvider p_serviceProvider, final LanguageProvider p_languageProvider,
+                                 final String p_mccMnc, final int p_smsCount) {
         // Find or create user. Must be thread safe.
         User user = userService.getByMsisdnAndServiceName(p_msisdn, p_serviceProvider.getServiceName(), false);
 
@@ -217,7 +223,7 @@ public class MessageServiceImpl implements MessageService {
                 LOG.info("User (" + user + ") changed service provider from " + user.getServiceProvider() + " to " + p_serviceProvider);
                 user.setServiceProvider(p_serviceProvider);
             }
-            
+
             userService.editUser(user);
         }
 
