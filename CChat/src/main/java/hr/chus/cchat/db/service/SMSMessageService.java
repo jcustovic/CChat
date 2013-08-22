@@ -36,5 +36,7 @@ public interface SMSMessageService {
     public SMSMessage getByGatewayId(String p_gatewayId);
 
     public void updateStatus(String p_gatewayId, DeliveryStatus p_status, String p_message);
+    
+    public SMSMessage getLastSentMessage(User p_user);
 
 }

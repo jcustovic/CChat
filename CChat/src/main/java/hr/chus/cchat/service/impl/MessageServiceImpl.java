@@ -148,6 +148,8 @@ public class MessageServiceImpl implements MessageService {
             LOG.debug("Received sms with length {} (max {}). Will split message ({} parts)...",
                     new Object[] { smsText.length(), SMS_ASCII_MAX_LENGTH, smsCount });
         }
+        
+        final SMSMessage responseTo = smsMessageService.getLastSentMessage(user);
 
         final Integer[] msgIds = new Integer[smsCount];
         for (int i = 0; i < smsCount; i++) {
@@ -159,6 +161,7 @@ public class MessageServiceImpl implements MessageService {
             message.setServiceProviderKeyword(providerKeyword);
             message.setEndUserPrice(p_price);
             message.setEndUserPriceCurrency(p_currency);
+            message.setResponseTo(responseTo);
 
             msgIds[i] = smsMessageService.updateSMSMessage(message).getId();
         }
@@ -234,17 +237,23 @@ public class MessageServiceImpl implements MessageService {
     public final SMSMessage sendMessage(final SMSMessage p_smsMessage, final Boolean p_botResponse, final User p_user, final String p_msgType)
             throws HttpException, IOException, GatewayResponseError {
         final ServiceProvider serviceProvider = p_user.getServiceProvider();
-        String gatewayId = null;
-        final SendMessageService sendMessageService;
+        
+        String senderBeanName = null;
         if (serviceProvider.getLanguageProvider() != null && serviceProvider.getLanguageProvider().getSendServiceBeanName() != null) {
-            sendMessageService = (SendMessageService) applicationContext.getBean(serviceProvider.getLanguageProvider().getSendServiceBeanName());
+            senderBeanName = serviceProvider.getLanguageProvider().getSendServiceBeanName();
         } else if (StringUtils.hasText(serviceProvider.getSendServiceBeanName())) {
-            sendMessageService = (SendMessageService) applicationContext.getBean(p_user.getServiceProvider().getSendServiceBeanName());
-        } else {
+            senderBeanName = serviceProvider.getSendServiceBeanName();
+        }
+        
+        final SendMessageService sendMessageService;
+        if (senderBeanName == null) {
             sendMessageService = defaultSendMessageService;
+        } else {
+            sendMessageService = (SendMessageService) applicationContext.getBean(senderBeanName);
         }
 
         LOG.debug("Sending message: {}", p_smsMessage);
+        String gatewayId = null;
         if ("wapPush".equals(p_msgType)) {
             gatewayId = sendMessageService.sendWapPushMessage(p_smsMessage);
         } else {
@@ -252,6 +261,7 @@ public class MessageServiceImpl implements MessageService {
         }
 
         LOG.debug("Sending done. Message gateway id: {}", gatewayId);
+        p_smsMessage.setUsedBean(senderBeanName);
         p_smsMessage.setGatewayId(gatewayId);
         p_smsMessage.setDeliveryStatus(DeliveryStatus.SENT_TO_GATEWAY);
         p_smsMessage.setBotResponse(Boolean.TRUE.equals(p_botResponse));
