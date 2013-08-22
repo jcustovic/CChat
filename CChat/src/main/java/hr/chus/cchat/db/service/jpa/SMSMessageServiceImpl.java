@@ -1,5 +1,6 @@
 package hr.chus.cchat.db.service.jpa;
 
+import hr.chus.cchat.db.repository.SMSMessageRepository;
 import hr.chus.cchat.db.service.SMSMessageService;
 import hr.chus.cchat.model.db.jpa.Operator;
 import hr.chus.cchat.model.db.jpa.SMSMessage;
@@ -21,6 +22,9 @@ import javax.persistence.Query;
 import org.hibernate.ejb.QueryHints;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,84 +37,88 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class SMSMessageServiceImpl implements SMSMessageService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SMSMessageServiceImpl.class);
+    private static final Logger            LOG = LoggerFactory.getLogger(SMSMessageServiceImpl.class);
 
     @PersistenceContext
-    private EntityManager       entityManager;
+    private transient EntityManager        entityManager;
+
+    @Autowired
+    private transient SMSMessageRepository smsMessageRepository;
 
     @Override
-    public void addSMSMessage(SMSMessage smsMessage) {
-        entityManager.persist(smsMessage);
+    public final void addSMSMessage(final SMSMessage p_smsMessage) {
+        entityManager.persist(p_smsMessage);
     }
 
     @Override
-    public void removeSMSMessage(SMSMessage smsMessage) {
-        smsMessage = entityManager.getReference(SMSMessage.class, smsMessage.getId());
+    public final void removeSMSMessage(final SMSMessage p_smsMessage) {
+        final SMSMessage smsMessage = entityManager.getReference(SMSMessage.class, p_smsMessage.getId());
         entityManager.remove(smsMessage);
     }
 
     @Override
-    public SMSMessage updateSMSMessage(SMSMessage smsMessage) {
-        return entityManager.merge(smsMessage);
+    public final SMSMessage updateSMSMessage(final SMSMessage p_smsMessage) {
+        return entityManager.merge(p_smsMessage);
     }
 
     @Override
-    public SMSMessage getById(Integer id) {
-        return entityManager.find(SMSMessage.class, id);
+    public final SMSMessage getById(final Integer p_id) {
+        return entityManager.find(SMSMessage.class, p_id);
     }
 
     @Override
-    public Object[] search(Operator operator, ServiceProvider serviceProvider, Direction direction, Integer userId, String userName, String userSurname,
-                           String msisdn, Date startDate, Date endDate, String text, int start, int limit) {
+    public final Object[] search(final Operator p_operator, final ServiceProvider p_serviceProvider, final Direction p_direction, final Integer p_userId,
+                                 final String p_username, final String p_userSurname, final String p_msisdn, final Date p_startDate, final Date p_endDate,
+                                 final String p_text, final int p_start, final int p_limit) {
         final StringBuffer queryWhereBuffer = new StringBuffer();
         boolean first = true;
 
-        if (operator != null) {
+        if (p_operator != null) {
             String query = "sms.operator = :operator ";
             queryWhereBuffer.append(first ? "WHERE " + query : "AND " + query);
             first = false;
         }
-        if (serviceProvider != null) {
+        if (p_serviceProvider != null) {
             String query = "sms.serviceProvider = :serviceProvider ";
             queryWhereBuffer.append(first ? "WHERE " + query : "AND " + query);
             first = false;
         }
-        if (userId != null) {
+        if (p_userId != null) {
             String query = "sms.user.id = :userId ";
             queryWhereBuffer.append(first ? "WHERE " + query : "AND " + query);
             first = false;
         }
-        if (userName != null && !userName.isEmpty()) {
+        if (p_username != null && !p_username.isEmpty()) {
             String query = "sms.user.name LIKE :userName ";
             queryWhereBuffer.append(first ? "WHERE " + query : "AND " + query);
             first = false;
         }
-        if (userSurname != null && !userSurname.isEmpty()) {
+        if (p_userSurname != null && !p_userSurname.isEmpty()) {
             String query = "sms.user.surname LIKE :userSurname ";
             queryWhereBuffer.append(first ? "WHERE " + query : "AND " + query);
             first = false;
         }
-        if (msisdn != null && !msisdn.isEmpty()) {
+        if (p_msisdn != null && !p_msisdn.isEmpty()) {
             String query = "sms.user.msisdn LIKE :msisdn ";
             queryWhereBuffer.append(first ? "WHERE " + query : "AND " + query);
             first = false;
         }
-        if (text != null && !text.isEmpty()) {
+        if (p_text != null && !p_text.isEmpty()) {
             String query = "sms.text LIKE :text ";
             queryWhereBuffer.append(first ? "WHERE " + query : "AND " + query);
             first = false;
         }
-        if (direction != null) {
+        if (p_direction != null) {
             String query = "sms.direction = :direction ";
             queryWhereBuffer.append(first ? "WHERE " + query : "AND " + query);
             first = false;
         }
-        if (startDate != null) {
+        if (p_startDate != null) {
             String query = "sms.time >= :startDate ";
             queryWhereBuffer.append(first ? "WHERE " + query : "AND " + query);
             first = false;
         }
-        if (endDate != null) {
+        if (p_endDate != null) {
             String query = "sms.time <= :endDate ";
             queryWhereBuffer.append(first ? "WHERE " + query : "AND " + query);
             first = false;
@@ -122,78 +130,79 @@ public class SMSMessageServiceImpl implements SMSMessageService {
         final Query query = entityManager.createQuery("SELECT sms FROM SMSMessage sms " + whereString);
         LOG.debug("Search sms messages query: SELECT sms FROM SMSMessage sms " + whereString);
 
-        if (operator != null) query.setParameter("operator", operator);
-        if (serviceProvider != null) query.setParameter("serviceProvider", serviceProvider);
-        if (userId != null) query.setParameter("userId", userId);
-        if (userName != null && !userName.isEmpty()) query.setParameter("userName", userName + "%");
-        if (userSurname != null && !userSurname.isEmpty()) query.setParameter("userSurname", msisdn + "%");
-        if (msisdn != null && !msisdn.isEmpty()) query.setParameter("msisdn", msisdn + "%");
-        if (text != null && !text.isEmpty()) query.setParameter("text", "%" + text + "%");
-        if (direction != null) query.setParameter("direction", direction);
-        if (startDate != null) query.setParameter("startDate", startDate);
-        if (endDate != null) query.setParameter("endDate", endDate);
+        if (p_operator != null) query.setParameter("operator", p_operator);
+        if (p_serviceProvider != null) query.setParameter("serviceProvider", p_serviceProvider);
+        if (p_userId != null) query.setParameter("userId", p_userId);
+        if (p_username != null && !p_username.isEmpty()) query.setParameter("userName", p_username + "%");
+        if (p_userSurname != null && !p_userSurname.isEmpty()) query.setParameter("userSurname", p_msisdn + "%");
+        if (p_msisdn != null && !p_msisdn.isEmpty()) query.setParameter("msisdn", p_msisdn + "%");
+        if (p_text != null && !p_text.isEmpty()) query.setParameter("text", "%" + p_text + "%");
+        if (p_direction != null) query.setParameter("direction", p_direction);
+        if (p_startDate != null) query.setParameter("startDate", p_startDate);
+        if (p_endDate != null) query.setParameter("endDate", p_endDate);
 
         final Object[] result = new Object[2];
-        if (limit == 0) {
+        if (p_limit == 0) {
             result[1] = query.getResultList();
         } else {
-            result[1] = query.setFirstResult(start).setMaxResults(limit).getResultList();
+            result[1] = query.setFirstResult(p_start).setMaxResults(p_limit).getResultList();
         }
 
         final Query queryCount = entityManager.createQuery("SELECT COUNT(sms.id) FROM SMSMessage sms " + whereString);
-        if (operator != null) queryCount.setParameter("operator", operator);
-        if (serviceProvider != null) queryCount.setParameter("serviceProvider", serviceProvider);
-        if (userId != null) queryCount.setParameter("userId", userId);
-        if (userName != null && !userName.isEmpty()) queryCount.setParameter("userName", userName + "%");
-        if (userSurname != null && !userSurname.isEmpty()) queryCount.setParameter("userSurname", msisdn + "%");
-        if (msisdn != null && !msisdn.isEmpty()) queryCount.setParameter("msisdn", msisdn + "%");
-        if (text != null && !text.isEmpty()) queryCount.setParameter("text", "%" + text + "%");
-        if (direction != null) queryCount.setParameter("direction", direction);
-        if (startDate != null) queryCount.setParameter("startDate", startDate);
-        if (endDate != null) queryCount.setParameter("endDate", endDate);
+        if (p_operator != null) queryCount.setParameter("operator", p_operator);
+        if (p_serviceProvider != null) queryCount.setParameter("serviceProvider", p_serviceProvider);
+        if (p_userId != null) queryCount.setParameter("userId", p_userId);
+        if (p_username != null && !p_username.isEmpty()) queryCount.setParameter("userName", p_username + "%");
+        if (p_userSurname != null && !p_userSurname.isEmpty()) queryCount.setParameter("userSurname", p_msisdn + "%");
+        if (p_msisdn != null && !p_msisdn.isEmpty()) queryCount.setParameter("msisdn", p_msisdn + "%");
+        if (p_text != null && !p_text.isEmpty()) queryCount.setParameter("text", "%" + p_text + "%");
+        if (p_direction != null) queryCount.setParameter("direction", p_direction);
+        if (p_startDate != null) queryCount.setParameter("startDate", p_startDate);
+        if (p_endDate != null) queryCount.setParameter("endDate", p_endDate);
         result[0] = queryCount.getSingleResult();
 
         return result;
     }
 
     @Override
-    public Object[] getConversationByUserId(Integer userId, int start, int limit) {
-        Object count = entityManager.createQuery("SELECT COUNT(sms.id) FROM SMSMessage sms WHERE sms.user.id = :userId ORDER BY sms.time DESC")
-                .setHint(QueryHints.HINT_CACHEABLE, false).setParameter("userId", userId).getSingleResult();
-        List<?> resultList = entityManager
+    public final Object[] getConversationByUserId(final Integer p_userId, final int p_start, final int p_limit) {
+        final Object count = entityManager.createQuery("SELECT COUNT(sms.id) FROM SMSMessage sms WHERE sms.user.id = :userId ORDER BY sms.time DESC")
+                .setHint(QueryHints.HINT_CACHEABLE, false).setParameter("userId", p_userId).getSingleResult();
+        final List<?> resultList = entityManager
                 .createQuery(
                         "SELECT sms.id, sms.text, sms.time, operator.username, sms.direction, _user.msisdn"
                                 + " FROM SMSMessage AS sms LEFT JOIN sms.operator AS operator LEFT JOIN sms.user AS _user"
-                                + " WHERE sms.user.id = :userId ORDER BY sms.time DESC").setParameter("userId", userId).setFirstResult(start)
-                .setMaxResults(limit).setHint(QueryHints.HINT_CACHEABLE, false).getResultList();
-        List<Conversation> conversationList = new LinkedList<Conversation>();
+                                + " WHERE sms.user.id = :userId ORDER BY sms.time DESC").setParameter("userId", p_userId).setFirstResult(p_start)
+                .setMaxResults(p_limit).setHint(QueryHints.HINT_CACHEABLE, false).getResultList();
+        final List<Conversation> conversationList = new LinkedList<Conversation>();
         for (Object object : resultList) {
-            Object[] row = (Object[]) object;
+            final Object[] row = (Object[]) object;
             conversationList.add(new Conversation((Integer) row[0], (String) row[5], (Date) row[2], (String) row[1], (String) row[3], (Direction) row[4]));
         }
+
         return new Object[] { count, conversationList };
     }
 
     @Override
-    public void updateSMSMessageOperatorIfNull(Integer operatorId, Integer userId) {
+    public final void updateSMSMessageOperatorIfNull(final Integer p_operatorId, final Integer p_userId) {
         entityManager.createQuery("UPDATE SMSMessage sms SET sms.operator.id = :operatorId WHERE sms.user.id = :userId AND sms.operator IS NULL")
-                .setParameter("operatorId", operatorId).setParameter("userId", userId).executeUpdate();
+                .setParameter("operatorId", p_operatorId).setParameter("userId", p_userId).executeUpdate();
     }
 
     @Override
-    public SMSMessage getLastReceivedMessage(User user) {
-        @SuppressWarnings("unchecked")
-        List<SMSMessage> result = entityManager.createNamedQuery("SMSMessage.getByDirectionAndUser").setParameter("direction", Direction.IN)
-                .setParameter("user", user).setMaxResults(1).getResultList();
-        if (result.size() == 1) {
-            return result.get(0);
+    public final SMSMessage getLastReceivedMessage(final User p_user) {
+        final PageRequest pageable = new PageRequest(0, 1);
+        final List<SMSMessage> messages = smsMessageRepository.findByUserAndDirection(p_user.getId(), Direction.IN, pageable);
+
+        if (messages.size() > 0) {
+            return messages.get(0);
         } else {
             return null;
         }
     }
 
     @Override
-    public SMSMessage getByGatewayId(final String p_gatewayId) {
+    public final SMSMessage getByGatewayId(final String p_gatewayId) {
         try {
             return (SMSMessage) entityManager.createNamedQuery("SMSMessage.getByGatewayId").setParameter("gatewayId", p_gatewayId).getSingleResult();
         } catch (NoResultException e) {
@@ -202,7 +211,7 @@ public class SMSMessageServiceImpl implements SMSMessageService {
     }
 
     @Override
-    public void updateStatus(final String p_gatewayId, final DeliveryStatus p_status, final String p_message) {
+    public final void updateStatus(final String p_gatewayId, final DeliveryStatus p_status, final String p_message) {
         final SMSMessage sms = getByGatewayId(p_gatewayId);
         if (sms == null) {
             LOG.warn("Message with gateway id {} not found.", p_gatewayId);
@@ -212,6 +221,18 @@ public class SMSMessageServiceImpl implements SMSMessageService {
             entityManager.merge(sms);
         } else {
             LOG.warn("Message with gateway id {} is incoming msg and status will not be updated.", p_gatewayId);
+        }
+    }
+
+    @Override
+    public final SMSMessage getLastSentMessage(final User p_user) {
+        final PageRequest pageable = new PageRequest(0, 1);
+        final List<SMSMessage> messages = smsMessageRepository.findByUserAndDirection(p_user.getId(), Direction.OUT, pageable);
+
+        if (messages.size() > 0) {
+            return messages.get(0);
+        } else {
+            return null;
         }
     }
 

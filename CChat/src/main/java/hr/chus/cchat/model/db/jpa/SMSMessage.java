@@ -29,8 +29,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Table(name = "sms_message")
 @NamedQueries({
         @NamedQuery(name = "SMSMessage.getAll", query = "SELECT sms FROM SMSMessage sms"),
-        @NamedQuery(name = "SMSMessage.getByDirectionAndUser",
-                query = "SELECT sms FROM SMSMessage sms WHERE sms.direction = :direction AND sms.user = :user ORDER BY sms.time DESC"),
         @NamedQuery(name = "SMSMessage.getByGatewayId", query = "SELECT sms FROM SMSMessage sms WHERE sms.gatewayId = :gatewayId") })
 @Cache(usage = CacheConcurrencyStrategy.NONE)
 public class SMSMessage extends AbstractBaseEntity {
@@ -95,6 +93,13 @@ public class SMSMessage extends AbstractBaseEntity {
 
     @Column(name = "bot_response", columnDefinition = "BIT")
     private Boolean                botResponse = Boolean.FALSE;
+
+    @Column(name = "used_send_bean", length = 30)
+    private String                 usedBean;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "response_to_id")
+    private SMSMessage             responseTo;
 
     public SMSMessage() {}
 
@@ -246,6 +251,22 @@ public class SMSMessage extends AbstractBaseEntity {
 
     public final void setBotResponse(final Boolean p_botResponse) {
         botResponse = p_botResponse;
+    }
+
+    public final String getUsedBean() {
+        return usedBean;
+    }
+
+    public final void setUsedBean(final String p_usedBean) {
+        usedBean = p_usedBean;
+    }
+
+    public final SMSMessage getResponseTo() {
+        return responseTo;
+    }
+
+    public final void setResponseTo(final SMSMessage p_responseTo) {
+        responseTo = p_responseTo;
     }
 
 }
