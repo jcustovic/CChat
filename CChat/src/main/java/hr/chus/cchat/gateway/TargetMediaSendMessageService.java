@@ -33,6 +33,9 @@ import org.springframework.stereotype.Service;
 
 /**
  * @author Jan Čustović (jan.custovic@gmail.com)
+ * 
+ * Technical Specification Premium SMS gateway V1.3 compatible
+ * 
  */
 @Service("targetMediaSendMessageService")
 public class TargetMediaSendMessageService implements SendMessageService {
@@ -78,7 +81,7 @@ public class TargetMediaSendMessageService implements SendMessageService {
     }
 
     @Override
-    public String sendSmsMessage(SMSMessage smsMessage) throws HttpException, IOException, GatewayResponseError {
+    public String sendSmsMessage(final SMSMessage smsMessage) throws HttpException, IOException, GatewayResponseError {
         final SMSMessage lastReceivedMessage = smsMessageService.getLastReceivedMessage(smsMessage.getUser());
         final ServiceProviderKeyword keyword = lastReceivedMessage.getServiceProviderKeyword();
         smsMessage.setServiceProviderKeyword(keyword);
@@ -98,15 +101,15 @@ public class TargetMediaSendMessageService implements SendMessageService {
          * for 'tariff' will be ignored.
          * Note 2: Service- or error messages in the Netherlands may not be charged for more than 25 eurocents.
          */
-        params.add(new BasicNameValuePair("tariff", (keyword == null || keyword.getBillingAmount() == null) ? null : String.valueOf(keyword.getBillingAmount()
-                .intValue())));
+        params.add(new BasicNameValuePair("tariff", ((keyword == null) || (keyword.getBillingAmount() == null)) ? null : String.valueOf(keyword
+                .getBillingAmount().intValue())));
         params.add(new BasicNameValuePair("returnid", returnid));
 
         return sendRequest(params);
     }
 
     @Override
-    public String sendWapPushMessage(SMSMessage smsMessage) throws HttpException, IOException, GatewayResponseError {
+    public String sendWapPushMessage(final SMSMessage smsMessage) throws HttpException, IOException, GatewayResponseError {
         final SMSMessage lastReceivedMessage = smsMessageService.getLastReceivedMessage(smsMessage.getUser());
         final ServiceProviderKeyword keyword = lastReceivedMessage.getServiceProviderKeyword();
         smsMessage.setServiceProviderKeyword(keyword);
@@ -119,8 +122,8 @@ public class TargetMediaSendMessageService implements SendMessageService {
         params.add(new BasicNameValuePair("sendto", smsMessage.getUser().getMsisdn()));
         params.add(new BasicNameValuePair("mo_messageid", lastReceivedMessage.getGatewayId()));
         params.add(new BasicNameValuePair("message", "URL"));
-        params.add(new BasicNameValuePair("tariff", (keyword == null || keyword.getBillingAmount() == null) ? null : String.valueOf(keyword.getBillingAmount()
-                .intValue())));
+        params.add(new BasicNameValuePair("tariff", ((keyword == null) || (keyword.getBillingAmount() == null)) ? null : String.valueOf(keyword
+                .getBillingAmount().intValue())));
         /* WAP push message ('0', '1').
          * A WAP push is a bookmark for a mobile phone. Enter '1' for this parameter when a WAP push SMS message 
          * has to be sent. In AU, UK and IE the end-user rate must be zero
@@ -188,7 +191,7 @@ public class TargetMediaSendMessageService implements SendMessageService {
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(final String username) {
         this.username = username;
     }
 
@@ -196,7 +199,7 @@ public class TargetMediaSendMessageService implements SendMessageService {
         return handle;
     }
 
-    public void setHandle(String handle) {
+    public void setHandle(final String handle) {
         this.handle = handle;
     }
 
@@ -204,7 +207,7 @@ public class TargetMediaSendMessageService implements SendMessageService {
         return url;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(final String url) {
         this.url = url;
     }
 
@@ -212,7 +215,7 @@ public class TargetMediaSendMessageService implements SendMessageService {
         return returnid;
     }
 
-    public void setReturnid(String returnid) {
+    public void setReturnid(final String returnid) {
         this.returnid = returnid;
     }
 

@@ -91,7 +91,7 @@ public class MessageServiceImpl implements MessageService {
         LOG.debug("Searching for service provider with name {} and sc {}.", p_serviceProviderName, p_sc);
         serviceProvider = serviceProviderService.getByProviderNameAndShortCode(p_serviceProviderName, p_sc);
 
-        // 2. Match language
+        // 2. Match language (we do the fetch every time for possible language change)
         final LanguageProvider matchedLanguageProvider = languageProviderService.findBestMatchByPrefix(msisdn);
         if (matchedLanguageProvider == null) {
             throw new LanguageNotFound("Language not found for msisdn " + msisdn + " --> provider " + p_serviceProviderName + " and sc " + p_sc);
@@ -109,7 +109,7 @@ public class MessageServiceImpl implements MessageService {
         ServiceProviderKeyword providerKeyword = null;
         if (StringUtils.hasText(p_serviceProviderKeyword)) {
             Set<ServiceProviderKeyword> keywords = serviceProvider.getServiceProviderKeywords();
-            if (keywords != null && !keywords.isEmpty()) {
+            if ((keywords != null) && !keywords.isEmpty()) {
                 for (ServiceProviderKeyword keyword : keywords) {
                     if (p_serviceProviderKeyword.equalsIgnoreCase(keyword.getKeyword())) {
                         providerKeyword = keyword;
@@ -136,7 +136,7 @@ public class MessageServiceImpl implements MessageService {
             smsCount = 1;
         } else {
             // TODO: Maybe respect ASCII or UNITCODE length
-            smsCount = (int) Math.ceil(smsText.length() * 1f / SMS_ASCII_MAX_LENGTH);
+            smsCount = (int) Math.ceil((smsText.length() * 1f) / SMS_ASCII_MAX_LENGTH);
         }
         User user;
         synchronized (USER_LOCK) {
@@ -148,7 +148,7 @@ public class MessageServiceImpl implements MessageService {
             LOG.debug("Received sms with length {} (max {}). Will split message ({} parts)...",
                     new Object[] { smsText.length(), SMS_ASCII_MAX_LENGTH, smsCount });
         }
-        
+
         final SMSMessage responseTo = smsMessageService.getLastSentMessage(user);
 
         final Integer[] msgIds = new Integer[smsCount];
@@ -237,14 +237,14 @@ public class MessageServiceImpl implements MessageService {
     public final SMSMessage sendMessage(final SMSMessage p_smsMessage, final Boolean p_botResponse, final User p_user, final String p_msgType)
             throws HttpException, IOException, GatewayResponseError {
         final ServiceProvider serviceProvider = p_user.getServiceProvider();
-        
+
         String senderBeanName = null;
-        if (serviceProvider.getLanguageProvider() != null && serviceProvider.getLanguageProvider().getSendServiceBeanName() != null) {
+        if ((serviceProvider.getLanguageProvider() != null) && (serviceProvider.getLanguageProvider().getSendServiceBeanName() != null)) {
             senderBeanName = serviceProvider.getLanguageProvider().getSendServiceBeanName();
         } else if (StringUtils.hasText(serviceProvider.getSendServiceBeanName())) {
             senderBeanName = serviceProvider.getSendServiceBeanName();
         }
-        
+
         final SendMessageService sendMessageService;
         if (senderBeanName == null) {
             sendMessageService = defaultSendMessageService;
