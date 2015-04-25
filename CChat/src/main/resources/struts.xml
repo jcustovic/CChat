@@ -140,7 +140,7 @@
 			<result name="input" type="freemarker">/WEB-INF/ftl/targetMediaReceiveSmsResult.ftl</result -->
 		</action>
 		
-		<!-- Target Media ReceiveSms -->
+		<!-- Target Media (v1.3) ReceiveSms -->
 		<!-- NOTE: Uncomment correct result in ReceiveSms, because this action is only used for property mapping -->
 		<action name="TMReceiveSms" class="hr.chus.cchat.struts2.action.common.TMReceiveSms">
 			<!-- Redirect to ReceiveSms (remember to configure resultType on ReceiveSms action) -->
