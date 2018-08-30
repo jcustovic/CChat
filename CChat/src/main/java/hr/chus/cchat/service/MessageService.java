@@ -16,13 +16,15 @@ import org.apache.http.HttpException;
  */
 public interface MessageService {
 
-    Integer[] receiveSms(String p_serviceProviderName, String p_sc, String p_serviceProviderKeyword, String p_msisdn, String p_text, Date p_date,
-                         String p_gatewayId);
+    Integer[] receiveSms(String p_serviceProviderName, String p_sc, String p_serviceProviderKeyword, String p_msisdn, 
+                         String p_text, Date p_date, String p_gatewayId);
     
-    Integer[] receiveSms(String p_serviceProviderName, String p_sc, String p_serviceProviderKeyword, String p_msisdn, String p_mccMnc, String p_text, Date p_date,
-                         String p_gatewayId, Float p_price, String p_currency);
+    Integer[] receiveSms(String p_serviceProviderName, String p_sc, String p_serviceProviderKeyword, String p_msisdn, 
+                         String p_mccMnc, String p_text, Date p_date, String p_gatewayId, Float p_price, String p_currency);
 
-    SMSMessage sendMessage(SMSMessage p_smsMessage, Boolean p_botResponse, User p_user, String p_msgType) throws HttpException, IOException,
-            GatewayResponseError;
+    SMSMessage sendMessage(SMSMessage p_smsMessage, Boolean p_botResponse, User p_user, String p_msgType) throws HttpException, 
+            IOException, GatewayResponseError;
 
+    Integer[] receiveSmsAndSendAutomaticBotReply(String serviceProviderName, String sc, Object o, String msisdn, String text, 
+                                                 Date date, String gatewayId) throws GatewayResponseError, IOException, HttpException;
 }

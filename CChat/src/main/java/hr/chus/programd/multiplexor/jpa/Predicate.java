@@ -18,7 +18,7 @@ public class Predicate extends AbstractBaseEntity {
     @Column(name = "bot_id", length = 128, nullable = false)
     private String botId;
 
-    @Column(name = "name", length = 128, nullable = true)
+    @Column(name = "name", length = 128)
     private String name;
 
     @Lob

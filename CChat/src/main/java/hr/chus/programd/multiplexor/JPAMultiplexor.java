@@ -4,15 +4,6 @@ import hr.chus.programd.multiplexor.jpa.Predicate;
 import hr.chus.programd.multiplexor.jpa.PredicateUser;
 import hr.chus.programd.multiplexor.repository.PredicateRepository;
 import hr.chus.programd.multiplexor.repository.PredicateUserRepository;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.aitools.programd.Core;
 import org.aitools.programd.multiplexor.DuplicateUserIDError;
 import org.aitools.programd.multiplexor.Multiplexor;
@@ -22,19 +13,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class JPAMultiplexor extends Multiplexor {
 
-    private static final Logger               LOG      = LoggerFactory.getLogger(JPAMultiplexor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JPAMultiplexor.class);
 
-    private static final String               ENC_UTF8 = "UTF-8";
+    private static final String ENC_UTF8 = "UTF-8";
 
     @Autowired
     private transient PredicateUserRepository userRepository;
 
     @Autowired
-    private transient PredicateRepository     predicateRepository;
+    private transient PredicateRepository predicateRepository;
 
-    private Map<String, Map<String, String>>  userCacheForBots;
+    private Map<String, Map<String, String>> userCacheForBots;
 
     public JPAMultiplexor(final Core p_core) {
         super(p_core);
@@ -88,7 +87,7 @@ public class JPAMultiplexor extends Multiplexor {
             } catch (IllegalArgumentException e) {
                 LOG.warn("Error decoding value " + predicate + ". Will delete predicate", e);
                 predicateRepository.delete(predicates.get(0));
-                
+
                 throw new NoSuchPredicateException(p_name);
             } catch (UnsupportedEncodingException e) {
                 throw new DeveloperError("This platform does not support UTF-8!", e);

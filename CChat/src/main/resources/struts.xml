@@ -144,6 +144,15 @@
 			</result>
 			<!-- <result name="input" type="freemarker">/WEB-INF/ftl/targetMediaReceiveSmsResult.ftl</result> -->
 		</action>
+
+		<action name="ReceiveSmsBot" class="hr.chus.cchat.struts2.action.common.ReceiveSmsBot">
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+			</result>
+			<result name="input" type="json">
+				<param name="excludeNullProperties">true</param>
+			</result>
+		</action>
 		
 		<!-- Target Media custom StatusHandler -->
 		<action name="TMStatusHandler" class="hr.chus.cchat.struts2.action.common.TMStatusHandler">

@@ -4,11 +4,11 @@ import hr.chus.cchat.model.db.jpa.Operator;
 
 /**
  * Every Struts2 action that wants to get logged in user info needs to implement this interface
- * 
+ *
  * @author Jan Čustović (jan.custovic@gmail.com)
  */
 public interface UserAware {
 
-    public void setAuthenticatedUser(Operator user);
+    void setAuthenticatedUser(Operator user);
 
 }

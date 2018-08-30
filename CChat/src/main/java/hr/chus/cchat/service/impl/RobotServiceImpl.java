@@ -5,9 +5,6 @@ import hr.chus.cchat.db.repository.UserRepository;
 import hr.chus.cchat.model.db.jpa.Robot;
 import hr.chus.cchat.model.db.jpa.User;
 import hr.chus.cchat.service.RobotService;
-
-import java.util.List;
-
 import org.aitools.programd.Core;
 import org.aitools.programd.bot.Bot;
 import org.aitools.programd.util.DeveloperError;
@@ -16,22 +13,24 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author Jan Čustović (jan.custovic@gmail.com)
  */
 @Service
 public class RobotServiceImpl implements RobotService {
 
-    private static final Logger       LOG = LoggerFactory.getLogger(RobotServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RobotServiceImpl.class);
 
     @Autowired
     private transient RobotRepository robotRepository;
 
     @Autowired
-    private transient Core            core;
+    private transient Core core;
 
     @Autowired
-    private transient UserRepository  userRepository;
+    private transient UserRepository userRepository;
 
     @Override
     public final Robot findByName(final String p_name) {
@@ -54,7 +53,7 @@ public class RobotServiceImpl implements RobotService {
     }
 
     @Override
-    public final String responde(final String p_text, Integer p_userId) {
+    public final String respond(final String p_text, Integer p_userId) {
         final User user = userRepository.findOne(p_userId);
         if (user.getBot() != null && user.getBot().getOnline()) {
             try {
@@ -65,7 +64,7 @@ public class RobotServiceImpl implements RobotService {
                     return core.getResponse(p_text, user.getId().toString(), bot.getID());
                 }
             } catch (final DeveloperError p_e) {
-                LOG.warn("Faild to find bot with id {}", user.getBot().getName());
+                LOG.warn("Failed to find bot with id {}", user.getBot().getName());
             }
         }
 

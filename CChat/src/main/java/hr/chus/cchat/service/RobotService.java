@@ -17,6 +17,6 @@ public interface RobotService {
 
     Robot findOne(Integer p_id);
 
-    String responde(String text, Integer userId);
+    String respond(String text, Integer userId);
 
 }

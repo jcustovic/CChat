@@ -7,23 +7,12 @@ import hr.chus.cchat.db.service.UserService;
 import hr.chus.cchat.exception.LanguageNotFound;
 import hr.chus.cchat.gateway.GatewayResponseError;
 import hr.chus.cchat.gateway.SendMessageService;
-import hr.chus.cchat.model.db.jpa.Language;
-import hr.chus.cchat.model.db.jpa.LanguageProvider;
-import hr.chus.cchat.model.db.jpa.Robot;
-import hr.chus.cchat.model.db.jpa.SMSMessage;
+import hr.chus.cchat.model.db.jpa.*;
 import hr.chus.cchat.model.db.jpa.SMSMessage.DeliveryStatus;
 import hr.chus.cchat.model.db.jpa.SMSMessage.Direction;
-import hr.chus.cchat.model.db.jpa.ServiceProvider;
-import hr.chus.cchat.model.db.jpa.ServiceProviderKeyword;
-import hr.chus.cchat.model.db.jpa.User;
 import hr.chus.cchat.service.LanguageProviderService;
 import hr.chus.cchat.service.MessageService;
 import hr.chus.cchat.service.RobotService;
-
-import java.io.IOException;
-import java.util.Date;
-import java.util.Set;
-
 import org.apache.http.HttpException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,46 +22,50 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.io.IOException;
+import java.util.Date;
+import java.util.Set;
+
 /**
- * Default implementation of {@link ReceiveSmsService}
- * 
+ * Default implementation of {@link MessageService}
+ *
  * @author Jan Čustović (jan.custovic@gmail.com)
  */
 @Service
 public class MessageServiceImpl implements MessageService {
 
-    private static final Logger           LOG                    = LoggerFactory.getLogger(MessageServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MessageServiceImpl.class);
 
-    private static final Object           USER_LOCK              = new Object();
-    private static final Object           SP_LOCK                = new Object();
+    private static final Object USER_LOCK = new Object();
+    private static final Object SP_LOCK = new Object();
 
-    public static final int               SMS_UNICODE_MAX_LENGTH = 70;
-    public static final int               SMS_ASCII_MAX_LENGTH   = 160;
-
-    @Autowired
-    private ApplicationContext            applicationContext;
+    public static final int SMS_UNICODE_MAX_LENGTH = 70;
+    public static final int SMS_ASCII_MAX_LENGTH = 160;
 
     @Autowired
-    private ServiceProviderService        serviceProviderService;
+    private ApplicationContext applicationContext;
 
     @Autowired
-    private UserService                   userService;
+    private ServiceProviderService serviceProviderService;
 
     @Autowired
-    private SMSMessageService             smsMessageService;
+    private UserService userService;
+
+    @Autowired
+    private SMSMessageService smsMessageService;
 
     @Autowired
     private ServiceProviderKeywordService serviceProviderKeywordService;
 
     @Autowired
-    private RobotService                  robotService;
+    private RobotService robotService;
 
     @Qualifier("defaultSendMessageService")
     @Autowired
-    private SendMessageService            defaultSendMessageService;
+    private SendMessageService defaultSendMessageService;
 
     @Autowired
-    private LanguageProviderService       languageProviderService;
+    private LanguageProviderService languageProviderService;
 
     @Override
     public final Integer[] receiveSms(final String p_serviceProviderName, final String p_sc, final String p_serviceProviderKeyword, final String p_msisdn,
@@ -135,7 +128,7 @@ public class MessageServiceImpl implements MessageService {
         if (smsText.isEmpty()) {
             smsCount = 1;
         } else {
-            // TODO: Maybe respect ASCII or UNITCODE length
+            // TODO: Maybe respect ASCII or UNICODE length
             smsCount = (int) Math.ceil((smsText.length() * 1f) / SMS_ASCII_MAX_LENGTH);
         }
         User user;
@@ -146,7 +139,7 @@ public class MessageServiceImpl implements MessageService {
         // We will split message if its length is more than 160 chars.
         if (smsCount > 1) {
             LOG.debug("Received sms with length {} (max {}). Will split message ({} parts)...",
-                    new Object[] { smsText.length(), SMS_ASCII_MAX_LENGTH, smsCount });
+                    new Object[]{smsText.length(), SMS_ASCII_MAX_LENGTH, smsCount});
         }
 
         final SMSMessage responseTo = smsMessageService.getLastSentMessage(user);
@@ -172,16 +165,16 @@ public class MessageServiceImpl implements MessageService {
     private ServiceProvider getProviderByMatchedLanguageProvider(final String p_serviceProviderName, final String p_sc, final String p_msisdn,
                                                                  final LanguageProvider p_matchedLanguageProvider) {
         final Language language = p_matchedLanguageProvider.getLanguage();
-        LOG.debug("Best matched language for msisdn {} is {} (prefix: {}, sendBean: {})", new Object[] { p_msisdn, language.getShortCode(),
-                p_matchedLanguageProvider.getPrefix(), p_matchedLanguageProvider.getSendServiceBeanName() });
+        LOG.debug("Best matched language for msisdn {} is {} (prefix: {}, sendBean: {})", new Object[]{p_msisdn, language.getShortCode(),
+                p_matchedLanguageProvider.getPrefix(), p_matchedLanguageProvider.getSendServiceBeanName()});
 
         final String serviceProviderName = p_serviceProviderName + "_" + p_matchedLanguageProvider.getId();
         synchronized (SP_LOCK) {
             ServiceProvider serviceProvider = serviceProviderService.findByProviderNameAndShortCodeAndProviderLanguage(serviceProviderName, p_sc,
                     p_matchedLanguageProvider);
             if (serviceProvider == null) {
-                LOG.debug("Service provider not found for provider name {}, sc {} and language {}. Will automatically create...", new Object[] {
-                        serviceProviderName, p_sc, language.getShortCode() });
+                LOG.debug("Service provider not found for provider name {}, sc {} and language {}. Will automatically create...", new Object[]{
+                        serviceProviderName, p_sc, language.getShortCode()});
                 // TODO: Is this the correct way to provide serviceName?
                 serviceProvider = new ServiceProvider(p_sc, serviceProviderName, "LANG_PROVIDER_" + p_matchedLanguageProvider.getId(), "Language provider "
                         + language.getShortCode(), false);
@@ -234,8 +227,8 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public final SMSMessage sendMessage(final SMSMessage p_smsMessage, final Boolean p_botResponse, final User p_user, final String p_msgType)
-            throws HttpException, IOException, GatewayResponseError {
+    public final SMSMessage sendMessage(final SMSMessage p_smsMessage, final Boolean p_botResponse, final User p_user,
+                                        final String p_msgType) throws HttpException, IOException, GatewayResponseError {
         final ServiceProvider serviceProvider = p_user.getServiceProvider();
 
         String senderBeanName = null;
@@ -267,6 +260,21 @@ public class MessageServiceImpl implements MessageService {
         p_smsMessage.setBotResponse(Boolean.TRUE.equals(p_botResponse));
 
         return smsMessageService.updateSMSMessage(p_smsMessage);
+    }
+
+    @Override
+    public Integer[] receiveSmsAndSendAutomaticBotReply(String serviceProviderName, String sc, Object o, String msisdn,
+                                                        String text, Date date, String gatewayId)
+            throws GatewayResponseError, IOException, HttpException {
+        Integer[] receivedSmsIds = receiveSms(serviceProviderName, sc, null, msisdn, text, date, gatewayId);
+        SMSMessage msg = smsMessageService.getById(receivedSmsIds[0]);
+        User user = msg.getUser();
+        String botResponse = robotService.respond(text, user.getId());
+        SMSMessage newSmsMessage = new SMSMessage(user, null, new Date(), botResponse, user.getServiceProvider().getSc(),
+                user.getServiceProvider(), Direction.OUT);
+        sendMessage(newSmsMessage, true, user, null);
+
+        return receivedSmsIds;
     }
 
 }

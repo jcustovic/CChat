@@ -1,5 +1,6 @@
 package hr.chus.cchat.struts2.action.common;
 
+import com.opensymphony.xwork2.ActionSupport;
 import hr.chus.cchat.db.service.UserService;
 import hr.chus.cchat.gateway.GatewayResponseError;
 import hr.chus.cchat.helper.UserAware;
@@ -9,10 +10,6 @@ import hr.chus.cchat.model.db.jpa.SMSMessage.Direction;
 import hr.chus.cchat.model.db.jpa.User;
 import hr.chus.cchat.service.MessageService;
 import hr.chus.cchat.service.impl.MessageServiceImpl;
-
-import java.util.Arrays;
-import java.util.Date;
-
 import org.apache.http.HttpException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,11 +17,13 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
-import com.opensymphony.xwork2.ActionSupport;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
 
 /**
- * Web GET or POST action that we invoke to send messages thru message gateway.
- * 
+ * Web GET or POST action that we invoke to send messages via message gateway.
+ *
  * @author Jan Čustović (jan.custovic@gmail.com)
  */
 @SuppressWarnings("serial")
@@ -33,19 +32,19 @@ public class SendSms extends ActionSupport implements UserAware {
     private static final Logger LOG = LoggerFactory.getLogger(SendSms.class);
 
     @Autowired
-    private MessageService      messageService;
+    private MessageService messageService;
 
     @Autowired
-    private UserService         userService;
+    private UserService userService;
 
-    private Operator            operator;
-    private User                user;
-    private String              msgType;
-    private String              text;
-    private Boolean             status;
-    private String              errorMsg;
-    private SMSMessage          smsMessage;
-    private Boolean             botResponse;
+    private Operator operator;
+    private User user;
+    private String msgType;
+    private String text;
+    private Boolean status;
+    private String errorMsg;
+    private SMSMessage smsMessage;
+    private Boolean botResponse;
 
     @Override
     public final void validate() {
@@ -56,10 +55,10 @@ public class SendSms extends ActionSupport implements UserAware {
         } else if (user == null) {
             errorMsg = getText("sendSms.user.notFound");
         } else if (user.getServiceProvider().getDisabled()) {
-            errorMsg = getText("sendSms.serviceProvider.disabled", new String[] { user.getServiceProvider().getProviderName(),
-                    user.getServiceProvider().getSc() });
+            errorMsg = getText("sendSms.serviceProvider.disabled", new String[]{user.getServiceProvider().getProviderName(),
+                    user.getServiceProvider().getSc()});
         } else if (user.getOperator() != null && !user.getOperator().equals(operator) && !"admin".equals(operator.getRole().getName())) {
-            errorMsg = getText("sendSms.user.belongsToAnotherOperator", new String[] { user.getOperator().getName() + " " + user.getOperator().getSurname() });
+            errorMsg = getText("sendSms.user.belongsToAnotherOperator", new String[]{user.getOperator().getName() + " " + user.getOperator().getSurname()});
         } else if (!StringUtils.hasText(msgType)) {
             errorMsg = getText("sendSms.msgType.notDefiend");
         } else if (text == null) {
@@ -69,11 +68,11 @@ public class SendSms extends ActionSupport implements UserAware {
         if (text != null) {
             if (org.apache.commons.lang3.StringUtils.isAsciiPrintable(text)) {
                 if (text.length() > MessageServiceImpl.SMS_ASCII_MAX_LENGTH) {
-                    errorMsg = getText("sendSms.text.tooLong", Arrays.asList(MessageServiceImpl.SMS_ASCII_MAX_LENGTH));
+                    errorMsg = getText("sendSms.text.tooLong", Collections.singletonList(MessageServiceImpl.SMS_ASCII_MAX_LENGTH));
                 }
             } else {
                 if (text.length() > MessageServiceImpl.SMS_UNICODE_MAX_LENGTH) {
-                    errorMsg = getText("sendSms.text.tooLong", Arrays.asList(MessageServiceImpl.SMS_UNICODE_MAX_LENGTH));
+                    errorMsg = getText("sendSms.text.tooLong", Collections.singletonList(MessageServiceImpl.SMS_UNICODE_MAX_LENGTH));
                 }
             }
         }
@@ -85,7 +84,7 @@ public class SendSms extends ActionSupport implements UserAware {
     }
 
     @Override
-    public final String execute() throws Exception {
+    public final String execute() {
         LOG.info("Sending message to user " + user + " --> type: " + msgType + ", text: " + text);
         final SMSMessage newSmsMessage = new SMSMessage(user, operator, new Date(), text, user.getServiceProvider().getSc(), user.getServiceProvider(),
                 Direction.OUT);
@@ -113,7 +112,7 @@ public class SendSms extends ActionSupport implements UserAware {
             return ERROR;
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
-            errorMsg = getText("sendSms.exception", new String[] { e.getMessage() });
+            errorMsg = getText("sendSms.exception", new String[]{e.getMessage()});
         }
 
         return SUCCESS;

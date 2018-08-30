@@ -1,27 +1,17 @@
 package hr.chus.cchat.model.db.jpa;
 
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-
 import org.apache.struts2.json.annotations.JSON;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Class describes SMSMessage DAO model which will be used for JPA/Hibernate implementation.
  * Class defines queries, table and column names and cache.
  * SMS messages are represented by this class.
- * 
+ *
  * @author Jan Čustović (jan.custovic@gmail.com)
  */
 @SuppressWarnings("serial")
@@ -29,7 +19,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Table(name = "sms_message")
 @NamedQueries({
         @NamedQuery(name = "SMSMessage.getAll", query = "SELECT sms FROM SMSMessage sms"),
-        @NamedQuery(name = "SMSMessage.getByGatewayId", query = "SELECT sms FROM SMSMessage sms WHERE sms.gatewayId = :gatewayId") })
+        @NamedQuery(name = "SMSMessage.getByGatewayId", query = "SELECT sms FROM SMSMessage sms WHERE sms.gatewayId = :gatewayId")})
 @Cache(usage = CacheConcurrencyStrategy.NONE)
 public class SMSMessage extends AbstractBaseEntity {
 
@@ -42,69 +32,70 @@ public class SMSMessage extends AbstractBaseEntity {
         DELIVERED, RECEIVED, SENT_TO_GATEWAY, SEND_FAILED, DELIVERY_FAILED
     }
 
-    @Column(name = "gateway_id", nullable = true, length = 36)
-    private String                 gatewayId;
+    @Column(name = "gateway_id", length = 36)
+    private String gatewayId;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
-    private User                   user;
+    private User user;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "operator_id", nullable = true)
-    private Operator               operator;
+    @JoinColumn(name = "operator_id")
+    private Operator operator;
 
     @Column(name = "time", nullable = false, columnDefinition = "DATETIME")
-    private Date                   time;
+    private Date time;
 
     @Column(name = "text", nullable = false)
-    private String                 text;
+    private String text;
 
     @Column(name = "sc", nullable = false)
-    private String                 sc;
+    private String sc;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "service_provider_id", nullable = false)
-    private ServiceProvider        serviceProvider;
+    private ServiceProvider serviceProvider;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "service_provider_keyword_id", nullable = true)
+    @JoinColumn(name = "service_provider_keyword_id")
     private ServiceProviderKeyword serviceProviderKeyword;
 
     @Column(name = "end_user_price")
-    private Float                  endUserPrice;
+    private Float endUserPrice;
 
     @Column(name = "end_user_price_currency")
-    private String                 endUserPriceCurrency;
+    private String endUserPriceCurrency;
 
     @Column(name = "direction", nullable = false, columnDefinition = "ENUM")
     @Enumerated(EnumType.STRING)
-    private Direction              direction;
+    private Direction direction;
 
     @Column(name = "delivery_status")
     @Enumerated(EnumType.STRING)
-    private DeliveryStatus         deliveryStatus;
+    private DeliveryStatus deliveryStatus;
 
     @Column(name = "delivery_msg", length = 200)
-    private String                 deliveryMessage;
+    private String deliveryMessage;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "nick_id", nullable = true)
-    private Nick                   nick;
+    @JoinColumn(name = "nick_id")
+    private Nick nick;
 
     @Column(name = "bot_response", columnDefinition = "BIT")
-    private Boolean                botResponse = Boolean.FALSE;
+    private Boolean botResponse = Boolean.FALSE;
 
     @Column(name = "used_send_bean", length = 30)
-    private String                 usedBean;
+    private String usedBean;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "response_to_id")
-    private SMSMessage             responseTo;
+    private SMSMessage responseTo;
 
-    public SMSMessage() {}
+    public SMSMessage() {
+    }
 
     public SMSMessage(final User p_user, final Operator p_operator, final Date p_time, final String p_text, final String p_sc,
-            final ServiceProvider p_serviceProvider, final Direction p_direction) {
+                      final ServiceProvider p_serviceProvider, final Direction p_direction) {
         user = p_user;
         operator = p_operator;
         time = p_time;
@@ -116,8 +107,8 @@ public class SMSMessage extends AbstractBaseEntity {
 
     @Override
     public final String toString() {
-        return String.format("SMSMessage[ID: %s, Msisdn: %s, Operator: %s, Text: %s, SC: %s, ServiceName: %s]", new Object[] { getId(), user.getMsisdn(),
-                operator.getName(), text, sc, serviceProvider.getServiceName() });
+        return String.format("SMSMessage[ID: %s, Msisdn: %s, Operator: %s, Text: %s, SC: %s, ServiceName: %s]",
+                getId(), user.getMsisdn(), operator == null ? "" : operator.getName(), text, sc, serviceProvider.getServiceName());
     }
 
     @Override
