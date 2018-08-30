@@ -1,81 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:task="http://www.springframework.org/schema/task"
-	xmlns:cache="http://www.springframework.org/schema/cache"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
 	http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd
 	http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-3.1.xsd">
 
-	<context:component-scan base-package="hr.chus.cchat.db.service.jpa" />
-	<context:component-scan base-package="hr.chus.cchat.service.impl" />
-	<context:component-scan base-package="hr.chus.cchat.gateway" />
-	<context:component-scan base-package="hr.chus.cchat.scheduler" />
-	
-	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
-		<property name="cacheManager" ref="ehcache" />
-	</bean>
+    <context:component-scan base-package="hr.chus.cchat.db.service.jpa"/>
+    <context:component-scan base-package="hr.chus.cchat.service.impl"/>
+    <context:component-scan base-package="hr.chus.cchat.gateway"/>
+    <context:component-scan base-package="hr.chus.cchat.scheduler"/>
 
-	<!-- Ehcache library setup -->
-	<bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-		<property name="configLocation" value="classpath:ehcache.xml" />
- 		<!-- Because of hibernate -->
-		<property name="shared" value="true" />
-	</bean>
+    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+        <property name="cacheManager" ref="ehcache"/>
+    </bean>
 
-	<task:executor id="executor" pool-size="5" />
-	<task:scheduler id="scheduler" pool-size="5" />
-	<task:annotation-driven scheduler="scheduler" executor="executor" />
-	<cache:annotation-driven />
-	
-	<bean id="operatorChooser" class="hr.chus.cchat.helper.OperatorChooser" init-method="init" />
+    <!-- Ehcache library setup -->
+    <bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:ehcache.xml"/>
+        <!-- Because of hibernate -->
+        <property name="shared" value="true"/>
+    </bean>
 
-	<bean id="kannel_amba_SILVERSTREET" class="hr.chus.cchat.gateway.AmbasmsSendMessageService" />
-	<bean id="kannel_amba_iBasis" class="hr.chus.cchat.gateway.AmbasmsSendMessageService" />
-	<bean id="kannel_amba_BICS" class="hr.chus.cchat.gateway.AmbasmsSendMessageService" />
-	<bean id="kannel_amba_MGI" class="hr.chus.cchat.gateway.AmbasmsSendMessageService" />
-	<bean id="kannel_amba_aicent_a2p" class="hr.chus.cchat.gateway.AmbasmsSendMessageService" />
-	<bean id="kannel_amba_aicent_p2p" class="hr.chus.cchat.gateway.AmbasmsSendMessageService" />
-	<bean id="kannel_amba_tyntec" class="hr.chus.cchat.gateway.AmbasmsSendMessageService" />
-	<bean id="kannel_amba_AMD" class="hr.chus.cchat.gateway.AmbasmsSendMessageService" />
+    <task:executor id="executor" pool-size="5"/>
+    <task:scheduler id="scheduler" pool-size="5"/>
+    <task:annotation-driven scheduler="scheduler" executor="executor"/>
+    <cache:annotation-driven/>
 
-	<bean id="kannel_KZ_Aicent_A2P" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_Aicent_P2P" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_AMD" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_BCL_HQ" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_Bharti_A2P" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_Cellent" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_Cellent_2" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_Clickatell" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_CLX_Networks_01" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_CLX_Networks_02" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_CMTelecom" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_Ibasis_01" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_Ibasis_02" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_InfoBip" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_InfoBip_2IP" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_Infobip_Flash" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_Infobip_Special" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_InfoBip3_subacc" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_LevelSMS" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_NEXMO" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_PomTelecom" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_RouteSMS_" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_RouteSMS_flat" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_Silverstreet_Eric" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_SITmobile" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_SMS_Global" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_SMS_TRADE" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_SMSrelay01" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_Sueno" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_Tyntec" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_Vertex" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_W2WTS" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_ZEN" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_BondSMS" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_Fortytwo" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_Medallion" class="hr.chus.cchat.gateway.KZSendMessageService" />
-	<bean id="kannel_KZ_Fortytwo_WAN" class="hr.chus.cchat.gateway.KZSendMessageService" />
+    <bean id="operatorChooser" class="hr.chus.cchat.helper.OperatorChooser" init-method="init"/>
+
+    <bean id="kannel_amba_SILVERSTREET" class="hr.chus.cchat.gateway.AmbasmsSendMessageService"/>
+    <bean id="kannel_amba_iBasis" class="hr.chus.cchat.gateway.AmbasmsSendMessageService"/>
+    <bean id="kannel_amba_BICS" class="hr.chus.cchat.gateway.AmbasmsSendMessageService"/>
+    <bean id="kannel_amba_MGI" class="hr.chus.cchat.gateway.AmbasmsSendMessageService"/>
+    <bean id="kannel_amba_aicent_a2p" class="hr.chus.cchat.gateway.AmbasmsSendMessageService"/>
+    <bean id="kannel_amba_aicent_p2p" class="hr.chus.cchat.gateway.AmbasmsSendMessageService"/>
+    <bean id="kannel_amba_tyntec" class="hr.chus.cchat.gateway.AmbasmsSendMessageService"/>
+    <bean id="kannel_amba_AMD" class="hr.chus.cchat.gateway.AmbasmsSendMessageService"/>
+
+    <bean id="kannel_KZ_Aicent_A2P" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_Aicent_P2P" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_AMD" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_BCL_HQ" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_Bharti_A2P" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_Cellent" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_Cellent_2" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_Clickatell" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_CLX_Networks_01" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_CLX_Networks_02" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_CMTelecom" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_Ibasis_01" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_Ibasis_02" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_InfoBip" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_InfoBip_2IP" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_Infobip_Flash" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_Infobip_Special" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_InfoBip3_subacc" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_LevelSMS" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_NEXMO" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_PomTelecom" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_RouteSMS_" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_RouteSMS_flat" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_Silverstreet_Eric" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_SITmobile" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_SMS_Global" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_SMS_TRADE" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_SMSrelay01" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_Sueno" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_Tyntec" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_Vertex" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_W2WTS" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_ZEN" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_BondSMS" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_Fortytwo" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_Medallion" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_Fortytwo_WAN" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_Procescom" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_Procescom_4174279" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_Procescom_4179977" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_Procescom_4179978" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_Procescom_4179979" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_Procescom_6797000071" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_Procescom_6785330067" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_Procescom_6851100049" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_CS_NETWORKS_01" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_CS_NETWORKS_02" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_Condor" class="hr.chus.cchat.gateway.KZSendMessageService"/>
+    <bean id="kannel_KZ_KZCchat" class="hr.chus.cchat.gateway.KZSendMessageService"/>
 
 </beans>
