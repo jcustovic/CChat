@@ -52,7 +52,7 @@
 		<version.taglibs.standard>1.1.2</version.taglibs.standard>
 		<version.ch.qos.logback>1.0.3</version.ch.qos.logback>
 		<version.com.googlecode.flyway>1.7</version.com.googlecode.flyway>
-		<version.org.apache.httpcomponents>4.2.1</version.org.apache.httpcomponents>
+		<version.org.apache.httpcomponents>4.3.6</version.org.apache.httpcomponents>
 		<version.org.apache.tomcat>7.0.30</version.org.apache.tomcat>
 		<version.programd>4.6-FIXED-SNAPSHOT</version.programd>
 
