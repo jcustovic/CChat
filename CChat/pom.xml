@@ -57,7 +57,7 @@
 		<version.programd>4.6-FIXED-SNAPSHOT</version.programd>
 
 		<!-- Test -->
-		<version.junit>4.10</version.junit>
+		<version.junit>4.13.1</version.junit>
 		<version.org.unitils>3.3</version.org.unitils>
 		<version.org.easytesting.fest-assert>1.4</version.org.easytesting.fest-assert>
 		<version.org.easymock>3.1</version.org.easymock>
