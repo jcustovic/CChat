@@ -50,7 +50,7 @@
 		<version.c3p0>0.9.1.2</version.c3p0>
 		<version.mysql>5.1.21</version.mysql>
 		<version.taglibs.standard>1.1.2</version.taglibs.standard>
-		<version.ch.qos.logback>1.0.3</version.ch.qos.logback>
+		<version.ch.qos.logback>1.2.0</version.ch.qos.logback>
 		<version.com.googlecode.flyway>1.7</version.com.googlecode.flyway>
 		<version.org.apache.httpcomponents>4.3.6</version.org.apache.httpcomponents>
 		<version.org.apache.tomcat>7.0.30</version.org.apache.tomcat>
