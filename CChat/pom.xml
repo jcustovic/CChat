@@ -62,7 +62,7 @@
 		<version.org.easytesting.fest-assert>1.4</version.org.easytesting.fest-assert>
 		<version.org.easymock>3.1</version.org.easymock>
 		<version.powermock-api-easymock>1.4.12</version.powermock-api-easymock>
-		<version.com.h2database>1.3.168</version.com.h2database>
+		<version.com.h2database>2.0.206</version.com.h2database>
 
 		<!-- Plugins -->
 	</properties>
