@@ -44,7 +44,7 @@
 		<version.org.freemarker>2.3.19</version.org.freemarker>
 		<version.ognl>3.0.5</version.ognl>
 		<version.aopalliance>1.0</version.aopalliance>
-		<version.org.hibernate>4.1.7.Final</version.org.hibernate>
+		<version.org.hibernate>5.4.24.Final</version.org.hibernate>
 		<version.jstl>1.2</version.jstl>
 		<version.net.sf.ehcache>2.5.4</version.net.sf.ehcache>
 		<version.c3p0>0.9.1.2</version.c3p0>
