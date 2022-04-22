@@ -27,7 +27,7 @@
 		<version.org.springframework>3.1.2.RELEASE</version.org.springframework>
 		<version.org.springframework.data.jpa>1.1.0.RELEASE</version.org.springframework.data.jpa>
 		<version.org.springframework.security>3.1.2.RELEASE</version.org.springframework.security>
-		<version.org.apache.struts>2.3.4.1</version.org.apache.struts>
+		<version.org.apache.struts>2.5.30</version.org.apache.struts>
 		<version.org.apache.tiles>2.2.2</version.org.apache.tiles>
 		<version.commons-lang3>3.1</version.commons-lang3>
 		<version.commons-io>2.2</version.commons-io>
