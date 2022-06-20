@@ -48,7 +48,7 @@
 		<version.jstl>1.2</version.jstl>
 		<version.net.sf.ehcache>2.5.4</version.net.sf.ehcache>
 		<version.c3p0>0.9.1.2</version.c3p0>
-		<version.mysql>5.1.21</version.mysql>
+		<version.mysql>8.0.28</version.mysql>
 		<version.taglibs.standard>1.1.2</version.taglibs.standard>
 		<version.ch.qos.logback>1.0.3</version.ch.qos.logback>
 		<version.com.googlecode.flyway>1.7</version.com.googlecode.flyway>
